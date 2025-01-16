@@ -1,0 +1,17 @@
+@use "../abstracts/mixins";
+
+.text-gray {
+  @include mixins.text-color-hover(gray, rgb(88, 86, 86));
+}
+.text-blue {
+  @include mixins.text-color-hover-auto(blue);
+}
+.text-red {
+  @include mixins.text-color-hover-auto(red, 15%);
+}
+.semibold {
+  @include mixins.font-weight(600);
+}
+.bold {
+  @include mixins.font-weight(700);
+}

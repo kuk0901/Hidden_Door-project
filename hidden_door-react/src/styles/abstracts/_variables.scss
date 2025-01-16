@@ -1,0 +1,32 @@
+@use "sass:color";
+
+// * 색상 관련 변수
+$primary-color: royalblue;
+$hover-color: color.adjust($primary-color, $lightness: -10%);
+$active-color: color.adjust($primary-color, $lightness: -20%);
+
+$secondary-color: #008080;
+$tertiary-color: #607d8b;
+
+$heading-color: #333;
+$background-color: #f4f4f4;
+$background-color-light: #ffebcd;
+$background-color-dark: #5a3815;
+
+$confirm-border-color: rgb(228, 210, 238);
+$confirm-button-color: rgb(180, 151, 231);
+$confirm-text-color: rgb(72, 61, 139);
+$confirm-bg-color: rgb(250, 245, 255);
+
+$delete-btn-color: rgb(225, 62, 62);
+
+$dark-text-color: rgba(255, 255, 255, 0.87);
+$light-text-color: #213547;
+
+$light-blue-color: #646cff;
+
+// * SCSS 변수로 브레이크포인트 정의(min-width)
+$breakpoint-sm: 576px; // 작은 화면 (모바일)
+$breakpoint-md: 768px; // 중간 화면 (태블릿)
+$breakpoint-lg: 992px; // 큰 화면 (데스크탑)
+$breakpoint-xl: 1200px; // 초대형 화면 (대형 데스크탑)

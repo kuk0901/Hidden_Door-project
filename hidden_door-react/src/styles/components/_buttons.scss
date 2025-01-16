@@ -1,0 +1,79 @@
+@use "../abstracts/variables";
+@use "sass:color";
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  color: white;
+
+  &:hover {
+    text-decoration: none;
+  }
+
+  &.primary {
+    background-color: variables.$primary-color;
+
+    &:hover {
+      background-color: variables.$hover-color;
+    }
+
+    &:active {
+      background-color: variables.$active-color;
+    }
+  }
+
+  &.secondary {
+    background-color: variables.$secondary-color;
+
+    &:hover {
+      background-color: color.scale(variables.$secondary-color, $lightness: 5%);
+    }
+
+    &:active {
+      background-color: color.scale(
+        variables.$secondary-color,
+        $lightness: -10%
+      );
+    }
+  }
+
+  &.tertiary {
+    background-color: variables.$tertiary-color;
+
+    &:hover {
+      background-color: color.scale(variables.$tertiary-color, $lightness: 5%);
+    }
+
+    &:active {
+      background-color: color.scale(
+        variables.$tertiary-color,
+        $lightness: -10%
+      );
+    }
+  }
+
+  &.delete {
+    background-color: variables.$delete-btn-color;
+
+    &:hover {
+      background-color: color.scale(
+        variables.$delete-btn-color,
+        $lightness: 5%
+      );
+    }
+
+    &:active {
+      background-color: color.scale(
+        variables.$delete-btn-color,
+        $lightness: -10%
+      );
+    }
+  }
+}

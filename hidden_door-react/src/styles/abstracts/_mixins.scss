@@ -1,0 +1,70 @@
+@use "functions";
+
+// flex
+@mixin flex {
+  display: flex;
+}
+
+@mixin justify-center {
+  justify-content: center;
+}
+
+@mixin justify-between {
+  justify-content: space-between;
+}
+
+@mixin justify-around {
+  justify-content: space-around;
+}
+
+@mixin align-center {
+  align-items: center;
+}
+
+@mixin flex-layout-row($justify: flex-start, $align: stretch) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin flex-layout-column($justify: flex-start, $align: stretch) {
+  display: flex;
+  flex-direction: column;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+// font
+@mixin font-size($size) {
+  font-size: $size;
+}
+
+@mixin font-weight($weight) {
+  font-weight: $weight;
+}
+
+// border
+@mixin border($width, $style, $color) {
+  border: $width $style $color;
+}
+
+// color
+@mixin text-color($color) {
+  color: $color;
+}
+
+@mixin text-color-hover($base-color, $hover-color) {
+  color: $base-color;
+
+  &:hover {
+    color: $hover-color;
+  }
+}
+
+@mixin text-color-hover-auto($base-color, $amount: 10%) {
+  color: $base-color;
+
+  &:hover {
+    color: auto-hover-color($base-color, $amount);
+  }
+}

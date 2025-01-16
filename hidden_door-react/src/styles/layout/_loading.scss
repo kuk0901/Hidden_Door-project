@@ -1,0 +1,48 @@
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+}
+
+.mini-loading__container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 20vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+}
+
+/* 스피너 스타일 */
+.spinner {
+  position: relative;
+  width: 5rem;
+  height: 5rem;
+
+  border-top: 5px solid rgba(#fff, 0.8);
+  border-right: 5px solid transparent;
+  border-radius: 50%;
+  animation: rotation 0.8s linear infinite;
+}
+
+// 애니메이션 정의
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}

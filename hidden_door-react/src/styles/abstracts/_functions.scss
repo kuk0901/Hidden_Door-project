@@ -1,0 +1,8 @@
+// color
+@function auto-hover-color($color, $amount: 10%) {
+  @if (lightness($color) > 50) {
+    @return darken($color, $amount);
+  } @else {
+    @return lighten($color, $amount);
+  }
+}

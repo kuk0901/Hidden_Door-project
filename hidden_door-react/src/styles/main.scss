@@ -1,0 +1,50 @@
+@use "abstracts/mixins";
+@use "abstracts/variables";
+
+@use "base/reset";
+@use "base/typography";
+@use "base/borders";
+@use "base/utilities";
+
+@use "components/buttons";
+@use "components/forms";
+@use "components/modal";
+
+@use "layout/containers";
+@use "layout/loading";
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: variables.$light-text-color;
+  background-color: variables.$background-color-light;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: variables.$light-text-color;
+    background-color: variables.$background-color-light;
+  }
+  a:hover {
+    color: #747bff;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: variables.$dark-text-color;
+    background-color: variables.$background-color-dark;
+  }
+
+  a:hover {
+    color: #747bff;
+  }
+}

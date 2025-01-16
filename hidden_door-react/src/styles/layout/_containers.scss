@@ -1,0 +1,20 @@
+@use "../abstracts/mixins";
+
+// Container styles
+.container {
+  @include mixins.flex-layout-row(space-around, center);
+}
+
+.column {
+  @include mixins.flex-layout-column(space-between, center);
+}
+
+.btn-container {
+  @include mixins.flex-layout-row(space-around, center);
+  margin: 10px;
+}
+
+.link-container {
+  @include mixins.flex-layout-row(space-around, center);
+  margin: auto;
+}

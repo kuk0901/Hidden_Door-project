@@ -1,0 +1,15 @@
+services:
+  mongodb:
+    image: mongo
+    container_name: hidden_door-app
+    ports:
+      - "27019:27017"
+    volumes:
+      - hidden_door:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME} # 초기 root 사용자 이름
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD} # 초기 root 비밀번호
+      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME} # 초기 데이터베이스 이름 (선택 사항)
+
+volumes:
+  hidden_door: # MongoDB 데이터를 저장할 별도의 볼륨 정의

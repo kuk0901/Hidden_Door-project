@@ -1,0 +1,38 @@
+server:
+  port: 8888 # 애플리케이션이 실행될 포트
+  servlet:
+    encoding:
+      charset: UTF-8 # 기본 문자 인코딩
+      force: true # 모든 요청에 대해 강제로 인코딩 적용
+
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  application:
+    name: Hidden_door-app # 애플리케이션 이름
+  main:
+    web-application-type: servlet # 서블릿 기반 웹 애플리케이션으로 설정
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+      database: ${MONGO_DB_NAME} # 사용할 데이터베이스 이름
+  servlet:
+    multipart:
+      max-file-size: 5MB # 파일 최대 크기
+      max-request-size: 5MB # 요청 최대 크기
+  config:
+    import: optional:file:.env
+
+custom:
+  jwt:
+    secretKey: ${JWT_SECRET_KEY}
+
+logging:
+  level:
+    root: INFO
+    "[com.baeksutalchul.hiddendoor]": DEBUG
+
+file:
+  upload-dir: HiddenDoor-app/images # 파일 업로드 디렉터리
+  default-extension: .png # 기본 확장자

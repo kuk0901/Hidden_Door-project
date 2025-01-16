@@ -1,0 +1,100 @@
+@use "../abstracts/mixins" as mixins;
+
+.form-container {
+  @include mixins.flex-layout-column(center, stretch);
+  gap: 10px;
+
+  .input-container {
+    @include mixins.flex-layout-row(space-between, center);
+    @include mixins.border(1px, solid, white);
+    max-width: 400px;
+    height: 45px;
+    padding: 5px 10px;
+    margin: 10px 0 15px 30px;
+
+    &__s {
+      max-width: 200px;
+    }
+
+    &__m {
+      max-width: 350px;
+    }
+
+    &__l {
+      max-width: 500px;
+    }
+
+    &__xl {
+      max-width: 700px;
+    }
+
+    input {
+      display: inline-block;
+      background-color: transparent;
+
+      &.input__s {
+        width: 180px;
+      }
+
+      &.input__m {
+        width: 300px;
+      }
+
+      &.input__l {
+        width: 450px;
+      }
+
+      &.input__xl {
+        width: 650px;
+      }
+    }
+  }
+}
+
+.input-container {
+  @include mixins.flex-layout-row(space-between, center);
+  @include mixins.border(1px, solid, white);
+  max-width: 400px;
+  padding: 5px 10px;
+  margin: 10px 0 15px;
+
+  &__s {
+    max-width: 200px;
+  }
+
+  &__m {
+    max-width: 350px;
+  }
+
+  &__l {
+    max-width: 500px;
+  }
+
+  &__xl {
+    max-width: 700px;
+  }
+
+  input {
+    display: inline-block;
+
+    &.input__s {
+      width: 180px;
+    }
+
+    &.input__m {
+      width: 300px;
+    }
+
+    &.input__l {
+      width: 450px;
+    }
+
+    &.input__xl {
+      width: 650px;
+    }
+  }
+}
+
+.label-container {
+  min-width: 70px;
+}
