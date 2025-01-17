@@ -3,6 +3,11 @@ import Button from "@components/common/Button";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "@components/common/Logo";
 import Api from "@/axios/api";
+import LinkContainer from "@components/common/LinkContainer";
+import { debounce } from "lodash";
+import { useState, useEffect } from "react";
+import { headerLinkList } from "@routes/linkList";
+import More from "@components/common/More";
 
 const Header = () => {
   const { admin, setAdmin } = useAdmin();
@@ -11,23 +16,58 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       await Api.post("/api/v1/auth/terminate", {}, { withCredentials: true });
-
-      // 사용자 정보와 토큰 제거
       setAdmin(null);
-      localStorage.removeItem("token"); // 로컬 스토리지에서 토큰 제거
-
-      // 로그인 페이지로 리다이렉트 (쿼리 파라미터 추가)
+      localStorage.removeItem("token");
       navigate(import.meta.env.VITE_APP_ADMIN_LOGIN_PATH + "?signout=true");
     } catch (error) {
       console.error("로그아웃 실패:", error);
     }
   };
 
-  return (
-    <header className="container">
-      <Logo />
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
-      <div className="link-container">{admin && <Link to="">관리자</Link>}</div>
+  useEffect(() => {
+    const handleResize = debounce(() => {
+      setWindowWidth(window.innerWidth);
+    }, 200);
+
+    window.addEventListener("resize", handleResize);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      handleResize.cancel(); // debounce 취소
+    };
+  }, []); // 빈 배열로 의존성 설정
+
+  return (
+    <header className="header">
+      {windowWidth > 768 ? (
+        <>
+          <div className="logo-container">
+            <Logo />
+          </div>
+
+          <ul className="link-container">
+            <LinkContainer linkList={headerLinkList} />
+            {admin && (
+              <Link to="#" className="link-item">
+                관리자
+              </Link>
+            )}
+          </ul>
+        </>
+      ) : (
+        <>
+          <ul className="link-container link-container__mini">
+            <More />
+          </ul>
+
+          <div className="logo-container">
+            <Logo />
+          </div>
+        </>
+      )}
 
       {admin && <Button text="로그아웃" onClick={handleLogout} />}
     </header>

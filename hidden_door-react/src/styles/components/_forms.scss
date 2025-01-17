@@ -3,6 +3,8 @@
 .form-container {
   @include mixins.flex-layout-column(center, stretch);
   gap: 10px;
+  padding: 10px;
+  margin: auto;
 
   .input-container {
     @include mixins.flex-layout-row(space-between, center);
@@ -10,7 +12,7 @@
     max-width: 400px;
     height: 45px;
     padding: 5px 10px;
-    margin: 10px 0 15px 30px;
+    margin: 10px 5px 15px;
 
     &__s {
       max-width: 200px;

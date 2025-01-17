@@ -1,6 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
-import Header from "@components/common/layout/header";
 import { useEffect } from "react";
+import Header from "@components/common/layout/header";
+import Footer from "@components/common/layout/Footer";
 
 const Layout = () => {
   const navigate = useNavigate();
@@ -17,6 +18,7 @@ const Layout = () => {
       <main>
         <Outlet />
       </main>
+      <Footer />
     </div>
   );
 };

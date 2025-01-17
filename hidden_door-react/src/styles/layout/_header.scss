@@ -1,0 +1,45 @@
+@use "../abstracts//mixins";
+@use "../abstracts/variables";
+
+.header {
+  @include mixins.flex-layout-row(space-between, align-center);
+  padding: 10px;
+
+  .link-container {
+    width: 600px;
+
+    @media (max-width: variables.$breakpoint-lg) {
+      // 992px 미만의 화면에 적용될 스타일
+    }
+
+    @media (max-width: variables.$breakpoint-md) {
+      // 768px 미만의 화면에 적용될 스타일
+      width: fit-content;
+    }
+
+    &.link-container__mini {
+      margin: 0;
+      @include mixins.flex-layout-row(space-between, align-center);
+      position: relative;
+
+      .link-items {
+        position: absolute;
+        top: 30px;
+        left: 0;
+        z-index: 10;
+        @include mixins.flex-layout-column(space-between, align-center);
+        background-color: variables.$dark-background-color;
+        padding: 3px 10px 10px;
+
+        .link-item {
+          border-bottom: 1px solid black;
+          padding: 3px;
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+}

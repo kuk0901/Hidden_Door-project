@@ -1,6 +1,5 @@
 import InputError from "@components/error/InputError";
 
-// FIXME: label 추가 고려 -> 컴포넌트로 분리 고민
 const InputField = ({
   register,
   type,
@@ -14,9 +13,9 @@ const InputField = ({
 }) => {
   if (register) {
     return (
-      <div className="column">
+      <div className="form-container column">
         <div className="container">
-          <div className={`label-container`}>
+          <div className={`label-container text-center`}>
             <label htmlFor={id}>{label}</label>
           </div>
           <div className={`input-container input-container__${className}`}>

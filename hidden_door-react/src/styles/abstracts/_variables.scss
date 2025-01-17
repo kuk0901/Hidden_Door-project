@@ -11,8 +11,8 @@ $tertiary-color: #607d8b;
 
 $heading-color: #333;
 $background-color: #f4f4f4;
-$background-color-light: #ffebcd;
-$background-color-dark: #5a3815;
+$light-background-color: #ffebcd;
+$dark-background-color: #5a3815;
 
 $confirm-border-color: rgb(228, 210, 238);
 $confirm-button-color: rgb(180, 151, 231);
@@ -26,8 +26,26 @@ $light-text-color: #213547;
 
 $light-blue-color: #646cff;
 
-// * SCSS 변수로 브레이크포인트 정의(min-width)
-$breakpoint-sm: 576px; // 작은 화면 (모바일)
-$breakpoint-md: 768px; // 중간 화면 (태블릿)
-$breakpoint-lg: 992px; // 큰 화면 (데스크탑)
-$breakpoint-xl: 1200px; // 초대형 화면 (대형 데스크탑)
+// * SCSS 변수로 브레이크포인트 정의(max-width)
+$breakpoint-xl: 1199px; // 1200px 미만 -> 초대형 화면 (대형 데스크탑)
+$breakpoint-lg: 991px; // 992px 미만 -> 큰 화면 (데스크탑)
+$breakpoint-md: 767px; // 768px 미만 -> 중간 화면 (태블릿)
+$breakpoint-sm: 575px; // 576px 미만 -> 작은 화면 (모바일)
+
+/* // * 미디어쿼리 예시
+.example-class {
+  1200px 이상의 큰 화면에 대한 기본 스타일
+
+  @media (max-width: $breakpoint-xl) {
+    1200px 미만의 화면에 적용될 스타일
+  }
+
+  @media (max-width: $breakpoint-lg) {
+    992px 미만의 화면에 적용될 스타일
+  }
+
+  @media (max-width: $breakpoint-md) {
+    768px 미만의 화면에 적용될 스타일
+  }
+}
+*/

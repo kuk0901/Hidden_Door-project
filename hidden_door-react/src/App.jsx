@@ -12,7 +12,6 @@ import Layout from "@components/common/layout/Layout";
 import { useAdmin } from "@hooks/useAdmin";
 import Api from "@axios/api";
 import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
-import { getCookie } from "./cookie/getCookie";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -20,9 +19,9 @@ function App() {
 
   const checkAdminStatus = async () => {
     const token = localStorage.getItem("token");
-    const refreshToken = getCookie("refreshToken");
 
-    if (!token && refreshToken) {
+    if (!token) {
+      // Access Token이 없을 때 리프레시 토큰으로 로그인 상태 확인
       try {
         const res = await Api.post(
           "/api/v1/auth/renew",
@@ -33,27 +32,25 @@ function App() {
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
-          error.response?.data.msg ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
-        );
-        localStorage.removeItem("token");
-        setAdmin(null);
-      }
-    } else if (token) {
-      try {
-        const res = await Api.get("/api/v1/auth/verify");
-        setAdmin(res.data.data);
-      } catch (error) {
-        toast.error(
-          error.response?.data.msg ||
+          error.message ||
             "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
         );
         localStorage.removeItem("token");
         setAdmin(null);
       }
     } else {
-      // 토큰과 리프레시 토큰 모두 없을 때
-      setAdmin(null);
+      // Access Token이 있을 때 유효성 검사
+      try {
+        const res = await Api.get("/api/v1/auth/verify");
+        setAdmin(res.data.data);
+      } catch (error) {
+        toast.error(
+          error.message ||
+            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        localStorage.removeItem("token");
+        setAdmin(null);
+      }
     }
 
     setLoading(false); // 모든 경우에 로딩 종료

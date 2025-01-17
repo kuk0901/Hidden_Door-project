@@ -1,4 +1,5 @@
 @use "../abstracts/mixins";
+@use "../abstracts/variables";
 
 // Container styles
 .container {
@@ -14,7 +15,25 @@
   margin: 10px;
 }
 
+.list-container {
+  @include mixins.flex-layout-row(space-around, center);
+}
+
+.list-container-col {
+  @include mixins.flex-layout-column(flex-start, flex-start);
+}
+
 .link-container {
   @include mixins.flex-layout-row(space-around, center);
   margin: auto;
+}
+
+.link-container-col {
+  @include mixins.flex-layout-column(flex-start, flex-start);
+}
+
+.login-form-container {
+  @media (max-width: variables.$breakpoint-lg) {
+    margin-top: 30px;
+  }
 }

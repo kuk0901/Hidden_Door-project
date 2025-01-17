@@ -1,0 +1,19 @@
+@use "../abstracts/variables";
+
+.login-section {
+  height: 550px;
+
+  &.container {
+    justify-content: center;
+  }
+
+  @media (max-width: variables.$breakpoint-xl) {
+    // 992px 미만의 화면에 적용될 스타일
+    height: 400px;
+  }
+
+  @media (max-width: variables.$breakpoint-lg) {
+    // 992px 미만의 화면에 적용될 스타일
+    height: 350px;
+  }
+}
