@@ -1,0 +1,39 @@
+package com.baeksutalchul.hiddendoor.faq.controller;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.baeksutalchul.hiddendoor.dto.FaqDto;
+import com.baeksutalchul.hiddendoor.faq.service.FaqService;
+import com.baeksutalchul.hiddendoor.res.ResponseDto;
+
+@RestController
+@RequestMapping("/api/seats") // * -> 여기만 복수형태로 작성함
+public class FaqController {
+  private final FaqService faqService;
+  private static final Logger logger = LoggerFactory.getLogger(FaqController.class);
+
+  public FaqController(FaqService faqService) {
+    this.faqService = faqService;
+  }
+
+  @GetMapping("/")
+  public ResponseEntity<ResponseDto<?>> getFaqAll() {
+    try {
+      ResponseDto<List<FaqDto>> res = faqService.getFaqAll();
+
+      logger.info("ResponseDto<List<FaqDto>>: {}", res);
+
+      return ResponseEntity.ok().body(res);
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError()
+          .body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."));
+    }
+  }
+}
