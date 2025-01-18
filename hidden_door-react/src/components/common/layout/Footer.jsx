@@ -2,7 +2,6 @@ import LinkContainer from "@components/common/LinkContainer";
 import { csLinkList } from "@routes/linkList";
 import { securityLinkList } from "../../../routes/linkList";
 
-// FIXME: security section -> page -> data
 const Footer = () => {
   return (
     <footer className="footer">

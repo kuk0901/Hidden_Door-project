@@ -7,7 +7,7 @@ import LinkContainer from "@components/common/LinkContainer";
 import { debounce } from "lodash";
 import { useState, useEffect } from "react";
 import { headerLinkList } from "@routes/linkList";
-import More from "@components/common/More";
+import MobileNavMenu from "@components/common/MobileNavMenu";
 
 const Nav = () => {
   const { admin, setAdmin } = useAdmin();
@@ -60,7 +60,7 @@ const Nav = () => {
       ) : (
         <>
           <ul className="link-container link-container__mini">
-            <More />
+            <MobileNavMenu />
           </ul>
 
           <div className="logo-container">

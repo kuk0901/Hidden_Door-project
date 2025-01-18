@@ -5,7 +5,7 @@ import LinkContainer from "@components/common/LinkContainer";
 import { headerLinkList } from "@routes/linkList";
 import { Link } from "react-router-dom";
 
-const More = () => {
+const MobileNavMenu = () => {
   const { admin } = useAdmin();
   const [open, setOpen] = useState(false);
   return (
@@ -26,4 +26,4 @@ const More = () => {
   );
 };
 
-export default More;
+export default MobileNavMenu;

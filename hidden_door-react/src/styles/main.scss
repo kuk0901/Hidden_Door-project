@@ -83,3 +83,16 @@ aside {
     margin: 10px;
   }
 }
+
+.logo-container {
+  height: 50px;
+
+  .logo {
+    background-color: transparent;
+    border: none;
+
+    .logo-img {
+      border-radius: 7px;
+    }
+  }
+}

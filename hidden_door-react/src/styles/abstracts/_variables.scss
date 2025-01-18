@@ -1,7 +1,7 @@
 @use "sass:color";
 
 // * 색상 관련 변수
-// TODO: 버튼 색상 변경해야 함
+// FIXME: 버튼 색상 변경해야 함
 $primary-color: royalblue;
 $hover-color: color.adjust($primary-color, $lightness: -10%);
 $active-color: color.adjust($primary-color, $lightness: -20%);
