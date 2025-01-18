@@ -11,11 +11,12 @@
 @use "components/modals";
 @use "components/headings";
 @use "components/icons";
+@use "components/policy";
 
 @use "layout/containers";
 @use "layout/loading";
 @use "layout/sections";
-@use "layout/header";
+@use "layout/nav";
 @use "layout/footer";
 
 :root {
@@ -38,12 +39,18 @@
     color: variables.$light-text-color;
     background-color: variables.$light-background-color;
   }
+
   a:hover {
     color: #747bff;
   }
 
   .login-icon {
     color: darkgray;
+  }
+
+  .title {
+    color: variables.$dark-text-color;
+    background-color: variables.$dark-background-color;
   }
 }
 
@@ -60,9 +67,19 @@
   .login-icon {
     color: variables.$dark-text-color;
   }
+
+  .title {
+    color: variables.$light-text-color;
+    background-color: variables.$light-background-color;
+  }
 }
 
 main {
-  overflow-y: scroll;
   padding: 10px;
+}
+
+aside {
+  &.portfolio-disclaimer {
+    margin: 10px;
+  }
 }

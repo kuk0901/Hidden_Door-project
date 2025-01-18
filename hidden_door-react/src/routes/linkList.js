@@ -33,17 +33,16 @@ export const csLinkList = [
   {
     route: "#",
     value: "1대1 문의"
-  },
-]
+  }
+];
 
 export const securityLinkList = [
   {
-    route: "#",
+    route: "/hidden_door/policy/privacy",
     value: "개인정보 처리 방침"
   },
   {
-    route: "#",
+    route: "/hidden_door/policy/service",
     value: "사이트 이용 약관"
-  },
-  
-]
+  }
+];

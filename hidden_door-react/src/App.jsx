@@ -12,6 +12,8 @@ import Layout from "@components/common/layout/Layout";
 import { useAdmin } from "@hooks/useAdmin";
 import Api from "@axios/api";
 import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
+import PrivacyPolicy from "@pages/policy/PrivacyPolicy";
+import TermsOfService from "@pages/policy/TermsOfService";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -84,9 +86,18 @@ function App() {
               element={<Navigate to="/hidden_door/main" replace />}
             />
             <Route path="/hidden_door/main" element={<HomePage />} />
-            <Route path="/hidden_door/admin" element={<ProtectedAdminRoute />}>
-              {/* 관리자 전용 페이지들 */}
+
+            {/* 정책 관련 페이지 그룹화 */}
+            <Route path="/hidden_door/policy">
+              <Route path="privacy" element={<PrivacyPolicy />} />
+              <Route path="service" element={<TermsOfService />} />
             </Route>
+
+            {/* 관리자 전용 페이지 그룹화 */}
+            <Route
+              path="/hidden_door/admin"
+              element={<ProtectedAdminRoute />}
+            ></Route>
           </Route>
 
           <Route
