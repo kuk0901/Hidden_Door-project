@@ -27,7 +27,8 @@ export default defineConfig({
       "@hooks": path.resolve(__dirname, "./src/hooks"),
       "@axios": path.resolve(__dirname, "./src/axios"),
       "@routes": path.resolve(__dirname, "./src/routes"),
-      "@data": path.resolve(__dirname, "./src/data")
+      "@data": path.resolve(__dirname, "./src/data"),
+      "@utils": path.resolve(__dirname, "./src/utils")
     }
   }
 });

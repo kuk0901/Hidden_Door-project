@@ -13,6 +13,7 @@ public enum ErrorCode {
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "ACCESS_DENIED", "접근이 거부되었습니다."),
 
     // * common
+    ESCAPE_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "ESCAPE_ROOM_404", "방탈출 카페 정보를 찾을 수 없습니다."),
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "RESERVATION_404", "예약 정보를 찾을 수 없습니다."),
     PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PAYMENT_404", "결제 정보를 찾을 수 없습니다."),
     NOTICE_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTICE_404", "공지사항을 찾을 수 없습니다."),
@@ -22,6 +23,7 @@ public enum ErrorCode {
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "INPUT_400", "유효하지 않은 입력입니다."),
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ACCESS_403", "접근이 금지되었습니다."),
     FILE_SIZE_EXCEEDED(HttpStatus.EXPECTATION_FAILED, "FILE_SIZE_417", "파일 크기가 너무 큽니다! 최대 크기는 5MB입니다."),
+    NO_CHANGES_DETECTED(HttpStatus.BAD_REQUEST, "NO_CHANGES_DETECTED", "변경된 내용이 없습니다."),
 
     // page
     PAGINATION_ERROR(HttpStatus.BAD_REQUEST, "PAGINATION_400", "페이지 정보가 유효하지 않습니다."),

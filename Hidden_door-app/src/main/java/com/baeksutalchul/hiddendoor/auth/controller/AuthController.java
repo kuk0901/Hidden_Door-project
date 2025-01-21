@@ -29,7 +29,6 @@ public class AuthController {
 
   private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-  // 생성자 주입
   public AuthController(AdminService adminService, TokenService tokenService) {
     this.adminService = adminService;
     this.tokenService = tokenService;
@@ -38,15 +37,13 @@ public class AuthController {
   @PostMapping("/register")
   public ResponseEntity<ResponseDto<String>> signUp(@RequestBody AdminDto adminDto) {
 
-    adminService.registerUser(adminDto); // 회원가입 처리
+    adminService.registerUser(adminDto);
     return ResponseEntity.ok(new ResponseDto<>(null, "회원가입 되었습니다."));
 
   }
 
   @PostMapping("/authenticate")
   public ResponseEntity<ResponseDto<AdminDto>> login(@RequestBody AdminDto adminDto, HttpServletResponse response) {
-
-    // 로그인 처리 및 사용자 정보와 액세스 토큰을 포함한 ResponseDto 생성
     ResponseDto<AdminDto> responseDto = adminService.login(adminDto.getEmail(), adminDto.getPwd(), response);
     return ResponseEntity.ok(responseDto);
 
@@ -69,9 +66,9 @@ public class AuthController {
   @PostMapping("/renew")
   public ResponseEntity<ResponseDto<String>> refresh(@CookieValue("refreshToken") String refreshToken) {
     logger.info("refreshToken: {}", refreshToken);
-    // 리프레시 토큰 유효성 검사
+
     if (!tokenService.validateRefreshToken(refreshToken)) {
-      throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED); // 유효하지 않은 경우 예외 발생
+      throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
     }
 
     String newAccessToken = adminService.refreshAccessToken(refreshToken); // 리프레시 토큰으로 액세스 토큰 갱신
@@ -81,8 +78,8 @@ public class AuthController {
   @GetMapping("/verify")
   public ResponseEntity<ResponseDto<?>> getUserInfo(@RequestHeader("Authorization") String authorization) {
     // Authorization 헤더에서 Bearer 토큰 추출
-    String token = authorization.substring(7); // "Bearer " 이후의 부분 추출
-    AdminDto userDto = adminService.getUserInfoByToken(token); // 토큰을 사용하여 사용자 정보 가져오기
+    String token = authorization.substring(7);
+    AdminDto userDto = adminService.getUserInfoByToken(token);
 
     return ResponseEntity.ok(new ResponseDto<>(userDto, "사용자 정보 조회 성공"));
   }

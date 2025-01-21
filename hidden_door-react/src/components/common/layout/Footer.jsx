@@ -1,4 +1,4 @@
-import LinkContainer from "@components/common/LinkContainer";
+import LinkContainer from "@components/common/navigation/LinkContainer";
 import { csLinkList } from "@routes/linkList";
 import { securityLinkList } from "../../../routes/linkList";
 

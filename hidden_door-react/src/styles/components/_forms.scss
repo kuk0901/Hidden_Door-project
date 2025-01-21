@@ -53,7 +53,8 @@
   }
 }
 
-.input-container {
+.input-container,
+.textarea-container {
   @include mixins.flex-layout-row(space-between, center);
   @include mixins.border(1px, solid, white);
   max-width: 400px;
@@ -99,4 +100,19 @@
 
 .label-container {
   min-width: 70px;
+}
+
+.edit-form {
+  .input-section {
+    .input-container--edit,
+    .textarea-container--edit {
+      max-width: none;
+      padding: 10px;
+
+      .input--edit,
+      .textarea--edit {
+        width: 100%;
+      }
+    }
+  }
 }

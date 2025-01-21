@@ -38,7 +38,9 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/register", "/api/v1/auth/terminate").permitAll()
+            .requestMatchers("/api/v1/**", "/api/v1/auth/authenticate", "/api/v1/auth/register",
+                "/api/v1/auth/terminate", "/images/**")
+            .permitAll()
             .requestMatchers("/api/v1/auth/renew", "/api/v1/auth/verify").authenticated()
             .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
             .requestMatchers("/api/v1/super-admin/**").hasAuthority("ROLE_SUPER_ADMIN")

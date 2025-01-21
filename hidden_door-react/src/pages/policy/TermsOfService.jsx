@@ -1,7 +1,7 @@
 import Header from "@components/common/layout/Header";
 import service from "@data/termsOfService";
 import PolicySection from "@components/policy/PolicySection";
-import PortfolioDisclaimer from "@components/common/PortfolioDisclaimer";
+import PortfolioDisclaimer from "@components/common/disclaimers/PortfolioDisclaimer";
 
 const TermsOfService = () => {
   return (

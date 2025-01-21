@@ -1,6 +1,6 @@
-export const headerLinkList = [
+export const navLinkList = [
   {
-    route: "#",
+    route: "hidden_door/info",
     value: "Hidden_Door"
   },
   {

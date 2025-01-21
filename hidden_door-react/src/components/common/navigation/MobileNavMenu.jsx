@@ -1,8 +1,8 @@
 import { useAdmin } from "@hooks/useAdmin";
 import { useState } from "react";
 import { IoIosMenu } from "react-icons/io";
-import LinkContainer from "@components/common/LinkContainer";
-import { headerLinkList } from "@routes/linkList";
+import LinkContainer from "@components/common/navigation/LinkContainer";
+import { navLinkList } from "@routes/linkList";
 import { Link } from "react-router-dom";
 
 const MobileNavMenu = () => {
@@ -14,7 +14,7 @@ const MobileNavMenu = () => {
 
       {open ? (
         <div className="link-items">
-          <LinkContainer linkList={headerLinkList} />
+          <LinkContainer linkList={navLinkList} />
           {admin && (
             <Link to="#" className="link-item">
               관리자

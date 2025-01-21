@@ -1,23 +1,29 @@
+// abstracts
 @use "abstracts/mixins";
 @use "abstracts/variables";
 
+// base
 @use "base/reset";
 @use "base/typography";
 @use "base/borders";
 @use "base/utilities";
 
+// components
 @use "components/buttons";
 @use "components/forms";
 @use "components/modals";
 @use "components/headings";
 @use "components/icons";
 @use "components/policy";
+@use "components/animation";
 
+// layout
 @use "layout/containers";
 @use "layout/loading";
 @use "layout/sections";
 @use "layout/nav";
 @use "layout/footer";
+@use "layout/header";
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -48,7 +54,7 @@
     color: darkgray;
   }
 
-  .title {
+  .title-container {
     color: variables.$dark-text-color;
     background-color: variables.$dark-background-color;
   }
@@ -68,7 +74,7 @@
     color: variables.$dark-text-color;
   }
 
-  .title {
+  .title-container {
     color: variables.$light-text-color;
     background-color: variables.$light-background-color;
   }

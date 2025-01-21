@@ -17,3 +17,12 @@
     height: 350px;
   }
 }
+
+.section-description {
+  padding: 10px;
+
+  .info-explanation {
+    margin: 20px auto;
+    white-space: pre-wrap;
+  }
+}

@@ -1,13 +1,13 @@
 import { useAdmin } from "@hooks/useAdmin";
-import Button from "@components/common/Button";
+import Button from "@components/common/buttons/Button";
 import { Link, useNavigate } from "react-router-dom";
-import Logo from "@components/common/Logo";
+import Logo from "@components/common/branding/Logo";
 import Api from "@/axios/api";
-import LinkContainer from "@components/common/LinkContainer";
+import LinkContainer from "@components/common/navigation/LinkContainer";
 import { debounce } from "lodash";
 import { useState, useEffect } from "react";
-import { headerLinkList } from "@routes/linkList";
-import MobileNavMenu from "@components/common/MobileNavMenu";
+import { navLinkList } from "@routes/linkList";
+import MobileNavMenu from "@components/common/navigation/MobileNavMenu";
 
 const Nav = () => {
   const { admin, setAdmin } = useAdmin();
@@ -49,7 +49,7 @@ const Nav = () => {
           </div>
 
           <ul className="link-container">
-            <LinkContainer linkList={headerLinkList} />
+            <LinkContainer linkList={navLinkList} />
             {admin && (
               <Link to="#" className="link-item">
                 관리자

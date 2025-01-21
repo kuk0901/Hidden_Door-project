@@ -2,7 +2,7 @@ import Header from "@components/common/layout/Header";
 import privacy from "@data/privacyPolicy";
 
 import PolicySection from "@components/policy/PolicySection";
-import PortfolioDisclaimer from "@components/common/PortfolioDisclaimer";
+import PortfolioDisclaimer from "@components/common/disclaimers/PortfolioDisclaimer";
 
 const PrivacyPolicy = () => {
   return (
