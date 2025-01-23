@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
@@ -33,6 +34,20 @@ public class GlobalExceptionHandler {
     logger.info("ErrorResponse: {}", response);
 
     return ResponseEntity.status(errorCode.getHttpStatus()).body(response);
+  }
+
+  @ExceptionHandler(NoHandlerFoundException.class)
+  public ResponseEntity<ErrorResponse> handleNoHandlerFoundException(NoHandlerFoundException e,
+      HttpServletRequest request) {
+    PageDto page = extractPageable(request);
+
+    ErrorResponse response = new ErrorResponse(
+        HttpStatus.NOT_FOUND.value(),
+        "NOT_FOUND",
+        "요청한 리소스를 찾을 수 없습니다.",
+        page);
+
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
   }
 
   @ExceptionHandler(Exception.class)

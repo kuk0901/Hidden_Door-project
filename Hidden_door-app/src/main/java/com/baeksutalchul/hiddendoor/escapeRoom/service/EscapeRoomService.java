@@ -34,7 +34,7 @@ public class EscapeRoomService {
 
   public ResponseDto<EscapeRoomDto> updateEscapeRoomInfo(EscapeRoomDto escapeRoomDto) {
     // 1. Optional로 EscapeRoom 조회
-    EscapeRoom escapeRoom = escapeRoomRepository.findByRoomId(escapeRoomDto.getRoomId())
+    EscapeRoom escapeRoom = escapeRoomRepository.findById(escapeRoomDto.getRoomId())
         .orElseThrow(() -> new CustomException(ErrorCode.ESCAPE_ROOM_NOT_FOUND));
 
     // 2. DTO를 Entity로 변환

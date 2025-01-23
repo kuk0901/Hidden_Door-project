@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
-@RequestMapping("/api/v1/escape-room")
+@RequestMapping("/api/v1/escape-rooms")
 public class EscapeRoomController {
   private EscapeRoomService escapeRoomService;
 

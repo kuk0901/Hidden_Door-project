@@ -42,6 +42,7 @@ const InputField = ({
             type={type}
             placeholder={placeholder}
             className={`input input__${className}`}
+            required
           />
         </div>
         {error && <InputError error={error} />}

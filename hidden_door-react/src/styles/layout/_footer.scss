@@ -4,4 +4,9 @@
 .footer {
   @include mixins.flex-layout-row(space-around, baseline);
   margin-bottom: 20px;
+
+  @media (max-width: variables.$breakpoint-md) {
+    // 768px 미만의 화면에 적용될 스타일
+    flex-direction: column;
+  }
 }

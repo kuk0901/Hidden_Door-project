@@ -1,4 +1,5 @@
 @use "../abstracts/variables";
+@use "../abstracts/mixins";
 
 .login-section {
   height: 550px;
@@ -24,5 +25,19 @@
   .info-explanation {
     margin: 20px auto;
     white-space: pre-wrap;
+  }
+}
+
+.section-caution {
+  @include mixins.border(1px, solid, white);
+  padding: 10px;
+  border-radius: 6px;
+
+  .section--title {
+    font-size: 20px;
+  }
+
+  .section--content {
+    padding: 10px;
   }
 }

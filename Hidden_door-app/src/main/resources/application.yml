@@ -23,6 +23,13 @@ spring:
       max-request-size: 5MB # 요청 최대 크기
   config:
     import: optional:file:.env
+  web:
+    resources:
+      add-mappings: false # 기본 리소스 핸들러 매핑 비활성화
+  mvc:
+    hiddenmethod:
+      filter:
+        enabled: true # HTTP 메서드 오버라이딩 활성화
 
 custom:
   jwt:

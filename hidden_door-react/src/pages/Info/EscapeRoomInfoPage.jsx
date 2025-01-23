@@ -8,22 +8,25 @@ import Loading from "@components/common/loading/Loading";
 import InfoEditForm from "@components/common/form/InfoEditForm";
 import LockAnimation from "@components/animation/LockAnimation";
 import Button from "@components/common/buttons/Button";
-import PriceTable from "@components/common/table/PriceTable";
+// import PriceTable from "@components/common/table/PriceTable"; // 이미지 예시 코드
+import CautionList from "@components/caution/CautionList";
 
-// import { useImgUrl } from "@hooks/useImgUrl";
+// import { useImgUrl } from "@hooks/useImgUrl"; // 이미지 예시 코드
 
 const EscapeRoomInfoPage = () => {
-  const [escapeRoomInfo, setEscapeRoomInfo] = useState(null);
+  const [escapeRoomInfo, setEscapeRoomInfo] = useState([]);
+
   const [titleVisible, setTitleVisible] = useState(false);
   const titleRef = useRef(null);
+
   const [explanationVisible, setExplanationVisible] = useState(false);
   const explanationRef = useRef(null);
 
-  // const imageUrl = useImgUrl(escapeRoomInfo?.storedFileName);
+  // const imageUrl = useImgUrl(escapeRoomInfo?.storedFileName); // 이미지 예시 코드
 
   const getEscapeRoomInfo = async () => {
     try {
-      const res = await Api.get("/api/v1/escape-room/info");
+      const res = await Api.get("/api/v1/escape-rooms/info");
 
       setEscapeRoomInfo(res.data.data);
     } catch (error) {
@@ -39,7 +42,7 @@ const EscapeRoomInfoPage = () => {
     try {
       const newTitle = titleRef.current.value;
 
-      const res = await Api.put("/api/v1/escape-room/info", {
+      const res = await Api.put("/api/v1/escape-rooms/info", {
         ...escapeRoomInfo,
         title: newTitle
       });
@@ -56,7 +59,7 @@ const EscapeRoomInfoPage = () => {
     try {
       const newExplanation = explanationRef.current.value;
 
-      const res = await Api.put("/api/v1/escape-room/info", {
+      const res = await Api.put("/api/v1/escape-rooms/info", {
         ...escapeRoomInfo,
         explanation: newExplanation
       });
@@ -101,6 +104,7 @@ const EscapeRoomInfoPage = () => {
         </div>
         <div className="btn-container">
           <Button
+            className="btn"
             text="수정"
             onClick={() => setExplanationVisible(!explanationVisible)}
           />
@@ -118,7 +122,9 @@ const EscapeRoomInfoPage = () => {
         )}
       </section>
 
-      {/* <section>
+      {/* 이미지 예시 코드
+      
+      <section>
         <img
           src={imageUrl}
           alt={escapeRoomInfo.storedFileName}
@@ -127,19 +133,19 @@ const EscapeRoomInfoPage = () => {
       </section> */}
 
       {/* price */}
-      <DefaultSection
+      {/* <DefaultSection
         api=""
         className="section section-price"
         title="price"
         ChildComponent={PriceTable}
-      />
+      /> */}
 
       {/* caution */}
       <DefaultSection
-        api=""
+        api="/api/v1/cautions/list"
         className="section section-caution"
         title="caution"
-        ChildComponent={PriceTable}
+        ChildComponent={CautionList}
       />
     </>
   );

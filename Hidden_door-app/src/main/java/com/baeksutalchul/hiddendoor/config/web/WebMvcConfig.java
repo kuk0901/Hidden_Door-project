@@ -26,6 +26,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
       fullPath = "file:" + userHome + File.separator + uploadDir + "/";
     }
 
+    // 이미지 리소스 핸들러
     registry.addResourceHandler("/images/**")
         .addResourceLocations(fullPath);
 

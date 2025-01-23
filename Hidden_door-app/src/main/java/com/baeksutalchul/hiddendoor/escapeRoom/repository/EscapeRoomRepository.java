@@ -12,5 +12,5 @@ import com.baeksutalchul.hiddendoor.escapeRoom.domain.EscapeRoom;
 public interface EscapeRoomRepository extends MongoRepository<EscapeRoom, String> {
   List<EscapeRoom> findAll();
 
-  Optional<EscapeRoom> findByRoomId(String roomId);
+  Optional<EscapeRoom> findById(String id);
 }

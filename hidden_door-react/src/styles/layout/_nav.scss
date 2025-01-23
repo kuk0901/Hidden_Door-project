@@ -23,19 +23,21 @@
       position: relative;
 
       .link-items {
+        border: 1px solid white;
+        border-radius: 4px;
         position: absolute;
-        top: 30px;
+        top: 45px;
         left: 0;
         z-index: 10;
         @include mixins.flex-layout-column(space-between, align-center);
         background-color: variables.$dark-background-color;
         padding: 3px 10px 10px;
 
-        .link-item {
+        li {
           border-bottom: 1px solid black;
           padding: 3px;
 
-          &:last-child {
+          &.link-item--last {
             border-bottom: none;
           }
         }

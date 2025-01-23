@@ -24,6 +24,8 @@ public enum ErrorCode {
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ACCESS_403", "접근이 금지되었습니다."),
     FILE_SIZE_EXCEEDED(HttpStatus.EXPECTATION_FAILED, "FILE_SIZE_417", "파일 크기가 너무 큽니다! 최대 크기는 5MB입니다."),
     NO_CHANGES_DETECTED(HttpStatus.BAD_REQUEST, "NO_CHANGES_DETECTED", "변경된 내용이 없습니다."),
+    CAUTION_NOT_FOUND(HttpStatus.NOT_FOUND, "CAUTION_404", "주의사항을 찾을 수 없습니다."),
+    DELETE_FAILED(HttpStatus.BAD_REQUEST, "DELETE_FAILED", "삭제에 실패했습니다."),
 
     // page
     PAGINATION_ERROR(HttpStatus.BAD_REQUEST, "PAGINATION_400", "페이지 정보가 유효하지 않습니다."),

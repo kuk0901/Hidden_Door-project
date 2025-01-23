@@ -16,6 +16,7 @@
 @use "components/icons";
 @use "components/policy";
 @use "components/animation";
+@use "components/caution";
 
 // layout
 @use "layout/containers";
@@ -58,6 +59,21 @@
     color: variables.$dark-text-color;
     background-color: variables.$dark-background-color;
   }
+
+  .footer {
+    background-color: variables.$dark-background-color;
+
+    li {
+      color: variables.$dark-text-color;
+    }
+
+    .link-item {
+      color: variables.$light-blue-color;
+      &:hover {
+        color: variables.$confirm-text-color;
+      }
+    }
+  }
 }
 
 @media (prefers-color-scheme: dark) {
@@ -77,6 +93,22 @@
   .title-container {
     color: variables.$light-text-color;
     background-color: variables.$light-background-color;
+  }
+
+  .footer {
+    background-color: variables.$light-background-color;
+
+    li {
+      color: variables.$light-text-color;
+    }
+
+    .link-item {
+      color: variables.$confirm-text-color;
+
+      &:hover {
+        color: variables.$light-blue-color;
+      }
+    }
   }
 }
 
