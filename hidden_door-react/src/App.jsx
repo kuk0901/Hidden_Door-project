@@ -13,6 +13,7 @@ import { useAdmin } from "@hooks/useAdmin";
 import Api from "@axios/api";
 import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
 import { getCookie } from "./cookie/getCookie";
+import AdminReservation from "./admin/reservation/AdminReservation";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -89,6 +90,12 @@ function App() {
             <Route path="/hidden_door/main" element={<HomePage />} />
             <Route path="/hidden_door/admin" element={<ProtectedAdminRoute />}>
               {/* 관리자 전용 페이지들 */}
+              <Route element={<ProtectedAdminRoute />}>
+                <Route
+                  path="/admin/reservation"
+                  element={<AdminReservation />}
+                />
+              </Route>
             </Route>
           </Route>
 
