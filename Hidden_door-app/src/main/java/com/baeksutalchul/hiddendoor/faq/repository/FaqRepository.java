@@ -17,5 +17,5 @@ public interface FaqRepository extends MongoRepository<Faq, String> {
 
   boolean existsById(String id);
 
-  void deleteById(String id);
+  void deleteById(String id); 
 }
