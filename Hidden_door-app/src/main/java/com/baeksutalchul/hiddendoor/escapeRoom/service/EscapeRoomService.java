@@ -1,25 +1,32 @@
 package com.baeksutalchul.hiddendoor.escapeRoom.service;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baeksutalchul.hiddendoor.dto.EscapeRoomDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.escapeRoom.repository.EscapeRoomRepository;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
+import com.mongodb.client.result.UpdateResult;
 import com.baeksutalchul.hiddendoor.escapeRoom.domain.EscapeRoom;
-
-import java.util.Optional;
 
 @Service
 public class EscapeRoomService {
   private EscapeRoomRepository escapeRoomRepository;
   private ModelMapper modelMapper;
+  private MongoTemplate mongoTemplate;
 
-  public EscapeRoomService(EscapeRoomRepository escapeRoomRepository, ModelMapper modelMapper) {
+  public EscapeRoomService(EscapeRoomRepository escapeRoomRepository, ModelMapper modelMapper,
+      MongoTemplate mongoTemplate) {
     this.escapeRoomRepository = escapeRoomRepository;
     this.modelMapper = modelMapper;
+    this.mongoTemplate = mongoTemplate;
   }
 
   public ResponseDto<EscapeRoomDto> getEscapeRoomInfo() {
@@ -32,26 +39,80 @@ public class EscapeRoomService {
         .orElseThrow(() -> new CustomException(ErrorCode.ESCAPE_ROOM_NOT_FOUND));
   }
 
-  public ResponseDto<EscapeRoomDto> updateEscapeRoomInfo(EscapeRoomDto escapeRoomDto) {
-    // 1. Optional로 EscapeRoom 조회
-    EscapeRoom escapeRoom = escapeRoomRepository.findById(escapeRoomDto.getRoomId())
-        .orElseThrow(() -> new CustomException(ErrorCode.ESCAPE_ROOM_NOT_FOUND));
+  @Transactional
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomTitle(EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
 
-    // 2. DTO를 Entity로 변환
-    EscapeRoom updatedEscapeRoom = modelMapper.map(escapeRoomDto, EscapeRoom.class);
-
-    // 3. 변경사항 확인
-    if (escapeRoom.equals(updatedEscapeRoom)) {
+    if (existingEscapeRoom.getTitle().equals(escapeRoomDto.getTitle())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
-    // 4. 엔티티 업데이트 및 저장
-    EscapeRoom savedEscapeRoom = escapeRoomRepository.save(updatedEscapeRoom);
+    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Update update = new Update().set("title", escapeRoomDto.getTitle());
 
-    // 5. DTO로 변환하여 반환
-    EscapeRoomDto responseDto = modelMapper.map(savedEscapeRoom, EscapeRoomDto.class);
+    UpdateResult result = mongoTemplate.updateFirst(query, update, EscapeRoom.class);
 
-    return new ResponseDto<>(responseDto, "방탈출 정보가 업데이트되었습니다.");
+    if (result.getModifiedCount() == 0) {
+      throw new CustomException(ErrorCode.UPDATE_FAILED);
+    }
+
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
+
+    return new ResponseDto<>(updatedDto, "방탈출 제목이 업데이트되었습니다.");
+  }
+
+  @Transactional
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomExplanation(EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+
+    if (existingEscapeRoom.getExplanation().equals(escapeRoomDto.getExplanation())) {
+      throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+    }
+
+    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Update update = new Update().set("explanation", escapeRoomDto.getExplanation());
+
+    UpdateResult result = mongoTemplate.updateFirst(query, update, EscapeRoom.class);
+
+    if (result.getModifiedCount() == 0) {
+      throw new CustomException(ErrorCode.UPDATE_FAILED);
+    }
+
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
+
+    return new ResponseDto<>(updatedDto, "방탈출 설명이 업데이트되었습니다.");
+  }
+
+  @Transactional
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeTitleLine(EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+
+    if (existingEscapeRoom.getExplanation().equals(escapeRoomDto.getExplanation())) {
+      throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+    }
+
+    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Update update = new Update()
+        .set("themeHeaderTitle", escapeRoomDto.getThemeHeaderTitle())
+        .set("themeHeaderSubtitle", escapeRoomDto.getThemeHeaderSubtitle());
+
+    UpdateResult result = mongoTemplate.updateFirst(query, update, EscapeRoom.class);
+
+    if (result.getModifiedCount() == 0) {
+      throw new CustomException(ErrorCode.UPDATE_FAILED);
+    }
+
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
+
+    return new ResponseDto<>(updatedDto, "방탈출 설명이 업데이트되었습니다.");
+  }
+
+  private EscapeRoom findEscapeRoomById(String roomId) {
+    return escapeRoomRepository.findById(roomId)
+        .orElseThrow(() -> new CustomException(ErrorCode.ESCAPE_ROOM_NOT_FOUND));
   }
 
 }

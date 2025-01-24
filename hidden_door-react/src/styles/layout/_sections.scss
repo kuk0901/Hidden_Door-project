@@ -19,6 +19,39 @@
   }
 }
 
+.main-section__img {
+  @include mixins.flex-layout-row(center, center);
+  margin-bottom: 50px;
+
+  @media (max-width: variables.$breakpoint-md) {
+    // 768px 미만의 화면에 적용될 스타일
+    margin-bottom: 30px;
+  }
+
+  img {
+    width: 500px;
+    height: 500px;
+    border-radius: 10px;
+    box-shadow: 10px 4px 40px rgba(0, 0, 0, 0.7);
+    animation: float 2s ease-in-out infinite alternate;
+
+    @media (max-width: variables.$breakpoint-md) {
+      // 768px 미만의 화면에 적용될 스타일
+      width: 300px;
+      height: 300px;
+    }
+  }
+
+  @keyframes float {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-10px);
+    }
+  }
+}
+
 .section-description {
   padding: 10px;
 

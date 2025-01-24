@@ -3,8 +3,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { Suspense, useEffect, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import HomePage from "@pages/home/HomePage";
-import LoginPage from "@pages/admin/LoginPage";
 import Confirm from "@components/common/dialogs/Confirm";
 import Loading from "@components/common/loading/Loading";
 import Layout from "@components/common/layout/Layout";
@@ -12,9 +10,13 @@ import Layout from "@components/common/layout/Layout";
 import { useAdmin } from "@hooks/useAdmin";
 import Api from "@axios/api";
 import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
+
+import HomePage from "@pages/home/HomePage";
+import LoginPage from "@pages/admin/LoginPage";
 import PrivacyPolicy from "@pages/policy/PrivacyPolicy";
 import TermsOfService from "@pages/policy/TermsOfService";
-import EscapeRoomInfoPage from "./pages/Info/EscapeRoomInfoPage";
+import EscapeRoomInfoPage from "@pages/Info/EscapeRoomInfoPage";
+import ThemePage from "@pages/theme/ThemePage";
 
 // FIXME: Theme -> 동적 라우팅을 위해 데이터를 가져온 후 Route 생성 -> ThemeDetail이라는 페이지로 theme 정보 담긴 item 전달
 function App() {
@@ -92,6 +94,7 @@ function App() {
             <Route path="/hidden_door">
               <Route path="main" element={<HomePage />} />
               <Route path="info" element={<EscapeRoomInfoPage />} />
+              <Route path="theme" element={<ThemePage />} />
             </Route>
 
             {/* 정책 관련 페이지 그룹화 */}

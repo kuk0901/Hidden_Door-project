@@ -4,7 +4,7 @@ export const navLinkList = [
     value: "Hidden_Door"
   },
   {
-    route: "#",
+    route: "hidden_door/theme",
     value: "테마"
   },
   {

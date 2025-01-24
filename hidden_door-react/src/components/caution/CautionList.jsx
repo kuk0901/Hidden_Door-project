@@ -134,6 +134,7 @@ const CautionList = ({ data, setSectionData }) => {
             onCancel={handleEditCancel}
             onChange={(e) => setTitle(e.target.value)}
             area={false}
+            autoFocus={true}
           />
           <InfoEditForm
             labelVal="주의사항 내용"

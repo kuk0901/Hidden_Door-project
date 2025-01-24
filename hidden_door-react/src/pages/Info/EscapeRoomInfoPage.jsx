@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import Api from "@axios/api";
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from "react";
 
 import Header from "@components/common/layout/Header";
 import DefaultSection from "@components/common/sections/DefaultSection";
@@ -8,13 +8,12 @@ import Loading from "@components/common/loading/Loading";
 import InfoEditForm from "@components/common/form/InfoEditForm";
 import LockAnimation from "@components/animation/LockAnimation";
 import Button from "@components/common/buttons/Button";
-// import PriceTable from "@components/common/table/PriceTable"; // 이미지 예시 코드
+// import PriceTable from "@components/common/table/PriceTable"; // 기갹 테이블 추후 수정
 import CautionList from "@components/caution/CautionList";
-
-// import { useImgUrl } from "@hooks/useImgUrl"; // 이미지 예시 코드
+import { useEscapeRoom } from "@hooks/useEscapeRoom";
 
 const EscapeRoomInfoPage = () => {
-  const [escapeRoomInfo, setEscapeRoomInfo] = useState([]);
+  const { escapeRoom, setEscapeRoom } = useEscapeRoom();
 
   const [titleVisible, setTitleVisible] = useState(false);
   const titleRef = useRef(null);
@@ -22,34 +21,19 @@ const EscapeRoomInfoPage = () => {
   const [explanationVisible, setExplanationVisible] = useState(false);
   const explanationRef = useRef(null);
 
-  // const imageUrl = useImgUrl(escapeRoomInfo?.storedFileName); // 이미지 예시 코드
-
-  const getEscapeRoomInfo = async () => {
-    try {
-      const res = await Api.get("/api/v1/escape-rooms/info");
-
-      setEscapeRoomInfo(res.data.data);
-    } catch (error) {
-      toast.error(error.message || "알 수 없는 오류가 발생했습니다.");
-    }
-  };
-
-  useEffect(() => {
-    getEscapeRoomInfo();
-  }, []);
-
   const handleTitleUpdate = async () => {
     try {
       const newTitle = titleRef.current.value;
 
-      const res = await Api.put("/api/v1/escape-rooms/info", {
-        ...escapeRoomInfo,
+      const res = await Api.patch("/api/v1/escape-rooms/info/title", {
+        roomId: escapeRoom.roomId,
         title: newTitle
       });
 
-      setEscapeRoomInfo(res.data.data);
+      setEscapeRoom(res.data.data);
 
       toast.success("제목이 성공적으로 수정되었습니다.");
+      setTitleVisible(false);
     } catch (error) {
       toast.error(error.message || "알 수 없는 오류가 발생했습니다.");
     }
@@ -59,26 +43,27 @@ const EscapeRoomInfoPage = () => {
     try {
       const newExplanation = explanationRef.current.value;
 
-      const res = await Api.put("/api/v1/escape-rooms/info", {
-        ...escapeRoomInfo,
+      const res = await Api.patch("/api/v1/escape-rooms/info/explanation", {
+        roomId: escapeRoom.roomId,
         explanation: newExplanation
       });
 
-      setEscapeRoomInfo(res.data.data);
+      setEscapeRoom(res.data.data);
 
       toast.success("상세 설명이 성공적으로 수정되었습니다.");
+      setExplanationVisible(false);
     } catch (error) {
       toast.error(error.message || "알 수 없는 오류가 발생했습니다.");
     }
   };
 
-  if (!escapeRoomInfo) return <Loading />;
+  if (!escapeRoom) return <Loading />;
 
   // FIXME: 각 영역 코드 작성
   return (
     <>
       <Header
-        title={escapeRoomInfo.title}
+        title={escapeRoom.title}
         text="제목 수정"
         reservation={true}
         handleUpdate={() => setTitleVisible(!titleVisible)}
@@ -87,10 +72,12 @@ const EscapeRoomInfoPage = () => {
       {titleVisible && (
         <InfoEditForm
           labelVal="제목"
-          currentTitle={escapeRoomInfo.title}
+          currentTitle={escapeRoom.title}
           onUpdate={handleTitleUpdate}
           onCancel={() => setTitleVisible(false)}
           onRef={titleRef}
+          viewButton={true}
+          autoFocus={true}
         />
       )}
 
@@ -100,7 +87,7 @@ const EscapeRoomInfoPage = () => {
 
         {/* explanation */}
         <div className="info-explanation text-center">
-          {escapeRoomInfo.explanation}
+          {escapeRoom.explanation}
         </div>
         <div className="btn-container">
           <Button
@@ -113,24 +100,16 @@ const EscapeRoomInfoPage = () => {
         {explanationVisible && (
           <InfoEditForm
             labelVal="상세 설명"
-            currentTitle={escapeRoomInfo.explanation}
+            currentTitle={escapeRoom.explanation}
             onUpdate={handleExplanationUpdate}
             onCancel={() => setExplanationVisible(false)}
             onRef={explanationRef}
             area={true}
+            viewButton={true}
+            autoFocus={true}
           />
         )}
       </section>
-
-      {/* 이미지 예시 코드
-      
-      <section>
-        <img
-          src={imageUrl}
-          alt={escapeRoomInfo.storedFileName}
-          style={{ width: "500px", height: "500px" }}
-        />
-      </section> */}
 
       {/* price */}
       {/* <DefaultSection
@@ -139,6 +118,17 @@ const EscapeRoomInfoPage = () => {
         title="price"
         ChildComponent={PriceTable}
       /> */}
+      <div
+        style={{
+          border: "1px solid white",
+          height: "300px",
+          marginBottom: "10px",
+          textAlign: "center",
+          fontSize: "40px"
+        }}
+      >
+        Price
+      </div>
 
       {/* caution */}
       <DefaultSection

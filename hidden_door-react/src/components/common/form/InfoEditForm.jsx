@@ -8,12 +8,20 @@ const InfoEditForm = ({
   onChange,
   onRef,
   area,
-  viewButton
+  viewButton,
+  autoFocus
 }) => {
   const resizeTextarea = (e) => {
     e.target.style.height = "auto";
     e.target.style.height = `${e.target.scrollHeight}px`;
   };
+
+  const onFocus = (e) => {
+    const element = e.target;
+    element.selectionStart = element.value.length;
+  };
+
+  const autoFocusProps = autoFocus ? { autoFocus: true } : {};
 
   if (onRef) {
     return (
@@ -27,6 +35,7 @@ const InfoEditForm = ({
               <div className="textarea-container textarea-container--edit">
                 <textarea
                   onChange={resizeTextarea}
+                  onFocus={onFocus}
                   id="title"
                   name="title"
                   ref={onRef}
@@ -36,6 +45,7 @@ const InfoEditForm = ({
                     minHeight: "150px",
                     maxHeight: "170px"
                   }}
+                  {...autoFocusProps}
                 />
               </div>
             </>
@@ -51,6 +61,7 @@ const InfoEditForm = ({
                   ref={onRef}
                   defaultValue={currentTitle}
                   className="input--edit"
+                  {...autoFocusProps}
                 />
               </div>
             </>
@@ -79,6 +90,7 @@ const InfoEditForm = ({
                     resizeTextarea(e);
                     onChange(e);
                   }}
+                  onFocus={onFocus}
                   id="title"
                   name="title"
                   value={currentTitle}
@@ -87,6 +99,7 @@ const InfoEditForm = ({
                     minHeight: "150px",
                     maxHeight: "170px"
                   }}
+                  {...autoFocusProps}
                 />
               </div>
             </>
@@ -102,6 +115,7 @@ const InfoEditForm = ({
                   value={currentTitle}
                   onChange={onChange}
                   className="input--edit"
+                  {...autoFocusProps}
                 />
               </div>
             </>

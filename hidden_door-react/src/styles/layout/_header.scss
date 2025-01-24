@@ -2,9 +2,24 @@
 @use "../abstracts/variables";
 
 .header {
-  .title-container {
+  .header-container {
     @include mixins.flex-layout-row($justify: space-between, $align: center);
 
+    .title-container {
+      @include mixins.flex-layout-column(
+        $justify: space-between,
+        $align: baseline
+      );
+
+      .title {
+        margin-bottom: 0;
+      }
+
+      .subtitle {
+        padding: 5px 10px 10px;
+        font-size: 16px;
+      }
+    }
     .link-container {
       @include mixins.flex-layout-row($justify: space-around, $align: center);
       margin-right: 10px;

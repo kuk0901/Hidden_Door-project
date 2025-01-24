@@ -26,6 +26,8 @@ public enum ErrorCode {
     NO_CHANGES_DETECTED(HttpStatus.BAD_REQUEST, "NO_CHANGES_DETECTED", "변경된 내용이 없습니다."),
     CAUTION_NOT_FOUND(HttpStatus.NOT_FOUND, "CAUTION_404", "주의사항을 찾을 수 없습니다."),
     DELETE_FAILED(HttpStatus.BAD_REQUEST, "DELETE_FAILED", "삭제에 실패했습니다."),
+    THEME_NOT_FOUND(HttpStatus.NOT_FOUND, "THEME_404", "테마 정보를 찾을 수 없습니다."),
+    UPDATE_FAILED(HttpStatus.BAD_REQUEST, "UPDATE_FAILED", "정보를 업데이트하는 데에 실패했습니다."),
 
     // page
     PAGINATION_ERROR(HttpStatus.BAD_REQUEST, "PAGINATION_400", "페이지 정보가 유효하지 않습니다."),
