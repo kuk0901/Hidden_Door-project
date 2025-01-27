@@ -20,6 +20,7 @@
         font-size: 16px;
       }
     }
+
     .link-container {
       @include mixins.flex-layout-row($justify: space-around, $align: center);
       margin-right: 10px;
@@ -45,6 +46,18 @@
           }
         }
       }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    // 576px 미만의 화면에 적용될 스타일
+
+    .header-container {
+      @include mixins.flex-layout-column(
+        $justify: space-between,
+        $align: baseline
+      );
+      padding-bottom: 10px;
     }
   }
 }

@@ -35,7 +35,10 @@ const EscapeRoomInfoPage = () => {
       toast.success("제목이 성공적으로 수정되었습니다.");
       setTitleVisible(false);
     } catch (error) {
-      toast.error(error.message || "알 수 없는 오류가 발생했습니다.");
+      toast.error(
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
     }
   };
 
@@ -53,7 +56,10 @@ const EscapeRoomInfoPage = () => {
       toast.success("상세 설명이 성공적으로 수정되었습니다.");
       setExplanationVisible(false);
     } catch (error) {
-      toast.error(error.message || "알 수 없는 오류가 발생했습니다.");
+      toast.error(
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
     }
   };
 

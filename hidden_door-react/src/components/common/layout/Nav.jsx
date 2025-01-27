@@ -71,7 +71,13 @@ const Nav = () => {
         </>
       )}
 
-      {admin && <Button text="로그아웃" onClick={handleLogout} />}
+      {admin && (
+        <Button
+          text="로그아웃"
+          onClick={handleLogout}
+          className="btn--signout"
+        />
+      )}
     </nav>
   );
 };

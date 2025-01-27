@@ -9,7 +9,7 @@ import Layout from "@components/common/layout/Layout";
 
 import { useAdmin } from "@hooks/useAdmin";
 import Api from "@axios/api";
-import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
+import ProtectedAdminRoute from "@routes/ProtectedAdminRoute";
 
 import HomePage from "@pages/home/HomePage";
 import LoginPage from "@pages/admin/LoginPage";
@@ -17,11 +17,15 @@ import PrivacyPolicy from "@pages/policy/PrivacyPolicy";
 import TermsOfService from "@pages/policy/TermsOfService";
 import EscapeRoomInfoPage from "@pages/Info/EscapeRoomInfoPage";
 import ThemePage from "@pages/theme/ThemePage";
+import { useThemeList } from "@hooks/useThemeList";
+import ThemeDetailPage from "@pages/theme/ThemeDetailPage";
+import ThemeAddPage from "@pages/theme/ThemeAddPage";
 
 // FIXME: Theme -> 동적 라우팅을 위해 데이터를 가져온 후 Route 생성 -> ThemeDetail이라는 페이지로 theme 정보 담긴 item 전달
 function App() {
   const { setAdmin } = useAdmin();
   const [loading, setLoading] = useState(true);
+  const { themeList, setThemeList } = useThemeList();
 
   const checkAdminStatus = async () => {
     const token = localStorage.getItem("token");
@@ -62,8 +66,22 @@ function App() {
     setLoading(false); // 모든 경우에 로딩 종료
   };
 
+  const getAllThemes = async () => {
+    try {
+      const res = await Api.get("/api/v1/themes/all");
+
+      setThemeList(res.data.data);
+    } catch (error) {
+      toast.error(
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
+    }
+  };
+
   useEffect(() => {
     checkAdminStatus();
+    getAllThemes();
   }, [setAdmin]);
 
   if (loading) return <Loading />; // 로딩 중일 때 로딩 컴포넌트 표시
@@ -94,7 +112,17 @@ function App() {
             <Route path="/hidden_door">
               <Route path="main" element={<HomePage />} />
               <Route path="info" element={<EscapeRoomInfoPage />} />
-              <Route path="theme" element={<ThemePage />} />
+              <Route path="theme">
+                <Route index element={<ThemePage />} />
+                {themeList.map((theme) => (
+                  <Route
+                    key={theme.themeId}
+                    path={theme.themeId}
+                    element={<ThemeDetailPage theme={theme} />}
+                  />
+                ))}
+                <Route path="add" element={<ThemeAddPage />} />
+              </Route>
             </Route>
 
             {/* 정책 관련 페이지 그룹화 */}

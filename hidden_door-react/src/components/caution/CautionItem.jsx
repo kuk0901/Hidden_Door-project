@@ -60,7 +60,11 @@ const CautionItem = ({ admin, item, handleVisible, setSectionData }) => {
       {admin && (
         <div className="btn-container">
           <Button text="수정" onClick={handleVisible} className="btn" />
-          <Button text="삭제" onClick={handleDeleteCaution} className="btn" />
+          <Button
+            text="삭제"
+            onClick={handleDeleteCaution}
+            className="btn delete"
+          />
         </div>
       )}
     </li>

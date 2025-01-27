@@ -7,7 +7,7 @@ import Api from "@axios/api";
 
 // FIXME: 데이터 요청하는 비동기 코드 필요, Swiper property 수정
 // * theme: imgUrl, route는 recoil 사용해서 관리
-const ThemeAside = () => {
+const HomeThemeSection = () => {
   // FIXME: slide 적용(swiper)
   const [themeList, setThemeList] = useState([]);
 
@@ -17,7 +17,10 @@ const ThemeAside = () => {
 
       setThemeList(res.data.data);
     } catch (error) {
-      toast.error(error.message || "");
+      toast.error(
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
     }
   };
 
@@ -50,4 +53,4 @@ const ThemeAside = () => {
   );
 };
 
-export default ThemeAside;
+export default HomeThemeSection;

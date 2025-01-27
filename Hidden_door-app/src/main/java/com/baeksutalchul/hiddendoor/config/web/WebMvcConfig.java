@@ -29,7 +29,5 @@ public class WebMvcConfig implements WebMvcConfigurer {
     // 이미지 리소스 핸들러
     registry.addResourceHandler("/images/**")
         .addResourceLocations(fullPath);
-
-    System.out.println("fullPath: " + fullPath);
   }
 }

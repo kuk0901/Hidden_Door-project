@@ -18,6 +18,8 @@ public class EscapeRoomDto {
   private String originalFileName;
   private String themeHeaderTitle;
   private String themeHeaderSubtitle;
+  private String themeTitle;
+  private String themeExplanation;
   private String themeDetailHeaderTitle;
   private String themeDetailHeaderSubtitle;
 }

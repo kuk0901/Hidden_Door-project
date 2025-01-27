@@ -18,6 +18,8 @@
     }
 
     &.link-container__mini {
+      width: 30px;
+
       margin: 0;
       @include mixins.flex-layout-row(space-between, align-center);
       position: relative;
@@ -43,5 +45,9 @@
         }
       }
     }
+  }
+
+  .btn--signout {
+    margin-right: 5px;
   }
 }

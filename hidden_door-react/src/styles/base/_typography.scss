@@ -1,15 +1,15 @@
 @use "../abstracts/mixins";
 
 // color
-.text-gray {
+.text--gray {
   @include mixins.text-color-hover(gray, rgb(88, 86, 86));
 }
 
-.text-blue {
+.text--blue {
   @include mixins.text-color-hover-auto(blue);
 }
 
-.text-red {
+.text--red {
   @include mixins.text-color-hover-auto(red, 15%);
 }
 

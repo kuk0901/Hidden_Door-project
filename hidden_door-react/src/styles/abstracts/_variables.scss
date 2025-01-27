@@ -48,5 +48,9 @@ $breakpoint-sm: 575px; // 576px 미만 -> 작은 화면 (모바일)
   @media (max-width: $breakpoint-md) {
     768px 미만의 화면에 적용될 스타일
   }
+
+  @media (max-width: $breakpoint-sm) {
+    576px 미만의 화면에 적용될 스타일
+  }
 }
 */

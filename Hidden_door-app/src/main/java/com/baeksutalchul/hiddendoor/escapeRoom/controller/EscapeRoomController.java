@@ -45,8 +45,13 @@ public class EscapeRoomController {
   @PatchMapping("/info/theme-title-line")
   public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeTitleLine(
       @RequestBody EscapeRoomDto escapeRoomDto) {
-
     return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeTitleLine(escapeRoomDto));
+  }
+
+  @PatchMapping("/info/theme-explanation-line")
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeExplanationLine(
+      @RequestBody EscapeRoomDto escapeRoomDto) {
+    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeExplanationLine(escapeRoomDto));
   }
 
 }

@@ -15,6 +15,10 @@
   margin: 10px;
 }
 
+.btn-link-container {
+  @include mixins.flex-layout-row(right, center);
+}
+
 .list-container {
   @include mixins.flex-layout-row(space-around, center);
 }
@@ -35,5 +39,17 @@
 .login-form-container {
   @media (max-width: variables.$breakpoint-lg) {
     margin-top: 30px;
+  }
+}
+
+.themeForm-container {
+  .form-container {
+    &.flex {
+      @include mixins.flex-layout-row(flex-start, center);
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    margin: 0;
   }
 }
