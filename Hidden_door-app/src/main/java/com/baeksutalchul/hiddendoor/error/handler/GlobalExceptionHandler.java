@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
     ErrorResponse response = new ErrorResponse(
         errorCode.getHttpStatus().value(),
         errorCode.getCode(),
-        errorCode.getMsg(),
+        e.getDetail(),
         page);
 
     logger.info("ErrorResponse: {}", response);

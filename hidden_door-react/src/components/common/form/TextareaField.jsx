@@ -9,7 +9,9 @@ const TextareaField = ({
   rows = 3,
   themeForm,
   id,
-  label
+  label,
+  value,
+  onChange
 }) => {
   // register와 themeForm이 동시에 있는 경우
   if (register && themeForm) {
@@ -50,7 +52,7 @@ const TextareaField = ({
           rows={rows}
           className={`textarea__${className}`}
         />
-        {error && <p>{error}</p>}
+        {error && <p className="text--red">{error}</p>}
       </div>
     );
   }
@@ -66,13 +68,16 @@ const TextareaField = ({
         </div>
         <div className={`textarea-container textarea-container__${className}`}>
           <textarea
+            id={id}
+            name={name}
             placeholder={placeholder}
             rows={rows}
             className={`textarea__${className}`}
-            name={name}
+            value={value}
+            onChange={onChange}
             required
           />
-          {error && <p>{error}</p>}
+          {error && <p className="text--red">{error}</p>}
         </div>
       </>
     );
@@ -86,7 +91,7 @@ const TextareaField = ({
         className={`textarea__${className}`}
         name={name}
       />
-      {error && <p>{error}</p>}
+      {error && <p className="text--red">{error}</p>}
     </div>
   );
 };

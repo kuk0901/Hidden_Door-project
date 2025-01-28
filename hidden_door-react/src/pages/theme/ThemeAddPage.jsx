@@ -2,12 +2,12 @@ import { useState } from "react";
 import FileForm from "@components/common/form/file/FileForm";
 // import Api from "@axios/api";
 import { toast } from "react-toastify";
+import { validateThemeField } from "../../validation/validationRules";
 
 /* * FIXME:
- * form 위치 고려해서 genre 부분 옮겨야 함 -> scss 추가도 필요
- * 수정 form 구조 고려해서 InputFiled 변경해야 할 수도 있음 -> file
- * 객체 key-value 학인
+ * UI 수정 필요, genre 부분 errorMessage 위치 수정
  */
+
 const ThemeAddPage = () => {
   const [genreList, setGenreList] = useState([
     { id: "asd1", name: "드라마", checked: false },
@@ -19,6 +19,18 @@ const ThemeAddPage = () => {
     { id: "asd7", name: "잠입", checked: false }
   ]);
 
+  const [formData, setFormData] = useState({
+    originalFileName: null,
+    minParticipants: 0,
+    maxParticipants: 0,
+    level: 0,
+    time: 0,
+    price: "",
+    description: ""
+  });
+
+  const [errors, setErrors] = useState({});
+
   const [previewImage, setPreviewImage] = useState(null);
 
   const handleGenreChange = (id) => {
@@ -29,8 +41,8 @@ const ThemeAddPage = () => {
     );
   };
 
-  // preview
   const handleFileChange = (file) => {
+    setFormData((prev) => ({ ...prev, originalFileName: file }));
     if (file) {
       const fileURL = URL.createObjectURL(file);
       setPreviewImage(fileURL);
@@ -39,31 +51,62 @@ const ThemeAddPage = () => {
     }
   };
 
-  const handleSubmit = async (data, reset) => {
-    const selectedGenres = genreList
-      .filter((genre) => genre.checked)
-      .map((genre) => genre.name);
+  const handleInputChange = (e) => {
+    const { name, value, type } = e.target;
 
-    const formData = new FormData();
+    // number 타입인 경우 숫자로 변환
+    const newValue = type === "number" ? Number(value) : value;
 
-    // 폼 데이터에 장르 추가
-    formData.append("genres", JSON.stringify(selectedGenres));
+    setFormData((prev) => ({ ...prev, [name]: newValue }));
 
-    // 다른 필드들 추가
-    Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
+    // 입력 값이 변경될 때마다 유효성 검사 수행
+    const error = validateThemeField(name, newValue);
+    setErrors((prev) => ({ ...prev, [name]: error }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // 모든 필드에 대해 유효성 검사 수행
+    const newErrors = {};
+    Object.keys(formData).forEach((key) => {
+      const error = validateThemeField(key, formData[key]);
+      if (error) newErrors[key] = error;
     });
 
+    // 장르 선택 검사
+    const selectedGenres = genreList.filter((genre) => genre.checked);
+    if (selectedGenres.length === 0) {
+      newErrors.genres = "최소 하나의 장르를 선택해주세요.";
+    }
+
+    setErrors(newErrors);
+
+    // 에러가 있으면 제출을 중단
+    if (Object.keys(newErrors).length > 0) {
+      toast.error("입력 정보를 확인해주세요.");
+      return;
+    }
+
+    const submitData = new FormData();
+    Object.keys(formData).forEach((key) => {
+      submitData.append(key, formData[key]);
+    });
+
+    // 선택된 장르 이름을 추출하여 추가
+    const selectedGenreNames = selectedGenres.map((genre) => genre.name);
+    submitData.append("genres", JSON.stringify(selectedGenreNames));
+
     try {
-      console.log(formData);
-      // const res = await Api.post("/api/v1/themes", formData, {
+      // API 호출 로직
+      // const res = await Api.post("/api/v1/themes", submitData, {
       //   headers: {
       //     "Content-Type": "multipart/form-data"
       //   }
       // });
 
       // 성공 처리
-      reset();
+      toast.success("테마가 성공적으로 추가되었습니다.");
     } catch (error) {
       toast.error(
         error.message ||
@@ -75,68 +118,65 @@ const ThemeAddPage = () => {
   const themeFields = [
     {
       name: "originalFileName",
+      id: "originalFileName",
       type: "file",
       field: "input",
       placeholder: "테마 이미지",
-      errorMessage: "이미지를 선택해주세요",
       label: "테마 이미지",
       themeForm: true,
       onChange: handleFileChange
     },
     {
       name: "minParticipants",
+      id: "minParticipants",
       type: "number",
       field: "input",
       placeholder: "2",
-      errorMessage: "최소 인원을 입력해주세요",
       label: "최소인원",
       themeForm: true
     },
     {
       name: "maxParticipants",
+      id: "maxParticipants",
       type: "number",
       field: "input",
       placeholder: "5",
-      errorMessage: "최대 인원을 입력해주세요",
       label: "최대인원",
       themeForm: true
     },
     {
       name: "level",
+      id: "level",
       type: "number",
       field: "input",
       placeholder: "3",
-      errorMessage: "난이도를 입력해주세요",
       label: "난이도",
       themeForm: true
     },
     {
-      id: "time",
       name: "time",
+      id: "time",
       type: "number",
       field: "input",
       placeholder: "플레이 시간 (분)",
-      errorMessage: "플레이 시간을 입력해주세요",
       label: "time",
       themeForm: true
     },
 
     {
-      id: "price",
       name: "price",
+      id: "price",
       type: "text",
       field: "input",
       placeholder: "20,000",
-      errorMessage: "가격을 입력해주세요",
       label: "가격 (1인당)",
       themeForm: true
     },
     {
-      id: "description",
       name: "description",
+      id: "description",
       field: "textarea",
       placeholder: "테마 설명",
-      errorMessage: "테마 설명을 입력해주세요",
       label: "description",
       themeForm: true
     }
@@ -159,6 +199,9 @@ const ThemeAddPage = () => {
       <FileForm
         onSubmit={handleSubmit}
         fields={themeFields}
+        formData={formData}
+        onInputChange={handleInputChange}
+        errors={errors}
         btnText="테마 추가"
       />
 

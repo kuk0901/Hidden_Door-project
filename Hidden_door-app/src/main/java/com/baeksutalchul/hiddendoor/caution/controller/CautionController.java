@@ -3,7 +3,6 @@ package com.baeksutalchul.hiddendoor.caution.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baeksutalchul.hiddendoor.caution.domain.Caution;
 import com.baeksutalchul.hiddendoor.caution.service.CautionService;
 import com.baeksutalchul.hiddendoor.dto.CautionDto;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
@@ -12,7 +11,9 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,19 +32,19 @@ public class CautionController {
   }
 
   @GetMapping("/list")
-  public ResponseEntity<ResponseDto<List<Caution>>> getCautionList() {
+  public ResponseEntity<ResponseDto<List<CautionDto>>> getCautionList() {
     return ResponseEntity.ok().body(cautionService.getCautionList());
   }
 
   @PutMapping("/caution/{id}")
-  public ResponseEntity<ResponseDto<List<Caution>>> postMethodName(@PathVariable("id") String cautionId,
+  public ResponseEntity<ResponseDto<List<CautionDto>>> postMethodName(@PathVariable("id") String cautionId,
       @RequestBody CautionDto cautionDto) {
 
     return ResponseEntity.ok().body(cautionService.updateCaution(cautionId, cautionDto));
   }
 
   @DeleteMapping("/caution/{id}")
-  public ResponseEntity<ResponseDto<List<Caution>>> deleteCautionOne(@PathVariable("id") String cautionId) {
+  public ResponseEntity<ResponseDto<List<CautionDto>>> deleteCautionOne(@PathVariable("id") String cautionId) {
     return ResponseEntity.ok().body(cautionService.deleteCautionOne(cautionId));
   }
 }

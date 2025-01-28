@@ -7,9 +7,12 @@ import org.springframework.stereotype.Service;
 
 import com.baeksutalchul.hiddendoor.caution.domain.Caution;
 import com.baeksutalchul.hiddendoor.caution.repository.CautionRepository;
+
 import com.baeksutalchul.hiddendoor.dto.CautionDto;
+
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
+
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 
 @Service
@@ -22,13 +25,17 @@ public class CautionService {
     this.modelMapper = modelMapper;
   }
 
-  public ResponseDto<List<Caution>> getCautionList() {
+  public ResponseDto<List<CautionDto>> getCautionList() {
     List<Caution> cautionList = cautionRepository.findAll();
 
-    return new ResponseDto<>(cautionList, "주의사항 리스트입니다.");
+    List<CautionDto> cautionDtoList = cautionList.stream()
+        .map(caution -> modelMapper.map(caution, CautionDto.class))
+        .toList();
+
+    return new ResponseDto<>(cautionDtoList, "success");
   }
 
-  public ResponseDto<List<Caution>> updateCaution(String cautionId, CautionDto cautionDto) {
+  public ResponseDto<List<CautionDto>> updateCaution(String cautionId, CautionDto cautionDto) {
     Caution caution = cautionRepository.findById(cautionId)
         .orElseThrow(() -> new CustomException(ErrorCode.CAUTION_NOT_FOUND));
 
@@ -40,13 +47,13 @@ public class CautionService {
 
     cautionRepository.save(updateCaution);
 
-    ResponseDto<List<Caution>> responseDto = getCautionList();
+    ResponseDto<List<CautionDto>> responseDto = getCautionList();
     responseDto.setMsg("주의사항이 수정되었습니다.");
 
     return responseDto;
   }
 
-  public ResponseDto<List<Caution>> deleteCautionOne(String cautionId) {
+  public ResponseDto<List<CautionDto>> deleteCautionOne(String cautionId) {
     cautionRepository.findById(cautionId)
         .orElseThrow(() -> new CustomException(ErrorCode.CAUTION_NOT_FOUND));
 
@@ -58,7 +65,7 @@ public class CautionService {
       throw new CustomException(ErrorCode.DELETE_FAILED); // 삭제 실패 시 예외 처리
     }
 
-    ResponseDto<List<Caution>> responseDto = getCautionList();
+    ResponseDto<List<CautionDto>> responseDto = getCautionList();
     responseDto.setMsg("해당 주의사항이 삭제되었습니다.");
 
     return responseDto;

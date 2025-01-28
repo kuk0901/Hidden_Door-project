@@ -1,28 +1,30 @@
-import { useForm } from "react-hook-form";
 import InputField from "@components/common/form/InputField";
 import SubmitButton from "@components/common/form/SubmitButton";
 import TextareaField from "@components/common/form/TextareaField";
 
-// FIXME: file form 작성
-const FileForm = ({ onSubmit, fields, btnText }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors }
-  } = useForm();
-
+const FileForm = ({
+  onSubmit,
+  fields,
+  formData,
+  onInputChange,
+  btnText,
+  errors
+}) => {
   const renderField = (field) => {
     const commonProps = {
-      register,
       name: field.name,
       placeholder: field.placeholder,
-      error: errors[field.name] && field.errorMessage,
+      error: errors[field.name] || field.errorMessage,
       className: field.className || "",
       label: field.label,
       themeForm: field.themeForm,
-      id: field.id
+      id: field.id,
+      onChange: field.type === "file" ? field.onChange : onInputChange
     };
+
+    if (field.type !== "file") {
+      commonProps.value = formData[field.name] || "";
+    }
 
     if (field.type === "file" && field.onChange) {
       return (
@@ -30,7 +32,8 @@ const FileForm = ({ onSubmit, fields, btnText }) => {
           key={field.name}
           {...commonProps}
           type={field.type}
-          onChange={(e) => field.onChange(e.target.files[0])} // 파일 변경 시 핸들러 호출
+          onChange={(e) => field.onChange(e.target.files[0])}
+          value={undefined}
         />
       );
     }
@@ -43,11 +46,9 @@ const FileForm = ({ onSubmit, fields, btnText }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit((data) => onSubmit(data, reset))}
-      className="flex form-container"
-    >
+    <form onSubmit={onSubmit} className="flex form-container">
       {fields.map(renderField)}
+      {errors.genres && <div className="error">{errors.genres}</div>}
       <SubmitButton text={btnText} />
     </form>
   );

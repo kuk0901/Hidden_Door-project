@@ -14,13 +14,14 @@ const Form = ({ onSubmit, fields, btnText }) => {
 
   const renderField = (field) => {
     const commonProps = {
-      register: register(field.name, validationRules[field.name]), // 유효성 검사 규칙 적용
+      register: register(field.name, validationRules[field.name] || {}), // 유효성 검사 규칙 적용
       name: field.name,
       placeholder: field.placeholder,
       error: errors[field.name]?.message,
       className: field.className || "",
       id: field.id,
-      label: field.label
+      label: field.label,
+      type: field.type
     };
 
     return field.field === "textarea" ? (
