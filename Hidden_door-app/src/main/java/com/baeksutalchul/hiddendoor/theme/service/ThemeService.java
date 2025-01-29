@@ -55,7 +55,12 @@ public class ThemeService {
   }
 
   @Transactional
-  public ResponseDto<String> addThemeWithFile(ThemeDto themeDto, MultipartFile file) {
+  public ResponseDto<List<ThemeDto>> addThemeWithFile(ThemeDto themeDto, MultipartFile file) {
+    // 파일 이름을 themeDto에 설정
+    if (file != null && !file.isEmpty()) {
+      themeDto.setOriginalFileName(file.getOriginalFilename());
+    }
+
     // 중복 검사
     Criteria criteria = new Criteria().orOperator(
         Criteria.where("themeName").is(themeDto.getThemeName()),
@@ -85,6 +90,9 @@ public class ThemeService {
     Theme savedTheme = modelMapper.map(themeDto, Theme.class);
     themeRepository.save(savedTheme);
 
-    return new ResponseDto<>("", "작성하신 테마 정보가 추가되었습니다.");
+    ResponseDto<List<ThemeDto>> themeList = getAllTheme();
+    themeList.setMsg("작성하신 테마 정보가 추가되었습니다.");
+
+    return themeList;
   }
 }

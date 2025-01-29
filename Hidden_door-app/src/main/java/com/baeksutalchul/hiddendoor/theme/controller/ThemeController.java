@@ -12,6 +12,9 @@ import com.baeksutalchul.hiddendoor.theme.service.ThemeService;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 @RequestMapping("/api/v1/themes")
 public class ThemeController {
   private ThemeService themeService;
+  private static final Logger logger = LoggerFactory.getLogger(ThemeController.class);
 
   public ThemeController(ThemeService themeService) {
     this.themeService = themeService;
@@ -37,9 +41,17 @@ public class ThemeController {
   }
 
   @PostMapping("/theme/add")
-  public ResponseEntity<ResponseDto<String>> addThemeOne(@RequestPart("themeDto") ThemeDto themeDto,
-      @RequestPart("file") MultipartFile file) {
-    return ResponseEntity.ok().body(themeService.addThemeWithFile(themeDto, file));
+  public ResponseEntity<ResponseDto<List<ThemeDto>>> addThemeOne(@RequestPart("themeDto") ThemeDto themeDto,
+      @RequestPart("originalFileName") MultipartFile file) {
+    logger.info("Received theme data: {}", themeDto);
+    logger.info("Received file: name={}, size={}, contentType={}",
+        file.getOriginalFilename(),
+        file.getSize(),
+        file.getContentType());
+
+    return ResponseEntity.ok().body(themeService.addThemeWithFile(themeDto,
+        file));
+
   }
 
 }

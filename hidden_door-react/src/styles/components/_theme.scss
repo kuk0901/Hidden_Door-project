@@ -82,3 +82,48 @@
     }
   }
 }
+
+.themeForm-container {
+  margin: 10px auto 50px;
+  padding-bottom: 20px;
+  border: 1px solid;
+  border-radius: 4px;
+
+  .container {
+    gap: 10px;
+  }
+
+  .theme-input-container {
+    .label-container {
+      min-width: 100px;
+    }
+  }
+
+  .theme-textarea {
+    .label-container {
+      min-width: 100px;
+    }
+
+    .textarea-container {
+      height: 140px;
+      max-width: 600px;
+      margin: 10px 5px 15px;
+
+      textarea {
+        width: 600px;
+        height: 100%;
+        text-align: start;
+      }
+    }
+  }
+
+  .genre-section {
+    padding: 10px;
+    @include mixins.flex-layout-row(flex-start, center);
+    gap: 10px;
+
+    .input-container {
+      margin: 10px 5px 15px;
+    }
+  }
+}

@@ -1,6 +1,6 @@
-import InputField from "@components/common/form/InputField";
+import InputField from "@components/common/form/input/InputField";
 import SubmitButton from "@components/common/form/SubmitButton";
-import TextareaField from "@components/common/form/TextareaField";
+import TextareaField from "@components/common/form/textarea/TextareaField";
 
 const FileForm = ({
   onSubmit,
@@ -8,7 +8,8 @@ const FileForm = ({
   formData,
   onInputChange,
   btnText,
-  errors
+  errors,
+  id
 }) => {
   const renderField = (field) => {
     const commonProps = {
@@ -46,10 +47,10 @@ const FileForm = ({
   };
 
   return (
-    <form onSubmit={onSubmit} className="flex form-container">
+    <form id={id} onSubmit={onSubmit} className="flex form-container">
       {fields.map(renderField)}
       {errors.genres && <div className="error">{errors.genres}</div>}
-      <SubmitButton text={btnText} />
+      {btnText ? <SubmitButton text={btnText} /> : null}
     </form>
   );
 };

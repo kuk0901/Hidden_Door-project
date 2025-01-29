@@ -37,6 +37,7 @@
 }
 
 .login-form-container {
+  border: 1px solid;
   @media (max-width: variables.$breakpoint-lg) {
     margin-top: 30px;
   }
@@ -44,12 +45,14 @@
 
 .themeForm-container {
   .form-container {
+    margin: 0;
+
     &.flex {
-      @include mixins.flex-layout-row(flex-start, center);
-      flex-direction: row;
-      flex-wrap: wrap;
+      @include mixins.flex-layout-column(flex-start, baseline);
     }
 
-    margin: 0;
+    .label-container {
+      text-align: left;
+    }
   }
 }

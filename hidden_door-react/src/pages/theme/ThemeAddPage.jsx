@@ -1,8 +1,10 @@
 import { useState } from "react";
 import FileForm from "@components/common/form/file/FileForm";
-// import Api from "@axios/api";
+import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { validateThemeField } from "../../validation/validationRules";
+import { useThemeList } from "@hooks/useThemeList";
+import { useNavigate } from "react-router-dom";
 
 /* * FIXME:
  * UI 수정 필요, genre 부분 errorMessage 위치 수정
@@ -30,8 +32,11 @@ const ThemeAddPage = () => {
   });
 
   const [errors, setErrors] = useState({});
-
+  const [genreError, setGenreError] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
+
+  const { setThemeList } = useThemeList();
+  const navigate = useNavigate();
 
   const handleGenreChange = (id) => {
     setGenreList(
@@ -74,39 +79,54 @@ const ThemeAddPage = () => {
       if (error) newErrors[key] = error;
     });
 
+    setErrors(newErrors);
+
     // 장르 선택 검사
     const selectedGenres = genreList.filter((genre) => genre.checked);
     if (selectedGenres.length === 0) {
-      newErrors.genres = "최소 하나의 장르를 선택해주세요.";
+      setGenreError("최소 하나의 장르를 선택해주세요.");
+    } else {
+      setGenreError("");
     }
 
-    setErrors(newErrors);
-
     // 에러가 있으면 제출을 중단
-    if (Object.keys(newErrors).length > 0) {
+    if (Object.keys(newErrors).length > 0 || selectedGenres.length === 0) {
       toast.error("입력 정보를 확인해주세요.");
       return;
     }
 
     const submitData = new FormData();
-    Object.keys(formData).forEach((key) => {
-      submitData.append(key, formData[key]);
-    });
 
     // 선택된 장르 이름을 추출하여 추가
     const selectedGenreNames = selectedGenres.map((genre) => genre.name);
-    submitData.append("genres", JSON.stringify(selectedGenreNames));
+
+    const themeDto = {
+      minParticipants: formData.minParticipants,
+      maxParticipants: formData.maxParticipants,
+      level: formData.level,
+      time: formData.time,
+      price: formData.price.replaceAll(",", "").trim(),
+      description: formData.description,
+      genres: JSON.stringify(selectedGenreNames)
+    };
+
+    submitData.append(
+      "themeDto",
+      new Blob([JSON.stringify(themeDto)], { type: "application/json" })
+    );
+    submitData.append("originalFileName", formData.originalFileName);
 
     try {
       // API 호출 로직
-      // const res = await Api.post("/api/v1/themes", submitData, {
-      //   headers: {
-      //     "Content-Type": "multipart/form-data"
-      //   }
-      // });
+      const res = await Api.post("/api/v1/themes/theme/add", submitData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
 
+      setThemeList(res.data.data);
       // 성공 처리
-      toast.success("테마가 성공적으로 추가되었습니다.");
+      toast.success(res.data.msg);
     } catch (error) {
       toast.error(
         error.message ||
@@ -176,8 +196,9 @@ const ThemeAddPage = () => {
       name: "description",
       id: "description",
       field: "textarea",
-      placeholder: "테마 설명",
+      placeholder: "테마 설명을 간략하게 작성해 주세요.",
       label: "description",
+
       themeForm: true
     }
   ];
@@ -185,12 +206,12 @@ const ThemeAddPage = () => {
   return (
     <div className="themeForm-container">
       {/* 미리보기 컨테이너 */}
-      <div className="preview-container">
+      <div className="preview-container text-center">
         {previewImage && (
           <img
             src={previewImage}
             alt="미리보기"
-            style={{ maxWidth: "300px", maxHeight: "300px" }}
+            style={{ maxWidth: "400px", maxHeight: "450px" }}
           />
         )}
       </div>
@@ -202,7 +223,7 @@ const ThemeAddPage = () => {
         formData={formData}
         onInputChange={handleInputChange}
         errors={errors}
-        btnText="테마 추가"
+        id="themeForm"
       />
 
       {/* 장르 체크박스 섹션 */}
@@ -227,6 +248,16 @@ const ThemeAddPage = () => {
             </div>
           ))}
         </div>
+        {genreError && <span className="text--red">{genreError}</span>}
+      </div>
+
+      <div className="btn-container">
+        <button className="btn" type="submit" form="themeForm">
+          테마 추가
+        </button>
+        <button onClick={() => navigate("/hidden_door/theme")} className="btn">
+          돌아가기
+        </button>
       </div>
     </div>
   );

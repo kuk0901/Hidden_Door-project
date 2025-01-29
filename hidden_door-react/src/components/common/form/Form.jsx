@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
-import InputField from "./InputField";
+import InputField from "./input/InputField";
 import SubmitButton from "./SubmitButton";
-import TextareaField from "./TextareaField";
+import TextareaField from "./textarea/TextareaField";
 import { validationRules } from "../../../validation/validationRules";
 
 const Form = ({ onSubmit, fields, btnText }) => {
@@ -39,7 +39,7 @@ const Form = ({ onSubmit, fields, btnText }) => {
       className="flex form-container"
     >
       {fields.map(renderField)}
-      <SubmitButton text={btnText} />
+      {btnText ? <SubmitButton text={btnText} /> : null}
     </form>
   );
 };
