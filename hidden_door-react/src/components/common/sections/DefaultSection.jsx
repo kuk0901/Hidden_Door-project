@@ -25,7 +25,7 @@ const DefaultSection = ({ api, className, title, ChildComponent }) => {
   }, []);
 
   return (
-    <section className={className}>
+    <section className={`section--default ${className}`}>
       {title ? (
         <div className="section--title text-center bold">{title}</div>
       ) : null}

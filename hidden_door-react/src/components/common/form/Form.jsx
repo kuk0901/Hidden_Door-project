@@ -2,9 +2,9 @@ import { useForm } from "react-hook-form";
 import InputField from "./input/InputField";
 import SubmitButton from "./SubmitButton";
 import TextareaField from "./textarea/TextareaField";
-import { validationRules } from "../../../validation/validationRules";
+// import { validationRules } from "../../../validation/validationRules";
 
-const Form = ({ onSubmit, fields, btnText }) => {
+const Form = ({ onSubmit, fields, btnText, id }) => {
   const {
     register,
     handleSubmit,
@@ -14,7 +14,7 @@ const Form = ({ onSubmit, fields, btnText }) => {
 
   const renderField = (field) => {
     const commonProps = {
-      register: register(field.name, validationRules[field.name] || {}), // 유효성 검사 규칙 적용
+      register: register(field.name), // 유효성 검사 규칙 적용
       name: field.name,
       placeholder: field.placeholder,
       error: errors[field.name]?.message,
@@ -27,12 +27,18 @@ const Form = ({ onSubmit, fields, btnText }) => {
     return field.field === "textarea" ? (
       <TextareaField key={field.name} {...commonProps} />
     ) : (
-      <InputField key={field.name} {...commonProps} type={field.type} />
+      <InputField
+        key={field.name}
+        {...commonProps}
+        type={field.type}
+        autoFocus={field.autoFocus}
+      />
     );
   };
 
   return (
     <form
+      id={id}
       onSubmit={handleSubmit((data) => {
         onSubmit(data, reset);
       })}

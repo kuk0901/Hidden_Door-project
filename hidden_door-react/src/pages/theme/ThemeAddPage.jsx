@@ -2,7 +2,7 @@ import { useState } from "react";
 import FileForm from "@components/common/form/file/FileForm";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
-import { validateThemeField } from "../../validation/validationRules";
+import { validateThemeField } from "@validation/validationRules";
 import { useThemeList } from "@hooks/useThemeList";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +22,8 @@ const ThemeAddPage = () => {
   ]);
 
   const [formData, setFormData] = useState({
-    originalFileName: null,
+    file: null,
+    themeName: "",
     minParticipants: 0,
     maxParticipants: 0,
     level: 0,
@@ -47,7 +48,7 @@ const ThemeAddPage = () => {
   };
 
   const handleFileChange = (file) => {
-    setFormData((prev) => ({ ...prev, originalFileName: file }));
+    setFormData((prev) => ({ ...prev, file }));
     if (file) {
       const fileURL = URL.createObjectURL(file);
       setPreviewImage(fileURL);
@@ -101,20 +102,21 @@ const ThemeAddPage = () => {
     const selectedGenreNames = selectedGenres.map((genre) => genre.name);
 
     const themeDto = {
+      themeName: formData.themeName,
       minParticipants: formData.minParticipants,
       maxParticipants: formData.maxParticipants,
       level: formData.level,
       time: formData.time,
       price: formData.price.replaceAll(",", "").trim(),
       description: formData.description,
-      genres: JSON.stringify(selectedGenreNames)
+      genre: selectedGenreNames
     };
 
     submitData.append(
       "themeDto",
       new Blob([JSON.stringify(themeDto)], { type: "application/json" })
     );
-    submitData.append("originalFileName", formData.originalFileName);
+    submitData.append("file", formData.file);
 
     try {
       // API 호출 로직
@@ -125,8 +127,16 @@ const ThemeAddPage = () => {
       });
 
       setThemeList(res.data.data);
-      // 성공 처리
-      toast.success(res.data.msg);
+
+      const newTheme = res.data.data.find(
+        (theme) => theme.themeName === formData.themeName
+      );
+
+      if (newTheme) {
+        navigate(`/hidden_door/theme/${newTheme.themeId}?register=true`);
+      } else {
+        navigate("/hidden_door/theme?register=false");
+      }
     } catch (error) {
       toast.error(
         error.message ||
@@ -145,6 +155,15 @@ const ThemeAddPage = () => {
       label: "테마 이미지",
       themeForm: true,
       onChange: handleFileChange
+    },
+    {
+      name: "themeName",
+      id: "themeName",
+      type: "text",
+      placeholder: "테마 명",
+      label: "테마 명",
+      themeForm: true,
+      className: "m"
     },
     {
       name: "minParticipants",

@@ -42,7 +42,7 @@ public class ThemeController {
 
   @PostMapping("/theme/add")
   public ResponseEntity<ResponseDto<List<ThemeDto>>> addThemeOne(@RequestPart("themeDto") ThemeDto themeDto,
-      @RequestPart("originalFileName") MultipartFile file) {
+      @RequestPart("file") MultipartFile file) {
     logger.info("Received theme data: {}", themeDto);
     logger.info("Received file: name={}, size={}, contentType={}",
         file.getOriginalFilename(),

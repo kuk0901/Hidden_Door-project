@@ -1,7 +1,7 @@
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Suspense, useEffect, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
 import Confirm from "@components/common/dialogs/Confirm";
 import Loading from "@components/common/loading/Loading";
@@ -26,6 +26,14 @@ function App() {
   const { setAdmin } = useAdmin();
   const [loading, setLoading] = useState(true);
   const { themeList, setThemeList } = useThemeList();
+  const location = useLocation();
+
+  useEffect(() => {
+    if ("scrollRestoration" in window.history) {
+      window.history.scrollRestoration = "manual";
+    }
+    window.scrollTo(0, 0);
+  }, [location.pathname]); // 라우트 변경 시마다 실행
 
   const checkAdminStatus = async () => {
     const token = localStorage.getItem("token");

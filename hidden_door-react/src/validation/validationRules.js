@@ -14,6 +14,20 @@ export const validationRules = {
       value: pwdRegex,
       message: "대소문자, 특수문자를 포함하는 8글자 이상이어야 합니다."
     }
+  },
+  title: {
+    required: "주의사항 제목은 필수입니다.",
+    maxLength: {
+      value: 30,
+      message: "제목은 30자 이내로 입력해주세요."
+    }
+  },
+  content: {
+    required: "주의사항 내용은 필수입니다.",
+    maxLength: {
+      value: 500,
+      message: "내용은 500자 이내로 입력해주세요."
+    }
   }
 };
 
@@ -21,6 +35,10 @@ export const themeValidationRules = {
   originalFileName: {
     required: true,
     message: "이미지를 선택해주세요"
+  },
+  themeName: {
+    required: true,
+    message: "최대 30자 이내여야 합니다."
   },
   minParticipants: {
     required: true,
@@ -64,7 +82,14 @@ export const validateThemeField = (name, value) => {
   if (!rules) return "";
 
   if (rules.required && !value) {
-    return rules.message;
+    return "필수 입력란입니다.";
+  }
+
+  if (name === "themeName") {
+    if (value.length > 30) {
+      return "테마 이름은 최대 30자 이내여야 합니다.";
+    }
+    return "";
   }
 
   if (rules.min && value < rules.min) {

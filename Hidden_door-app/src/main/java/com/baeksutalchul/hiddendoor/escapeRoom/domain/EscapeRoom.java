@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// FIXME: 테마, 테마 상세 페이지에서 사용할 타이틀도 추가해야 함
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

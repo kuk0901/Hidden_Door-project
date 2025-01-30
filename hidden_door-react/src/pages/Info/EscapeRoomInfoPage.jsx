@@ -11,6 +11,7 @@ import Button from "@components/common/buttons/Button";
 // import PriceTable from "@components/common/table/PriceTable"; // 기갹 테이블 추후 수정
 import CautionList from "@components/caution/CautionList";
 import { useEscapeRoom } from "@hooks/useEscapeRoom";
+import PriceSection from "@components/theme/PriceSection";
 
 const EscapeRoomInfoPage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
@@ -65,7 +66,6 @@ const EscapeRoomInfoPage = () => {
 
   if (!escapeRoom) return <Loading />;
 
-  // FIXME: 각 영역 코드 작성
   return (
     <>
       <Header
@@ -87,7 +87,7 @@ const EscapeRoomInfoPage = () => {
         />
       )}
 
-      <section className="section section-description">
+      <section className="section section--description">
         {/* animation */}
         <LockAnimation />
 
@@ -117,30 +117,20 @@ const EscapeRoomInfoPage = () => {
         )}
       </section>
 
-      {/* price */}
+      {/* FIXME: Theme price 영역 -> PriceSection 만들어서 재사용 */}
+      <PriceSection />
       {/* <DefaultSection
         api=""
         className="section section-price"
         title="price"
         ChildComponent={PriceTable}
       /> */}
-      <div
-        style={{
-          border: "1px solid white",
-          height: "300px",
-          marginBottom: "10px",
-          textAlign: "center",
-          fontSize: "40px"
-        }}
-      >
-        Price
-      </div>
 
       {/* caution */}
       <DefaultSection
         api="/api/v1/cautions/list"
-        className="section section-caution"
-        title="caution"
+        className="section section--caution"
+        title="주의사항"
         ChildComponent={CautionList}
       />
     </>

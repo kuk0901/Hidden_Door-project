@@ -73,7 +73,7 @@ public class ThemeService {
       if (existingTheme.getThemeName().equals(themeDto.getThemeName())) {
         throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 테마 이름이 이미 존재합니다.");
       } else if (existingTheme.getOriginalFileName().equals(themeDto.getOriginalFileName())) {
-        throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 파일 이름이 이미 존재합니다.");
+        throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 이미지가 이미 존재합니다.");
       } else {
         throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 테마 설명이 이미 존재합니다.");
       }

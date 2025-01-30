@@ -1,6 +1,6 @@
 import { useEscapeRoom } from "@hooks/useEscapeRoom";
 import Header from "@components/common/layout/Header";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import InfoEditForm from "@components/common/form/InfoEditForm";
 import { toast } from "react-toastify";
 import Api from "@axios/api";
@@ -75,6 +75,16 @@ const ThemePage = () => {
       );
     }
   };
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+
+    if (queryParams.get("register") === "false") {
+      toast.warning(
+        "새로 추가된 테마를 찾을 수 없습니다. 테마 목록으로 이동합니다."
+      );
+    }
+  }, []);
 
   return (
     <>

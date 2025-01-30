@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/api/v1/cautions")
@@ -47,4 +48,10 @@ public class CautionController {
   public ResponseEntity<ResponseDto<List<CautionDto>>> deleteCautionOne(@PathVariable("id") String cautionId) {
     return ResponseEntity.ok().body(cautionService.deleteCautionOne(cautionId));
   }
+
+  @PostMapping("/caution/add")
+  public ResponseEntity<ResponseDto<List<CautionDto>>> addCautionOne(@RequestBody CautionDto cautionDto) {
+    return ResponseEntity.ok().body(cautionService.addCautionOne(cautionDto));
+  }
+
 }

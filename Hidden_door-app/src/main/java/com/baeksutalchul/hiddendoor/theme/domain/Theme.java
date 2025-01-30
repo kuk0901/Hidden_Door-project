@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-// FIXME: 각 인스턴스 변수 값 documents/database 문서에 맞춰 수정 -> ThemeDto 생성
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

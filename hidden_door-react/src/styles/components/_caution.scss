@@ -61,7 +61,8 @@
   }
 }
 
-.caution--edit {
+.caution--edit,
+.caution--add {
   border-radius: 5px;
   padding: 15px;
 
@@ -95,6 +96,61 @@
       label {
         font-size: 16px;
         font-weight: bold;
+      }
+    }
+  }
+}
+
+.caution--add {
+  .icon-update {
+    .select-container {
+      .label {
+        font-size: 17px;
+      }
+    }
+  }
+
+  #cautionAddForm {
+    padding: 0;
+    gap: 15px;
+
+    .form-container {
+      margin: 0;
+      padding: 0;
+
+      .container {
+        &.caution {
+          width: 100%;
+        }
+      }
+
+      .label-container {
+        font-weight: 700;
+      }
+
+      .input-container {
+        margin: 10px 0 0;
+        width: 100%;
+        max-width: none;
+
+        input {
+          &.caution {
+            width: 100%;
+          }
+        }
+      }
+
+      &:has(.textarea-container) {
+        gap: 0;
+      }
+
+      .textarea-container {
+        width: 100%;
+        max-width: none;
+
+        textarea {
+          width: 100%;
+        }
       }
     }
   }

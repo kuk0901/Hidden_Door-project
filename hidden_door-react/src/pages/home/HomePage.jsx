@@ -1,21 +1,18 @@
-// import DefaultSection from "@components/common/sections/DefaultSection";
-// import BannerImg from "@components/home/BannerImg";
-// import HomeThemeSection from "@components/home/HomeThemeSection";
-// import Events from "@components/home/Events";
-// import Notices from "@components/home/Notices";
 import { toast } from "react-toastify";
 import Api from "@axios/api";
 import { useImgUrl } from "@hooks/useImgUrl";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useEscapeRoom } from "@hooks/useEscapeRoom";
-// import { useCautionList } from "@hooks/useCautionList";
+import { useAdmin } from "@hooks/useAdmin";
+import PresentImageUploader from "@components/common/form/file/PresentImageUploader";
+import DefaultSection from "@components/common/sections/DefaultSection";
+import CautionList from "@components/caution/CautionList";
 
 // * FIXME: 개별 페이지 완성 후 내용 수정
 const HomePage = () => {
-  // FIXME: 이미지 불러오기 -> 컴포넌트로 분리(atom 사용주의)
-
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
-  // const { cautionList, setCautionList } = useCautionList();
+  const { admin } = useAdmin();
+  const [imgUpdateView, setImgUpdateView] = useState(false);
 
   const getEscapeRoomInfo = async () => {
     try {
@@ -27,77 +24,75 @@ const HomePage = () => {
     }
   };
 
-  // const getCautionList = async () => {
-  //   try {
-  //     const res = await Api.get();
-
-  //     setCautionList(res.data.data);
-  //   } catch (error) {
-  //     toast.error(
-  //     error.message ||
-  //     "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
-  // );
-  //   }
-  // };
-
   useEffect(() => {
     getEscapeRoomInfo();
-    // getCautionList();
   }, []);
 
   return (
     <>
       {/* main img */}
-      {/* FIXME: css 수정 필요 */}
+      {/* FIXME: 반응형 css 수정 필요 */}
       <section className="main-section__img">
         <img
           src={`${useImgUrl(escapeRoom.storedFileName)}`}
           alt={escapeRoom.originalFileName}
         />
+
+        {admin && (
+          <>
+            <div className="btn-container">
+              <button
+                className="btn"
+                onClick={() => setImgUpdateView(!imgUpdateView)}
+              >
+                수정
+              </button>
+            </div>
+
+            {imgUpdateView && (
+              <PresentImageUploader
+                escapeRoom={escapeRoom}
+                setEscapeRoom={setEscapeRoom}
+                onClose={() => setImgUpdateView(false)}
+              />
+            )}
+          </>
+        )}
       </section>
 
-      <div
-        style={{
-          border: "1px solid white",
-          height: "300px",
-          marginBottom: "10px"
-        }}
-      ></div>
+      {/* FIXME: <HomeThemeSection /> */}
 
       <div
         style={{
           border: "1px solid white",
           height: "300px",
-          marginBottom: "10px"
+          marginBottom: "10px",
+          textAlign: "center"
         }}
-      ></div>
+      >
+        Theme slide section
+      </div>
+
+      {/* FIXME: Event section */}
 
       <div
         style={{
           border: "1px solid white",
           height: "300px",
-          marginBottom: "10px"
+          marginBottom: "10px",
+          textAlign: "center"
         }}
-      ></div>
+      >
+        Event section
+      </div>
 
-      {/* <DefaultSection
-        api="/api/v1/banner"
-        className="banner-section"
-        Component={BannerImg}
-      />
-      <HomeThemeSection />
+      {/* caution */}
       <DefaultSection
-        api="/api/v1/events"
-        className="event-section"
-        title="놓치지마세요!"
-        Component={Events}
+        api="/api/v1/cautions/list"
+        className="section section--caution"
+        title="주의사항"
+        ChildComponent={CautionList}
       />
-      <DefaultSection
-        api="/api/v1/notices"
-        className="notice-section"
-        title="notice"
-        Component={Notices}
-      /> */}
     </>
   );
 };

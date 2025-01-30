@@ -1,5 +1,8 @@
 package com.baeksutalchul.hiddendoor.escapeRoom.service;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -7,12 +10,16 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.baeksutalchul.hiddendoor.dto.EscapeRoomDto;
+import com.baeksutalchul.hiddendoor.dto.ThemeDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.escapeRoom.repository.EscapeRoomRepository;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
+import com.baeksutalchul.hiddendoor.theme.domain.Theme;
+import com.baeksutalchul.hiddendoor.utils.file.FileUtils;
 import com.mongodb.client.result.UpdateResult;
 import com.baeksutalchul.hiddendoor.escapeRoom.domain.EscapeRoom;
 
@@ -21,12 +28,14 @@ public class EscapeRoomService {
   private EscapeRoomRepository escapeRoomRepository;
   private ModelMapper modelMapper;
   private MongoTemplate mongoTemplate;
+  private FileUtils fileUtils;
 
   public EscapeRoomService(EscapeRoomRepository escapeRoomRepository, ModelMapper modelMapper,
-      MongoTemplate mongoTemplate) {
+      MongoTemplate mongoTemplate, FileUtils fileUtils) {
     this.escapeRoomRepository = escapeRoomRepository;
     this.modelMapper = modelMapper;
     this.mongoTemplate = mongoTemplate;
+    this.fileUtils = fileUtils;
   }
 
   public ResponseDto<EscapeRoomDto> getEscapeRoomInfo() {
@@ -138,6 +147,37 @@ public class EscapeRoomService {
   private EscapeRoom findEscapeRoomById(String roomId) {
     return escapeRoomRepository.findById(roomId)
         .orElseThrow(() -> new CustomException(ErrorCode.ESCAPE_ROOM_NOT_FOUND));
+  }
+
+  @Transactional
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomImg(String roomId, MultipartFile file) {
+    if (file == null || file.isEmpty()) {
+      throw new CustomException(ErrorCode.INVALID_INPUT, "파일이 없습니다.");
+    }
+
+    EscapeRoom escapeRoom = escapeRoomRepository.findById(roomId)
+        .orElseThrow(() -> new CustomException(ErrorCode.ESCAPE_ROOM_NOT_FOUND));
+
+    if (escapeRoom.getOriginalFileName().equals(file.getOriginalFilename())) {
+      throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 이미지입니다.");
+    }
+
+    // 파일 저장
+    try {
+      String storedFileName = fileUtils.saveFile(file);
+      escapeRoom.setOriginalFileName(file.getOriginalFilename());
+      escapeRoom.setStoredFileName(storedFileName);
+    } catch (IOException e) {
+      throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
+    }
+
+    // DB 저장
+    escapeRoomRepository.save(escapeRoom);
+
+    ResponseDto<EscapeRoomDto> updateEscapeRoom = getEscapeRoomInfo();
+    updateEscapeRoom.setMsg("방탈출 이미지가 변경되었습니다.");
+
+    return updateEscapeRoom;
   }
 
 }

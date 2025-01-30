@@ -47,6 +47,7 @@ label {
   border: none;
   font-size: 17px;
   background-color: transparent;
+  margin: auto;
 }
 
 textarea {
@@ -57,6 +58,9 @@ textarea {
   font-size: 15px;
   outline: none;
   resize: none;
+  width: 350px;
+  min-height: 150px;
+  max-height: 170px;
 }
 
 section {

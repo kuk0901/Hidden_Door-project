@@ -34,6 +34,7 @@ const InfoEditForm = ({
               </div>
               <div className="textarea-container textarea-container--edit">
                 <textarea
+                  required
                   onChange={resizeTextarea}
                   onFocus={onFocus}
                   id="title"
@@ -56,6 +57,7 @@ const InfoEditForm = ({
               </div>
               <div className="input-container input-container--edit">
                 <input
+                  required
                   id="title"
                   name="title"
                   ref={onRef}
@@ -86,6 +88,7 @@ const InfoEditForm = ({
               </div>
               <div className="textarea-container textarea-container--edit">
                 <textarea
+                  required
                   onChange={(e) => {
                     resizeTextarea(e);
                     onChange(e);
@@ -110,6 +113,7 @@ const InfoEditForm = ({
               </div>
               <div className="input-container input-container--edit">
                 <input
+                  required
                   id="title"
                   name="title"
                   value={currentTitle}

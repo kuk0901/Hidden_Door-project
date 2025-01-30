@@ -16,9 +16,11 @@ const InputField = ({
   name,
   themeForm,
   min,
-  max
+  max,
+  autoFocus
 }) => {
   const inputProps = {
+    ...register,
     id,
     name,
     type,
@@ -28,7 +30,8 @@ const InputField = ({
     ...(type === "number" && min !== undefined && { min }),
     ...(type === "number" && max !== undefined && { max }),
     ...(onChange ? { onChange } : {}),
-    ...(type !== "file" && value !== undefined && { value })
+    ...(type !== "file" && value !== undefined && { value }),
+    ...(autoFocus && { autoFocus: true })
   };
 
   if (register && themeForm) {
@@ -39,6 +42,7 @@ const InputField = ({
         label={label}
         id={id}
         error={error}
+        className={className}
       />
     );
   }
@@ -51,6 +55,7 @@ const InputField = ({
         label={label}
         id={id}
         error={error}
+        className={className}
       />
     );
   }
@@ -62,11 +67,18 @@ const InputField = ({
         label={label}
         id={id}
         error={error}
+        className={className}
       />
     );
   }
 
-  return <BaseInputField inputProps={inputProps} error={error} />;
+  return (
+    <BaseInputField
+      inputProps={inputProps}
+      error={error}
+      className={className}
+    />
+  );
 };
 
 export default InputField;
