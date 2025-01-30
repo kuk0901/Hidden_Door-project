@@ -8,6 +8,8 @@ import LoginPage from "@pages/admin/LoginPage";
 import Confirm from "@components/common/Confirm";
 import Loading from "@components/common/loading/Loading";
 import Layout from "@components/common/layout/Layout";
+import FaqPage from "@pages/cs/faq/FaqPage";
+import CustomerPage from "@pages/cs/customer/CustomerPage";
 
 import { useAdmin } from "@hooks/useAdmin";
 import Api from "@axios/api";
@@ -87,6 +89,11 @@ function App() {
               element={<Navigate to="/hidden_door/main" replace />}
             />
             <Route path="/hidden_door/main" element={<HomePage />} />
+            <Route path="/hidden_door/cs/faqs" element={<FaqPage />} />
+            <Route
+              path="/hidden_door/cs/customers"
+              element={<CustomerPage />}
+            />
             <Route path="/hidden_door/admin" element={<ProtectedAdminRoute />}>
               {/* 관리자 전용 페이지들 */}
             </Route>

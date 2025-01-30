@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class FaqDto {
   private String faqId; 
   private String writer; 
+  private String title;
   private String category; 
   private String question;
   private String answer;

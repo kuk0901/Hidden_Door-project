@@ -1,4 +1,4 @@
-package com.baeksutalchul.hiddendoor.faq.controller;
+package com.baeksutalchul.hiddendoor.customer.controller;
 
 import java.util.List;
 
@@ -14,27 +14,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.baeksutalchul.hiddendoor.dto.FaqDto;
+import com.baeksutalchul.hiddendoor.customer.service.CustomerService;
+import com.baeksutalchul.hiddendoor.dto.CustomerDto;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
-import com.baeksutalchul.hiddendoor.faq.service.FaqService;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 
 @RestController
-@RequestMapping("/api/v1/faqs") // * -> 여기만 복수형태로 작성함
-public class FaqController {
-  private final FaqService faqService;
-  private static final Logger logger = LoggerFactory.getLogger(FaqController.class);
+@RequestMapping("/api/v1/customers") // * -> 여기만 복수형태로 작성함
+public class ConstomerController {
+  private final CustomerService customerService;
+  private static final Logger logger = LoggerFactory.getLogger(ConstomerController.class);
 
-  public FaqController(FaqService faqService) {
-    this.faqService = faqService;
+  public ConstomerController(CustomerService customerService) {
+    this.customerService = customerService;
   }
 
   @GetMapping("/list")
-  public ResponseEntity<ResponseDto<?>> getFaqAll() {
+  public ResponseEntity<ResponseDto<?>> getCustomerAll() {
     try {
-      ResponseDto<List<FaqDto>> res = faqService.getFaqAll();
+      ResponseDto<List<CustomerDto>> res = customerService.getCustomerAll();
 
-      logger.info("ResponseDto<List<FaqDto>>: {}", res);
+      logger.info("ResponseDto<List<CustomerDto>>: {}", res);
 
       return ResponseEntity.ok().body(res);
     } catch (Exception e) {
@@ -43,22 +43,22 @@ public class FaqController {
     }
   }
 
-    @PostMapping("/faq/add")
-  public ResponseEntity<ResponseDto<String>> addFaq(@RequestBody FaqDto faqDto) {
+    @PostMapping("/customer/add")
+  public ResponseEntity<ResponseDto<String>> addCustomer(@RequestBody CustomerDto customerDto) {
       try {
-        logger.info("FaqDto: {}", faqDto);
+        logger.info("CustomerDto: {}", customerDto);
 
-        ResponseDto<String> res = faqService.addFaq(faqDto); 
+        ResponseDto<String> res = customerService.addCustomer(customerDto); 
         return ResponseEntity.ok().body(res);
       } catch (Exception e) {
         return ResponseEntity.internalServerError().body(new ResponseDto<>("", "서버 오류로 인해 좌석 추가에 실패하였습니다. 잠시 후 다시 시도해 주세요."));
       }
   }
   
-  @PutMapping("/faq/update/")
-  public ResponseEntity<ResponseDto<?>> updateFaqOne(@RequestBody FaqDto faqDto) {
+  @PutMapping("/customer/update/")
+  public ResponseEntity<ResponseDto<?>> updateCustomerOne(@RequestBody CustomerDto customerDto) {
       try {      
-        return ResponseEntity.ok().body(faqService.updateFaqOne(faqDto));
+        return ResponseEntity.ok().body(customerService.updateCustomerOne(customerDto));
       } catch (CustomException e) {
         return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
       } catch (Exception e) {
@@ -66,10 +66,10 @@ public class FaqController {
       }
   }
 
-  @DeleteMapping("/faq/delete/{id}")
-  public ResponseEntity<ResponseDto<String>> deleteFaqOne(@PathVariable("id") String id) {
+  @DeleteMapping("/customer/delete/{id}")
+  public ResponseEntity<ResponseDto<String>> deleteCustomerOne(@PathVariable("id") String id) {
     try {
-      return ResponseEntity.ok().body(faqService.deleteFaqOne(id));
+      return ResponseEntity.ok().body(customerService.deleteCustomerOne(id));
     } catch (CustomException e) {
       return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
     } catch (Exception e) {

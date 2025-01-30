@@ -18,6 +18,7 @@ public class Faq {
   private String faqId; 
   private String writer; 
   private String category; 
+  private String title;
   private String question;
   private String answer;
   private Date creDate;
