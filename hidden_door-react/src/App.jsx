@@ -21,7 +21,6 @@ import { useThemeList } from "@hooks/useThemeList";
 import ThemeDetailPage from "@pages/theme/ThemeDetailPage";
 import ThemeAddPage from "@pages/theme/ThemeAddPage";
 
-// FIXME: Theme -> 동적 라우팅을 위해 데이터를 가져온 후 Route 생성 -> ThemeDetail이라는 페이지로 theme 정보 담긴 item 전달
 function App() {
   const { setAdmin } = useAdmin();
   const [loading, setLoading] = useState(true);
