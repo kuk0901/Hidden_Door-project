@@ -9,9 +9,12 @@ import LoginPage from "@pages/admin/LoginPage";
 import Confirm from "@components/common/Confirm";
 import Loading from "@components/common/loading/Loading";
 import Layout from "@components/common/layout/Layout";
+import FaqPage from "@pages/cs/faq/FaqPage";
+import CustomerPage from "@pages/cs/customer/CustomerPage";
 import ReservationPage from "@pages/reservation/ReservationPage";
 import EventPage from '@pages/event/EventPage';
 import NoticePage from '@pages/notice/NoticePage';
+
 
 import { useAdmin } from '@hooks/useAdmin';
 import Api from '@axios/api';
@@ -92,6 +95,12 @@ function App() {
             />
             <Route path="/hidden_door/main" element={<HomePage />} />
 
+            <Route path="/hidden_door/cs/faqs" element={<FaqPage />} />
+            <Route
+              path="/hidden_door/cs/customers"
+              element={<CustomerPage />}
+            />
+
             <Route path="/hidden_door/event" element={<EventPage />} />{' '}
             {/* 이벤트 페이지 */}
             <Route path="/Hidden_door/notice" element={<NoticePage />}></Route>
@@ -100,7 +109,6 @@ function App() {
               path="/hidden_door/reservation"
               element={<ReservationPage />}
             />
-
             <Route path="/hidden_door/admin" element={<ProtectedAdminRoute />}>
               {/* 관리자 전용 페이지들 */}
             </Route>
