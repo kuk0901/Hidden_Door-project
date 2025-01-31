@@ -1,0 +1,7 @@
+@use "../abstracts//mixins";
+@use "../abstracts/variables";
+
+.footer {
+  @include mixins.flex-layout-row(space-around, baseline);
+  margin-bottom: 20px;
+}

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import com.baeksutalchul.hiddendoor.admin.domain.Admin;
 import com.baeksutalchul.hiddendoor.admin.repository.AdminRepository;
+
 import com.baeksutalchul.hiddendoor.token.TokenService;
 
 @Component

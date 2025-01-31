@@ -1,17 +1,32 @@
+// abstracts
 @use "abstracts/mixins";
 @use "abstracts/variables";
 
+// base
 @use "base/reset";
 @use "base/typography";
 @use "base/borders";
 @use "base/utilities";
 
+// components
 @use "components/buttons";
 @use "components/forms";
-@use "components/modal";
+@use "components/modals";
+@use "components/headings";
+@use "components/icons";
+@use "components/policy";
+@use "components/animation";
+@use "components/caution";
+@use "components/theme";
+@use "components/faqs";
 
+// layout
 @use "layout/containers";
 @use "layout/loading";
+@use "layout/sections";
+@use "layout/nav";
+@use "layout/footer";
+@use "layout/header";
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -20,7 +35,7 @@
 
   color-scheme: light dark;
   color: variables.$light-text-color;
-  background-color: variables.$background-color-light;
+  background-color: variables.$light-background-color;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -31,20 +46,93 @@
 @media (prefers-color-scheme: light) {
   :root {
     color: variables.$light-text-color;
-    background-color: variables.$background-color-light;
+    background-color: variables.$light-background-color;
   }
+
   a:hover {
     color: #747bff;
+  }
+
+  .login-icon {
+    color: darkgray;
+  }
+
+  header {
+    color: variables.$dark-text-color;
+    background-color: variables.$dark-background-color;
+  }
+
+  .footer {
+    background-color: variables.$dark-background-color;
+
+    li {
+      color: variables.$dark-text-color;
+    }
+
+    .link-item {
+      color: variables.$light-blue-color;
+      &:hover {
+        color: variables.$confirm-text-color;
+      }
+    }
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
     color: variables.$dark-text-color;
-    background-color: variables.$background-color-dark;
+    background-color: variables.$dark-background-color;
   }
 
   a:hover {
     color: #747bff;
+  }
+
+  .login-icon {
+    color: variables.$dark-text-color;
+  }
+
+  header {
+    color: variables.$light-text-color;
+    background-color: variables.$light-background-color;
+  }
+
+  .footer {
+    background-color: variables.$light-background-color;
+
+    li {
+      color: variables.$light-text-color;
+    }
+
+    .link-item {
+      color: variables.$confirm-text-color;
+
+      &:hover {
+        color: variables.$light-blue-color;
+      }
+    }
+  }
+}
+
+main {
+  padding: 10px;
+}
+
+aside {
+  &.portfolio-disclaimer {
+    margin: 10px;
+  }
+}
+
+.logo-container {
+  height: 50px;
+
+  .logo {
+    background-color: transparent;
+    border: none;
+
+    .logo-img {
+      border-radius: 7px;
+    }
   }
 }

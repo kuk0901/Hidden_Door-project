@@ -3,13 +3,10 @@ import { useAdmin } from "@hooks/useAdmin";
 import Api from "@axios/api";
 import Form from "@components/common/form/Form";
 import { toast } from "react-toastify";
-import { useState } from "react";
-import Loading from "../loading/Loading";
 
 const SigninForm = () => {
   const { setAdmin } = useAdmin();
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
 
   const fields = [
     {
@@ -32,12 +29,14 @@ const SigninForm = () => {
 
   const onSubmit = async (data, reset) => {
     try {
-      setLoading(true);
-
-      const res = await Api.post("/api/v1/auth/authenticate", {
-        email: data.email,
-        pwd: data.pwd
-      });
+      const res = await Api.post(
+        "/api/v1/auth/authenticate",
+        {
+          email: data.email,
+          pwd: data.pwd
+        },
+        { withCredentials: true }
+      );
 
       const accessToken = res.data.token;
       const userInfoData = res.data.data;
@@ -52,12 +51,8 @@ const SigninForm = () => {
           "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
       );
       reset();
-    } finally {
-      setLoading(false);
     }
   };
-
-  if (loading) return <Loading />;
 
   return <Form onSubmit={onSubmit} fields={fields} btnText="로그인" />;
 };

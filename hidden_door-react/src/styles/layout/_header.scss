@@ -1,0 +1,63 @@
+@use "../abstracts/mixins";
+@use "../abstracts/variables";
+
+.header {
+  .header-container {
+    @include mixins.flex-layout-row($justify: space-between, $align: center);
+
+    .title-container {
+      @include mixins.flex-layout-column(
+        $justify: space-between,
+        $align: baseline
+      );
+
+      .title {
+        margin-bottom: 0;
+      }
+
+      .subtitle {
+        padding: 5px 10px 10px;
+        font-size: 16px;
+      }
+    }
+
+    .link-container {
+      @include mixins.flex-layout-row($justify: space-around, $align: center);
+      margin-right: 10px;
+      gap: 30px;
+
+      .btn {
+        text-decoration: none;
+        transition: none;
+        text-underline-offset: 0;
+
+        &.header--btn {
+          padding: 10px;
+          border-radius: 5px;
+          background-color: variables.$light-background-color;
+          color: variables.$dark-blue-color;
+          border: 1px solid variables.$dark-blue-color;
+          transition: all 0.3s ease;
+          transform: none;
+
+          &:hover {
+            background-color: variables.$dark-blue-color;
+            color: variables.$light-background-color;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    // 576px 미만의 화면에 적용될 스타일
+
+    .header-container {
+      @include mixins.flex-layout-column(
+        $justify: space-between,
+        $align: baseline
+      );
+      padding-bottom: 10px;
+    }
+  }
+}

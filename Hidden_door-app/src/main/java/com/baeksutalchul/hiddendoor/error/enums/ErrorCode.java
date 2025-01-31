@@ -13,6 +13,7 @@ public enum ErrorCode {
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "ACCESS_DENIED", "접근이 거부되었습니다."),
 
     // * common
+    ESCAPE_ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "ESCAPE_ROOM_404", "방탈출 카페 정보를 찾을 수 없습니다."),
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "RESERVATION_404", "예약 정보를 찾을 수 없습니다."),
     PAYMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "PAYMENT_404", "결제 정보를 찾을 수 없습니다."),
     NOTICE_NOT_FOUND(HttpStatus.NOT_FOUND, "NOTICE_404", "공지사항을 찾을 수 없습니다."),
@@ -21,12 +22,22 @@ public enum ErrorCode {
     FAQ_NOT_FOUND(HttpStatus.NOT_FOUND, "FAQ_404", "FAQ 정보를 찾을 수 없습니다."),
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "INPUT_400", "유효하지 않은 입력입니다."),
     FORBIDDEN_ACCESS(HttpStatus.FORBIDDEN, "ACCESS_403", "접근이 금지되었습니다."),
-    FILE_SIZE_EXCEEDED(HttpStatus.EXPECTATION_FAILED, "FILE_SIZE_417", "파일 크기가 너무 큽니다! 최대 크기는 5MB입니다."),
+    CAUTION_NOT_FOUND(HttpStatus.NOT_FOUND, "CAUTION_404", "주의사항을 찾을 수 없습니다."),
+    THEME_NOT_FOUND(HttpStatus.NOT_FOUND, "THEME_404", "테마 정보를 찾을 수 없습니다."),
 
-    // page
+    // * admin
+    NO_CHANGES_DETECTED(HttpStatus.BAD_REQUEST, "NO_CHANGES_DETECTED", "변경된 내용이 없습니다."),
+    DELETE_FAILED(HttpStatus.BAD_REQUEST, "DELETE_FAILED", "삭제에 실패했습니다."),
+    UPDATE_FAILED(HttpStatus.BAD_REQUEST, "UPDATE_FAILED", "정보를 업데이트하는 데에 실패했습니다."),
+    FILE_SIZE_EXCEEDED(HttpStatus.EXPECTATION_FAILED, "FILE_SIZE_417", "파일 크기가 너무 큽니다! 최대 크기는 10MB입니다."),
+    FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_FAILED", "이미지 저장에 실패했습니다."),
+    DUPLICATE_ENTITY(HttpStatus.CONFLICT, "DUPLICATE_409", "이미 존재하는 항목입니다."),
+    FILE_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "FILE_400", "파일 처리 중 오류가 발생했습니다."),
+
+    // * page
     PAGINATION_ERROR(HttpStatus.BAD_REQUEST, "PAGINATION_400", "페이지 정보가 유효하지 않습니다."),
 
-    // img
+    // * img
     INVALID_INPUT_FILE(HttpStatus.BAD_REQUEST, "INPUT_FILE_400", "유효하지 않은 파일입니다."),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER_500", "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
