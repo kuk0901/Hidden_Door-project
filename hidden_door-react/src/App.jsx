@@ -3,12 +3,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Suspense, useEffect, useState } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import HomePage from '@pages/home/HomePage';
-import LoginPage from '@pages/admin/LoginPage';
-import Confirm from '@components/common/Confirm';
-import Loading from '@components/common/loading/Loading';
-import Layout from '@components/common/layout/Layout';
 
+import HomePage from "@pages/home/HomePage";
+import LoginPage from "@pages/admin/LoginPage";
+import Confirm from "@components/common/Confirm";
+import Loading from "@components/common/loading/Loading";
+import Layout from "@components/common/layout/Layout";
+import ReservationPage from "@pages/reservation/ReservationPage";
 import EventPage from '@pages/event/EventPage';
 import NoticePage from '@pages/notice/NoticePage';
 
@@ -90,9 +91,16 @@ function App() {
               element={<Navigate to="/hidden_door/main" replace />}
             />
             <Route path="/hidden_door/main" element={<HomePage />} />
+
             <Route path="/hidden_door/event" element={<EventPage />} />{' '}
             {/* 이벤트 페이지 */}
             <Route path="/Hidden_door/notice" element={<NoticePage />}></Route>
+
+            <Route
+              path="/hidden_door/reservation"
+              element={<ReservationPage />}
+            />
+
             <Route path="/hidden_door/admin" element={<ProtectedAdminRoute />}>
               {/* 관리자 전용 페이지들 */}
             </Route>
