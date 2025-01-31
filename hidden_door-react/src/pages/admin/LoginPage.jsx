@@ -1,24 +1,29 @@
 import SigninForm from "@components/common/auth/SigninForm";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 
-const LoginPage = () => {
-  const [hasShownSignoutMessage, setHasShownSignoutMessage] = useState(false);
+import { GiDoor } from "react-icons/gi";
 
+const LoginPage = () => {
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
 
-    if (queryParams.get("signout") === "true" && !hasShownSignoutMessage) {
-      toast.success("로그아웃 되었습니다."); // 로그아웃
-      setHasShownSignoutMessage(true); // 메시지 표시 후 상태 업데이트
+    if (queryParams.get("signout") === "true") {
+      toast.success("로그아웃 되었습니다.");
     }
-  }, [hasShownSignoutMessage]);
+  }, []);
 
   return (
     <div>
-      <div className="border-gray"></div>
-      <div className="border-gray container login_container">
-        <SigninForm />
+      <h1 className="title italic bold text-center">Hidden_Door 관리자</h1>
+      <div className="container login-section">
+        <section className="login-img-container">
+          <GiDoor size={400} className="login-icon" />
+        </section>
+        <section className="login-form-container">
+          <h2 className="text-center">&quot;Admin Login&quot;</h2>
+          <SigninForm />
+        </section>
       </div>
     </div>
   );

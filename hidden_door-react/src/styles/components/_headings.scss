@@ -1,0 +1,10 @@
+@use "../abstracts//mixins";
+@use "../abstracts/variables";
+
+.title {
+  margin: 5px 0;
+  padding: 10px;
+  text-decoration: underline;
+  text-underline-offset: 7px;
+  border-radius: 3px;
+}

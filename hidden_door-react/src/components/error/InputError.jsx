@@ -1,5 +1,5 @@
 const InputError = ({ error }) => {
-  return <span>{error}</span>;
+  return <span className="text--red">{error}</span>;
 };
 
 export default InputError;

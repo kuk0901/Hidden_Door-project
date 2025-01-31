@@ -1,16 +1,32 @@
+@use "../abstracts/variables";
+
 * {
   box-sizing: border-box;
   word-break: keep-all;
 }
 
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
+  overflow-y: auto;
+
+  @media (max-width: variables.$breakpoint-md) {
+    /* Chrome, Safari, Opera, Edge */
+    &::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Firefox */
+    scrollbar-width: none;
+
+    /* Internet Explorer */
+    -ms-overflow-style: none;
+  }
 }
 
 ul {
   list-style: none;
+  margin: 0;
   padding-left: 0;
   margin-left: 0;
 }
@@ -31,4 +47,22 @@ label {
   border: none;
   font-size: 17px;
   background-color: transparent;
+  margin: auto;
+}
+
+textarea {
+  margin-top: 5px;
+  background-color: transparent;
+  border: none;
+  overflow-y: scroll;
+  font-size: 15px;
+  outline: none;
+  resize: none;
+  width: 350px;
+  min-height: 150px;
+  max-height: 170px;
+}
+
+section {
+  margin: 20px;
 }

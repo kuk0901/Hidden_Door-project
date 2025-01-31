@@ -1,0 +1,161 @@
+@use "../abstracts/mixins";
+@use "../abstracts/variables";
+
+// LockAnimation
+.lock-animation {
+  .spinner-box {
+    .circle-border {
+      padding: 3px;
+      border-radius: 50%;
+      background: linear-gradient(
+        0deg,
+        rgba(63, 249, 220, 0.1) 33%,
+        rgba(63, 249, 220, 1) 100%
+      );
+
+      .circle-core {
+        background-color: #1d2630;
+        border-radius: 50%;
+        @include mixins.flex-layout-row(center, center);
+        gap: 20px;
+        @include mixins.border(2px, solid, white);
+        width: 500px;
+        height: 450px;
+        margin: auto;
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-md) {
+    // 768px 미만의 화면에 적용될 스타일
+    display: none;
+  }
+}
+
+.door-container {
+  width: 250px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 10px;
+  overflow: hidden;
+
+  .door {
+    position: relative;
+
+    .door-closed,
+    .door-open {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      transition: opacity 3s ease;
+    }
+
+    .door-closed {
+      animation: doorClose 8s infinite;
+    }
+
+    .door-open {
+      animation: doorOpen 8s infinite;
+    }
+  }
+}
+
+.key-container {
+  position: relative;
+  width: 100px;
+  height: 100px;
+
+  .key-closed,
+  .key-open {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: opacity 3s ease;
+  }
+
+  .key-closed {
+    animation: keyClose 8s infinite, keyMove 2s ease-in-out infinite;
+  }
+
+  .key-open {
+    animation: keyOpen 8s infinite, keyMove 2s ease-in-out infinite;
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes doorClose {
+  0%,
+  10% {
+    opacity: 1;
+  }
+  20%,
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes doorOpen {
+  0%,
+  10% {
+    opacity: 0;
+  }
+  20%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes keyClose {
+  0%,
+  10% {
+    opacity: 1;
+  }
+  20%,
+  90% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes keyOpen {
+  0%,
+  10% {
+    opacity: 0;
+  }
+  20%,
+  90% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes keyMove {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-10px);
+  }
+}
