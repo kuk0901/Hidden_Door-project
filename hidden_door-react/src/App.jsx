@@ -6,6 +6,11 @@ import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import Confirm from "@components/common/dialogs/Confirm";
 import Loading from "@components/common/loading/Loading";
 import Layout from "@components/common/layout/Layout";
+import FaqPage from "@pages/cs/faq/FaqPage";
+import CustomerPage from "@pages/cs/customer/CustomerPage";
+import ReservationPage from "@pages/reservation/ReservationPage";
+import EventPage from '@pages/event/EventPage';
+import NoticePage from '@pages/notice/NoticePage';
 
 import { useAdmin } from "@hooks/useAdmin";
 import Api from "@axios/api";
@@ -41,31 +46,31 @@ function App() {
       // Access Token이 없을 때 리프레시 토큰으로 로그인 상태 확인
       try {
         const res = await Api.post(
-          "/api/v1/auth/renew",
+          '/api/v1/auth/renew',
           {},
           { withCredentials: true }
         );
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem('token', res.data.token);
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
           error.message ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     } else {
       // Access Token이 있을 때 유효성 검사
       try {
-        const res = await Api.get("/api/v1/auth/verify");
+        const res = await Api.get('/api/v1/auth/verify');
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
           error.message ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     }
@@ -118,7 +123,9 @@ function App() {
             {/* 사용자, 관리자 공통 페이지 그룹화 */}
             <Route path="/hidden_door">
               <Route path="main" element={<HomePage />} />
+                
               <Route path="info" element={<EscapeRoomInfoPage />} />
+                
               <Route path="theme">
                 <Route index element={<ThemePage />} />
                 {themeList.map((theme) => (
@@ -130,6 +137,18 @@ function App() {
                 ))}
                 <Route path="add" element={<ThemeAddPage />} />
               </Route>
+
+              {/* 고객센터 페이지 */}
+              <Route path="cs/faqs" element={<FaqPage />} />
+              <Route path="cs/customers" element={<CustomerPage />} />
+                
+              {/* 이벤트 페이지 */}
+              <Route path="event" element={<EventPage />} />
+              {/* 공지사항 페이지 */}
+              <Route path="notice" element={<NoticePage />}></Route>
+
+              <Route path="reservation" element={<ReservationPage />} />
+
             </Route>
 
             {/* 정책 관련 페이지 그룹화 */}
