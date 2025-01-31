@@ -1,7 +1,8 @@
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Suspense, useEffect, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Suspense, useEffect, useState } from 'react';
+import { Navigate, Route, Routes } from 'react-router-dom';
+
 
 import HomePage from "@pages/home/HomePage";
 import LoginPage from "@pages/admin/LoginPage";
@@ -9,47 +10,49 @@ import Confirm from "@components/common/Confirm";
 import Loading from "@components/common/loading/Loading";
 import Layout from "@components/common/layout/Layout";
 import ReservationPage from "@pages/reservation/ReservationPage";
+import EventPage from '@pages/event/EventPage';
+import NoticePage from '@pages/notice/NoticePage';
 
-import { useAdmin } from "@hooks/useAdmin";
-import Api from "@axios/api";
-import ProtectedAdminRoute from "./routes/ProtectedAdminRoute";
-import { getCookie } from "./cookie/getCookie";
+import { useAdmin } from '@hooks/useAdmin';
+import Api from '@axios/api';
+import ProtectedAdminRoute from './routes/ProtectedAdminRoute';
+import { getCookie } from './cookie/getCookie';
 
 function App() {
   const { setAdmin } = useAdmin();
   const [loading, setLoading] = useState(true);
 
   const checkAdminStatus = async () => {
-    const token = localStorage.getItem("token");
-    const refreshToken = getCookie("refreshToken");
+    const token = localStorage.getItem('token');
+    const refreshToken = getCookie('refreshToken');
 
     if (!token && refreshToken) {
       try {
         const res = await Api.post(
-          "/api/v1/auth/renew",
+          '/api/v1/auth/renew',
           {},
           { withCredentials: true }
         );
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem('token', res.data.token);
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
           error.response?.data.msg ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     } else if (token) {
       try {
-        const res = await Api.get("/api/v1/auth/verify");
+        const res = await Api.get('/api/v1/auth/verify');
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
           error.response?.data.msg ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     } else {
@@ -88,10 +91,16 @@ function App() {
               element={<Navigate to="/hidden_door/main" replace />}
             />
             <Route path="/hidden_door/main" element={<HomePage />} />
+
+            <Route path="/hidden_door/event" element={<EventPage />} />{' '}
+            {/* 이벤트 페이지 */}
+            <Route path="/Hidden_door/notice" element={<NoticePage />}></Route>
+
             <Route
               path="/hidden_door/reservation"
               element={<ReservationPage />}
             />
+
             <Route path="/hidden_door/admin" element={<ProtectedAdminRoute />}>
               {/* 관리자 전용 페이지들 */}
             </Route>
