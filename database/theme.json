@@ -1,0 +1,58 @@
+[
+  {
+    "themeName": "Sernium's Treasure",
+    "genre": ["드라마", "판타지"],
+    "minParticipants": 2,
+    "maxParticipants": 6,
+    "level": 3,
+    "time": 80,
+    "description": "세르니움의 마지막 보물이 사라지자, 세상이 붕괴하기 시작했다.",
+    "price": 30000,
+    "storedFileName": "sernium'sTreasure.jpeg",
+    "originalFileName": "sernium'sTreasure.jpeg",
+    "totalReservationCount": 247,
+    "totalRevenue": 7410000
+  },
+  {
+    "themeName": "Silent Home",
+    "genre": ["공포", "스릴러"],
+    "minParticipants": 3,
+    "maxParticipants": 6,
+    "level": 4,
+    "time": 70,
+    "description": "고요한 집에 숨겨진 어두운 비밀... 당신의 생존 본능을 시험한다.",
+    "price": 25000,
+    "storedFileName": "slientHome.jpeg",
+    "originalFileName": "slientHome.jpeg",
+    "totalReservationCount": 289,
+    "totalRevenue": 7225000
+  },
+  {
+    "themeName": "T 1 M E",
+    "genre": ["잠입", "액션"],
+    "minParticipants": 2,
+    "maxParticipants": 5,
+    "level": 4,
+    "time": 75,
+    "description": "시간과의 숨막히는 추격전, 한 번의 실수도 용납되지 않는다.",
+    "price": 27000,
+    "storedFileName": "time.jpg",
+    "originalFileName": "time.jpg",
+    "totalReservationCount": 256,
+    "totalRevenue": 6912000
+  },
+  {
+    "themeName": "TO PAST",
+    "genre": "SF",
+    "minParticipants": 3,
+    "maxParticipants": 6,
+    "level": 3.5,
+    "time": 75,
+    "description": "과거로의 여행? 미래를 바꾸기 위한 위험한 도전이 시작된다!",
+    "price": 27000,
+    "storedFileName": "toPast.jpg",
+    "originalFileName": "toPast.jpg",
+    "totalReservationCount": 223,
+    "totalRevenue": 6021000
+  }
+]

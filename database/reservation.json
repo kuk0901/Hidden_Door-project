@@ -1,0 +1,38 @@
+[
+  {
+    "themeId": "1",
+    "name": "김보근",
+    "phone": "01030343198",
+    "email": "marlang@gmail.com",
+    "reservationDate": {
+      "$date": "2025-02-20T00:00:00.000Z"
+    },
+    "reservationCreDate": {
+      "$date": "2025-01-31T00:00:00.000Z"
+    },
+    "availability": "N",
+    "paymentAmount": 25000,
+    "paymentState": "N",
+    "paymentMethod": "현장",
+    "paymentDate": "",
+    "refundState": "N"
+  },
+  {
+    "themeId": "2",
+    "name": "조병철",
+    "phone": "01056712498",
+    "email": "JJJbc@gmail.com",
+    "reservationDate": {
+      "$date": "2025-02-25T00:00:00.000Z"
+    },
+    "reservationCreDate": {
+      "$date": "2025-01-31T00:00:00.000Z"
+    },
+    "availability": "N",
+    "paymentAmount": 27000,
+    "paymentState": "N",
+    "paymentMethod": "현장",
+    "paymentDate": "",
+    "refundState": "N"
+  }
+]
