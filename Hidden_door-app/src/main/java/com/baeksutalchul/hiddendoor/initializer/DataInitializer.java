@@ -1,6 +1,8 @@
 package com.baeksutalchul.hiddendoor.initializer;
 
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Component;
 
 import com.baeksutalchul.hiddendoor.admin.domain.Admin;
 import com.baeksutalchul.hiddendoor.admin.repository.AdminRepository;
+import com.baeksutalchul.hiddendoor.reservation.domain.Reservation;
+import com.baeksutalchul.hiddendoor.reservation.repository.ReservationRepository;
 import com.baeksutalchul.hiddendoor.token.TokenService;
 
 @Component
@@ -16,6 +20,7 @@ public class DataInitializer implements CommandLineRunner {
   private final AdminRepository adminRepository;
   private final PasswordEncoder passwordEncoder;
   private final TokenService tokenService;
+  private final ReservationRepository reservationRepository;
 
   @Value("${ADMIN_EMAIL}")
   private String adminEmail;
@@ -29,10 +34,11 @@ public class DataInitializer implements CommandLineRunner {
   @Value("${TEST_ADMIN_PASSWORD}")
   private String testAdminPassword;
 
-  public DataInitializer(AdminRepository adminRepository, PasswordEncoder passwordEncoder, TokenService tokenService) {
+  public DataInitializer(AdminRepository adminRepository, PasswordEncoder passwordEncoder, TokenService tokenService, ReservationRepository reservationRepository) {
     this.adminRepository = adminRepository;
     this.passwordEncoder = passwordEncoder;
     this.tokenService = tokenService;
+    this.reservationRepository = reservationRepository;
   }
 
   @Override
