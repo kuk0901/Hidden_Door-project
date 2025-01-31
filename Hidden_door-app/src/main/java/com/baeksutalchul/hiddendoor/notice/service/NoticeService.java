@@ -1,75 +1,83 @@
 package com.baeksutalchul.hiddendoor.notice.service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.time.LocalDateTime;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.baeksutalchul.hiddendoor.notice.domain.Notice;
 import com.baeksutalchul.hiddendoor.notice.repository.NoticeRepository;
+import com.baeksutalchul.hiddendoor.res.ResponseDto;
+import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 import com.baeksutalchul.hiddendoor.dto.NoticeDto;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 
 @Service
 public class NoticeService {
-    private final NoticeRepository noticeRepository;
+  private final NoticeRepository noticeRepository;
+  private final ModelMapper modelMapper;
 
-    public NoticeService(NoticeRepository noticeRepository) {
-        this.noticeRepository = noticeRepository;
-    }
+  public NoticeService(NoticeRepository noticeRepository, ModelMapper modelMapper) {
+    this.noticeRepository = noticeRepository;
+    this.modelMapper = modelMapper;
+  }
 
-    public List<NoticeDto> getAllNotices() {
-        List<Notice> notices = noticeRepository.findAll();
-        return notices.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-    }
+  // TODO: 모든 반환 데이터는 ResponseDto
+  // TODO: 데이터 변환은 modelMapper 사용
 
-    public NoticeDto getNoticeById(String id) {
-        Optional<Notice> noticeOptional = noticeRepository.findById(id);
-        if (noticeOptional.isPresent()) {
-            return convertToDto(noticeOptional.get());
-        } else {
-            throw new CustomException(ErrorCode.NOTICE_NOT_FOUND);
-        }
-    }
+  public ResponseDto<List<NoticeDto>> getAllNotices() {
+    List<Notice> noticeList = noticeRepository.findAll();
 
-    public NoticeDto createNotice(NoticeDto noticeDto) {
-        Notice notice = convertToEntity(noticeDto);
-        notice.setCreatedAt(LocalDateTime.now());
-        Notice savedNotice = noticeRepository.save(notice);
-        return convertToDto(savedNotice);
-    }
+    List<NoticeDto> noticeDtoList = noticeList.stream().map(notice -> {
+      NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
+      noticeDto.setKstCreatedAt(DateTimeUtil.convertToKoreanDate(noticeDto.getCreatedAt()));
 
-    public NoticeDto updateNotice(String id, NoticeDto noticeDto) {
-        Optional<Notice> noticeOptional = noticeRepository.findById(id);
-        if (noticeOptional.isPresent()) {
-            Notice notice = noticeOptional.get();
-            notice.setTitle(noticeDto.getTitle());
-            notice.setContent(noticeDto.getContent());
-            Notice updatedNotice = noticeRepository.save(notice);
-            return convertToDto(updatedNotice);
-        } else {
-            throw new CustomException(ErrorCode.NOTICE_NOT_FOUND);
-        }
-    }
+      return noticeDto;
+    }).toList();
 
-    public void deleteNotice(String id) {
-        if (noticeRepository.existsById(id)) {
-            noticeRepository.deleteById(id);
-        } else {
-            throw new CustomException(ErrorCode.NOTICE_NOT_FOUND);
-        }
-    }
+    return new ResponseDto<>(noticeDtoList, "success");
+  }
 
-    private NoticeDto convertToDto(Notice notice) {
-        return new NoticeDto(notice.getId(), notice.getTitle(), notice.getContent(), notice.getCreatedAt());
-    }
+  public ResponseDto<NoticeDto> getNoticeById(String id) {
+    Notice notice = noticeRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOTICE_NOT_FOUND));
 
-    private Notice convertToEntity(NoticeDto noticeDto) {
-        return new Notice(noticeDto.getId(), noticeDto.getTitle(), noticeDto.getContent(), noticeDto.getCreatedAt());
+    NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
+    return new ResponseDto<>(noticeDto, "메시지 알아서 ㄱ");
+  }
+
+  public ResponseDto<NoticeDto> createNotice(NoticeDto noticeDto) {
+    Notice notice = modelMapper.map(noticeDto, Notice.class);
+
+    Notice savedNotice = noticeRepository.save(notice);
+
+    NoticeDto noticeDtoResult = modelMapper.map(savedNotice, NoticeDto.class);
+
+    return new ResponseDto<>(noticeDtoResult, "공지사항이 성공적으로 생성되었습니다.");
+  }
+
+  public ResponseDto<NoticeDto> updateNotice(String id, NoticeDto noticeDto) {
+    Notice notice = noticeRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.NOTICE_NOT_FOUND));
+
+    notice.setTitle(noticeDto.getTitle());
+    notice.setContent(noticeDto.getContent());
+
+    Notice updatedNotice = noticeRepository.save(notice);
+
+    NoticeDto noticeDtoResult = modelMapper.map(updatedNotice, NoticeDto.class);
+    noticeDtoResult.setKstCreatedAt(DateTimeUtil.convertToKoreanDateTime(noticeDtoResult.getCreatedAt()));
+
+    return new ResponseDto<>(noticeDtoResult, "공지사항이 성공적으로 수정되었습니다.");
+  }
+
+  public void deleteNotice(String id) {
+    if (noticeRepository.existsById(id)) {
+      noticeRepository.deleteById(id);
+    } else {
+      throw new CustomException(ErrorCode.NOTICE_NOT_FOUND);
     }
+  }
+
 }

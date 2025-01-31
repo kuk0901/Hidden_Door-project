@@ -9,16 +9,18 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baeksutalchul.hiddendoor.dto.FaqDto;
+import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.faq.domain.Faq;
 import com.baeksutalchul.hiddendoor.faq.repository.FaqRepository;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
+import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 
 @Service
 public class FaqService {
   private FaqRepository faqRepository;
   private final ModelMapper modelMapper;
-  private static final Logger logger = LoggerFactory.getLogger(FaqService.class);
+  private final Logger logger = LoggerFactory.getLogger(FaqService.class);
 
   public FaqService(FaqRepository faqRepository, ModelMapper modelMapper) {
     this.faqRepository = faqRepository;
@@ -28,15 +30,27 @@ public class FaqService {
   public ResponseDto<List<FaqDto>> getFaqAll() {
     List<Faq> faqList = faqRepository.findAll();
 
+    if (faqList.isEmpty()) {
+      throw new CustomException(ErrorCode.FAQ_NOT_FOUND);
+    }
+
     List<FaqDto> faqDtoList = faqList.stream()
-        .map(faq -> modelMapper.map(faq, FaqDto.class))
+        .map(faq -> {
+          FaqDto faqDto = modelMapper.map(faq, FaqDto.class);
+          faqDto.setKstCreDate(DateTimeUtil.convertToKoreanDate(faq.getCreDate()));
+          faqDto.setKstModDate(DateTimeUtil.convertToKoreanDateTime(faq.getModDate()));
+
+          return faqDto;
+        })
         .toList();
+
+    logger.info("faqDtoList: {}", faqDtoList);
 
     return new ResponseDto<>(faqDtoList, "FAQ 데이터 반환");
   }
 
-    public ResponseDto<String> addFaq(FaqDto faqDto) {
-    
+  public ResponseDto<String> addFaq(FaqDto faqDto) {
+
     Faq faq = faqRepository.save(modelMapper.map(faqDto, Faq.class));
 
     return new ResponseDto<>("", faq.getFaqId() + "번 질문이 추가되었습니다.");
@@ -57,12 +71,12 @@ public class FaqService {
   }
 
   @Transactional
-  public ResponseDto<String> deleteFaqOne(String id) throws CustomException { 
+  public ResponseDto<String> deleteFaqOne(String id) throws CustomException {
 
     Faq faqToDelete = faqRepository.findById(id)
-      .orElseThrow(() -> new CustomException(null));
-    
-      faqRepository.deleteById(id);
+        .orElseThrow(() -> new CustomException(null));
+
+    faqRepository.deleteById(id);
     return new ResponseDto<>("", "질문 " + faqToDelete.getFaqId() + "이(가) 삭제되었습니다.");
   }
 }

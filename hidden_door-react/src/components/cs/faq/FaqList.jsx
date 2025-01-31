@@ -4,7 +4,7 @@ const FaqList = ({ faqList }) => {
   return (
     <ul className="faq-container">
       {faqList.map((faq) => (
-        <FaqItem key={faq.id} faq={faq} />
+        <FaqItem key={faq.faqId} faq={faq} />
       ))}
     </ul>
   );

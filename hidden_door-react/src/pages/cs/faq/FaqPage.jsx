@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import FaqList from "../../../components/cs/faq/FaqList";
 
 const FaqPage = () => {
-  const [faqList, setFaqList] = useState({});
+  const [faqList, setFaqList] = useState([]);
 
   const getAllFaq = async () => {
     try {
@@ -28,6 +28,8 @@ const FaqPage = () => {
       <section>
         <FaqList faqList={faqList} />
       </section>
+
+      <div></div>
     </>
   );
 };

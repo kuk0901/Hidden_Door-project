@@ -1,6 +1,6 @@
 package com.baeksutalchul.hiddendoor.dto;
 
-import java.util.Date;
+import java.time.Instant;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,15 +10,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CustomerDto {
-  private String customerId; 
-  private String customerName; 
-  private String customerEmail; 
-  private String customerTitle; 
-  private String customerContent; 
-  private String customerCheck; 
-  private String customerAnswer; 
+  private String customerId;
+  private String customerName;
+  private String customerEmail;
+  private String customerTitle;
+  private String customerContent;
+  private String customerCheck;
+  private String customerAnswer;
   private String adminName;
   private int customerPwd;
-  private Date queCreDate;
-  private Date ansCreDate; 
+  private Instant queCreDate;
+  private Instant ansCreDate;
+  private String kstQueCreDate;
+  private String kstAnsCreDate;
+
 }

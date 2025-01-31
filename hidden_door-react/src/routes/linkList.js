@@ -8,7 +8,7 @@ export const navLinkList = [
     value: "테마"
   },
   {
-    route: "#",
+    route: "hidden_door/reservation",
     value: "예약"
   },
   {
@@ -16,22 +16,22 @@ export const navLinkList = [
     value: "오시는 길"
   },
   {
-    route: "#",
+    route: "hidden_door/event",
     value: "이벤트"
   }
 ];
 
 export const csLinkList = [
   {
-    route: "#",
+    route: "hidden_door/notice",
     value: "공지사항"
   },
   {
-    route: "#",
+    route: "hidden_door/cs/faq",
     value: "FAQ"
   },
   {
-    route: "#",
+    route: "hidden_door/cs/customer",
     value: "1대1 문의"
   }
 ];

@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import ReservationList from "../../components/reservation/ReservationList";
 
 const ReservationPage = () => {
-  const [reservationList, setReservationList] = useState({});
+  const [reservationList, setReservationList] = useState([]);
 
   const getAllReservation = async () => {
     try {
@@ -28,6 +28,8 @@ const ReservationPage = () => {
       <section>
         <ReservationList reservationList={reservationList} />
       </section>
+
+      <div></div>
     </>
   );
 };

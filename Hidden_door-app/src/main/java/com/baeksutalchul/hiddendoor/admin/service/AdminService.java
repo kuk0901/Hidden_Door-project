@@ -26,7 +26,7 @@ public class AdminService {
   private final PasswordEncoder passwordEncoder;
   private final TokenService tokenService;
 
-  private static final Logger logger = LoggerFactory.getLogger(AdminService.class);
+  private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
   public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder,
       TokenService tokenService) {

@@ -30,40 +30,32 @@ public class FaqController {
   }
 
   @GetMapping("/list")
-  public ResponseEntity<ResponseDto<?>> getFaqAll() {
+  public ResponseEntity<ResponseDto<List<FaqDto>>> getFaqAll() {
+    return ResponseEntity.ok().body(faqService.getFaqAll());
+  }
+
+  @PostMapping("/faq/add")
+  public ResponseEntity<ResponseDto<String>> addFaq(@RequestBody FaqDto faqDto) {
     try {
-      ResponseDto<List<FaqDto>> res = faqService.getFaqAll();
+      logger.info("FaqDto: {}", faqDto);
 
-      logger.info("ResponseDto<List<FaqDto>>: {}", res);
-
+      ResponseDto<String> res = faqService.addFaq(faqDto);
       return ResponseEntity.ok().body(res);
     } catch (Exception e) {
       return ResponseEntity.internalServerError()
-          .body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."));
+          .body(new ResponseDto<>("", "서버 오류로 인해 좌석 추가에 실패하였습니다. 잠시 후 다시 시도해 주세요."));
     }
   }
 
-    @PostMapping("/faq/add")
-  public ResponseEntity<ResponseDto<String>> addFaq(@RequestBody FaqDto faqDto) {
-      try {
-        logger.info("FaqDto: {}", faqDto);
-
-        ResponseDto<String> res = faqService.addFaq(faqDto); 
-        return ResponseEntity.ok().body(res);
-      } catch (Exception e) {
-        return ResponseEntity.internalServerError().body(new ResponseDto<>("", "서버 오류로 인해 좌석 추가에 실패하였습니다. 잠시 후 다시 시도해 주세요."));
-      }
-  }
-  
   @PutMapping("/faq/update/")
   public ResponseEntity<ResponseDto<?>> updateFaqOne(@RequestBody FaqDto faqDto) {
-      try {      
-        return ResponseEntity.ok().body(faqService.updateFaqOne(faqDto));
-      } catch (CustomException e) {
-        return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
-      } catch (Exception e) {
-        return ResponseEntity.internalServerError().body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
-      }
+    try {
+      return ResponseEntity.ok().body(faqService.updateFaqOne(faqDto));
+    } catch (CustomException e) {
+      return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
+    } catch (Exception e) {
+      return ResponseEntity.internalServerError().body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
+    }
   }
 
   @DeleteMapping("/faq/delete/{id}")

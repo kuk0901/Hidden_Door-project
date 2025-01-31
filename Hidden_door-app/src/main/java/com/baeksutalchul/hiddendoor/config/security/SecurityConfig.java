@@ -1,7 +1,5 @@
 package com.baeksutalchul.hiddendoor.config.security;
 
-import java.util.Arrays;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -46,15 +44,20 @@ public class SecurityConfig {
             .requestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/register",
                 "/api/v1/auth/terminate", "/images/**")
             .permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**")
+            .requestMatchers(HttpMethod.GET, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
             .permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**")
+            .requestMatchers(HttpMethod.POST, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
             .authenticated()
-            .requestMatchers(HttpMethod.PATCH, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**")
+            .requestMatchers(HttpMethod.PATCH, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
             .authenticated()
-            .requestMatchers(HttpMethod.PUT, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**")
+            .requestMatchers(HttpMethod.PUT, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
             .authenticated()
-            .requestMatchers(HttpMethod.DELETE, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**")
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
             .authenticated()
             .requestMatchers("/api/v1/auth/renew", "/api/v1/auth/verify").authenticated()
             .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
