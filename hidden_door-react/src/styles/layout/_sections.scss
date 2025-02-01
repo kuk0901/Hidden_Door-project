@@ -145,3 +145,20 @@
     margin-top: 50px;
   }
 }
+
+@media (prefers-color-scheme: light) {
+  .section--caution,
+  .section--price {
+    @include mixins.border(1px, solid, variables.$light-text-color);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .section--price {
+    .price--line {
+      .price--guide {
+        color: white;
+      }
+    }
+  }
+}

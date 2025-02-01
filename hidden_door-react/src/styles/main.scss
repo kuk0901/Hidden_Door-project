@@ -70,9 +70,9 @@
     }
 
     .link-item {
-      color: variables.$light-blue-color;
+      color: variables.$light-link-color;
       &:hover {
-        color: variables.$confirm-text-color;
+        color: variables.$dark-link-color;
       }
     }
   }
@@ -105,10 +105,10 @@
     }
 
     .link-item {
-      color: variables.$confirm-text-color;
+      color: variables.$dark-link-color;
 
       &:hover {
-        color: variables.$light-blue-color;
+        color: variables.$light-link-color;
       }
     }
   }

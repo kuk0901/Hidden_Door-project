@@ -53,5 +53,28 @@
 
   .btn--signout {
     margin-right: 5px;
+    border-radius: 3px;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .btn--signout {
+    background-color: variables.$light-text-color;
+    color: white;
+    border-color: transparent;
+  }
+
+  .nav {
+    .link-container {
+      &.link-container__mini {
+        .link-items {
+          li {
+            .link-item {
+              color: white;
+            }
+          }
+        }
+      }
+    }
   }
 }
