@@ -30,6 +30,7 @@ function App() {
   const { setAdmin } = useAdmin();
   const [loading, setLoading] = useState(true);
   const { themeList, setThemeList } = useThemeList();
+
   const location = useLocation();
 
   useEffect(() => {

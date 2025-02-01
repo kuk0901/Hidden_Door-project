@@ -74,3 +74,13 @@
     }
   }
 }
+
+@media (prefers-color-scheme: light) {
+  .btn {
+    background-color: variables.$light-text-color;
+
+    &.delete {
+      color: white;
+    }
+  }
+}

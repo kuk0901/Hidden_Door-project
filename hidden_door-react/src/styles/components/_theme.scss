@@ -127,3 +127,24 @@
     }
   }
 }
+
+@media (prefers-color-scheme: light) {
+  .theme-section {
+    .theme-page--theme-section {
+      .theme--list {
+        .theme--item {
+          .btn-container {
+            .btn {
+              color: variables.$light-text-color;
+              background-color: transparent;
+
+              &:hover {
+                color: #747bff;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
