@@ -15,7 +15,7 @@ const ReservationPage = () => {
 
       setReservationList(res.data.data);
     } catch (error) {
-      toast.error(error.message || "오류입니다");
+      toast.error(error.message || "오류입니다.");
     }
   };
 
