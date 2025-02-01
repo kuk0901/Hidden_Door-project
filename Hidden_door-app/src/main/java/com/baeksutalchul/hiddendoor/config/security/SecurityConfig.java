@@ -3,8 +3,10 @@ package com.baeksutalchul.hiddendoor.config.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -35,10 +37,28 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
+        .cors(Customizer.withDefaults())
         .csrf(csrf -> csrf.disable())
         .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/register", "/api/v1/auth/terminate").permitAll()
+            .requestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/register",
+                "/api/v1/auth/terminate", "/images/**")
+            .permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
+            .permitAll()
+            .requestMatchers(HttpMethod.POST, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
+            .authenticated()
+            .requestMatchers(HttpMethod.PATCH, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
+            .authenticated()
+            .requestMatchers(HttpMethod.PUT, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
+            .authenticated()
+            .requestMatchers(HttpMethod.DELETE, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**")
+            .authenticated()
             .requestMatchers("/api/v1/auth/renew", "/api/v1/auth/verify").authenticated()
             .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
             .requestMatchers("/api/v1/super-admin/**").hasAuthority("ROLE_SUPER_ADMIN")

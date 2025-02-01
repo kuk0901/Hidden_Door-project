@@ -1,42 +1,43 @@
-import PropTypes from "prop-types";
+import InputField from "@components/common/form/input/InputField";
+import SubmitButton from "@components/common/form/SubmitButton";
+import TextareaField from "@components/common/form/textarea/TextareaField";
 
-import { useForm } from "react-hook-form";
-import InputField from "../InputField";
-import SubmitButton from "../../SubmitButton";
-import TextareaField from "../TextareaField";
-
-FileForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
-  fields: PropTypes.arrayOf(
-    PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      type: PropTypes.string,
-      placeholder: PropTypes.string,
-      errorMessage: PropTypes.string,
-      className: PropTypes.string,
-      field: PropTypes.oneOf(["input", "textarea"])
-    })
-  ).isRequired,
-  btnText: PropTypes.string.isRequired
-};
-
-// FIXME: file form 작성
-const FileForm = ({ onSubmit, fields, btnText }) => {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors }
-  } = useForm();
-
+const FileForm = ({
+  onSubmit,
+  fields,
+  formData,
+  onInputChange,
+  btnText,
+  errors,
+  id
+}) => {
   const renderField = (field) => {
     const commonProps = {
-      register,
       name: field.name,
       placeholder: field.placeholder,
-      error: errors[field.name] && field.errorMessage,
-      className: field.className || ""
+      error: errors[field.name] || field.errorMessage,
+      className: field.className || "",
+      label: field.label,
+      themeForm: field.themeForm,
+      id: field.id,
+      onChange: field.type === "file" ? field.onChange : onInputChange
     };
+
+    if (field.type !== "file") {
+      commonProps.value = formData[field.name] || "";
+    }
+
+    if (field.type === "file" && field.onChange) {
+      return (
+        <InputField
+          key={field.name}
+          {...commonProps}
+          type={field.type}
+          onChange={(e) => field.onChange(e.target.files[0])}
+          value={undefined}
+        />
+      );
+    }
 
     return field.field === "textarea" ? (
       <TextareaField key={field.name} {...commonProps} />
@@ -46,12 +47,10 @@ const FileForm = ({ onSubmit, fields, btnText }) => {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit((data) => onSubmit(data, reset))}
-      className="flex form-container"
-    >
+    <form id={id} onSubmit={onSubmit} className="flex form-container">
       {fields.map(renderField)}
-      <SubmitButton text={btnText} />
+      {errors.genres && <div className="error">{errors.genres}</div>}
+      {btnText ? <SubmitButton text={btnText} /> : null}
     </form>
   );
 };

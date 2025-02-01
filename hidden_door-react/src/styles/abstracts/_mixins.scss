@@ -35,6 +35,12 @@
 }
 
 // font
+@mixin font($size, $weight, $color: white) {
+  font-size: $size;
+  font-weight: $weight;
+  color: $color;
+}
+
 @mixin font-size($size) {
   font-size: $size;
 }

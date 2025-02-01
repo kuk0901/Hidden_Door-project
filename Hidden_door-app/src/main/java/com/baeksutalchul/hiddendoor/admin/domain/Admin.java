@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "admin") // MongoDB의 "users" 컬렉션과 매핑
+@Document(collection = "admin")
 public class Admin {
   @Id
   private String adminId;

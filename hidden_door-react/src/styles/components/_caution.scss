@@ -1,0 +1,163 @@
+@use "../abstracts/variables";
+@use "../abstracts/mixins";
+
+.caution--list {
+  @include mixins.flex-layout-row(space-around, center);
+  flex-wrap: wrap;
+  gap: 10px;
+
+  .caution--item {
+    padding: 10px;
+    .caution-content {
+      padding: 10px 20px;
+      @include mixins.flex-layout-row(center, center);
+      gap: 15px;
+
+      @include mixins.border(3px, solid, gray);
+      border-radius: 10px;
+      width: 370px;
+      height: 170px;
+      max-width: 380px;
+      max-height: 180px;
+
+      @media (max-width: variables.$breakpoint-md) {
+        // 768px 미만의 화면에 적용될 스타일
+        width: 320px;
+        height: 200px;
+        max-height: 210px;
+      }
+
+      .icon-container {
+        width: 50px;
+        height: 50px;
+      }
+
+      .content-container {
+        height: 170px;
+        @include mixins.flex-layout-column(flex-start, baseline);
+        margin-top: 20px;
+        overflow: hidden;
+
+        .title {
+          font-size: 17px;
+          font-weight: bold;
+          padding: 0;
+          margin-bottom: 10px;
+        }
+
+        @media (max-width: variables.$breakpoint-md) {
+          // 768px 미만의 화면에 적용될 스타일
+          height: 210px;
+        }
+
+        .content {
+          overflow-y: auto;
+          font-size: 14px;
+          max-height: 110px;
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.caution--edit,
+.caution--add {
+  border-radius: 5px;
+  padding: 15px;
+
+  .current,
+  .label,
+  .preview {
+    font-size: 16px;
+    font-weight: bold;
+    margin: 10px 10px 20px 0;
+  }
+
+  .preview,
+  .current {
+    @include mixins.flex-layout-row(flex-start, center);
+    gap: 10px;
+  }
+
+  .select,
+  .option {
+    font-size: 17px;
+  }
+
+  .column {
+    align-items: baseline;
+  }
+
+  .edit-form {
+    .label-container {
+      margin: 10px 10px 15px 0;
+
+      label {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.caution--add {
+  .icon-update {
+    .select-container {
+      .label {
+        font-size: 17px;
+      }
+    }
+  }
+
+  #cautionAddForm {
+    padding: 0;
+    gap: 15px;
+
+    .form-container {
+      margin: 0;
+      padding: 0;
+
+      .container {
+        &.caution {
+          width: 100%;
+        }
+      }
+
+      .label-container {
+        font-weight: 700;
+      }
+
+      .input-container {
+        margin: 10px 0 0;
+        width: 100%;
+        max-width: none;
+
+        input {
+          &.caution {
+            width: 100%;
+          }
+        }
+      }
+
+      &:has(.textarea-container) {
+        gap: 0;
+      }
+
+      .textarea-container {
+        width: 100%;
+        max-width: none;
+
+        textarea {
+          width: 100%;
+        }
+      }
+    }
+  }
+}
+
+.caution--content__red {
+  display: inline-block;
+  white-space: pre-line;
+  color: red;
+}

@@ -46,7 +46,8 @@ public class FileUtils {
     }
   }
 
-  public Map<String, String> saveFile(MultipartFile file) throws IOException {
+  // FIXME: null 반환 시 Service단에서 예외 처리
+  public String saveFile(MultipartFile file) throws IOException {
     Map<String, String> fileInfo = new HashMap<>();
 
     if (file != null && !file.isEmpty()) {
@@ -59,9 +60,11 @@ public class FileUtils {
 
       fileInfo.put("originalFileName", originalFileName);
       fileInfo.put("storedFileName", storedFileName);
+
+      return storedFileName; // 저장된 파일명만 반환
     }
 
-    return fileInfo; // 저장된 파일 정보 반환
+    return null; // 파일 없거나 비어있는 경우
   }
 
   private String generateUniqueFileName(String originalFileName) {
