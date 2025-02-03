@@ -180,4 +180,29 @@ public class EscapeRoomService {
     return updateEscapeRoom;
   }
 
+  @Transactional
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeDetailTitleLine(EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+
+    if (existingEscapeRoom.getExplanation().equals(escapeRoomDto.getExplanation())) {
+      throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+    }
+
+    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Update update = new Update()
+        .set("themeDetailHeaderTitle", escapeRoomDto.getThemeDetailHeaderTitle())
+        .set("themeDetailHeaderSubtitle", escapeRoomDto.getThemeDetailHeaderSubtitle());
+
+    UpdateResult result = mongoTemplate.updateFirst(query, update, EscapeRoom.class);
+
+    if (result.getModifiedCount() == 0) {
+      throw new CustomException(ErrorCode.UPDATE_FAILED);
+    }
+
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
+
+    return new ResponseDto<>(updatedDto, "테마 상세 페이지의 제목이 업데이트되었습니다.");
+  }
+
 }

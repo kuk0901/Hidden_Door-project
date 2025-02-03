@@ -69,4 +69,10 @@ public class EscapeRoomController {
         file.getContentType());
     return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomImg(roomId, file));
   }
+
+  @PatchMapping("/info/theme-detail-title-line")
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeDetailTitleLine(
+      @RequestBody EscapeRoomDto escapeRoomDto) {
+    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeDetailTitleLine(escapeRoomDto));
+  }
 }

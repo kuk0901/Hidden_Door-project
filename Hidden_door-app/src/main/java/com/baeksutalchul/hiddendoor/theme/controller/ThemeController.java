@@ -19,6 +19,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/v1/themes")
@@ -52,6 +54,21 @@ public class ThemeController {
     return ResponseEntity.ok().body(themeService.addThemeWithFile(themeDto,
         file));
 
+  }
+
+  @PutMapping("/theme/update")
+  public ResponseEntity<ResponseDto<List<ThemeDto>>> updateThemeOne(
+      @RequestPart("themeDto") ThemeDto themeDto, @RequestPart(value = "file", required = false) MultipartFile file) {
+    logger.info("Received theme data: {}", themeDto);
+    if (file != null) {
+      logger.info("Received file: name={}, size={}, contentType={}",
+          file.getOriginalFilename(),
+          file.getSize(),
+          file.getContentType());
+    }
+
+    return ResponseEntity.ok().body(themeService.updateThemeWithFile(themeDto,
+        file));
   }
 
 }
