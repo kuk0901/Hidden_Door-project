@@ -354,3 +354,74 @@
     }
   }
 }
+
+.theme-slide-section {
+  padding: 10px;
+  border: 1px solid;
+  display: flex; /* 부모 요소에 flexbox 레이아웃 적용 */
+  flex-direction: column; /* 세로 방향으로 나열 */
+  gap: 20px;
+  max-height: 800px;
+
+  .slick-slider {
+    height: 800px;
+
+    .slick-list {
+      overflow: hidden; /* 슬라이드가 잘리도록 설정 */
+      height: 700px;
+
+      .slick-track {
+        height: 700px;
+      }
+    }
+
+    .slick-slide {
+      width: calc(100% - 20px); /* 슬라이드 너비 설정 */
+      margin: 0 10px; /* 슬라이드 간격 설정 */
+    }
+
+    .theme--slide {
+      margin-top: 40px;
+      @include mixins.flex-layout-column(center, center);
+
+      .theme--slide__image {
+        width: 100%; /* 이미지 너비 설정 */
+        height: 600px;
+        object-fit: cover;
+      }
+
+      .theme--slide__btn {
+        text-align: center;
+        width: 100%;
+        display: block;
+        font-size: 18px;
+        background-color: black;
+        color: white;
+        border-top: 1px solid;
+
+        &:hover {
+          transform: none;
+        }
+      }
+    }
+
+    .slick-dots {
+      bottom: 0;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      font-size: 35px;
+      opacity: 1;
+      color: variables.$slide-btn-color;
+    }
+
+    .slick-prev {
+      left: 5px;
+    }
+
+    .slick-next {
+      right: 25px;
+    }
+  }
+}

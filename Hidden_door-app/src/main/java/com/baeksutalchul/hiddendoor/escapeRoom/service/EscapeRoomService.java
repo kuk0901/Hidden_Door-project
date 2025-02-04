@@ -162,6 +162,8 @@ public class EscapeRoomService {
       throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 이미지입니다.");
     }
 
+    String deleteStoredFileName = escapeRoom.getStoredFileName();
+
     // 파일 저장
     try {
       String storedFileName = fileUtils.saveFile(file);
@@ -173,6 +175,8 @@ public class EscapeRoomService {
 
     // DB 저장
     escapeRoomRepository.save(escapeRoom);
+
+    fileUtils.deleteFile(deleteStoredFileName);
 
     ResponseDto<EscapeRoomDto> updateEscapeRoom = getEscapeRoomInfo();
     updateEscapeRoom.setMsg("방탈출 이미지가 변경되었습니다.");

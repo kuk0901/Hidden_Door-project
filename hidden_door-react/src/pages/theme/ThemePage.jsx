@@ -7,6 +7,7 @@ import Api from "@axios/api";
 import ThemeSection from "@components/theme/ThemeSection";
 import { useAdmin } from "@hooks/useAdmin";
 import { useSearchParams } from "react-router-dom";
+import useConfirm from "@hooks/useConfirm";
 
 const ThemePage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
@@ -21,8 +22,18 @@ const ThemePage = () => {
   const explanationRef = useRef(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
+  const confirm = useConfirm();
 
   const handleThemeTitleLineUpdate = async () => {
+    const isConfirmed = await confirm(
+      `테마 페이지의 제목 부분을 정말로 수정하시겠습니까?`
+    );
+
+    if (!isConfirmed) {
+      setTitleVisible(false);
+      return;
+    }
+
     try {
       const newThemeHeaderTitle = titleRef.current.value;
       const newThemeHeaderSubtitle = subtitleRef.current.value;
@@ -49,6 +60,15 @@ const ThemePage = () => {
   };
 
   const handleThemeDetailUpdate = async () => {
+    const isConfirmed = await confirm(
+      `테마 페이지의 설명을 정말로 수정하시겠습니까?`
+    );
+
+    if (!isConfirmed) {
+      setTitleDetailVisible(false);
+      return;
+    }
+
     try {
       const newThemeTitle = titleDetailRef.current.value;
       const newThemeExplanation = explanationRef.current.value;

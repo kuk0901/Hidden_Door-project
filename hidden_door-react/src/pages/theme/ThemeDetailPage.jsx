@@ -6,17 +6,29 @@ import InfoEditForm from "@components/common/form/infoEditForm";
 import Api from "@axios/api";
 import ThemeDetail from "@components/theme/ThemeDetail";
 import { useSearchParams } from "react-router-dom";
+import OneThemePriceSection from "@components/theme/OneThemePriceSection";
+import useConfirm from "@hooks/useConfirm";
 
+// price 영역 확인 필요
 const ThemeDetailPage = ({ theme }) => {
-  // themeDetailHeaderTitle
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
   const [themeDetailHeaderTitleVisible, setThemeDetailHeaderTitleVisible] =
     useState(false);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
+  const confirm = useConfirm();
 
   const handleThemeDetailTitleLineUpdate = async () => {
+    const isConfirmed = await confirm(
+      `테마 상세 페이지의 제목 부분을 정말로 수정하시겠습니까?`
+    );
+
+    if (!isConfirmed) {
+      setThemeDetailHeaderTitleVisible(false);
+      return;
+    }
+
     try {
       const newThemeDetailHeaderTitle = titleRef.current.value;
       const newThemeDetailHeaderSubtitle = subtitleRef.current.value;
@@ -84,6 +96,9 @@ const ThemeDetailPage = ({ theme }) => {
       )}
 
       <ThemeDetail theme={theme} />
+
+      {/* 테마 가격표 영역 */}
+      <OneThemePriceSection theme={theme} />
     </>
   );
 };

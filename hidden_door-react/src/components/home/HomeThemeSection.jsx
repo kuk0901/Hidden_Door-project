@@ -1,54 +1,54 @@
-import { useEffect, useState } from "react";
-import { Swiper } from "swiper/react";
-import "swiper/swiper-bundle.css";
-import ThemeSlide from "./ThemeSlide";
-import { toast } from "react-toastify";
-import Api from "@axios/api";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import ThemeSlide from "@components/home/ThemeSlide";
+import { useThemeList } from "@hooks/useThemeList";
 
-// FIXME: 데이터 요청하는 비동기 코드 필요, Swiper property 수정
-// * theme: imgUrl, route는 recoil 사용해서 관리
 const HomeThemeSection = () => {
-  // FIXME: slide 적용(swiper)
-  const [themeList, setThemeList] = useState([]);
+  const { themeList } = useThemeList();
 
-  const handleThemeList = async () => {
-    try {
-      const res = await Api.get("");
-
-      setThemeList(res.data.data);
-    } catch (error) {
-      toast.error(
-        error.message ||
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
-      );
-    }
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1378,
+        settings: {
+          slidesToShow: 3,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 998,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1
+        }
+      },
+      {
+        breakpoint: 625,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1
+        }
+      }
+    ]
   };
 
-  useEffect(() => {
-    handleThemeList();
-  }, []);
-
   return (
-    <section className="theme-section">
-      <Swiper
-        breakpoints={{
-          320: {
-            slidesPerView: 1
-          },
-          640: {
-            slidesPerView: 2
-          },
-          1024: {
-            slidesPerView: 3
-          }
-        }}
-        spaceBetween={10}
-        pagination={{ clickable: true }}
-      >
-        {themeList.map((theme) => (
-          <ThemeSlide key={theme.id} theme={theme} />
+    <section className="theme-slide-section">
+      <Slider {...settings}>
+        {themeList.map((item) => (
+          <div key={item.themeId}>
+            <ThemeSlide theme={item} />
+          </div>
         ))}
-      </Swiper>
+      </Slider>
     </section>
   );
 };

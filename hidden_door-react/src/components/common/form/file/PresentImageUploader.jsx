@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import Api from "@axios/api";
+import useConfirm from "@hooks/useConfirm";
 
 const PresentImageUploader = ({ escapeRoom, setEscapeRoom, onClose }) => {
   const [previewImage, setPreviewImage] = useState(null);
   const [file, setFile] = useState(null);
+  const confirm = useConfirm();
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -28,6 +30,15 @@ const PresentImageUploader = ({ escapeRoom, setEscapeRoom, onClose }) => {
 
     for (let [key, value] of formData.entries()) {
       console.log(key, value);
+    }
+
+    const isConfirmed = await confirm(
+      `사이트의 대표 이미지를 정말로 수정하시겠습니까?`
+    );
+
+    if (!isConfirmed) {
+      onClose();
+      return;
     }
 
     try {

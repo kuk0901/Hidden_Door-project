@@ -6,7 +6,9 @@ import { validateThemeField } from "@validation/validationRules";
 import { useThemeList } from "@hooks/useThemeList";
 import { useNavigate } from "react-router-dom";
 import { themeFields, initialGenreList } from "@utils/fields/themeFields";
+import useConfirm from "@hooks/useConfirm";
 
+// * FIXME: update, create, delete 영역 확인하면서 useConfirm 사용
 const ThemeAddPage = () => {
   const [genreList, setGenreList] = useState(initialGenreList);
   const [formData, setFormData] = useState({
@@ -26,6 +28,7 @@ const ThemeAddPage = () => {
 
   const { setThemeList } = useThemeList();
   const navigate = useNavigate();
+  const confirm = useConfirm();
 
   const handleGenreChange = (id) => {
     setGenreList(
@@ -105,6 +108,12 @@ const ThemeAddPage = () => {
       new Blob([JSON.stringify(themeDto)], { type: "application/json" })
     );
     submitData.append("file", formData.file);
+
+    const isConfirmed = await confirm(`테마를 추가하시겠습니까?`);
+
+    if (!isConfirmed) {
+      return;
+    }
 
     try {
       // API 호출 로직

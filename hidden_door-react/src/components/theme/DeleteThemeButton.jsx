@@ -5,8 +5,6 @@ import Api from "@axios/api";
 import { useNavigate } from "react-router-dom";
 
 const DeleteThemeButton = ({ themeId, themeName }) => {
-  console.log("themeId: ", themeId);
-
   const confirm = useConfirm();
   const { setThemeList } = useThemeList();
   const navigate = useNavigate();

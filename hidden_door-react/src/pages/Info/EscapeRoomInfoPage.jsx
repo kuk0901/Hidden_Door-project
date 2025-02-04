@@ -11,6 +11,7 @@ import Button from "@components/common/buttons/Button";
 import CautionList from "@components/caution/CautionList";
 import { useEscapeRoom } from "@hooks/useEscapeRoom";
 import PriceSection from "@components/theme/PriceSection";
+import useConfirm from "@hooks/useConfirm";
 
 const EscapeRoomInfoPage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
@@ -20,8 +21,18 @@ const EscapeRoomInfoPage = () => {
 
   const [explanationVisible, setExplanationVisible] = useState(false);
   const explanationRef = useRef(null);
+  const confirm = useConfirm();
 
   const handleTitleUpdate = async () => {
+    const isConfirmed = await confirm(
+      `상세 페이지 제목을 정말로 수정하시겠습니까?`
+    );
+
+    if (!isConfirmed) {
+      setTitleVisible(false);
+      return;
+    }
+
     try {
       const newTitle = titleRef.current.value;
 
@@ -43,6 +54,15 @@ const EscapeRoomInfoPage = () => {
   };
 
   const handleExplanationUpdate = async () => {
+    const isConfirmed = await confirm(
+      `상세 페이지 설명을 정말로 수정하시겠습니까?`
+    );
+
+    if (!isConfirmed) {
+      setExplanationVisible(false);
+      return;
+    }
+
     try {
       const newExplanation = explanationRef.current.value;
 

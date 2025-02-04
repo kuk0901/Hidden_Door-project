@@ -9,6 +9,7 @@ import { themeFields, initialGenreList } from "@utils/fields/themeFields";
 import { formatNumberToPrice } from "@utils/format/number";
 import { useThemeList } from "@hooks/useThemeList";
 import DeleteThemeButton from "@components/theme/DeleteThemeButton";
+import useConfirm from "@hooks/useConfirm";
 
 const ThemeDetail = ({ theme }) => {
   const [themeEditVisible, setThemeEditVisible] = useState(false);
@@ -32,6 +33,7 @@ const ThemeDetail = ({ theme }) => {
     price: formatNumberToPrice(theme.price),
     description: theme.description
   });
+  const confirm = useConfirm();
 
   const handleEditClick = () => {
     setThemeEditVisible(true);
@@ -126,6 +128,15 @@ const ThemeDetail = ({ theme }) => {
     );
     if (formData.file) {
       submitData.append("file", formData.file);
+    }
+
+    const isConfirmed = await confirm(
+      `"${theme.themeName}" 테마 정보를 정말로 수정하시겠습니까?`
+    );
+
+    if (!isConfirmed) {
+      setThemeEditVisible(false);
+      return;
     }
 
     try {
