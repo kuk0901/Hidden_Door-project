@@ -8,6 +8,7 @@ import { validateThemeField } from "@validation/validationRules";
 import { themeFields, initialGenreList } from "@utils/fields/themeFields";
 import { formatNumberToPrice } from "@utils/format/number";
 import { useThemeList } from "@hooks/useThemeList";
+import DeleteThemeButton from "@components/theme/DeleteThemeButton";
 
 const ThemeDetail = ({ theme }) => {
   const [themeEditVisible, setThemeEditVisible] = useState(false);
@@ -18,11 +19,9 @@ const ThemeDetail = ({ theme }) => {
       return { ...genre, checked: isChecked };
     })
   );
-
-  const handleEditClick = () => {
-    setThemeEditVisible(true);
-  };
-
+  const [errors, setErrors] = useState({});
+  const [genreError, setGenreError] = useState("");
+  const { setThemeList } = useThemeList();
   const [formData, setFormData] = useState({
     file: null,
     themeName: theme.themeName,
@@ -34,9 +33,9 @@ const ThemeDetail = ({ theme }) => {
     description: theme.description
   });
 
-  const [errors, setErrors] = useState({});
-  const [genreError, setGenreError] = useState("");
-  const { setThemeList } = useThemeList();
+  const handleEditClick = () => {
+    setThemeEditVisible(true);
+  };
 
   const handleGenreChange = (id) => {
     setGenreList(
@@ -171,6 +170,10 @@ const ThemeDetail = ({ theme }) => {
           <button className="btn" onClick={handleEditClick}>
             테마 정보 수정
           </button>
+          <DeleteThemeButton
+            themeId={theme.themeId}
+            themeName={theme.themeName}
+          />
         </div>
       </div>
 

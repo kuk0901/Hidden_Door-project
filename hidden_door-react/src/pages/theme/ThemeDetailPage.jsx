@@ -5,6 +5,7 @@ import Header from "@components/common/layout/Header";
 import InfoEditForm from "@components/common/form/infoEditForm";
 import Api from "@axios/api";
 import ThemeDetail from "@components/theme/ThemeDetail";
+import { useSearchParams } from "react-router-dom";
 
 const ThemeDetailPage = ({ theme }) => {
   // themeDetailHeaderTitle
@@ -13,6 +14,7 @@ const ThemeDetailPage = ({ theme }) => {
     useState(false);
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleThemeDetailTitleLineUpdate = async () => {
     try {
@@ -41,13 +43,13 @@ const ThemeDetailPage = ({ theme }) => {
   };
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-
-    if (queryParams.get("register") === "true") {
+    if (searchParams.get("register") === "true") {
       toast.success("작성하신 테마 정보가 추가되었습니다.");
-    } else if (queryParams.get("update") === "true") {
+    } else if (searchParams.get("update") === "true") {
       toast.success("테마 정보가 수정되었습니다.");
     }
+
+    setSearchParams({});
   }, []);
   return (
     <>

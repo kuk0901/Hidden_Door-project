@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,12 +46,6 @@ public class ThemeController {
   @PostMapping("/theme/add")
   public ResponseEntity<ResponseDto<List<ThemeDto>>> addThemeOne(@RequestPart("themeDto") ThemeDto themeDto,
       @RequestPart("file") MultipartFile file) {
-    logger.info("Received theme data: {}", themeDto);
-    logger.info("Received file: name={}, size={}, contentType={}",
-        file.getOriginalFilename(),
-        file.getSize(),
-        file.getContentType());
-
     return ResponseEntity.ok().body(themeService.addThemeWithFile(themeDto,
         file));
 
@@ -59,16 +54,13 @@ public class ThemeController {
   @PutMapping("/theme/update")
   public ResponseEntity<ResponseDto<List<ThemeDto>>> updateThemeOne(
       @RequestPart("themeDto") ThemeDto themeDto, @RequestPart(value = "file", required = false) MultipartFile file) {
-    logger.info("Received theme data: {}", themeDto);
-    if (file != null) {
-      logger.info("Received file: name={}, size={}, contentType={}",
-          file.getOriginalFilename(),
-          file.getSize(),
-          file.getContentType());
-    }
-
     return ResponseEntity.ok().body(themeService.updateThemeWithFile(themeDto,
         file));
+  }
+
+  @DeleteMapping("/theme/delete/{id}")
+  public ResponseEntity<ResponseDto<List<ThemeDto>>> deleteThemeOne(@PathVariable("id") String id) {
+    return ResponseEntity.ok().body(themeService.deleteThemeOne(id));
   }
 
 }

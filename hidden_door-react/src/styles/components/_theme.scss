@@ -103,6 +103,10 @@
       background-color: variables.$dark-blue-color;
       border-radius: 5px;
     }
+
+    .btn-container {
+      gap: 20px;
+    }
   }
 
   .info-line {

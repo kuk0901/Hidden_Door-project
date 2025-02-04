@@ -12,36 +12,11 @@
   font-size: 1rem;
   font-weight: bold;
   color: white;
+  background-color: variables.$light-blue-color;
 
   &:hover {
     text-decoration: none;
-  }
-
-  &.primary {
-    background-color: variables.$primary-color;
-
-    &:hover {
-      background-color: variables.$hover-color;
-    }
-
-    &:active {
-      background-color: variables.$active-color;
-    }
-  }
-
-  &.secondary {
-    background-color: variables.$secondary-color;
-
-    &:hover {
-      background-color: color.scale(variables.$secondary-color, $lightness: 5%);
-    }
-
-    &:active {
-      background-color: color.scale(
-        variables.$secondary-color,
-        $lightness: -10%
-      );
-    }
+    background-color: color.scale(variables.$light-blue-color, $lightness: 5%);
   }
 
   &.btn--link {
@@ -78,6 +53,13 @@
 @media (prefers-color-scheme: light) {
   .btn {
     background-color: variables.$light-text-color;
+
+    &:hover {
+      background-color: color.scale(
+        variables.$light-text-color,
+        $lightness: 7%
+      );
+    }
 
     &.delete {
       color: white;

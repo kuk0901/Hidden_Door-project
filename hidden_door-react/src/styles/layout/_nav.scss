@@ -1,3 +1,4 @@
+@use "sass:color";
 @use "../abstracts//mixins";
 @use "../abstracts/variables";
 
@@ -55,17 +56,33 @@
     margin-right: 5px;
     border-radius: 3px;
     border: none;
+    background-color: variables.$light-background-color;
+    color: variables.$dark-background-color;
+    font-weight: 700;
+
+    &:hover {
+      background-color: color.scale(
+        variables.$light-background-color,
+        $lightness: -3%
+      );
+    }
   }
 }
 
 @media (prefers-color-scheme: light) {
-  .btn--signout {
-    background-color: variables.$light-text-color;
-    color: white;
-    border-color: transparent;
-  }
-
   .nav {
+    .btn--signout {
+      background-color: variables.$dark-background-color;
+      color: variables.$light-background-color;
+
+      &:hover {
+        background-color: color.scale(
+          variables.$dark-background-color,
+          $lightness: 5%
+        );
+      }
+    }
+
     .link-container {
       &.link-container__mini {
         .link-items {

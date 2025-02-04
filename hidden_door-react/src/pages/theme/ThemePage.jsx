@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import Api from "@axios/api";
 import ThemeSection from "@components/theme/ThemeSection";
 import { useAdmin } from "@hooks/useAdmin";
+import { useSearchParams } from "react-router-dom";
 
 const ThemePage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
@@ -18,6 +19,8 @@ const ThemePage = () => {
   const [titleDetailVisible, setTitleDetailVisible] = useState(false);
   const titleDetailRef = useRef(null);
   const explanationRef = useRef(null);
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const handleThemeTitleLineUpdate = async () => {
     try {
@@ -77,13 +80,15 @@ const ThemePage = () => {
   };
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
-
-    if (queryParams.get("register") === "false") {
+    if (searchParams.get("register") === "false") {
       toast.warning(
         "새로 추가된 테마를 찾을 수 없습니다. 테마 목록으로 이동합니다."
       );
+    } else if (searchParams.get("delete") === "true") {
+      toast.success(`${searchParams.get("tn")} 해당 테마가 삭제되었습니다.`);
     }
+
+    setSearchParams({});
   }, []);
 
   return (

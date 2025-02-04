@@ -165,4 +165,30 @@ public class ThemeService {
     return themeList;
   }
 
+  @Transactional
+  public ResponseDto<List<ThemeDto>> deleteThemeOne(String themeId) {
+    Theme theme = themeRepository.findById(themeId)
+        .orElseThrow(() -> new CustomException(ErrorCode.THEME_NOT_FOUND));
+
+    // 기존 파일 삭제
+    if (theme.getStoredFileName() != null) {
+      boolean isDeleted = fileUtils.deleteFile(theme.getStoredFileName());
+
+      if (!isDeleted) {
+        throw new CustomException(ErrorCode.FILE_PROCESSING_ERROR);
+      }
+    }
+
+    themeRepository.deleteById(themeId);
+
+    if (!themeRepository.findById(themeId).isEmpty()) {
+      throw new CustomException(ErrorCode.DELETE_FAILED);
+    }
+
+    ResponseDto<List<ThemeDto>> responseDto = getAllTheme();
+    responseDto.setMsg("해당 테마가 삭제되었습니다.");
+
+    return responseDto;
+  }
+
 }
