@@ -18,8 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
-  private ReservationService reservationService;
-  
+  private final ReservationService reservationService;
   private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
 
   public ReservationController(ReservationService reservationService) {
@@ -27,17 +26,8 @@ public class ReservationController {
   }
 
   @GetMapping("/list")
-  public ResponseEntity<ResponseDto<?>> getReservationAll() {
-    try {
-      ResponseDto<List<ReservationDto>> res = reservationService.getReservationAll();
-
-      logger.info("ResponseDto<List<ResponseDto>>: {}", res);
-
-      return ResponseEntity.ok().body(res);
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError()
-        .body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
-    }
+  public ResponseEntity<ResponseDto<List<ReservationDto>>> getReservationAll() {
+    return ResponseEntity.ok().body(reservationService.getReservationAll());
   }
   
 }

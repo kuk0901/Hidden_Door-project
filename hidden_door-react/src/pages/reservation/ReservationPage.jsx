@@ -26,7 +26,11 @@ const ReservationPage = () => {
   return (
     <>
       <section>
-        <ReservationList reservationList={reservationList} />
+        <div>예약 확인 페이지</div>
+
+        <div className="reservation-main-container">
+          <ReservationList reservationList={reservationList} />
+        </div>
       </section>
 
       <div></div>

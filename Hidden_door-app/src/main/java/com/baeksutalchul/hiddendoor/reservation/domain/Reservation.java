@@ -1,7 +1,6 @@
 package com.baeksutalchul.hiddendoor.reservation.domain;
 
 import java.time.Instant;
-import java.util.Date;
 
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
