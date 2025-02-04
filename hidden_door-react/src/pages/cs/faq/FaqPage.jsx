@@ -26,7 +26,22 @@ const FaqPage = () => {
   return (
     <>
       <section>
-        <FaqList faqList={faqList} />
+        <div className="cs-body">
+          <div className="cs-header">고객센터</div>
+
+          <div className="cs-move">
+            <div>FAQ</div>
+            <div>1:1 문의</div>
+          </div>
+
+          <div className="cs-add-button">
+            <button>FAQ추가</button>
+          </div>
+
+          <div className="cs-main-container">
+            <FaqList faqList={faqList} />
+          </div>
+        </div>
       </section>
 
       <div></div>

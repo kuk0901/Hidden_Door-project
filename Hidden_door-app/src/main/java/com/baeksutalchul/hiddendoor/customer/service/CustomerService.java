@@ -11,8 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baeksutalchul.hiddendoor.customer.domain.Customer;
 import com.baeksutalchul.hiddendoor.customer.repository.CustomerRepository;
 import com.baeksutalchul.hiddendoor.dto.CustomerDto;
+
+import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
+
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
+import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 
 @Service
 public class CustomerService {
@@ -28,9 +32,21 @@ public class CustomerService {
   public ResponseDto<List<CustomerDto>> getCustomerAll() {
     List<Customer> customerList = customerRepository.findAll();
 
+    if (customerList.isEmpty()) {
+      throw new CustomException(ErrorCode.FAQ_NOT_FOUND);
+    }
+
     List<CustomerDto> customerDtoList = customerList.stream()
-        .map(customer -> modelMapper.map(customer, CustomerDto.class))
+        .map(customer -> {
+          CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
+          customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
+          customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDateTime(customer.getAnsCreDate()));
+
+          return customerDto;
+        })
         .toList();
+
+    logger.info("customerDtoList: {}", customerDtoList);
 
     return new ResponseDto<>(customerDtoList, "Customer 데이터 반환");
   }

@@ -1,10 +1,9 @@
 const FaqItem = ({ faq }) => {
   return (
-    <li>
-      <div>{faq.answer}</div>
-      <div>{faq.kstCreDate}</div>
-      <div>{faq.kstModDate}</div>
-    </li>
+    <tr className="faq-tr-content">
+      <td>{faq.title}</td>
+      <td>{faq.kstCreDate}</td>
+    </tr>
   );
 };
 
