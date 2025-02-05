@@ -59,6 +59,20 @@
       }
     }
   }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    .caution--item {
+      padding: 0;
+
+      .caution-content {
+        width: 300px;
+
+        .content-container {
+          margin-top: 45px;
+        }
+      }
+    }
+  }
 }
 
 .caution--edit,

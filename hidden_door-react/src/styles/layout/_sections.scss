@@ -11,12 +11,10 @@
   }
 
   @media (max-width: variables.$breakpoint-xl) {
-    // 992px 미만의 화면에 적용될 스타일
     height: 400px;
   }
 
   @media (max-width: variables.$breakpoint-lg) {
-    // 992px 미만의 화면에 적용될 스타일
     height: 350px;
   }
 }
@@ -28,7 +26,6 @@
   margin-bottom: 50px;
 
   @media (max-width: variables.$breakpoint-md) {
-    // 768px 미만의 화면에 적용될 스타일
     margin-bottom: 30px;
   }
 
@@ -40,7 +37,6 @@
     animation: float 2s ease-in-out infinite alternate;
 
     @media (max-width: variables.$breakpoint-md) {
-      // 768px 미만의 화면에 적용될 스타일
       width: 300px;
       height: 300px;
     }
@@ -130,6 +126,17 @@
       }
     }
   }
+
+  @media (max-width: variables.$breakpoint-lg) {
+    .price--line {
+      .price--list,
+      .price--guide {
+        .price {
+          width: 110px;
+        }
+      }
+    }
+  }
 }
 
 .section--price--one {
@@ -174,6 +181,50 @@
 
         &:last-child {
           border-right: none;
+        }
+      }
+    }
+  }
+  @media (max-width: variables.$breakpoint-sm) {
+    .price--line {
+      flex-direction: row;
+
+      .price--list,
+      .price--guide {
+        flex-direction: column;
+
+        .price {
+          border-bottom: 1px solid;
+        }
+
+        &:last-child {
+          border-bottom: none;
+        }
+      }
+
+      .price--list {
+        border-top: 1px solid;
+      }
+
+      .price--guide {
+        border: 1px solid;
+
+        .price {
+          border-right: none;
+
+          &:first-child {
+            border-right: none;
+            border-bottom: 1px solid;
+          }
+
+          &:nth-child(2) {
+            border-right: none;
+          }
+
+          &:last-child {
+            border-right: none;
+            border-bottom: none;
+          }
         }
       }
     }

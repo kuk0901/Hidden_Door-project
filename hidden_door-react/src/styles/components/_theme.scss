@@ -178,6 +178,63 @@
       }
     }
   }
+
+  @media (max-width: variables.$breakpoint-lg) {
+    // 992px 미만의 화면에 적용될 스타일
+
+    .theme-title--line {
+      flex-direction: column;
+      align-items: baseline;
+
+      .btn-container {
+        width: 100%;
+        justify-content: end;
+
+        .btn {
+          &.delete {
+            margin-right: 10px;
+          }
+        }
+      }
+    }
+
+    .info-line {
+      .img-container {
+        width: 50%;
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    // 576px 미만의 화면에 적용될 스타일
+    .theme-title--line {
+      margin-bottom: 20px;
+
+      .theme-title {
+        width: 270px;
+        font-size: 22px;
+      }
+    }
+
+    .info-line {
+      flex-direction: column;
+
+      .img-container {
+        width: 100%;
+      }
+
+      .info--section {
+        margin-top: 0;
+        width: 100%;
+
+        .theme-info--list {
+          .theme-info--item {
+            min-width: 155px;
+          }
+        }
+      }
+    }
+  }
 }
 
 .themeForm-container {
@@ -359,6 +416,7 @@
     }
   }
 }
+
 @media (prefers-color-scheme: light) {
   .theme-section {
     .theme-page--theme-section {
@@ -452,6 +510,59 @@
       .genre-section {
         .input-container {
           border-color: variables.$dark-text-color;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: variables.$breakpoint-sm) {
+  .themeForm-container {
+    .theme-input-container,
+    .theme-textarea,
+    .genre-section {
+      flex-direction: column;
+    }
+
+    .theme-input-container {
+      .label-container {
+        width: 100%;
+      }
+
+      .input-container {
+        &:has(#originalFileName) {
+          width: 322px;
+
+          #originalFileName {
+            width: 300px;
+          }
+        }
+      }
+    }
+
+    .theme-textarea {
+      width: 100%;
+      .label-container,
+      .textarea-container {
+        width: 100%;
+      }
+
+      .textarea-container {
+        textarea {
+          width: 100%;
+        }
+      }
+    }
+
+    .genre-section {
+      padding-top: 5px;
+
+      .input-container {
+        flex-wrap: wrap;
+        gap: 10px;
+
+        .input--checkbox {
+          width: 60px;
         }
       }
     }

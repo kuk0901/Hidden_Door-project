@@ -3,16 +3,15 @@
 @use "../abstracts/variables";
 
 .nav {
+  position: sticky;
+  top: 0;
   @include mixins.flex-layout-row(space-between, align-center);
   padding: 10px;
-  background-color: variables.$light-background-color;
+  background-color: rgba(variables.$light-background-color, 0.7);
+  z-index: 9999;
 
   .link-container {
     width: 600px;
-
-    @media (max-width: variables.$breakpoint-lg) {
-      // 992px 미만의 화면에 적용될 스타일
-    }
 
     @media (max-width: variables.$breakpoint-md) {
       // 768px 미만의 화면에 적용될 스타일
@@ -30,13 +29,16 @@
 
     &.link-container__mini {
       width: 30px;
-
       margin: 0;
       @include mixins.flex-layout-row(space-between, align-center);
       position: relative;
 
+      svg {
+        color: #000;
+      }
+
       .link-items {
-        border: 1px solid white;
+        @include mixins.border(1px, solid, #fff);
         border-radius: 4px;
         position: absolute;
         top: 45px;
@@ -77,9 +79,21 @@
 
 @media (prefers-color-scheme: light) {
   .nav {
-    background-color: variables.$dark-background-color;
+    background-color: rgba(variables.$dark-background-color, 0.9);
 
     .link-container {
+      &.link-container__mini {
+        .link-items {
+          border-width: 1.5px;
+          border-color: #000;
+          li {
+            .link-item {
+              color: white;
+            }
+          }
+        }
+      }
+
       .link-item {
         color: variables.$light-link-color;
 
@@ -98,18 +112,6 @@
           variables.$light-background-color,
           $lightness: -3%
         );
-      }
-    }
-
-    .link-container {
-      &.link-container__mini {
-        .link-items {
-          li {
-            .link-item {
-              color: white;
-            }
-          }
-        }
       }
     }
   }
