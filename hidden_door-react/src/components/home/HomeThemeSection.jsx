@@ -15,6 +15,7 @@ const HomeThemeSection = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+    initialSlide: 0,
     responsive: [
       {
         breakpoint: 1378,
@@ -42,6 +43,8 @@ const HomeThemeSection = () => {
 
   return (
     <section className="theme-slide-section">
+      <div className="section--title text-center bold">테마</div>
+
       <Slider {...settings}>
         {themeList.map((item) => (
           <div key={item.themeId}>

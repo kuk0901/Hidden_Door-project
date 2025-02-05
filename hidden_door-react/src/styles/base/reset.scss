@@ -65,4 +65,8 @@ textarea {
 
 section {
   margin: 20px;
+
+  &.Toastify {
+    margin: 0;
+  }
 }
