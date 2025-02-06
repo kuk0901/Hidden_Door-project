@@ -1,4 +1,4 @@
-import PriceItem from "@components/theme/PriceItem";
+import PriceItem from "@components/price/PriceItem";
 
 const OneThemePriceSection = ({ theme }) => {
   return (

@@ -1,6 +1,7 @@
 @use "../abstracts/variables";
 @use "../abstracts/mixins";
 
+// 로그인
 .login-section {
   height: 550px;
   max-width: 1100px;
@@ -19,6 +20,7 @@
   }
 }
 
+// 이미지
 .main-section__img {
   @include mixins.flex-layout-column(center, center);
   gap: 20px;
@@ -61,6 +63,7 @@
   }
 }
 
+// 주의사항, 가격, 테마 슬라이드
 .section--caution,
 .section--price,
 .theme-slide-section {
@@ -78,6 +81,7 @@
   }
 }
 
+// 가격
 .section--price {
   .price--line {
     @include mixins.flex-layout-row(center, center);
@@ -133,12 +137,42 @@
       .price--guide {
         .price {
           width: 110px;
+
+          .price--themeName {
+            height: 135px;
+          }
+        }
+      }
+
+      .price--guide {
+        .price {
+          &:first-child {
+            height: 135px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-md) {
+    .price--line {
+      .price--list,
+      .price--guide {
+        .price {
+          width: 100px;
+        }
+      }
+
+      .price--guide {
+        .price {
+          width: 85px;
         }
       }
     }
   }
 }
 
+// 단일 가격
 .section--price--one {
   padding: 40px 10px;
 
@@ -185,6 +219,7 @@
       }
     }
   }
+
   @media (max-width: variables.$breakpoint-sm) {
     .price--line {
       flex-direction: row;
@@ -231,6 +266,62 @@
   }
 }
 
+.section--price--mini {
+  border: 1px solid;
+  border-radius: 6px;
+  padding: 10px;
+
+  .section--title {
+    font-size: 22px;
+    margin-bottom: 20px;
+  }
+
+  .price--line {
+    margin-bottom: 25px;
+    border-top: 1px solid;
+    border-bottom: 1px solid;
+    padding: 10px;
+    // border-radius: 5px;
+
+    .price--title {
+      padding: 5px;
+      margin-bottom: 15px;
+      @include mixins.flex-layout-column(center, center);
+      border-bottom: 1px solid;
+      font-size: 18px;
+      background-color: variables.$light-background-color;
+      color: variables.$dark-background-color;
+    }
+
+    .price--content {
+      @include mixins.flex-layout-row(center, center);
+
+      .price--guide--list {
+        border-right: 1px solid;
+        .price--guide {
+          padding: 10px;
+          border-bottom: 1px solid;
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+
+      .price--list {
+        .price {
+          padding: 10px;
+          border-bottom: 1px solid;
+
+          &:last-child {
+            border-bottom: none;
+          }
+        }
+      }
+    }
+  }
+}
+
 .img-update--section {
   @include mixins.flex-layout-column(center, center);
   gap: 10px;
@@ -247,6 +338,7 @@
   }
 }
 
+// 라이트 모드
 @media (prefers-color-scheme: light) {
   .section--caution,
   .section--price,
@@ -259,6 +351,15 @@
       .price--guide {
         color: white;
         border: 1px solid black;
+      }
+    }
+  }
+
+  .section--price--mini {
+    .price--line {
+      .price--title {
+        background-color: variables.$dark-background-color;
+        color: variables.$light-background-color;
       }
     }
   }

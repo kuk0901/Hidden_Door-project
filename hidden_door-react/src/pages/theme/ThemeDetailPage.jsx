@@ -6,7 +6,7 @@ import InfoEditForm from "@components/common/form/infoEditForm";
 import Api from "@axios/api";
 import ThemeDetail from "@components/theme/ThemeDetail";
 import { useSearchParams } from "react-router-dom";
-import OneThemePriceSection from "@components/theme/OneThemePriceSection";
+import OneThemePriceSection from "@components/price/OneThemePriceSection";
 import useConfirm from "@hooks/useConfirm";
 
 // price 영역 확인 필요

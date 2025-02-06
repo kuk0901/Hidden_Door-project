@@ -38,7 +38,7 @@ const Nav = () => {
       window.removeEventListener("resize", handleResize);
       handleResize.cancel(); // debounce 취소
     };
-  }, []); // 빈 배열로 의존성 설정
+  }, []);
 
   return (
     <nav className="nav">

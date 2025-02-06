@@ -1,7 +1,7 @@
 import { toast } from "react-toastify";
 import Api from "@axios/api";
-import { useState, useRef } from "react";
-
+import { useState, useRef, useEffect } from "react";
+import { debounce } from "lodash";
 import Header from "@components/common/layout/Header";
 import DefaultSection from "@components/common/sections/DefaultSection";
 import Loading from "@components/common/loading/Loading";
@@ -10,8 +10,9 @@ import LockAnimation from "@components/animation/LockAnimation";
 import Button from "@components/common/buttons/Button";
 import CautionList from "@components/caution/CautionList";
 import { useEscapeRoom } from "@hooks/useEscapeRoom";
-import PriceSection from "@components/theme/PriceSection";
+import PriceSection from "@components/price/PriceSection";
 import useConfirm from "@hooks/useConfirm";
+import MiniPriceSection from "@components/price/MiniPriceSection";
 
 const EscapeRoomInfoPage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
@@ -22,6 +23,8 @@ const EscapeRoomInfoPage = () => {
   const [explanationVisible, setExplanationVisible] = useState(false);
   const explanationRef = useRef(null);
   const confirm = useConfirm();
+
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const handleTitleUpdate = async () => {
     const isConfirmed = await confirm(
@@ -83,6 +86,20 @@ const EscapeRoomInfoPage = () => {
     }
   };
 
+  useEffect(() => {
+    const handleResize = debounce(() => {
+      setWindowWidth(window.innerWidth);
+    }, 200);
+
+    window.addEventListener("resize", handleResize);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      handleResize.cancel(); // debounce 취소
+    };
+  }, []);
+
   if (!escapeRoom) return <Loading />;
 
   return (
@@ -136,7 +153,7 @@ const EscapeRoomInfoPage = () => {
         )}
       </section>
 
-      <PriceSection />
+      {windowWidth > 768 ? <PriceSection /> : <MiniPriceSection />}
 
       {/* caution */}
       <DefaultSection

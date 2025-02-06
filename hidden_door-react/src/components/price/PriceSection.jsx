@@ -1,4 +1,4 @@
-import PriceItem from "@components/theme/PriceItem";
+import PriceItem from "@components/price/PriceItem";
 import { useThemeList } from "@hooks/useThemeList";
 
 const PriceSection = () => {
