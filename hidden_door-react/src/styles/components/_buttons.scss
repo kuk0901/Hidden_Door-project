@@ -48,6 +48,22 @@
       );
     }
   }
+
+  &.scroll-to-top-button {
+    position: fixed;
+    bottom: 20px;
+    right: 15px;
+    background-color: #fff;
+    color: #000;
+    border: none;
+    padding: 7px;
+    cursor: pointer;
+
+    .icon {
+      width: 30px;
+      height: 30px;
+    }
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -63,6 +79,11 @@
 
     &.delete {
       color: white;
+    }
+
+    &.scroll-to-top-button {
+      background-color: #000;
+      color: #fff;
     }
   }
 }

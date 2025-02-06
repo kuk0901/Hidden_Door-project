@@ -30,13 +30,6 @@ const HomeThemeSection = () => {
           slidesToShow: 2,
           slidesToScroll: 1
         }
-      },
-      {
-        breakpoint: 625,
-        settings: {
-          slidesToShow: 1,
-          slidesToScroll: 1
-        }
       }
     ]
   };
