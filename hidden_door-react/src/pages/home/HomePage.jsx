@@ -32,12 +32,41 @@ const HomePage = () => {
   return (
     <>
       {/* main img */}
-      {/* FIXME: 반응형 css 수정 필요 */}
       <section className="main-section__img">
-        <img
-          src={`${useImgUrl(escapeRoom.storedFileName)}`}
-          alt={escapeRoom.originalFileName}
-        />
+        <div className="guide-container">
+          <div className="guide--text">
+            {escapeRoom.themeDetailHeaderSubtitle}
+          </div>
+
+          <div className="img-container">
+            <div
+              style={{
+                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundPosition: "top",
+                backgroundSize: "100% 300%"
+              }}
+              className="image-part top"
+            />
+            <div
+              style={{
+                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundPosition: "center",
+                backgroundSize: "100% 300%"
+              }}
+              className="image-part middle"
+            />
+            <div
+              style={{
+                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundPosition: "bottom",
+                backgroundSize: "100% 300%"
+              }}
+              className="image-part bottom"
+            />
+          </div>
+
+          <div className="guide--text">{escapeRoom.themeTitle}</div>
+        </div>
 
         {admin && (
           <>
