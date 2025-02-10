@@ -13,6 +13,9 @@ import com.baeksutalchul.hiddendoor.reservation.service.ReservationService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -28,6 +31,11 @@ public class ReservationController {
   @GetMapping("/list")
   public ResponseEntity<ResponseDto<List<ReservationDto>>> getReservationAll() {
     return ResponseEntity.ok().body(reservationService.getReservationAll());
+  }
+
+  @GetMapping("/{reservationId}")
+  public ResponseEntity<ResponseDto<ReservationDto>> getReservationById(@PathVariable String reservationId) {
+    return ResponseEntity.ok().body(reservationService.getReservationById(reservationId));
   }
   
 }

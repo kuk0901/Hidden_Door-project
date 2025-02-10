@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.reservation.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -43,5 +44,23 @@ public class ReservationService {
     logger.info("reservationDtoList: {}", reservationDtoList);
 
     return new ResponseDto<>(reservationDtoList, "예약 데이터 반환");
+  }
+
+  public ResponseDto<ReservationDto> getReservationById(String reservationId) {
+    Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
+
+    if (reservationOptional.isPresent()) {
+      Reservation reservation = reservationOptional.get();
+      ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
+
+      reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
+      reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
+      reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDateTime(reservation.getPaymentDate()));
+
+      return new ResponseDto<>(reservationDto, "예약 상세 정보 반환");
+    } else {
+      return new ResponseDto<>(null, "예약 정보를 찾을 수 없습니다.");
+    }
+
   }
 }
