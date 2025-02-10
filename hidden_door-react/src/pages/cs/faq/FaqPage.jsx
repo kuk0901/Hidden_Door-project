@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import FaqList from "../../../components/cs/faq/FaqList";
 
 const FaqPage = () => {
   const [faqList, setFaqList] = useState([]);
+  const navigate = useNavigate();
 
   const getAllFaq = async () => {
     try {
@@ -23,6 +25,10 @@ const FaqPage = () => {
     getAllFaq();
   }, []);
 
+  const handleAddFaq = () => {
+    navigate("/hidden_door/cs/faqAdd");
+  };
+
   return (
     <>
       <section>
@@ -35,7 +41,7 @@ const FaqPage = () => {
           </div>
 
           <div className="cs-add-button">
-            <button>FAQ추가</button>
+            <button onClick={handleAddFaq}>FAQ추가</button>{" "}
           </div>
 
           <div className="cs-main-container">

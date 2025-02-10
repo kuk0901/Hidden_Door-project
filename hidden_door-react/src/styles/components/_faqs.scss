@@ -2,7 +2,7 @@
   width: 1000px;
   height: 1000px;
   border: 1px solid black;
-  position: relative; // 추가
+  position: relative;
 
   .cs-header {
     width: 1000px;
@@ -25,8 +25,8 @@
   }
 
   .cs-add-button {
-    position: absolute; // 추가
-    right: 0; // 오른쪽 끝으로 배치
+    position: absolute;
+    right: 0;
     margin-top: 30px;
     button {
       width: 100px;
@@ -63,5 +63,29 @@
         height: 60px;
       }
     }
+  }
+}
+
+.faqadd-input-box {
+  width: 1000px;
+  height: 800px;
+  border: 1px solid black;
+  position: relative;
+  padding: 50px;
+
+  div {
+    margin-top: 20px;
+  }
+  input {
+    background-color: white;
+    width: 600px;
+    height: 30px;
+    border: 1px solid black;
+  }
+  textarea {
+    width: 600px;
+    height: 500px;
+    background-color: white;
+    border: 1px solid black;
   }
 }

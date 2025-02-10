@@ -21,6 +21,7 @@ import ThemePage from "@pages/theme/ThemePage";
 import ThemeDetailPage from "@pages/theme/ThemeDetailPage";
 import ThemeAddPage from "@pages/theme/ThemeAddPage";
 import FaqPage from "@pages/cs/faq/FaqPage";
+import FaqAddPage from "@pages/cs/faq/FaqAddPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
 import ReservationPage from "@pages/reservation/ReservationPage";
 import EventPage from "@pages/event/EventPage";
@@ -141,6 +142,7 @@ function App() {
               {/* 고객센터 페이지 */}
               <Route path="cs">
                 <Route path="faq" element={<FaqPage />} />
+                <Route path="faqAdd" element={<FaqAddPage />} />
                 <Route path="customer" element={<CustomerPage />} />
               </Route>
 

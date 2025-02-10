@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.faq.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -9,11 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baeksutalchul.hiddendoor.dto.FaqDto;
+import com.baeksutalchul.hiddendoor.dto.ReservationDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.faq.domain.Faq;
 import com.baeksutalchul.hiddendoor.faq.repository.FaqRepository;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
+import com.baeksutalchul.hiddendoor.reservation.domain.Reservation;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 
 @Service
@@ -47,6 +50,23 @@ public class FaqService {
     logger.info("faqDtoList: {}", faqDtoList);
 
     return new ResponseDto<>(faqDtoList, "FAQ 데이터 반환");
+  }
+
+  public ResponseDto<FaqDto> getFaqById(String faqId) {
+    Optional<Faq> faqOptional = faqRepository.findById(faqId);
+
+    if (faqOptional.isPresent()) {
+      Faq faq = faqOptional.get();
+      FaqDto faqDto = modelMapper.map(faq, FaqDto.class);
+
+      faqDto.setKstCreDate(DateTimeUtil.convertToKoreanDate(faq.getCreDate()));
+      faqDto.setKstModDate(DateTimeUtil.convertToKoreanDateTime(faq.getModDate()));
+
+      return new ResponseDto<>(faqDto, "FAQ 상세 정보 반환");
+    } else {
+      return new ResponseDto<>(null, "FAQ 정보를 찾을 수 없습니다.");
+    }
+
   }
 
   public ResponseDto<String> addFaq(FaqDto faqDto) {

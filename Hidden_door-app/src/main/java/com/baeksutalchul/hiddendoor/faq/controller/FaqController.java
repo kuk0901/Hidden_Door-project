@@ -34,6 +34,11 @@ public class FaqController {
     return ResponseEntity.ok().body(faqService.getFaqAll());
   }
 
+  @GetMapping("/{faqId}")
+  public ResponseEntity<ResponseDto<FaqDto>> getFaqById(@PathVariable String faqId) {
+    return ResponseEntity.ok().body(faqService.getFaqById(faqId));
+  }
+
   @PostMapping("/faq/add")
   public ResponseEntity<ResponseDto<String>> addFaq(@RequestBody FaqDto faqDto) {
     try {
