@@ -26,12 +26,12 @@ const FaqPage = () => {
   }, []);
 
   const handleAddFaq = () => {
-    navigate("/hidden_door/cs/faqAdd");
+    navigate("/hidden_door/cs/faq/add");
   };
 
   return (
     <>
-      <section>
+      <section className="section section-cs">
         <div className="cs-body">
           <div className="cs-header">고객센터</div>
 
@@ -40,8 +40,10 @@ const FaqPage = () => {
             <div>1:1 문의</div>
           </div>
 
-          <div className="cs-add-button">
-            <button onClick={handleAddFaq}>FAQ추가</button>{" "}
+          <div className="btn-container">
+            <button className="btn" onClick={handleAddFaq}>
+              FAQ추가
+            </button>
           </div>
 
           <div className="cs-main-container">

@@ -1,31 +1,33 @@
 package com.baeksutalchul.hiddendoor.faq.service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baeksutalchul.hiddendoor.dto.FaqDto;
-import com.baeksutalchul.hiddendoor.dto.ReservationDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.faq.domain.Faq;
 import com.baeksutalchul.hiddendoor.faq.repository.FaqRepository;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
-import com.baeksutalchul.hiddendoor.reservation.domain.Reservation;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 
 @Service
 public class FaqService {
+  private MongoTemplate mongoTemplate;
   private FaqRepository faqRepository;
   private final ModelMapper modelMapper;
   private final Logger logger = LoggerFactory.getLogger(FaqService.class);
 
-  public FaqService(FaqRepository faqRepository, ModelMapper modelMapper) {
+  public FaqService(FaqRepository faqRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate) {
+    this.mongoTemplate =mongoTemplate;
     this.faqRepository = faqRepository;
     this.modelMapper = modelMapper;
   }
@@ -69,11 +71,23 @@ public class FaqService {
 
   }
 
-  public ResponseDto<String> addFaq(FaqDto faqDto) {
+  @Transactional
+  public ResponseDto<FaqDto> addFaq(FaqDto faqDto) {
 
-    Faq faq = faqRepository.save(modelMapper.map(faqDto, Faq.class));
+    Faq faq = new Faq();
+    faq.setWriter(faqDto.getWriter());
+    faq.setTitle(faqDto.getTitle());
+    faq.setCategory(faqDto.getCategory());
+    faq.setQuestion(faqDto.getQuestion());
+    faq.setAnswer(faqDto.getAnswer());
+    faq.setCreDate(Instant.now());
+    faq.setModDate(Instant.now());
 
-    return new ResponseDto<>("", faq.getFaqId() + "번 질문이 추가되었습니다.");
+    Faq saveFaq = mongoTemplate.save(faq);
+
+    FaqDto resFaqDto = modelMapper.map(saveFaq, FaqDto.class);
+
+    return new ResponseDto<>(resFaqDto, faq.getTitle() + "제목의 질문이 추가되었습니다.");
   }
 
   @Transactional

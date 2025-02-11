@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "faq")
+@Document(collection = "customer")
 public class Customer {
   @Id
   private String customerId; 
@@ -27,10 +27,6 @@ public class Customer {
   private String customerAnswer; 
   private String adminName;
   private int customerPwd;
-
-  @CreatedDate
   private Instant queCreDate;
-
-  @LastModifiedDate
   private Instant ansCreDate; 
 }

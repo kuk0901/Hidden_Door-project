@@ -141,9 +141,14 @@ function App() {
 
               {/* 고객센터 페이지 */}
               <Route path="cs">
-                <Route path="faq" element={<FaqPage />} />
-                <Route path="faqAdd" element={<FaqAddPage />} />
-                <Route path="customer" element={<CustomerPage />} />
+                <Route index element={<FaqPage />} />
+                <Route path="faq">
+                  <Route index element={<FaqPage />} />
+                  <Route path="add" element={<FaqAddPage />} />
+                </Route>
+                <Route path="customer">
+                  <Route index element={<CustomerPage />} />
+                </Route>
               </Route>
 
               {/* 이벤트 및 공지사항 페이지 */}

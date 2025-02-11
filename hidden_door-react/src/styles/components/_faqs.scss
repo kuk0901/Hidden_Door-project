@@ -1,66 +1,67 @@
-.cs-body {
+.section-cs {
+  margin: auto;
   width: 1000px;
   height: 1000px;
   border: 1px solid black;
-  position: relative;
 
-  .cs-header {
-    width: 1000px;
-    height: 100px;
-    text-align: center;
-    line-height: 100px;
-    border: 1px solid black;
-  }
-
-  .cs-move {
-    margin-top: 30px;
-    display: flex;
-    div {
-      width: 500px;
-      height: 40px;
-      border: 1px solid black;
+  .cs-body {
+    .cs-header {
+      width: 1000px;
+      height: 100px;
       text-align: center;
-      padding-top: 5px;
+      line-height: 100px;
+      border: 1px solid black;
     }
-  }
 
-  .cs-add-button {
-    position: absolute;
-    right: 0;
-    margin-top: 30px;
-    button {
-      width: 100px;
-      height: 30px;
-    }
-  }
-
-  .cs-main-container {
-    margin-top: 90px;
-    width: 1000px;
-    height: 660px;
-    border: 1px solid black;
-
-    .faq-container {
-      border-collapse: collapse;
-      .faq-tr-content {
-        td {
-          height: 60px;
-          width: 300px;
-          border: 1px solid black;
-          padding-left: 20px;
-        }
-      }
-      .faq-tr-header {
+    .cs-move {
+      margin-top: 30px;
+      display: flex;
+      div {
+        width: 500px;
+        height: 40px;
+        border: 1px solid black;
         text-align: center;
-        padding: 0;
-        td {
-          border: 1px solid black;
-        }
+        padding-top: 5px;
       }
+    }
 
-      .faq-title {
-        width: 700px;
-        height: 60px;
+    .btn-container {
+      justify-content: flex-end;
+      margin-top: 30px;
+      .btn {
+        width: 100px;
+        height: 30px;
+      }
+    }
+
+    .cs-main-container {
+      margin-top: 30px;
+      width: 1000px;
+      height: 660px;
+      border: 1px solid black;
+
+      .faq-container {
+        border-collapse: collapse;
+        .faq-tr-content {
+          td {
+            height: 60px;
+            width: 300px;
+            border: 1px solid black;
+            padding-left: 20px;
+          }
+        }
+        .faq-tr-header {
+          text-align: center;
+          padding: 0;
+          td {
+            border: 1px solid black;
+          }
+        }
+
+        .faq-title {
+          width: 700px;
+          height: 60px;
+        }
       }
     }
   }
