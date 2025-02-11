@@ -11,6 +11,12 @@ const ReservationDetail = ({ reservationDetail }) => {
       <p>연락처: {reservationDetail.phone}</p>
       <p>이메일: {reservationDetail.email}</p>
       <p>예약 날짜: {reservationDetail.kstResDate}</p>
+      <p>
+        결제 날짜:{" "}
+        {reservationDetail.kstPayDate === ""
+          ? "아직 결제가 되지 않았습니다"
+          : reservationDetail.kstPayDate}
+      </p>
     </div>
   );
 };
