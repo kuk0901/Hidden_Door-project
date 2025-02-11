@@ -1,7 +1,6 @@
 package com.baeksutalchul.hiddendoor.escapeRoom.service;
 
 import java.io.IOException;
-import java.util.List;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -13,12 +12,10 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.baeksutalchul.hiddendoor.dto.EscapeRoomDto;
-import com.baeksutalchul.hiddendoor.dto.ThemeDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.escapeRoom.repository.EscapeRoomRepository;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
-import com.baeksutalchul.hiddendoor.theme.domain.Theme;
 import com.baeksutalchul.hiddendoor.utils.file.FileUtils;
 import com.mongodb.client.result.UpdateResult;
 import com.baeksutalchul.hiddendoor.escapeRoom.domain.EscapeRoom;
@@ -38,6 +35,7 @@ public class EscapeRoomService {
     this.fileUtils = fileUtils;
   }
 
+  // common
   public ResponseDto<EscapeRoomDto> getEscapeRoomInfo() {
     return escapeRoomRepository.findAll().stream()
         .findFirst()
@@ -48,6 +46,7 @@ public class EscapeRoomService {
         .orElseThrow(() -> new CustomException(ErrorCode.ESCAPE_ROOM_NOT_FOUND));
   }
 
+  // admin
   @Transactional
   public ResponseDto<EscapeRoomDto> updateEscapeRoomTitle(EscapeRoomDto escapeRoomDto) {
     EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());

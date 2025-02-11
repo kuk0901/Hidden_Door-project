@@ -23,6 +23,7 @@ const ThemeDetail = ({ theme }) => {
   const [errors, setErrors] = useState({});
   const [genreError, setGenreError] = useState("");
   const { setThemeList } = useThemeList();
+
   const [formData, setFormData] = useState({
     file: null,
     themeName: theme.themeName,

@@ -21,7 +21,6 @@
 }
 
 // 이미지
-//FIXME: main-section__img 배경에 애니메이션 추가
 .main-section__img {
   margin-top: 25px;
   margin-bottom: 50px;
@@ -36,9 +35,10 @@
     .guide--text {
       font-weight: 900;
       font-size: 23px;
-      transform: skewX(7deg);
+      transform: skewX(-10deg);
       text-decoration: underline;
       text-underline-offset: 8px;
+      text-align: center;
     }
 
     .img-container {
@@ -95,9 +95,15 @@
 @media (max-width: variables.$breakpoint-sm) {
   .main-section__img {
     .guide-container {
+      flex-direction: column;
+
       .img-container {
         width: 300px;
         height: 300px; /* 높이 조정 */
+      }
+
+      .guide--text {
+        margin: 25px auto;
       }
     }
   }
