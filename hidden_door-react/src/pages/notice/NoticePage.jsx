@@ -3,6 +3,7 @@ import { useAdmin } from '@hooks/useAdmin';
 import Api from '@axios/api';
 import { toast } from 'react-toastify';
 import AddNoticeModal from './AddNoticeModal';
+import EditNoticeModal from './EditNoticeModal'; // 새로 추가할 컴포넌트
 
 function NoticePage() {
   const { admin } = useAdmin();
@@ -10,6 +11,8 @@ function NoticePage() {
   const [notices, setNotices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false); // 수정 모달 상태
+  const [editingNotice, setEditingNotice] = useState(null); // 수정 중인 공지사항
 
   useEffect(() => {
     fetchNotices();
@@ -70,6 +73,31 @@ function NoticePage() {
       });
   };
 
+  // 수정 모달 열기
+  const openEditModal = (notice) => {
+    setEditingNotice(notice);
+    setIsEditModalOpen(true);
+  };
+
+  // 수정 모달 닫기
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingNotice(null);
+  };
+
+  // 공지사항 수정 완료 처리
+  const handleNoticeEdited = (editedNotice) => {
+    setNotices(
+      notices.map((notice) =>
+        notice.id === editedNotice.id ? editedNotice : notice
+      )
+    );
+    if (selectedNotice && selectedNotice.id === editedNotice.id) {
+      setSelectedNotice(editedNotice);
+    }
+    closeEditModal();
+  };
+
   if (loading) return <div>로딩 중...</div>;
 
   return (
@@ -115,7 +143,10 @@ function NoticePage() {
                 닫기
               </button>
               {admin && (
-                <button className="confirm-modal__btn confirm-modal__btn--confirm">
+                <button
+                  className="confirm-modal__btn confirm-modal__btn--confirm"
+                  onClick={() => openEditModal(selectedNotice)}
+                >
                   수정
                 </button>
               )}
@@ -127,6 +158,12 @@ function NoticePage() {
         isOpen={isAddModalOpen}
         onClose={closeAddModal}
         onNoticeAdded={handleNoticeAdded}
+      />
+      <EditNoticeModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        onNoticeEdited={handleNoticeEdited}
+        notice={editingNotice}
       />
     </div>
   );
