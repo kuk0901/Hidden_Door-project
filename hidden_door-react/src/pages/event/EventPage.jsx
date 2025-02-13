@@ -22,14 +22,12 @@ function EventPage() {
     setLoading(true);
     Api.get('/api/v1/events')
       .then((response) => {
-        console.log('Fetched events:', response.data);
         if (response.data.length === 0) {
           toast.info('등록된 이벤트가 없습니다.');
         }
         setEvents(response.data);
       })
-      .catch((error) => {
-        console.error('Error fetching events:', error);
+      .catch(() => {
         toast.error('이벤트를 불러오는 데 실패했습니다.');
       })
       .finally(() => {
@@ -123,38 +121,38 @@ function EventPage() {
             >
               {event.title}
             </div>
-            {admin && (
-              <button
-                onClick={() => deleteEvent(event.id)}
-                className="delete-event-btn"
-              >
-                삭제
-              </button>
-            )}
           </div>
         ))}
       </div>
       {selectedEvent && (
-        <div className="confirm-modal-overlay">
-          <div className="confirm-modal">
-            <div className="confirm-modal__msg">
+        <div className="event-modal-overlay">
+          <div className="event-modal">
+            <div className="event-modal__msg">
               <h2>{selectedEvent.title}</h2>
               <p>{selectedEvent.description}</p>
             </div>
-            <div className="confirm-modal__btn-container">
+            <div className="event-modal__btn-container">
               <button
-                className="confirm-modal__btn confirm-modal__btn--cancel"
+                className="event-modal__btn event-modal__btn--cancel"
                 onClick={closeModal}
               >
                 닫기
               </button>
               {admin && (
-                <button
-                  className="confirm-modal__btn confirm-modal__btn--edit"
-                  onClick={() => openEditModal(selectedEvent)}
-                >
-                  수정
-                </button>
+                <>
+                  <button
+                    className="event-modal__btn event-modal__btn--edit"
+                    onClick={() => openEditModal(selectedEvent)}
+                  >
+                    수정
+                  </button>
+                  <button
+                    className="event-modal__btn event-modal__btn--delete"
+                    onClick={() => deleteEvent(selectedEvent.id)}
+                  >
+                    삭제
+                  </button>
+                </>
               )}
             </div>
           </div>
