@@ -23,6 +23,7 @@ import ThemeAddPage from "@pages/theme/ThemeAddPage";
 import FaqPage from "@pages/cs/faq/FaqPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
 import ReservationPage from "@pages/reservation/ReservationPage";
+import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
 
@@ -148,7 +149,13 @@ function App() {
               <Route path="event" element={<EventPage />} />
               <Route path="notice" element={<NoticePage />}></Route>
 
-              <Route path="reservation" element={<ReservationPage />} />
+              <Route path="reservation">
+                <Route index element={<ReservationPage />} />
+                <Route
+                  path=":reservationId"
+                  element={<ReservationDetailPage />}
+                />
+              </Route>
             </Route>
 
             {/* 정책 관련 페이지 그룹화 */}
