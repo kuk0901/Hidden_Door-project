@@ -1,9 +1,7 @@
 package com.baeksutalchul.hiddendoor.reservation.domain;
 
 import java.time.Instant;
-import java.util.Date;
 
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,13 +20,8 @@ public class Reservation {
   private String name;
   private String phone;
   private String email;
-
-  @CreatedDate
   private Instant reservationDate;
-
-  @CreatedDate
   private Instant reservationCreDate;
-
   private String availability;
   private int paymentAmount;
   private String paymentState;

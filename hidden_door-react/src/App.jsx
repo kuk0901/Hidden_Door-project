@@ -1,31 +1,34 @@
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Suspense, useEffect, useState } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { Suspense, useEffect, useState } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 
-import Confirm from "@components/common/dialogs/Confirm";
-import Loading from "@components/common/loading/Loading";
-import Layout from "@components/common/layout/Layout";
+import Confirm from '@components/common/dialogs/Confirm';
+import Loading from '@components/common/loading/Loading';
+import Layout from '@components/common/layout/Layout';
 
-import { useAdmin } from "@hooks/useAdmin";
-import { useThemeList } from "@hooks/useThemeList";
-import Api from "@axios/api";
-import ProtectedAdminRoute from "@routes/ProtectedAdminRoute";
+import { useAdmin } from '@hooks/useAdmin';
+import { useThemeList } from '@hooks/useThemeList';
+import Api from '@axios/api';
+import ProtectedAdminRoute from '@routes/ProtectedAdminRoute';
 
-import HomePage from "@pages/home/HomePage";
-import LoginPage from "@pages/admin/LoginPage";
-import PrivacyPolicy from "@pages/policy/PrivacyPolicy";
-import TermsOfService from "@pages/policy/TermsOfService";
-import EscapeRoomInfoPage from "@pages/Info/EscapeRoomInfoPage";
-import ThemePage from "@pages/theme/ThemePage";
-import ThemeDetailPage from "@pages/theme/ThemeDetailPage";
-import ThemeAddPage from "@pages/theme/ThemeAddPage";
-import FaqPage from "@pages/cs/faq/FaqPage";
+import HomePage from '@pages/home/HomePage';
+import LoginPage from '@pages/admin/LoginPage';
+import PrivacyPolicy from '@pages/policy/PrivacyPolicy';
+import TermsOfService from '@pages/policy/TermsOfService';
+import EscapeRoomInfoPage from '@pages/Info/EscapeRoomInfoPage';
+import ThemePage from '@pages/theme/ThemePage';
+import ThemeDetailPage from '@pages/theme/ThemeDetailPage';
+import ThemeAddPage from '@pages/theme/ThemeAddPage';
+import FaqPage from '@pages/cs/faq/FaqPage';
 import FaqAddPage from "@pages/cs/faq/FaqAddPage";
-import CustomerPage from "@pages/cs/customer/CustomerPage";
-import ReservationPage from "@pages/reservation/ReservationPage";
-import EventPage from "@pages/event/EventPage";
-import NoticePage from "@pages/notice/NoticePage";
+import CustomerPage from '@pages/cs/customer/CustomerPage';
+import ReservationPage from '@pages/reservation/ReservationPage';
+import EventPage from '@pages/event/EventPage';
+import NoticePage from '@pages/notice/NoticePage';
+import NoticeDetailPage from './pages/notice/NoticeDetailPage';
+import AddNoticePage from './pages/notice/AddNoticePage';
+import EditNoticePage from './pages/notice/EditNoticePage';
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -34,44 +37,44 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
   }, [location.pathname]); // 라우트 변경 시마다 실행
 
   const checkAdminStatus = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
 
     if (!token) {
       // Access Token이 없을 때 리프레시 토큰으로 로그인 상태 확인
       try {
         const res = await Api.post(
-          "/api/v1/auth/renew",
+          '/api/v1/auth/renew',
           {},
           { withCredentials: true }
         );
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem('token', res.data.token);
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
           error.message ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     } else {
       // Access Token이 있을 때 유효성 검사
       try {
-        const res = await Api.get("/api/v1/auth/verify");
+        const res = await Api.get('/api/v1/auth/verify');
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
           error.message ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     }
@@ -81,13 +84,13 @@ function App() {
 
   const getAllThemes = async () => {
     try {
-      const res = await Api.get("/api/v1/themes/all");
+      const res = await Api.get('/api/v1/themes/all');
 
       setThemeList(res.data.data);
     } catch (error) {
       toast.error(
         error.message ||
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
       );
     }
   };
@@ -153,9 +156,20 @@ function App() {
 
               {/* 이벤트 및 공지사항 페이지 */}
               <Route path="event" element={<EventPage />} />
-              <Route path="notice" element={<NoticePage />}></Route>
+              <Route path="notice">
+                <Route index element={<NoticePage />} />
+                <Route path=":id" element={<NoticeDetailPage />} />
+                <Route path="add" element={<AddNoticePage />} />
+                <Route path="edit/:id" element={<EditNoticePage />} />
+              </Route>
 
-              <Route path="reservation" element={<ReservationPage />} />
+              <Route path="reservation">
+                <Route index element={<ReservationPage />} />
+                <Route
+                  path=":reservationId"
+                  element={<ReservationDetailPage />}
+                />
+              </Route>
             </Route>
 
             {/* 정책 관련 페이지 그룹화 */}

@@ -6,7 +6,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
-
+  private static final Instant DEFAULT_INSTANT = Instant.parse("1970-01-01T00:00:00Z");
   private static final ZoneId KST_ZONE = ZoneId.of("Asia/Seoul");
   private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
   private static final DateTimeFormatter DATETIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -18,21 +18,41 @@ public class DateTimeUtil {
   }
 
   public static String convertToKSTDate(Instant instant) {
+    if (instant.equals(DEFAULT_INSTANT)) {
+      System.out.println(instant);
+      return "";
+    }
+
     ZonedDateTime kstZdt = ZonedDateTime.ofInstant(instant, KST_ZONE);
     return kstZdt.format(DATE_FORMATTER);
   }
 
   public static String convertToKSTDateTime(Instant instant) {
+    if (instant.equals(DEFAULT_INSTANT)) {
+      System.out.println(instant);
+      return "";
+    }
+
     ZonedDateTime kstZdt = ZonedDateTime.ofInstant(instant, KST_ZONE);
     return kstZdt.format(DATETIME_FORMATTER);
   }
 
   public static String convertToKoreanDate(Instant instant) {
+    if (instant.equals(DEFAULT_INSTANT)) {
+      System.out.println(instant);
+      return "";
+    }
+
     ZonedDateTime kstZdt = ZonedDateTime.ofInstant(instant, KST_ZONE);
     return kstZdt.format(KOREAN_DATE_FORMATTER);
   }
 
   public static String convertToKoreanDateTime(Instant instant) {
+    if (instant.equals(DEFAULT_INSTANT)) {
+      System.out.println(instant);
+      return "";
+    }
+
     ZonedDateTime kstZdt = ZonedDateTime.ofInstant(instant, KST_ZONE);
     return kstZdt.format(KOREAN_DATETIME_FORMATTER);
   }

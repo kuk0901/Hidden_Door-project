@@ -1,7 +1,6 @@
 package com.baeksutalchul.hiddendoor.dto;
 
 import java.time.Instant;
-import java.util.Date;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

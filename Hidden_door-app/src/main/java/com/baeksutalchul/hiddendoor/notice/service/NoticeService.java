@@ -2,6 +2,9 @@ package com.baeksutalchul.hiddendoor.notice.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,9 @@ import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 
 @Service
 public class NoticeService {
+
+  private static final Logger logger = LoggerFactory.getLogger(NoticeService.class);
+  
   private final NoticeRepository noticeRepository;
   private final ModelMapper modelMapper;
 
@@ -40,12 +46,16 @@ public class NoticeService {
   }
 
   public ResponseDto<NoticeDto> getNoticeById(String id) {
-    Notice notice = noticeRepository.findById(id)
-        .orElseThrow(() -> new CustomException(ErrorCode.NOTICE_NOT_FOUND));
+    try {
+        Notice notice = noticeRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.NOTICE_NOT_FOUND));
+        NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
+        return new ResponseDto<>(noticeDto, "공지사항을 성공적으로 조회했습니다.");
+    } catch (CustomException e) {
+        return new ResponseDto<>(null, e.getMessage());
+    }
+}
 
-    NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
-    return new ResponseDto<>(noticeDto, "메시지 알아서 ㄱ");
-  }
 
   public ResponseDto<NoticeDto> createNotice(NoticeDto noticeDto) {
     Notice notice = modelMapper.map(noticeDto, Notice.class);
