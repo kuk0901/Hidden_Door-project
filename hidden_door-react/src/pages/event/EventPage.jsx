@@ -3,6 +3,7 @@ import { useAdmin } from '@hooks/useAdmin';
 import Api from '@axios/api';
 import { toast } from 'react-toastify';
 import AddEventModal from './AddEventModal';
+import EditEventModal from './EditEventModal';
 
 function EventPage() {
   const { admin } = useAdmin();
@@ -10,6 +11,8 @@ function EventPage() {
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingEvent, setEditingEvent] = useState(null);
 
   useEffect(() => {
     fetchEvents();
@@ -24,8 +27,7 @@ function EventPage() {
         }
         setEvents(response.data);
       })
-      .catch((error) => {
-        console.error('Error fetching events:', error);
+      .catch(() => {
         toast.error('이벤트를 불러오는 데 실패했습니다.');
       })
       .finally(() => {
@@ -70,6 +72,36 @@ function EventPage() {
       });
   };
 
+  const openEditModal = (event) => {
+    setEditingEvent(event);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setIsEditModalOpen(false);
+    setEditingEvent(null);
+  };
+
+  const handleEventEdited = (editedEvent) => {
+    Api.put(`/api/v1/events/${editedEvent.id}`, editedEvent)
+      .then((response) => {
+        setEvents(
+          events.map((event) =>
+            event.id === editedEvent.id ? response.data : event
+          )
+        );
+        closeEditModal();
+        if (selectedEvent && selectedEvent.id === editedEvent.id) {
+          setSelectedEvent(response.data);
+        }
+        toast.success('이벤트가 수정되었습니다.');
+      })
+      .catch((error) => {
+        console.error('Error editing event:', error);
+        toast.error('이벤트 수정에 실패했습니다.');
+      });
+  };
+
   if (loading) return <div>로딩 중...</div>;
 
   return (
@@ -89,35 +121,38 @@ function EventPage() {
             >
               {event.title}
             </div>
-            {admin && (
-              <button
-                onClick={() => deleteEvent(event.id)}
-                className="delete-event-btn"
-              >
-                삭제
-              </button>
-            )}
           </div>
         ))}
       </div>
       {selectedEvent && (
-        <div className="confirm-modal-overlay">
-          <div className="confirm-modal">
-            <div className="confirm-modal__msg">
+        <div className="event-modal-overlay">
+          <div className="event-modal">
+            <div className="event-modal__msg">
               <h2>{selectedEvent.title}</h2>
               <p>{selectedEvent.description}</p>
             </div>
-            <div className="confirm-modal__btn-container">
+            <div className="event-modal__btn-container">
               <button
-                className="confirm-modal__btn confirm-modal__btn--cancel"
+                className="event-modal__btn event-modal__btn--cancel"
                 onClick={closeModal}
               >
                 닫기
               </button>
               {admin && (
-                <button className="confirm-modal__btn confirm-modal__btn--confirm">
-                  수정
-                </button>
+                <>
+                  <button
+                    className="event-modal__btn event-modal__btn--edit"
+                    onClick={() => openEditModal(selectedEvent)}
+                  >
+                    수정
+                  </button>
+                  <button
+                    className="event-modal__btn event-modal__btn--delete"
+                    onClick={() => deleteEvent(selectedEvent.id)}
+                  >
+                    삭제
+                  </button>
+                </>
               )}
             </div>
           </div>
@@ -127,6 +162,12 @@ function EventPage() {
         isOpen={isAddModalOpen}
         onClose={closeAddModal}
         onEventAdded={handleEventAdded}
+      />
+      <EditEventModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        onEventEdited={handleEventEdited}
+        event={editingEvent}
       />
     </div>
   );

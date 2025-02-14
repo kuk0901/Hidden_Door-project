@@ -1,16 +1,17 @@
+@use "sass:color";
 @use "../abstracts//mixins";
 @use "../abstracts/variables";
 
 .nav {
+  position: sticky;
+  top: 0;
   @include mixins.flex-layout-row(space-between, align-center);
   padding: 10px;
+  background-color: rgba(variables.$light-background-color, 0.7);
+  z-index: 9999;
 
   .link-container {
     width: 600px;
-
-    @media (max-width: variables.$breakpoint-lg) {
-      // 992px 미만의 화면에 적용될 스타일
-    }
 
     @media (max-width: variables.$breakpoint-md) {
       // 768px 미만의 화면에 적용될 스타일
@@ -19,17 +20,25 @@
 
     .link-item {
       font-weight: bold;
+      color: variables.$dark-link-color;
+
+      &:hover {
+        color: variables.$light-link-color;
+      }
     }
 
     &.link-container__mini {
       width: 30px;
-
       margin: 0;
       @include mixins.flex-layout-row(space-between, align-center);
       position: relative;
 
+      svg {
+        color: #000;
+      }
+
       .link-items {
-        border: 1px solid white;
+        @include mixins.border(1px, solid, #fff);
         border-radius: 4px;
         position: absolute;
         top: 45px;
@@ -53,5 +62,57 @@
 
   .btn--signout {
     margin-right: 5px;
+    border-radius: 3px;
+    border: none;
+    background-color: variables.$dark-background-color;
+    color: variables.$light-background-color;
+    font-weight: 700;
+
+    &:hover {
+      background-color: color.scale(
+        variables.$dark-background-color,
+        $lightness: 5%
+      );
+    }
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .nav {
+    background-color: rgba(variables.$dark-background-color, 0.9);
+
+    .link-container {
+      &.link-container__mini {
+        .link-items {
+          border-width: 1.5px;
+          border-color: #000;
+          li {
+            .link-item {
+              color: white;
+            }
+          }
+        }
+      }
+
+      .link-item {
+        color: variables.$light-link-color;
+
+        &:hover {
+          color: variables.$dark-link-color;
+        }
+      }
+    }
+
+    .btn--signout {
+      background-color: variables.$light-background-color;
+      color: variables.$dark-background-color;
+
+      &:hover {
+        background-color: color.scale(
+          variables.$light-background-color,
+          $lightness: -3%
+        );
+      }
+    }
   }
 }

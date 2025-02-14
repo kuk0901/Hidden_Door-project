@@ -29,8 +29,8 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
   if (!isOpen) return null;
 
   return (
-    <div className="modal-overlay">
-      <div className="modal">
+    <div className="event-modal-overlay">
+      <div className="event-modal">
         <h2>새 이벤트 추가</h2>
         <form onSubmit={handleSubmit}>
           <div>
@@ -52,9 +52,18 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
               required
             />
           </div>
-          <div className="modal-buttons">
-            <button type="submit">추가</button>
-            <button type="button" onClick={onClose}>
+          <div className="event-modal__btn-container">
+            <button
+              type="submit"
+              className="event-modal__btn event-modal__btn--confirm"
+            >
+              추가
+            </button>
+            <button
+              type="button"
+              onClick={onClose}
+              className="event-modal__btn event-modal__btn--cancel"
+            >
               취소
             </button>
           </div>

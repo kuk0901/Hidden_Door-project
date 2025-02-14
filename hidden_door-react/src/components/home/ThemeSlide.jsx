@@ -1,13 +1,21 @@
-import { SwiperSlide } from "swiper/react";
 import { Link } from "react-router-dom";
+import { useImgUrl } from "@hooks/useImgUrl";
 
-// FIXME: 실제 dto에 맞춰 수정
 const ThemeSlide = ({ theme }) => {
   return (
-    <SwiperSlide className="theme-slide">
-      <img src={theme.imgUrl} alt={theme.themeName} className="theme-slide__image" />
-      <Link to={theme.detailRoute} className="theme-slide__btn btn--detail"></Link>
-    </SwiperSlide>
+    <div className="theme--slide">
+      <img
+        src={useImgUrl(theme.storedFileName)}
+        alt={theme.themeName}
+        className="theme--slide__image"
+      />
+      <Link
+        to={`/hidden_door/theme/${theme.themeId}`}
+        className="theme--slide__btn btn--detail"
+      >
+        자세히 보기
+      </Link>
+    </div>
   );
 };
 

@@ -21,26 +21,17 @@ import com.baeksutalchul.hiddendoor.res.ResponseDto;
 
 @RestController
 @RequestMapping("/api/v1/customers") // * -> 여기만 복수형태로 작성함
-public class ConstomerController {
+public class CustomerController {
   private final CustomerService customerService;
-  private static final Logger logger = LoggerFactory.getLogger(ConstomerController.class);
+  private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
-  public ConstomerController(CustomerService customerService) {
+  public CustomerController(CustomerService customerService) {
     this.customerService = customerService;
   }
 
   @GetMapping("/list")
-  public ResponseEntity<ResponseDto<?>> getCustomerAll() {
-    try {
-      ResponseDto<List<CustomerDto>> res = customerService.getCustomerAll();
-
-      logger.info("ResponseDto<List<CustomerDto>>: {}", res);
-
-      return ResponseEntity.ok().body(res);
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError()
-          .body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."));
-    }
+  public ResponseEntity<ResponseDto<List<CustomerDto>>> getCustomerAll() {
+    return ResponseEntity.ok().body(customerService.getCustomerAll());
   }
 
     @PostMapping("/customer/add")

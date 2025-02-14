@@ -76,11 +76,11 @@ public class AuthController {
   }
 
   @GetMapping("/verify")
-  public ResponseEntity<ResponseDto<?>> getUserInfo(@RequestHeader("Authorization") String authorization) {
+  public ResponseEntity<ResponseDto<AdminDto>> getUserInfo(@RequestHeader("Authorization") String authorization) {
     // Authorization 헤더에서 Bearer 토큰 추출
     String token = authorization.substring(7);
-    AdminDto userDto = adminService.getUserInfoByToken(token);
+    AdminDto adminDto = adminService.getUserInfoByToken(token);
 
-    return ResponseEntity.ok(new ResponseDto<>(userDto, "사용자 정보 조회 성공"));
+    return ResponseEntity.ok(new ResponseDto<>(adminDto, "사용자 정보 조회 성공"));
   }
 }

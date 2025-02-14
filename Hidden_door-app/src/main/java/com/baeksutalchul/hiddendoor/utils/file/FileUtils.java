@@ -46,7 +46,6 @@ public class FileUtils {
     }
   }
 
-  // FIXME: null 반환 시 Service단에서 예외 처리
   public String saveFile(MultipartFile file) throws IOException {
     Map<String, String> fileInfo = new HashMap<>();
 

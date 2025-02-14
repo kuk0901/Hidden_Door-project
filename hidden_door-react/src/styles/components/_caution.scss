@@ -48,6 +48,7 @@
         @media (max-width: variables.$breakpoint-md) {
           // 768px 미만의 화면에 적용될 스타일
           height: 210px;
+          margin-top: 40px;
         }
 
         .content {
@@ -55,6 +56,20 @@
           font-size: 14px;
           max-height: 110px;
           width: 100%;
+        }
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    .caution--item {
+      padding: 0;
+
+      .caution-content {
+        width: 300px;
+
+        .content-container {
+          margin-top: 45px;
         }
       }
     }

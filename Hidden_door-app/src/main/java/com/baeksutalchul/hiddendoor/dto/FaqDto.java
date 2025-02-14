@@ -1,7 +1,6 @@
 package com.baeksutalchul.hiddendoor.dto;
 
 import java.time.Instant;
-import java.util.Date;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

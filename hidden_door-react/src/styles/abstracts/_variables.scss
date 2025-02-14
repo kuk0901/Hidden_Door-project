@@ -1,18 +1,15 @@
 @use "sass:color";
 
 // * 색상 관련 변수
-// FIXME: 버튼 색상 변경해야 함
 $primary-color: royalblue;
 $hover-color: color.adjust($primary-color, $lightness: -10%);
 $active-color: color.adjust($primary-color, $lightness: -20%);
-
-$secondary-color: #008080;
-$tertiary-color: #607d8b;
 
 $heading-color: #333;
 $background-color: #f4f4f4;
 $light-background-color: #ffebcd;
 $dark-background-color: #955514;
+$nav-background-color: #808080;
 
 $confirm-border-color: rgb(228, 210, 238);
 $confirm-button-color: rgb(180, 151, 231);
@@ -26,6 +23,11 @@ $light-text-color: #213547;
 
 $dark-blue-color: #282c78;
 $light-blue-color: #646cff;
+
+$dark-link-color: #132b96;
+$light-link-color: #739bfa;
+
+$slide-btn-color: rgb(46, 226, 136);
 
 // * SCSS 변수로 브레이크포인트 정의(max-width)
 $breakpoint-xl: 1199px; // 1200px 미만 -> 초대형 화면 (대형 데스크탑)

@@ -1,8 +1,11 @@
 package com.baeksutalchul.hiddendoor.customer.domain;
 
+import java.time.Instant;
 import java.util.Date;
 
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -12,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "faq")
+@Document(collection = "customer")
 public class Customer {
   @Id
   private String customerId; 
@@ -24,6 +27,6 @@ public class Customer {
   private String customerAnswer; 
   private String adminName;
   private int customerPwd;
-  private Date queCreDate;
-  private Date ansCreDate; 
+  private Instant queCreDate;
+  private Instant ansCreDate; 
 }

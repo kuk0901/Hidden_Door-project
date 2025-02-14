@@ -7,6 +7,7 @@ import { useAdmin } from "@hooks/useAdmin";
 import PresentImageUploader from "@components/common/form/file/PresentImageUploader";
 import DefaultSection from "@components/common/sections/DefaultSection";
 import CautionList from "@components/caution/CautionList";
+import HomeThemeSection from "@components/home/HomeThemeSection";
 
 // * FIXME: 개별 페이지 완성 후 내용 수정
 const HomePage = () => {
@@ -31,12 +32,41 @@ const HomePage = () => {
   return (
     <>
       {/* main img */}
-      {/* FIXME: 반응형 css 수정 필요 */}
       <section className="main-section__img">
-        <img
-          src={`${useImgUrl(escapeRoom.storedFileName)}`}
-          alt={escapeRoom.originalFileName}
-        />
+        <div className="guide-container">
+          <div className="guide--text">
+            {escapeRoom.themeDetailHeaderSubtitle}
+          </div>
+
+          <div className="img-container">
+            <div
+              style={{
+                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundPosition: "top",
+                backgroundSize: "100% 300%"
+              }}
+              className="image-part top"
+            />
+            <div
+              style={{
+                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundPosition: "center",
+                backgroundSize: "100% 300%"
+              }}
+              className="image-part middle"
+            />
+            <div
+              style={{
+                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundPosition: "bottom",
+                backgroundSize: "100% 300%"
+              }}
+              className="image-part bottom"
+            />
+          </div>
+
+          <div className="guide--text">{escapeRoom.themeTitle}</div>
+        </div>
 
         {admin && (
           <>
@@ -60,18 +90,7 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* FIXME: <HomeThemeSection /> */}
-
-      <div
-        style={{
-          border: "1px solid white",
-          height: "300px",
-          marginBottom: "10px",
-          textAlign: "center"
-        }}
-      >
-        Theme slide section
-      </div>
+      <HomeThemeSection />
 
       {/* FIXME: Event section */}
 

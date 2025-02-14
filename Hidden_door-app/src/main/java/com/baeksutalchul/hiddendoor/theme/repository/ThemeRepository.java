@@ -19,4 +19,6 @@ public interface ThemeRepository extends MongoRepository<Theme, String> {
   Optional<Theme> findByOriginalFileName(String originalFileName);
 
   Optional<Theme> findByDescription(String description);
+
+  void deleteById(String id);
 }

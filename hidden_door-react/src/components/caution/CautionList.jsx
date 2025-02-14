@@ -6,6 +6,7 @@ import { useAdmin } from "@hooks/useAdmin";
 import InfoEditForm from "@components/common/form/InfoEditForm";
 import IconSelector from "@components/common/form/select/IconSelector";
 import Form from "@components/common/form/Form";
+import useConfirm from "@hooks/useConfirm";
 
 const CautionList = ({ data, setSectionData }) => {
   const [editingItem, setEditingItem] = useState(null);
@@ -13,12 +14,20 @@ const CautionList = ({ data, setSectionData }) => {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+  const confirm = useConfirm();
 
   const { admin } = useAdmin();
 
   const handleAddCaution = async (formData, reset) => {
     if (!selectedIcon) {
       toast.error("아이콘은 필수입력란입니다.");
+      return;
+    }
+
+    const isConfirmed = await confirm(`주의사항을 추가하시겠습니까?`);
+
+    if (!isConfirmed) {
+      handleAddCancel();
       return;
     }
 
@@ -81,8 +90,22 @@ const CautionList = ({ data, setSectionData }) => {
     setSelectedIcon(null);
   };
 
+  const handleAddCancel = () => {
+    setIsAdding(false);
+    resetForm();
+  };
+
   const handleUpdateCaution = async () => {
     if (!editingItem) return;
+
+    const isConfirmed = await confirm(
+      `해당 주의사항 정보를 정말로 수정하시겠습니까?`
+    );
+
+    if (!isConfirmed) {
+      handleEditCancel();
+      return;
+    }
 
     try {
       const updatedCaution = {

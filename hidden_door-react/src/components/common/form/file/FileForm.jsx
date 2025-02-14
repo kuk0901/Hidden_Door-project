@@ -20,7 +20,8 @@ const FileForm = ({
       label: field.label,
       themeForm: field.themeForm,
       id: field.id,
-      onChange: field.type === "file" ? field.onChange : onInputChange
+      onChange: field.type === "file" ? field.onChange : onInputChange,
+      required: field.required
     };
 
     if (field.type !== "file") {
@@ -47,7 +48,14 @@ const FileForm = ({
   };
 
   return (
-    <form id={id} onSubmit={onSubmit} className="flex form-container">
+    <form
+      id={id}
+      onSubmit={(e) => {
+        e.preventDefault();
+        onSubmit(e);
+      }}
+      className="flex form-container"
+    >
       {fields.map(renderField)}
       {errors.genres && <div className="error">{errors.genres}</div>}
       {btnText ? <SubmitButton text={btnText} /> : null}
