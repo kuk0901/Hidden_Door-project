@@ -2,14 +2,13 @@ import { useState, useEffect } from 'react';
 import { useAdmin } from '@hooks/useAdmin';
 import Api from '@axios/api';
 import { toast } from 'react-toastify';
-import AddNoticeModal from './AddNoticeModal';
+import { useNavigate } from 'react-router-dom';
 
 function NoticePage() {
   const { admin } = useAdmin();
-  const [selectedNotice, setSelectedNotice] = useState(null);
   const [notices, setNotices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchNotices();
@@ -33,101 +32,33 @@ function NoticePage() {
       });
   };
 
-  const handleNoticeClick = (notice) => {
-    setSelectedNotice(notice);
-  };
-
-  const closeModal = () => {
-    setSelectedNotice(null);
-  };
-
-  const openAddModal = () => {
-    if (!admin) return;
-    setIsAddModalOpen(true);
-  };
-
-  const closeAddModal = () => {
-    setIsAddModalOpen(false);
-  };
-
-  const handleNoticeAdded = (newNotice) => {
-    setNotices([...notices, newNotice]);
-  };
-
-  const deleteNotice = (id) => {
-    if (!admin) return;
-
-    Api.delete(`/api/v1/notices/${id}`)
-      .then(() => {
-        setNotices(notices.filter((notice) => notice.id !== id));
-        if (selectedNotice && selectedNotice.id === id) {
-          closeModal();
-        }
-        toast.success('공지사항이 삭제되었습니다.');
-      })
-      .catch(() => {
-        toast.error('공지사항 삭제에 실패했습니다.');
-      });
-  };
-
   if (loading) return <div>로딩 중...</div>;
 
   return (
     <div className="notice-page">
       <h1>공지사항 페이지</h1>
       {admin && (
-        <button onClick={openAddModal} className="add-notice-btn">
+        <button
+          onClick={() => navigate('/hidden_door/notice/add')}
+          className="add-notice-btn"
+        >
           공지사항 추가
         </button>
       )}
-      <div className="notice-container">
+      <div className="notice-list">
         {notices.map((notice) => (
-          <div key={notice.id} className="notice-item">
-            <div
-              className="notice-title"
-              onClick={() => handleNoticeClick(notice)}
-            >
-              {notice.title}
+          <div
+            key={notice.id}
+            className="notice-item"
+            onClick={() => navigate(`/hidden_door/notice/${notice.id}`)}
+          >
+            <div className="notice-title">{notice.title}</div>
+            <div className="notice-date">
+              {new Date(notice.createdAt).toLocaleDateString()}
             </div>
-            {admin && (
-              <button
-                onClick={() => deleteNotice(notice.id)}
-                className="delete-notice-btn"
-              >
-                삭제
-              </button>
-            )}
           </div>
         ))}
       </div>
-      {selectedNotice && (
-        <div className="confirm-modal-overlay">
-          <div className="confirm-modal">
-            <div className="confirm-modal__msg">
-              <h2>{selectedNotice.title}</h2>
-              <p>{selectedNotice.content}</p>
-            </div>
-            <div className="confirm-modal__btn-container">
-              <button
-                className="confirm-modal__btn confirm-modal__btn--cancel"
-                onClick={closeModal}
-              >
-                닫기
-              </button>
-              {admin && (
-                <button className="confirm-modal__btn confirm-modal__btn--confirm">
-                  수정
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
-      <AddNoticeModal
-        isOpen={isAddModalOpen}
-        onClose={closeAddModal}
-        onNoticeAdded={handleNoticeAdded}
-      />
     </div>
   );
 }

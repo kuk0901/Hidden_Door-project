@@ -1,0 +1,169 @@
+@use '../abstracts/variables';
+@use 'sass:color';
+
+// event main scss
+
+.event-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
+  .add-event-btn {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    background-color: variables.$light-blue-color;
+    color: variables.$background-color;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+
+    &:hover {
+      background-color: color.adjust(
+        variables.$light-blue-color,
+        $lightness: -15%
+      );
+    }
+  }
+
+  .event-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+
+    .event-item {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .event-circle {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-color: variables.$background-color;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &:hover {
+          background-color: #e0e0e0;
+        }
+      }
+    }
+  }
+}
+
+// event 추가 & 수정 modal scss
+
+.event-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9998;
+
+  .event-modal {
+    border: 1px solid variables.$confirm-border-color;
+    border-radius: 12px;
+    padding: 20px;
+    background-color: variables.$confirm-bg-color;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    width: 400px;
+
+    .event-modal__msg {
+      color: variables.$confirm-text-color;
+      margin-bottom: 20px;
+      font-weight: 700;
+
+      h2 {
+        margin-bottom: 10px;
+      }
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      label {
+        color: variables.$confirm-text-color;
+        font-weight: 600;
+      }
+
+      input,
+      textarea {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid variables.$confirm-border-color;
+        border-radius: 4px;
+      }
+
+      textarea {
+        min-height: 100px;
+        resize: vertical;
+      }
+    }
+
+    .event-modal__btn-container {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 20px;
+
+      .event-modal__btn {
+        margin-left: 10px;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+
+        &--delete {
+          background-color: variables.$delete-btn-color;
+          color: variables.$confirm-bg-color;
+
+          &:hover {
+            background-color: color.adjust(
+              variables.$delete-btn-color,
+              $lightness: -15%
+            );
+          }
+        }
+
+        &--cancel {
+          background-color: variables.$confirm-bg-color;
+          color: variables.$confirm-text-color;
+
+          &:hover {
+            background-color: color.adjust(
+              variables.$confirm-bg-color,
+              $lightness: -5%
+            );
+          }
+        }
+
+        &--confirm,
+        &--edit {
+          background-color: variables.$confirm-button-color;
+          color: white;
+
+          &:hover {
+            background-color: color.adjust(
+              variables.$confirm-button-color,
+              $lightness: -15%
+            );
+          }
+        }
+      }
+    }
+  }
+}
