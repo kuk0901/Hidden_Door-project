@@ -14,7 +14,9 @@
     "paymentAmount": 25000,
     "paymentState": "N",
     "paymentMethod": "현장",
-    "paymentDate": "",
+    "paymentDate": {
+      "$date": "1970-01-01T00:00:00.000Z"
+    },
     "refundState": "N"
   },
   {
@@ -32,7 +34,9 @@
     "paymentAmount": 27000,
     "paymentState": "N",
     "paymentMethod": "현장",
-    "paymentDate": "",
+    "paymentDate": {
+      "$date": "1970-01-01T00:00:00.000Z"
+    },
     "refundState": "N"
   }
 ]
