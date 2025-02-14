@@ -32,7 +32,7 @@ public class ReservationController {
 
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto<ReservationDto>> getReservationById(
-      @PathVariable("id") String reservationId) {
+      @PathVariable("id")  String reservationId) {
     return ResponseEntity.ok().body(reservationService.getReservationById(reservationId));
   }
 
