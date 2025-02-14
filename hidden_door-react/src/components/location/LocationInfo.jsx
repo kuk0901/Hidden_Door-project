@@ -1,6 +1,7 @@
+// FIXME: icon 사용 고려
 const LocationInfo = ({ location, contactInfo, branchName }) => {
   return (
-    <section className="simple-info">
+    <section className="simple--info">
       <ul className="info--list">
         <li className="info--item">
           <span className="title">지점명</span>

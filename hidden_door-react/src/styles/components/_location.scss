@@ -1,0 +1,53 @@
+@use "../abstracts/mixins";
+@use "../abstracts/variables";
+
+.map--info {
+  margin: 30px auto 70px;
+
+  #map {
+    width: 90%;
+    height: 600px;
+    margin: auto;
+  }
+}
+
+// FIXME: 반응형 css / 배경, 글자 색상
+.simple--info {
+  margin-bottom: 100px;
+
+  .info--list {
+    @include mixins.flex-layout-row(space-around, center);
+
+    .info--item {
+      @include mixins.flex-layout-column(space-around, center);
+      border: 1px solid;
+      padding: 5px 15px 20px;
+      border-radius: 5px;
+    }
+  }
+}
+
+@media only screen and (max-width: variables.$breakpoint-xl) {
+  .map--info {
+    #map {
+      height: 500px;
+    }
+  }
+}
+
+@media only screen and (max-width: variables.$breakpoint-lg) {
+  .map--info {
+    #map {
+      height: 400px;
+    }
+  }
+}
+
+@media only screen and (max-width: variables.$breakpoint-md) {
+  .map--info {
+    #map {
+      width: 100%;
+      height: 300px;
+    }
+  }
+}

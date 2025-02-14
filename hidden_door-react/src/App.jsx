@@ -27,9 +27,10 @@ import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
 import ReservationPage from "@pages/reservation/ReservationPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
-import NoticeDetailPage from "./pages/notice/NoticeDetailPage";
-import AddNoticePage from "./pages/notice/AddNoticePage";
-import EditNoticePage from "./pages/notice/EditNoticePage";
+import NoticeDetailPage from "@pages/notice/NoticeDetailPage";
+import AddNoticePage from "@pages/notice/AddNoticePage";
+import EditNoticePage from "@pages/notice/EditNoticePage";
+import LocationPage from "@pages/location/LocationPage";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -190,6 +191,8 @@ function App() {
                 />
               </Route>
             </Route>
+
+            <Route path="/hidden_door/location" element={<LocationPage />} />
 
             {/* 정책 관련 페이지 그룹화 */}
             <Route path="/hidden_door/policy">
