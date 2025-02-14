@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Api from '@axios/api';
 
-function AddEventModal({ isOpen, onClose, onEventAdded }) {
+function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  // 이벤트 데이터가 변경될 때마다 폼에 값을 채워줌
+  useEffect(() => {
+    if (event) {
+      setTitle(event.title || '');
+      setDescription(event.description || '');
+    }
+  }, [event]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -14,15 +22,15 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
       return;
     }
 
-    const newEvent = { title, description };
-    Api.post('/api/v1/events', newEvent)
+    const updatedEvent = { ...event, title, description }; // 기존 이벤트 데이터에 수정된 값 추가
+    Api.put(`/api/v1/events/${event.id}`, updatedEvent)
       .then((response) => {
-        onEventAdded(response.data);
-        toast.success('이벤트가 추가되었습니다.');
+        onEventEdited(response.data); // 수정된 데이터 전달
+        toast.success('이벤트가 수정되었습니다.');
         onClose();
       })
       .catch(() => {
-        toast.error('이벤트 추가에 실패했습니다.');
+        toast.error('이벤트 수정에 실패했습니다.');
       });
   };
 
@@ -31,7 +39,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
   return (
     <div className="event-modal-overlay">
       <div className="event-modal">
-        <h2>새 이벤트 추가</h2>
+        <h2>이벤트 수정</h2>
         <form onSubmit={handleSubmit}>
           <div>
             <label htmlFor="title">제목</label>
@@ -55,9 +63,9 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
           <div className="event-modal__btn-container">
             <button
               type="submit"
-              className="event-modal__btn event-modal__btn--confirm"
+              className="event-modal__btn event-modal__btn--edit"
             >
-              추가
+              수정
             </button>
             <button
               type="button"
@@ -73,4 +81,4 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
   );
 }
 
-export default AddEventModal;
+export default EditEventModal;

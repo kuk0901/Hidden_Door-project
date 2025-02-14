@@ -34,17 +34,14 @@ public class FaqController {
     return ResponseEntity.ok().body(faqService.getFaqAll());
   }
 
-  @PostMapping("/faq/add")
-  public ResponseEntity<ResponseDto<String>> addFaq(@RequestBody FaqDto faqDto) {
-    try {
-      logger.info("FaqDto: {}", faqDto);
+  @GetMapping("/{faqId}")
+  public ResponseEntity<ResponseDto<FaqDto>> getFaqById(@PathVariable String faqId) {
+    return ResponseEntity.ok().body(faqService.getFaqById(faqId));
+  }
 
-      ResponseDto<String> res = faqService.addFaq(faqDto);
-      return ResponseEntity.ok().body(res);
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError()
-          .body(new ResponseDto<>("", "서버 오류로 인해 좌석 추가에 실패하였습니다. 잠시 후 다시 시도해 주세요."));
-    }
+  @PostMapping("/faq/add")
+  public ResponseEntity<ResponseDto<FaqDto>> addFaq(@RequestBody FaqDto faqDto) {
+    return ResponseEntity.ok().body(faqService.addFaq(faqDto));
   }
 
   @PutMapping("/faq/update/")

@@ -1,14 +1,13 @@
 // abstracts
-@use "abstracts/mixins";
-@use "abstracts/variables";
+@use 'abstracts/mixins';
+@use 'abstracts/variables';
 
 // base
-@use "base/reset";
-@use "base/typography";
-@use "base/borders";
-@use "base/utilities";
+@use 'base/reset';
+@use 'base/typography';
+@use 'base/borders';
+@use 'base/utilities';
 
-// components
 @use "components/buttons";
 @use "components/forms";
 @use "components/modals";
@@ -19,6 +18,9 @@
 @use "components/caution";
 @use "components/theme";
 @use "components/faqs";
+@use "components/reservations";
+@use 'components/events';
+@use 'components/notices';
 
 // layout
 @use "layout/containers";

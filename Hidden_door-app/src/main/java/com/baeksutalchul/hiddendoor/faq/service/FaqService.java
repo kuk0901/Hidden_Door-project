@@ -1,10 +1,13 @@
 package com.baeksutalchul.hiddendoor.faq.service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,11 +21,13 @@ import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 
 @Service
 public class FaqService {
+  private MongoTemplate mongoTemplate;
   private FaqRepository faqRepository;
   private final ModelMapper modelMapper;
   private final Logger logger = LoggerFactory.getLogger(FaqService.class);
 
-  public FaqService(FaqRepository faqRepository, ModelMapper modelMapper) {
+  public FaqService(FaqRepository faqRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate) {
+    this.mongoTemplate =mongoTemplate;
     this.faqRepository = faqRepository;
     this.modelMapper = modelMapper;
   }
@@ -49,11 +54,40 @@ public class FaqService {
     return new ResponseDto<>(faqDtoList, "FAQ 데이터 반환");
   }
 
-  public ResponseDto<String> addFaq(FaqDto faqDto) {
+  public ResponseDto<FaqDto> getFaqById(String faqId) {
+    Optional<Faq> faqOptional = faqRepository.findById(faqId);
 
-    Faq faq = faqRepository.save(modelMapper.map(faqDto, Faq.class));
+    if (faqOptional.isPresent()) {
+      Faq faq = faqOptional.get();
+      FaqDto faqDto = modelMapper.map(faq, FaqDto.class);
 
-    return new ResponseDto<>("", faq.getFaqId() + "번 질문이 추가되었습니다.");
+      faqDto.setKstCreDate(DateTimeUtil.convertToKoreanDate(faq.getCreDate()));
+      faqDto.setKstModDate(DateTimeUtil.convertToKoreanDateTime(faq.getModDate()));
+
+      return new ResponseDto<>(faqDto, "FAQ 상세 정보 반환");
+    } else {
+      return new ResponseDto<>(null, "FAQ 정보를 찾을 수 없습니다.");
+    }
+
+  }
+
+  @Transactional
+  public ResponseDto<FaqDto> addFaq(FaqDto faqDto) {
+
+    Faq faq = new Faq();
+    faq.setWriter(faqDto.getWriter());
+    faq.setTitle(faqDto.getTitle());
+    faq.setCategory(faqDto.getCategory());
+    faq.setQuestion(faqDto.getQuestion());
+    faq.setAnswer(faqDto.getAnswer());
+    faq.setCreDate(Instant.now());
+    faq.setModDate(Instant.now());
+
+    Faq saveFaq = mongoTemplate.save(faq);
+
+    FaqDto resFaqDto = modelMapper.map(saveFaq, FaqDto.class);
+
+    return new ResponseDto<>(resFaqDto, faq.getTitle() + "제목의 질문이 추가되었습니다.");
   }
 
   @Transactional
