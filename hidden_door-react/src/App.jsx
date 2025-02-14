@@ -21,6 +21,7 @@ import ThemePage from '@pages/theme/ThemePage';
 import ThemeDetailPage from '@pages/theme/ThemeDetailPage';
 import ThemeAddPage from '@pages/theme/ThemeAddPage';
 import FaqPage from '@pages/cs/faq/FaqPage';
+import FaqAddPage from "@pages/cs/faq/FaqAddPage";
 import CustomerPage from '@pages/cs/customer/CustomerPage';
 import ReservationPage from '@pages/reservation/ReservationPage';
 import EventPage from '@pages/event/EventPage';
@@ -28,7 +29,6 @@ import NoticePage from '@pages/notice/NoticePage';
 import NoticeDetailPage from './pages/notice/NoticeDetailPage';
 import AddNoticePage from './pages/notice/AddNoticePage';
 import EditNoticePage from './pages/notice/EditNoticePage';
-
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -144,8 +144,14 @@ function App() {
 
               {/* 고객센터 페이지 */}
               <Route path="cs">
-                <Route path="faq" element={<FaqPage />} />
-                <Route path="customer" element={<CustomerPage />} />
+                <Route index element={<FaqPage />} />
+                <Route path="faq">
+                  <Route index element={<FaqPage />} />
+                  <Route path="add" element={<FaqAddPage />} />
+                </Route>
+                <Route path="customer">
+                  <Route index element={<CustomerPage />} />
+                </Route>
               </Route>
 
               {/* 이벤트 및 공지사항 페이지 */}

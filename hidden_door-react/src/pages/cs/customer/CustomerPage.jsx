@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import CustomerList from "../../../components/cs/customer/CustomerList";
 
 const CustomerPage = () => {
-  const [customerList, setCustomerList] = useState({});
+  const [customerList, setCustomerList] = useState([]);
 
   const getAllCustomer = async () => {
     try {
@@ -28,6 +28,7 @@ const CustomerPage = () => {
       <section>
         <CustomerList customerList={customerList} />
       </section>
+      <div></div>
     </>
   );
 };
