@@ -29,6 +29,7 @@ import NoticeDetailPage from './pages/notice/NoticeDetailPage';
 import AddNoticePage from './pages/notice/AddNoticePage';
 import EditNoticePage from './pages/notice/EditNoticePage';
 
+
 function App() {
   const { setAdmin } = useAdmin();
   const [loading, setLoading] = useState(true);
@@ -156,7 +157,13 @@ function App() {
                 <Route path="edit/:id" element={<EditNoticePage />} />
               </Route>
 
-              <Route path="reservation" element={<ReservationPage />} />
+              <Route path="reservation">
+                <Route index element={<ReservationPage />} />
+                <Route
+                  path=":reservationId"
+                  element={<ReservationDetailPage />}
+                />
+              </Route>
             </Route>
 
             {/* 정책 관련 페이지 그룹화 */}

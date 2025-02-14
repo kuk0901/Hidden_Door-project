@@ -8,17 +8,17 @@
 @use 'base/borders';
 @use 'base/utilities';
 
-// components
-@use 'components/buttons';
-@use 'components/forms';
-@use 'components/modals';
-@use 'components/headings';
-@use 'components/icons';
-@use 'components/policy';
-@use 'components/animation';
-@use 'components/caution';
-@use 'components/theme';
-@use 'components/faqs';
+@use "components/buttons";
+@use "components/forms";
+@use "components/modals";
+@use "components/headings";
+@use "components/icons";
+@use "components/policy";
+@use "components/animation";
+@use "components/caution";
+@use "components/theme";
+@use "components/faqs";
+@use "components/reservations";
 @use 'components/events';
 @use 'components/notices';
 

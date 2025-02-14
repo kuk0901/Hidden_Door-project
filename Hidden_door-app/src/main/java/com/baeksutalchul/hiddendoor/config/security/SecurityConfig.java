@@ -62,7 +62,7 @@ public class SecurityConfig {
             .requestMatchers("/api/v1/auth/renew", "/api/v1/auth/verify").authenticated()
             .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
             .requestMatchers("/api/v1/super-admin/**").hasAuthority("ROLE_SUPER_ADMIN")
-            .requestMatchers("api/v1/reservation/**")
+            .requestMatchers("api/v1/reservations/**")
             .authenticated()
             .anyRequest().authenticated())
         .exceptionHandling(exceptions -> exceptions
