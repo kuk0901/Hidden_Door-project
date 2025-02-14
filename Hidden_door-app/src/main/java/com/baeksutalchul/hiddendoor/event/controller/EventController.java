@@ -38,13 +38,13 @@ public class EventController {
 
     @PutMapping("/{id}")
     public ResponseEntity<EventDto> updateEvent(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
-    EventDto updatedEvent = eventService.updateEvent(id, eventDto);
-    return new ResponseEntity<>(updatedEvent, HttpStatus.OK);    
+        EventDto updatedEvent = eventService.updateEvent(id, eventDto);
+        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public ResponseEntity<Void> deleteEvent(@PathVariable("id") String id) {        
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable("id") String id) {
         eventService.deleteEvent(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);      
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

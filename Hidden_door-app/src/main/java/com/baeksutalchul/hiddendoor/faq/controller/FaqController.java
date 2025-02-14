@@ -34,8 +34,8 @@ public class FaqController {
     return ResponseEntity.ok().body(faqService.getFaqAll());
   }
 
-  @GetMapping("/{faqId}")
-  public ResponseEntity<ResponseDto<FaqDto>> getFaqById(@PathVariable String faqId) {
+  @GetMapping("/{id}")
+  public ResponseEntity<ResponseDto<FaqDto>> getFaqById(@PathVariable("id") String faqId) {
     return ResponseEntity.ok().body(faqService.getFaqById(faqId));
   }
 
@@ -44,7 +44,7 @@ public class FaqController {
     return ResponseEntity.ok().body(faqService.addFaq(faqDto));
   }
 
-  @PutMapping("/faq/update/")
+  @PutMapping("/faq/update")
   public ResponseEntity<ResponseDto<?>> updateFaqOne(@RequestBody FaqDto faqDto) {
     try {
       return ResponseEntity.ok().body(faqService.updateFaqOne(faqDto));
@@ -56,9 +56,9 @@ public class FaqController {
   }
 
   @DeleteMapping("/faq/delete/{id}")
-  public ResponseEntity<ResponseDto<String>> deleteFaqOne(@PathVariable("id") String id) {
+  public ResponseEntity<ResponseDto<String>> deleteFaqOne(@PathVariable("id") String faqId) {
     try {
-      return ResponseEntity.ok().body(faqService.deleteFaqOne(id));
+      return ResponseEntity.ok().body(faqService.deleteFaqOne(faqId));
     } catch (CustomException e) {
       return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
     } catch (Exception e) {

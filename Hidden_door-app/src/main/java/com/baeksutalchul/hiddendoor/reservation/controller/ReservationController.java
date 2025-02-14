@@ -15,8 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-
-
 @RestController
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
@@ -32,9 +30,10 @@ public class ReservationController {
     return ResponseEntity.ok().body(reservationService.getReservationAll());
   }
 
-  @GetMapping("/{reservationId}")
-  public ResponseEntity<ResponseDto<ReservationDto>> getReservationById(@PathVariable String reservationId) {
+  @GetMapping("/{id}")
+  public ResponseEntity<ResponseDto<ReservationDto>> getReservationById(
+      @PathVariable("id") String reservationId) {
     return ResponseEntity.ok().body(reservationService.getReservationById(reservationId));
   }
-  
+
 }

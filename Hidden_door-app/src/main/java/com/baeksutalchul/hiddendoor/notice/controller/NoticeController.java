@@ -39,8 +39,8 @@ public class NoticeController {
         return new ResponseEntity<>(notice, HttpStatus.OK);
     }
 
-
     // 새로운 공지사항 생성
+    // PostMapping("/notice/add")
     @PostMapping
     public ResponseEntity<NoticeDto> createNotice(@RequestBody NoticeDto noticeDto) {
         NoticeDto createdNotice = noticeService.createNotice(noticeDto).getData();
@@ -54,10 +54,8 @@ public class NoticeController {
         return new ResponseEntity<>(updatedNotice, HttpStatus.OK);
     }
 
-   
-
     // 공지사항 삭제
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteNotice(@PathVariable("id") String id) {
         noticeService.deleteNotice(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
