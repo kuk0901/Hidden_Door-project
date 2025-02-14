@@ -67,10 +67,8 @@ public class CautionService {
 
     cautionRepository.deleteById(cautionId);
 
-    boolean isDeleted = !cautionRepository.findById(cautionId).isPresent();
-
-    if (!isDeleted) {
-      throw new CustomException(ErrorCode.DELETE_FAILED); // 삭제 실패 시 예외 처리
+    if (!cautionRepository.findById(cautionId).isEmpty()) {
+      throw new CustomException(ErrorCode.DELETE_FAILED);
     }
 
     ResponseDto<List<CautionDto>> responseDto = getCautionList();

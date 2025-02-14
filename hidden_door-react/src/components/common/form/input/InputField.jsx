@@ -17,7 +17,8 @@ const InputField = ({
   themeForm,
   min,
   max,
-  autoFocus
+  autoFocus,
+  required = true
 }) => {
   const inputProps = {
     ...register,
@@ -26,7 +27,7 @@ const InputField = ({
     type,
     placeholder,
     className: `input input__${className}`,
-    required: true,
+    required,
     ...(type === "number" && min !== undefined && { min }),
     ...(type === "number" && max !== undefined && { max }),
     ...(onChange ? { onChange } : {}),

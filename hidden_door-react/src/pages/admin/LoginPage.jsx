@@ -1,16 +1,18 @@
 import SigninForm from "@components/common/auth/SigninForm";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-
+import { useSearchParams } from "react-router-dom";
 import { GiDoor } from "react-icons/gi";
 
 const LoginPage = () => {
-  useEffect(() => {
-    const queryParams = new URLSearchParams(location.search);
+  const [searchParams, setSearchParams] = useSearchParams();
 
-    if (queryParams.get("signout") === "true") {
+  useEffect(() => {
+    if (searchParams.get("signout") === "true") {
       toast.success("로그아웃 되었습니다.");
     }
+
+    setSearchParams({});
   }, []);
 
   return (

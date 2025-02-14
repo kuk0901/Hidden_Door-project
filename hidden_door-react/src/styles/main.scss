@@ -23,12 +23,13 @@
 @use 'components/notices';
 
 // layout
-@use 'layout/containers';
-@use 'layout/loading';
-@use 'layout/sections';
-@use 'layout/nav';
-@use 'layout/footer';
-@use 'layout/header';
+@use "layout/containers";
+@use "layout/loading";
+@use "layout/sections";
+@use "layout/nav";
+@use "layout/footer";
+@use "layout/header";
+@use "layout/slide";
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -43,6 +44,16 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  &.btn {
+    background-color: transparent;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
 }
 
 @media (prefers-color-scheme: light) {
@@ -72,9 +83,9 @@
     }
 
     .link-item {
-      color: variables.$light-blue-color;
+      color: variables.$light-link-color;
       &:hover {
-        color: variables.$confirm-text-color;
+        color: variables.$dark-link-color;
       }
     }
   }
@@ -107,17 +118,13 @@
     }
 
     .link-item {
-      color: variables.$confirm-text-color;
+      color: variables.$dark-link-color;
 
       &:hover {
-        color: variables.$light-blue-color;
+        color: variables.$light-link-color;
       }
     }
   }
-}
-
-main {
-  padding: 10px;
 }
 
 aside {

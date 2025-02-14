@@ -1,0 +1,6 @@
+.slick-prev,
+.slick-next {
+  display: block;
+  color: #fff !important;
+  z-index: 9999 !important; /* z-index를 높여 다른 요소에 가려지지 않도록 설정 */
+}

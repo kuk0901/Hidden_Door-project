@@ -5,22 +5,12 @@ import { toast } from "react-toastify";
 import { validateThemeField } from "@validation/validationRules";
 import { useThemeList } from "@hooks/useThemeList";
 import { useNavigate } from "react-router-dom";
+import { themeFields, initialGenreList } from "@utils/fields/themeFields";
+import useConfirm from "@hooks/useConfirm";
 
-/* * FIXME:
- * UI 수정 필요, genre 부분 errorMessage 위치 수정
- */
-
+// * FIXME: update, create, delete 영역 확인하면서 useConfirm 사용
 const ThemeAddPage = () => {
-  const [genreList, setGenreList] = useState([
-    { id: "asd1", name: "드라마", checked: false },
-    { id: "asd2", name: "판타지", checked: false },
-    { id: "asd3", name: "공포", checked: false },
-    { id: "asd4", name: "스릴러", checked: false },
-    { id: "asd5", name: "액션", checked: false },
-    { id: "asd6", name: "SF", checked: false },
-    { id: "asd7", name: "잠입", checked: false }
-  ]);
-
+  const [genreList, setGenreList] = useState(initialGenreList);
   const [formData, setFormData] = useState({
     file: null,
     themeName: "",
@@ -38,6 +28,7 @@ const ThemeAddPage = () => {
 
   const { setThemeList } = useThemeList();
   const navigate = useNavigate();
+  const confirm = useConfirm();
 
   const handleGenreChange = (id) => {
     setGenreList(
@@ -118,6 +109,12 @@ const ThemeAddPage = () => {
     );
     submitData.append("file", formData.file);
 
+    const isConfirmed = await confirm(`테마를 추가하시겠습니까?`);
+
+    if (!isConfirmed) {
+      return;
+    }
+
     try {
       // API 호출 로직
       const res = await Api.post("/api/v1/themes/theme/add", submitData, {
@@ -145,82 +142,12 @@ const ThemeAddPage = () => {
     }
   };
 
-  const themeFields = [
-    {
-      name: "originalFileName",
-      id: "originalFileName",
-      type: "file",
-      field: "input",
-      placeholder: "테마 이미지",
-      label: "테마 이미지",
-      themeForm: true,
-      onChange: handleFileChange
-    },
-    {
-      name: "themeName",
-      id: "themeName",
-      type: "text",
-      placeholder: "테마 명",
-      label: "테마 명",
-      themeForm: true,
-      className: "m"
-    },
-    {
-      name: "minParticipants",
-      id: "minParticipants",
-      type: "number",
-      field: "input",
-      placeholder: "2",
-      label: "최소인원",
-      themeForm: true
-    },
-    {
-      name: "maxParticipants",
-      id: "maxParticipants",
-      type: "number",
-      field: "input",
-      placeholder: "5",
-      label: "최대인원",
-      themeForm: true
-    },
-    {
-      name: "level",
-      id: "level",
-      type: "number",
-      field: "input",
-      placeholder: "3",
-      label: "난이도",
-      themeForm: true
-    },
-    {
-      name: "time",
-      id: "time",
-      type: "number",
-      field: "input",
-      placeholder: "플레이 시간 (분)",
-      label: "time",
-      themeForm: true
-    },
-
-    {
-      name: "price",
-      id: "price",
-      type: "text",
-      field: "input",
-      placeholder: "20,000",
-      label: "가격 (1인당)",
-      themeForm: true
-    },
-    {
-      name: "description",
-      id: "description",
-      field: "textarea",
-      placeholder: "테마 설명을 간략하게 작성해 주세요.",
-      label: "description",
-
-      themeForm: true
+  const themeFieldsWithOnChange = themeFields(null).map((field) => {
+    if (field.name === "originalFileName") {
+      return { ...field, onChange: handleFileChange };
     }
-  ];
+    return field;
+  });
 
   return (
     <div className="themeForm-container">
@@ -238,7 +165,7 @@ const ThemeAddPage = () => {
       {/* FileForm 사용 */}
       <FileForm
         onSubmit={handleSubmit}
-        fields={themeFields}
+        fields={themeFieldsWithOnChange}
         formData={formData}
         onInputChange={handleInputChange}
         errors={errors}
@@ -254,7 +181,7 @@ const ThemeAddPage = () => {
         </div>
         <div className="input-container">
           {genreList.map((genre) => (
-            <div key={genre.id}>
+            <div key={genre.id} className="input--checkbox">
               <input
                 type="checkbox"
                 id={`genre-${genre.id}`}

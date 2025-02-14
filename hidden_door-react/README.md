@@ -117,3 +117,93 @@ function ListPage() {
   )
 }
 ```
+
+# 지도 API(카카오)
+
+> env 파일에 작성할 API 키 변수 명 작성 주의(VITE)
+
+- 필요 라이브러리 설치
+
+  ```shell
+  npm install react-query react-kakao-maps-sdk
+  ```
+
+- Kakao 개발자 플랫폼에서 발급받은 JavaScript 키 필요
+
+  ```html
+  <script
+    type="text/javascript"
+    src="//dapi.kakao.com/v2/maps/sdk.js?appkey=YOUR_JAVASCRIPT_KEY&libraries=services,clusterer"
+  ></script>
+  ```
+
+- Kakao 개발자 플랫폼에서 발급받은 REST API 키 필요
+
+  ```js
+  import { useQuery } from "react-query";
+
+  export const fetchLocationData = async (address) => {
+    const encodedAddress = encodeURIComponent(address);
+
+    const response = await fetch(
+      `https://dapi.kakao.com/v2/local/search/address.json?query=${encodedAddress}`,
+      {
+        headers: {
+          Authorization: `KakaoAK ${API_KEY}`
+        }
+      }
+    );
+    const data = await response.json();
+
+    // 응답 데이터에서 위도와 경도를 추출
+    const { documents } = data;
+    if (documents.length > 0) {
+      const { x, y } = documents[0].address;
+      return { x, y };
+    } else {
+      throw new Error("Address not found");
+    }
+  };
+
+  export const useLocationData = (address) => {
+    return useQuery(
+      ["locationData", address], // 캐시 키
+      () => fetchLocationData(address)
+    );
+  };
+  ```
+
+  ```js
+  // component
+  const MapPage = () => {
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error occurred</div>;
+
+    return (
+      <>
+        {/* <Header /> */}
+        <MapComponent />)
+      </>
+    ;
+  };
+  ```
+
+  ```js
+  // MapComponent
+  import { useLocationData } from "./useLocationData";
+  import { useEscapeRoom } from "@hooks/useEscapeRoom";
+
+  import { Map } from "react-kakao-maps-sdk";
+
+  const MapComponent = () => {
+    const { escapeRoom } = useEscapeRoom();
+    const { data, isLoading, error } = useLocationData(escapeRoom.address);
+
+    if (isLoading) return <div>Loading...</div>;
+    if (error) return <div>Error occurred</div>;
+
+    return <Map center={{ lat: data.y, lng: data.x }} />;
+  };
+
+  export default MapComponent;
+  ```

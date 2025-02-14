@@ -34,6 +34,7 @@ function App() {
   const { setAdmin } = useAdmin();
   const [loading, setLoading] = useState(true);
   const { themeList, setThemeList } = useThemeList();
+
   const location = useLocation();
 
   useEffect(() => {
@@ -54,8 +55,16 @@ function App() {
           {},
           { withCredentials: true }
         );
-        localStorage.setItem('token', res.data.token);
-        setAdmin(res.data.data);
+
+        localStorage.setItem("token", res.data.token);
+
+        // 갱신된 액세스 토큰으로 verify 요청
+        const verifyRes = await Api.get("/api/v1/auth/verify", {
+          headers: {
+            Authorization: `Bearer ${res.data.token}`
+          }
+        });
+        setAdmin(verifyRes.data.data);
       } catch (error) {
         toast.error(
           error.message ||
@@ -67,7 +76,12 @@ function App() {
     } else {
       // Access Token이 있을 때 유효성 검사
       try {
-        const res = await Api.get('/api/v1/auth/verify');
+        const res = await Api.get("/api/v1/auth/verify", {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
@@ -97,8 +111,11 @@ function App() {
 
   useEffect(() => {
     checkAdminStatus();
-    getAllThemes();
   }, [setAdmin]);
+
+  useEffect(() => {
+    getAllThemes();
+  }, [setThemeList]);
 
   if (loading) return <Loading />; // 로딩 중일 때 로딩 컴포넌트 표시
 
@@ -132,13 +149,14 @@ function App() {
 
               <Route path="theme">
                 <Route index element={<ThemePage />} />
-                {themeList.map((theme) => (
-                  <Route
-                    key={theme.themeId}
-                    path={theme.themeId}
-                    element={<ThemeDetailPage theme={theme} />}
-                  />
-                ))}
+                {themeList.length > 0 &&
+                  themeList.map((theme) => (
+                    <Route
+                      key={theme.themeId}
+                      path={theme.themeId}
+                      element={<ThemeDetailPage theme={theme} />}
+                    />
+                  ))}
                 <Route path="add" element={<ThemeAddPage />} />
               </Route>
 
