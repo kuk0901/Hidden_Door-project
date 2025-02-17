@@ -22,15 +22,21 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       return;
     }
 
-    const updatedEvent = { ...event, title, description }; // 기존 이벤트 데이터에 수정된 값 추가
+    const updatedEvent = { id: event.id, title, description };
     Api.put(`/api/v1/events/${event.id}`, updatedEvent)
       .then((response) => {
-        onEventEdited(response.data); // 수정된 데이터 전달
-        toast.success('이벤트가 수정되었습니다.');
-        onClose();
+        if (response.data && response.data.data) {
+          onEventEdited(response.data.data);
+          toast.success(response.data.message || '이벤트가 수정되었습니다.');
+          onClose();
+        } else {
+          toast.error('서버 응답 형식이 올바르지 않습니다.');
+        }
       })
-      .catch(() => {
-        toast.error('이벤트 수정에 실패했습니다.');
+      .catch((error) => {
+        toast.error(
+          error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+        );
       });
   };
 

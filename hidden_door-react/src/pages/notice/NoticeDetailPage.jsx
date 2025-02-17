@@ -19,8 +19,8 @@ function NoticeDetailPage() {
     setLoading(true);
     Api.get(`/api/v1/notices/${id}`)
       .then((response) => {
-        if (response.data) {
-          setNotice(response.data);
+        if (response.data && response.data.data) {
+          setNotice(response.data.data);
         } else {
           toast.info('해당 공지사항을 찾을 수 없습니다.');
           navigate('/hidden_door/notice');
@@ -28,7 +28,10 @@ function NoticeDetailPage() {
       })
       .catch((error) => {
         console.error('Error fetching notice:', error);
-        toast.error('공지사항을 불러오는 데 실패했습니다.');
+        toast.error(
+          error.response?.data?.message ||
+            '공지사항을 불러오는 데 실패했습니다.'
+        );
         navigate('/hidden_door/notice');
       })
       .finally(() => {
@@ -40,12 +43,14 @@ function NoticeDetailPage() {
     if (!admin) return;
 
     Api.delete(`/api/v1/notices/${id}`)
-      .then(() => {
-        toast.success('공지사항이 삭제되었습니다.');
+      .then((response) => {
+        toast.success(response.data?.message || '공지사항이 삭제되었습니다.');
         navigate('/hidden_door/notice');
       })
-      .catch(() => {
-        toast.error('공지사항 삭제에 실패했습니다.');
+      .catch((error) => {
+        toast.error(
+          error.response?.data?.message || '공지사항 삭제에 실패했습니다.'
+        );
       });
   };
 

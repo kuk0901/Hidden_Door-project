@@ -22,13 +22,20 @@ function EventPage() {
     setLoading(true);
     Api.get('/api/v1/events')
       .then((response) => {
-        if (response.data.length === 0) {
+        if (response.data && response.data.data) {
+          if (response.data.data.length === 0) {
+            toast.info('등록된 이벤트가 없습니다.');
+          }
+          setEvents(response.data.data);
+        } else {
+          setEvents([]);
           toast.info('등록된 이벤트가 없습니다.');
         }
-        setEvents(response.data);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error fetching events:', error);
         toast.error('이벤트를 불러오는 데 실패했습니다.');
+        setEvents([]);
       })
       .finally(() => {
         setLoading(false);
@@ -60,15 +67,26 @@ function EventPage() {
     if (!admin) return;
 
     Api.delete(`/api/v1/events/${id}`)
-      .then(() => {
-        setEvents(events.filter((event) => event.id !== id));
-        if (selectedEvent && selectedEvent.id === id) {
-          closeModal();
+      .then((response) => {
+        if (
+          response.data &&
+          (response.data.message || response.data.data !== undefined)
+        ) {
+          setEvents(events.filter((event) => event.id !== id));
+          if (selectedEvent && selectedEvent.id === id) {
+            closeModal();
+          }
+          toast.success(
+            response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
+          );
+        } else {
+          toast.error('삭제 응답이 올바르지 않습니다.');
         }
-        toast.success('이벤트가 삭제되었습니다.');
       })
-      .catch(() => {
-        toast.error('이벤트 삭제에 실패했습니다.');
+      .catch((error) => {
+        toast.error(
+          error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
+        );
       });
   };
 
@@ -85,20 +103,26 @@ function EventPage() {
   const handleEventEdited = (editedEvent) => {
     Api.put(`/api/v1/events/${editedEvent.id}`, editedEvent)
       .then((response) => {
-        setEvents(
-          events.map((event) =>
-            event.id === editedEvent.id ? response.data : event
-          )
-        );
-        closeEditModal();
-        if (selectedEvent && selectedEvent.id === editedEvent.id) {
-          setSelectedEvent(response.data);
+        if (response.data && response.data.data) {
+          setEvents(
+            events.map((event) =>
+              event.id === editedEvent.id ? response.data.data : event
+            )
+          );
+          closeEditModal();
+          if (selectedEvent && selectedEvent.id === editedEvent.id) {
+            setSelectedEvent(response.data.data);
+          }
+          toast.success(response.data.message || '이벤트가 수정되었습니다.');
+        } else {
+          toast.error('수정 응답이 올바르지 않습니다.');
         }
-        toast.success('이벤트가 수정되었습니다.');
       })
       .catch((error) => {
         console.error('Error editing event:', error);
-        toast.error('이벤트 수정에 실패했습니다.');
+        toast.error(
+          error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+        );
       });
   };
 

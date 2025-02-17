@@ -22,7 +22,7 @@ public class EventController {
         this.eventService = eventService;
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public ResponseEntity<ResponseDto<List<EventDto>>> getEventAll() {
         try {
             List<EventDto> events = eventService.getAllEvents();
@@ -33,7 +33,7 @@ public class EventController {
         }
     }
 
-    @GetMapping("/event/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ResponseDto<EventDto>> getEventOne(@PathVariable String id) {
         try {
             EventDto event = eventService.getEventById(id);
@@ -46,7 +46,7 @@ public class EventController {
         }
     }
 
-    @PostMapping("/event/add")
+    @PostMapping
     public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {
         try {
             logger.info("EventDto: {}", eventDto);
@@ -58,10 +58,10 @@ public class EventController {
         }
     }
 
-    @PutMapping("/event/update")
-    public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@RequestBody EventDto eventDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
         try {
-            EventDto updatedEvent = eventService.updateEvent(eventDto.getId(), eventDto);
+            EventDto updatedEvent = eventService.updateEvent(id, eventDto);
             return ResponseEntity.ok().body(new ResponseDto<>(updatedEvent, "이벤트가 성공적으로 수정되었습니다."));
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
@@ -71,7 +71,7 @@ public class EventController {
         }
     }
 
-    @DeleteMapping("/event/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable("id") String id) {
         try {
             eventService.deleteEvent(id);

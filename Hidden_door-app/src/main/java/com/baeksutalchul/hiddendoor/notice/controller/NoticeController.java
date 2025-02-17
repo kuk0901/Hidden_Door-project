@@ -21,8 +21,8 @@ public class NoticeController {
         this.noticeService = noticeService;
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<ResponseDto<List<NoticeDto>>> getNoticeAll() {
+    @GetMapping
+    public ResponseEntity<ResponseDto<List<NoticeDto>>> getAllNotices() {
         try {
             ResponseDto<List<NoticeDto>> response = noticeService.getAllNotices();
             return ResponseEntity.ok().body(response);
@@ -33,8 +33,8 @@ public class NoticeController {
         }
     }
 
-    @GetMapping("/notice/{id}")
-    public ResponseEntity<ResponseDto<NoticeDto>> getNoticeOne(@PathVariable("id") String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ResponseDto<NoticeDto>> getNoticeById(@PathVariable("id") String id) {
         try {
             ResponseDto<NoticeDto> response = noticeService.getNoticeById(id);
             return ResponseEntity.ok().body(response);
@@ -47,8 +47,8 @@ public class NoticeController {
         }
     }
 
-    @PostMapping("/notice/add")
-    public ResponseEntity<ResponseDto<NoticeDto>> addNotice(@RequestBody NoticeDto noticeDto) {
+    @PostMapping
+    public ResponseEntity<ResponseDto<NoticeDto>> createNotice(@RequestBody NoticeDto noticeDto) {
         try {
             logger.info("NoticeDto: {}", noticeDto);
             ResponseDto<NoticeDto> response = noticeService.createNotice(noticeDto);
@@ -60,10 +60,10 @@ public class NoticeController {
         }
     }
 
-    @PutMapping("/notice/update")
-    public ResponseEntity<ResponseDto<NoticeDto>> updateNoticeOne(@RequestBody NoticeDto noticeDto) {
+    @PutMapping("/{id}")
+    public ResponseEntity<ResponseDto<NoticeDto>> updateNotice(@PathVariable("id") String id, @RequestBody NoticeDto noticeDto) {
         try {
-            ResponseDto<NoticeDto> response = noticeService.updateNotice(noticeDto.getId(), noticeDto);
+            ResponseDto<NoticeDto> response = noticeService.updateNotice(id, noticeDto);
             return ResponseEntity.ok().body(response);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
@@ -74,8 +74,8 @@ public class NoticeController {
         }
     }
 
-    @DeleteMapping("/notice/delete/{id}")
-    public ResponseEntity<ResponseDto<String>> deleteNoticeOne(@PathVariable("id") String id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ResponseDto<String>> deleteNotice(@PathVariable("id") String id) {
         try {
             noticeService.deleteNotice(id);
             return ResponseEntity.ok().body(new ResponseDto<>("", "공지사항이 성공적으로 삭제되었습니다."));

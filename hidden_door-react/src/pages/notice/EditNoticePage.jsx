@@ -14,13 +14,21 @@ function EditNoticePage() {
     setLoading(true);
     Api.get(`/api/v1/notices/${id}`)
       .then((response) => {
-        const notice = response.data;
-        setTitle(notice.title);
-        setContent(notice.content);
+        if (response.data && response.data.data) {
+          const notice = response.data.data;
+          setTitle(notice.title);
+          setContent(notice.content);
+        } else {
+          toast.error('공지사항 데이터를 불러오는 데 실패했습니다.');
+          navigate('/hidden_door/notice');
+        }
       })
       .catch((error) => {
         console.error('Error fetching notice:', error);
-        toast.error('공지사항을 불러오는 데 실패했습니다.');
+        toast.error(
+          error.response?.data?.message ||
+            '공지사항을 불러오는 데 실패했습니다.'
+        );
         navigate('/hidden_door/notice');
       })
       .finally(() => {
@@ -38,13 +46,19 @@ function EditNoticePage() {
 
     const updatedNotice = { title, content };
     Api.put(`/api/v1/notices/${id}`, updatedNotice)
-      .then(() => {
-        toast.success('공지사항이 수정되었습니다.');
-        navigate('/hidden_door/notice');
+      .then((response) => {
+        if (response.data && response.data.data) {
+          toast.success(response.data.message || '공지사항이 수정되었습니다.');
+          navigate('/hidden_door/notice');
+        } else {
+          toast.error('서버 응답 형식이 올바르지 않습니다.');
+        }
       })
       .catch((error) => {
         console.error('Error updating notice:', error);
-        toast.error('공지사항 수정에 실패했습니다.');
+        toast.error(
+          error.response?.data?.message || '공지사항 수정에 실패했습니다.'
+        );
       });
   };
 

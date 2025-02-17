@@ -18,18 +18,28 @@ function NoticePage() {
     setLoading(true);
     Api.get('/api/v1/notices')
       .then((response) => {
-        if (response.data.length === 0) {
+        if (response.data && response.data.data) {
+          if (response.data.data.length === 0) {
+            toast.info('등록된 공지사항이 없습니다.');
+          }
+          setNotices(response.data.data);
+        } else {
+          setNotices([]);
           toast.info('등록된 공지사항이 없습니다.');
         }
-        setNotices(response.data);
       })
       .catch((error) => {
         console.error('Error fetching notices:', error);
         toast.error('공지사항을 불러오는 데 실패했습니다.');
+        setNotices([]);
       })
       .finally(() => {
         setLoading(false);
       });
+  };
+
+  const handleNoticeClick = (id) => {
+    navigate(`/hidden_door/notice/${id}`);
   };
 
   if (loading) return <div>로딩 중...</div>;
@@ -50,7 +60,7 @@ function NoticePage() {
           <div
             key={notice.id}
             className="notice-item"
-            onClick={() => navigate(`/hidden_door/notice/${notice.id}`)}
+            onClick={() => handleNoticeClick(notice.id)}
           >
             <div className="notice-title">{notice.title}</div>
             <div className="notice-date">
