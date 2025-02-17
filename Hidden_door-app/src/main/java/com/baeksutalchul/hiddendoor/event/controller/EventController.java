@@ -2,7 +2,10 @@ package com.baeksutalchul.hiddendoor.event.controller;
 
 import com.baeksutalchul.hiddendoor.dto.EventDto;
 import com.baeksutalchul.hiddendoor.event.service.EventService;
-import org.springframework.http.HttpStatus;
+import com.baeksutalchul.hiddendoor.error.exception.CustomException;
+import com.baeksutalchul.hiddendoor.res.ResponseDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,38 +16,71 @@ import java.util.List;
 public class EventController {
 
     private final EventService eventService;
+    private static final Logger logger = LoggerFactory.getLogger(EventController.class);
 
     public EventController(EventService eventService) {
         this.eventService = eventService;
     }
 
     @GetMapping
-    public ResponseEntity<List<EventDto>> getAllEvents() {
-        List<EventDto> events = eventService.getAllEvents();
-        return new ResponseEntity<>(events, HttpStatus.OK);
+    public ResponseEntity<ResponseDto<List<EventDto>>> getEventAll() {
+        try {
+            List<EventDto> events = eventService.getAllEvents();
+            return ResponseEntity.ok().body(new ResponseDto<>(events, "이벤트 목록을 성공적으로 조회했습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 목록 조회에 실패했습니다. 잠시 후 다시 시도해 주세요."));
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventDto> getEventById(@PathVariable String id) {
-        EventDto event = eventService.getEventById(id);
-        return new ResponseEntity<>(event, HttpStatus.OK);
+    public ResponseEntity<ResponseDto<EventDto>> getEventOne(@PathVariable String id) {
+        try {
+            EventDto event = eventService.getEventById(id);
+            return ResponseEntity.ok().body(new ResponseDto<>(event, "이벤트를 성공적으로 조회했습니다."));
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 조회에 실패했습니다. 잠시 후 다시 시도해 주세요."));
+        }
     }
 
     @PostMapping
-    public ResponseEntity<EventDto> createEvent(@RequestBody EventDto eventDto) {
-        EventDto createdEvent = eventService.createEvent(eventDto);
-        return new ResponseEntity<>(createdEvent, HttpStatus.CREATED);
+    public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {
+        try {
+            logger.info("EventDto: {}", eventDto);
+            EventDto createdEvent = eventService.createEvent(eventDto);
+            return ResponseEntity.ok().body(new ResponseDto<>(createdEvent, "이벤트가 성공적으로 추가되었습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 추가에 실패했습니다. 잠시 후 다시 시도해 주세요."));
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<EventDto> updateEvent(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
-        EventDto updatedEvent = eventService.updateEvent(id, eventDto);
-        return new ResponseEntity<>(updatedEvent, HttpStatus.OK);
+    public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
+        try {
+            EventDto updatedEvent = eventService.updateEvent(id, eventDto);
+            return ResponseEntity.ok().body(new ResponseDto<>(updatedEvent, "이벤트가 성공적으로 수정되었습니다."));
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요."));
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteEvent(@PathVariable("id") String id) {
-        eventService.deleteEvent(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable("id") String id) {
+        try {
+            eventService.deleteEvent(id);
+            return ResponseEntity.ok().body(new ResponseDto<>("", "이벤트가 성공적으로 삭제되었습니다."));
+        } catch (CustomException e) {
+            return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                .body(new ResponseDto<>("", "서버 오류로 인해 이벤트 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요."));
+        }
     }
 }

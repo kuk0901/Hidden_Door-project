@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "events")
+@Document(collection = "event")
 public class Event {
     @Id
     private String id;

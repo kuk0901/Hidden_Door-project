@@ -1,10 +1,18 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Api from '@axios/api';
 
 function AddEventModal({ isOpen, onClose, onEventAdded }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+  // 모달이 열리거나 닫힐 때 입력 필드 초기화
+  useEffect(() => {
+    if (isOpen) {
+      setTitle('');
+      setDescription('');
+    }
+  }, [isOpen]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -17,12 +25,21 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
     const newEvent = { title, description };
     Api.post('/api/v1/events', newEvent)
       .then((response) => {
-        onEventAdded(response.data);
-        toast.success('이벤트가 추가되었습니다.');
-        onClose();
+        if (response.data && response.data.data) {
+          onEventAdded(response.data.data);
+          toast.success(response.data.message || '이벤트가 추가되었습니다.');
+          onClose();
+          // 입력 필드 초기화
+          setTitle('');
+          setDescription('');
+        } else {
+          toast.error('서버 응답 형식이 올바르지 않습니다.');
+        }
       })
-      .catch(() => {
-        toast.error('이벤트 추가에 실패했습니다.');
+      .catch((error) => {
+        toast.error(
+          error.response?.data?.message || '이벤트 추가에 실패했습니다.'
+        );
       });
   };
 
@@ -61,7 +78,12 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
             </button>
             <button
               type="button"
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                // 모달을 닫을 때도 입력 필드 초기화
+                setTitle('');
+                setDescription('');
+              }}
               className="event-modal__btn event-modal__btn--cancel"
             >
               취소
