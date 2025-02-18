@@ -46,33 +46,39 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
   if (!isOpen) return null;
 
   return (
-    <div className="event-modal-overlay">
-      <div className="event-modal">
-        <h2>새 이벤트 추가</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="title">제목</label>
+    <div className="em-event-modal-overlay">
+      <div className="em-event-modal">
+        <h2 className="em-modal-title">새 이벤트 추가</h2>
+        <form onSubmit={handleSubmit} className="em-modal-form">
+          <div className="em-form-group">
+            <label htmlFor="title" className="em-form-label">
+              제목
+            </label>
             <input
               type="text"
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              className="em-form-input"
             />
           </div>
-          <div>
-            <label htmlFor="description">설명</label>
+          <div className="em-form-group">
+            <label htmlFor="description" className="em-form-label">
+              설명
+            </label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
+              className="em-form-textarea"
             />
           </div>
-          <div className="event-modal__btn-container">
+          <div className="em-modal-btn-container">
             <button
               type="submit"
-              className="event-modal__btn event-modal__btn--confirm"
+              className="em-modal-btn em-modal-btn--confirm"
             >
               추가
             </button>
@@ -80,11 +86,10 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
               type="button"
               onClick={() => {
                 onClose();
-                // 모달을 닫을 때도 입력 필드 초기화
                 setTitle('');
                 setDescription('');
               }}
-              className="event-modal__btn event-modal__btn--cancel"
+              className="em-modal-btn em-modal-btn--cancel"
             >
               취소
             </button>

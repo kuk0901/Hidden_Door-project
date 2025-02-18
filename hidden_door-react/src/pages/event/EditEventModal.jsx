@@ -43,40 +43,43 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
   if (!isOpen) return null;
 
   return (
-    <div className="event-modal-overlay">
-      <div className="event-modal">
-        <h2>이벤트 수정</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="title">제목</label>
+    <div className="em-event-modal-overlay">
+      <div className="em-event-modal">
+        <h2 className="em-modal-title">이벤트 수정</h2>
+        <form onSubmit={handleSubmit} className="em-modal-form">
+          <div className="em-form-group">
+            <label htmlFor="title" className="em-form-label">
+              제목
+            </label>
             <input
               type="text"
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              className="em-form-input"
             />
           </div>
-          <div>
-            <label htmlFor="description">설명</label>
+          <div className="em-form-group">
+            <label htmlFor="description" className="em-form-label">
+              설명
+            </label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
+              className="em-form-textarea"
             />
           </div>
-          <div className="event-modal__btn-container">
-            <button
-              type="submit"
-              className="event-modal__btn event-modal__btn--edit"
-            >
+          <div className="em-modal-btn-container">
+            <button type="submit" className="em-modal-btn em-modal-btn--edit">
               수정
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="event-modal__btn event-modal__btn--cancel"
+              className="em-modal-btn em-modal-btn--cancel"
             >
               취소
             </button>

@@ -149,15 +149,13 @@ function EventPage() {
         ))}
       </div>
       {selectedEvent && (
-        <div className="event-modal-overlay">
-          <div className="event-modal">
-            <div className="event-modal__msg">
-              <h2>{selectedEvent.title}</h2>
-              <p>{selectedEvent.description}</p>
-            </div>
-            <div className="event-modal__btn-container">
+        <div className="em-event-modal-overlay">
+          <div className="em-event-modal">
+            <h2 className="em-modal-title">{selectedEvent.title}</h2>
+            <p className="em-modal-description">{selectedEvent.description}</p>
+            <div className="em-modal-btn-container">
               <button
-                className="event-modal__btn event-modal__btn--cancel"
+                className="em-modal-btn em-modal-btn--cancel"
                 onClick={closeModal}
               >
                 닫기
@@ -165,13 +163,13 @@ function EventPage() {
               {admin && (
                 <>
                   <button
-                    className="event-modal__btn event-modal__btn--edit"
+                    className="em-modal-btn em-modal-btn--edit"
                     onClick={() => openEditModal(selectedEvent)}
                   >
                     수정
                   </button>
                   <button
-                    className="event-modal__btn event-modal__btn--delete"
+                    className="em-modal-btn em-modal-btn--delete"
                     onClick={() => deleteEvent(selectedEvent.id)}
                   >
                     삭제

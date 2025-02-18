@@ -46,7 +46,7 @@ function NoticePage() {
 
   return (
     <div className="notice-page">
-      <h1>공지사항 페이지</h1>
+      <h1 className="notice-page-title">공지사항</h1>
       {admin && (
         <button
           onClick={() => navigate('/hidden_door/notice/add')}
@@ -56,18 +56,20 @@ function NoticePage() {
         </button>
       )}
       <div className="notice-list">
-        {notices.map((notice) => (
-          <div
-            key={notice.id}
-            className="notice-item"
-            onClick={() => handleNoticeClick(notice.id)}
-          >
-            <div className="notice-title">{notice.title}</div>
-            <div className="notice-date">
-              {new Date(notice.createdAt).toLocaleDateString()}
-            </div>
-          </div>
-        ))}
+        <ul>
+          {notices.map((notice) => (
+            <li
+              key={notice.id}
+              className="notice-item"
+              onClick={() => handleNoticeClick(notice.id)}
+            >
+              <div className="notice-title">{notice.title}</div>
+              <div className="notice-date">
+                {new Date(notice.createdAt).toLocaleDateString()}
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
