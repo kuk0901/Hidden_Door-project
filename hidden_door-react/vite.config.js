@@ -38,7 +38,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         "/api": {
-          target: env.VITE_APP_API_URL, // .env에서 가져온 값 사용
+          target: env.VITE_APP_API_URL,
           changeOrigin: true,
           rewrite: (path) => path.replace(/^\/api/, "/api/v1")
         }
