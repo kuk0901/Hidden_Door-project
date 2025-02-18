@@ -1,8 +1,14 @@
 package com.baeksutalchul.hiddendoor.reservation.service;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -79,6 +85,36 @@ public class ReservationService {
       return new ResponseDto<>(null, "예약 정보를 찾을 수 없습니다.");
     }
 
+  }
+
+  public ResponseDto<Map<String, Object>> getReservationPageData() {
+    Map<String, Object> pageData = new HashMap<>();
+        
+    // 예약 가능한 날짜 설정 (현재부터 15일)
+    List<String> availableDates = getAvailableDates(15);
+    pageData.put("availableDates", availableDates);
+    
+    // 시간 슬롯 설정
+    List<String> timeSlots = getTimeSlots();
+    pageData.put("timeSlots", timeSlots);
+        
+    return new ResponseDto<>(pageData, "예약 메인 페이지 데이터를 성공적으로 로드했습니다.");
+  }
+
+  private List<String> getAvailableDates(int days) {
+    LocalDate startDate = LocalDate.now();
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    
+    return IntStream.range(0, days)
+            .mapToObj(startDate::plusDays)
+            .map(date -> date.format(formatter))
+            .collect(Collectors.toList());
+  }
+
+  private List<String> getTimeSlots() {
+    return List.of(
+        "11:00", "12:30", "14:00", "15:30", "17:00", "18:30", "20:00", "21:30"
+    );
   }
   
 }
