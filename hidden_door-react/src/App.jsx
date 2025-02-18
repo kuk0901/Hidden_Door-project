@@ -53,7 +53,7 @@ function App() {
       // Access Token이 없을 때 리프레시 토큰으로 로그인 상태 확인
       try {
         const res = await Api.post(
-          "/api/v1/auth/renew",
+          "/auth/renew",
           {},
           { withCredentials: true }
         );
@@ -61,7 +61,7 @@ function App() {
         localStorage.setItem("token", res.data.token);
 
         // 갱신된 액세스 토큰으로 verify 요청
-        const verifyRes = await Api.get("/api/v1/auth/verify", {
+        const verifyRes = await Api.get("/auth/verify", {
           headers: {
             Authorization: `Bearer ${res.data.token}`
           }
@@ -78,7 +78,7 @@ function App() {
     } else {
       // Access Token이 있을 때 유효성 검사
       try {
-        const res = await Api.get("/api/v1/auth/verify", {
+        const res = await Api.get("/auth/verify", {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -100,7 +100,7 @@ function App() {
 
   const getAllThemes = async () => {
     try {
-      const res = await Api.get("/api/v1/themes/all");
+      const res = await Api.get("/themes/all");
 
       setThemeList(res.data.data);
     } catch (error) {

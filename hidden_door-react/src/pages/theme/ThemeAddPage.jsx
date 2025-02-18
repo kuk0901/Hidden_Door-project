@@ -117,7 +117,7 @@ const ThemeAddPage = () => {
 
     try {
       // API 호출 로직
-      const res = await Api.post("/api/v1/themes/theme/add", submitData, {
+      const res = await Api.post("/themes/theme/add", submitData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }

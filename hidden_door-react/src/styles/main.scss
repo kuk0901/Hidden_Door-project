@@ -47,6 +47,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.Toastify__toast-container {
+  z-index: 9999 !important;
+}
+
 a {
   &.btn {
     background-color: transparent;

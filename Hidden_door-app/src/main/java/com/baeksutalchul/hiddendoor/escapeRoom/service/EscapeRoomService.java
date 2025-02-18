@@ -97,7 +97,8 @@ public class EscapeRoomService {
   public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeTitleLine(EscapeRoomDto escapeRoomDto) {
     EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
 
-    if (existingEscapeRoom.getExplanation().equals(escapeRoomDto.getExplanation())) {
+    if (existingEscapeRoom.getThemeHeaderTitle().equals(escapeRoomDto.getThemeHeaderTitle())
+        && existingEscapeRoom.getThemeHeaderSubtitle().equals(escapeRoomDto.getThemeHeaderSubtitle())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
@@ -122,7 +123,7 @@ public class EscapeRoomService {
   public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeExplanationLine(EscapeRoomDto escapeRoomDto) {
     EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
 
-    if (existingEscapeRoom.getExplanation().equals(escapeRoomDto.getExplanation())) {
+    if (existingEscapeRoom.getThemeExplanation().equals(escapeRoomDto.getThemeExplanation())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
@@ -187,7 +188,8 @@ public class EscapeRoomService {
   public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeDetailTitleLine(EscapeRoomDto escapeRoomDto) {
     EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
 
-    if (existingEscapeRoom.getExplanation().equals(escapeRoomDto.getExplanation())) {
+    if (existingEscapeRoom.getThemeDetailHeaderTitle().equals(escapeRoomDto.getThemeDetailHeaderTitle())
+        && existingEscapeRoom.getThemeDetailHeaderSubtitle().equals(escapeRoomDto.getThemeDetailHeaderSubtitle())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 

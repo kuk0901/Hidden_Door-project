@@ -39,7 +39,7 @@ const EscapeRoomInfoPage = () => {
     try {
       const newTitle = titleRef.current.value;
 
-      const res = await Api.patch("/api/v1/escape-rooms/info/title", {
+      const res = await Api.patch("/escape-rooms/info/title", {
         roomId: escapeRoom.roomId,
         title: newTitle
       });
@@ -69,7 +69,7 @@ const EscapeRoomInfoPage = () => {
     try {
       const newExplanation = explanationRef.current.value;
 
-      const res = await Api.patch("/api/v1/escape-rooms/info/explanation", {
+      const res = await Api.patch("/escape-rooms/info/explanation", {
         roomId: escapeRoom.roomId,
         explanation: newExplanation
       });
@@ -157,7 +157,7 @@ const EscapeRoomInfoPage = () => {
 
       {/* caution */}
       <DefaultSection
-        api="/api/v1/cautions/list"
+        api="/cautions/list"
         className="section section--caution"
         title="주의사항"
         ChildComponent={CautionList}
