@@ -6,8 +6,6 @@ import { useAdmin } from "@hooks/useAdmin";
 const FaqAddPage = () => {
   const { admin } = useAdmin();
 
-  console.log(admin);
-
   const [newFaq, setNewFaq] = useState({
     writer: admin.email,
     title: "",

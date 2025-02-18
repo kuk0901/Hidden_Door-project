@@ -34,7 +34,7 @@ public class FaqController {
     return ResponseEntity.ok().body(faqService.getFaqAll());
   }
 
-  @GetMapping("/{id}")
+  @GetMapping("/faq/{id}")
   public ResponseEntity<ResponseDto<FaqDto>> getFaqById(@PathVariable("id") String faqId) {
     return ResponseEntity.ok().body(faqService.getFaqById(faqId));
   }
@@ -57,12 +57,6 @@ public class FaqController {
 
   @DeleteMapping("/faq/delete/{id}")
   public ResponseEntity<ResponseDto<String>> deleteFaqOne(@PathVariable("id") String faqId) {
-    try {
-      return ResponseEntity.ok().body(faqService.deleteFaqOne(faqId));
-    } catch (CustomException e) {
-      return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError().body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
-    }
+    return ResponseEntity.ok().body(faqService.deleteFaqOne(faqId));
   }
 }

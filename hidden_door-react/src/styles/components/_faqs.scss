@@ -41,27 +41,44 @@
       border: 1px solid black;
 
       .faq-container {
-        border-collapse: collapse;
-        .faq-tr-content {
-          td {
-            height: 60px;
-            width: 300px;
-            border: 1px solid black;
-            padding-left: 20px;
-          }
-        }
-        .faq-tr-header {
-          text-align: center;
-          padding: 0;
-          td {
-            border: 1px solid black;
-          }
-        }
+        list-style-type: none; /* 기본적인 li 스타일 제거 */
+        padding: 0;
+        margin: 0;
+        display: table; /* ul을 테이블처럼 보이게 만듦 */
+        width: 100%; /* 테이블 너비를 100%로 설정 */
+        border-collapse: collapse; /* 셀의 경계선을 하나로 합침 */
+      }
 
-        .faq-title {
-          width: 700px;
-          height: 60px;
-        }
+      .faq-li-header {
+        display: table-row; /* li를 테이블 행으로 설정 */
+        font-weight: bold; /* 제목 행은 굵게 */
+        background-color: #f4f4f4; /* 헤더에 배경색 추가 */
+        padding: 10px; /* 여백 추가 */
+      }
+
+      .faq-title,
+      .faq-li-header div {
+        display: table-cell; /* 각 항목을 테이블 셀로 설정 */
+        padding: 8px; /* 각 셀에 여백 추가 */
+        border: 1px solid #ddd; /* 셀에 테두리 추가 */
+      }
+
+      .faq-li-header .faq-title {
+        width: 60%; /* 제목 열의 너비를 설정 */
+      }
+
+      .faq-li-header div {
+        width: 40%; /* 날짜 열의 너비를 설정 */
+      }
+
+      .faq-tr-content {
+        display: table-row; /* 각 FAQ 항목을 테이블 행으로 설정 */
+      }
+
+      .faq-tr-content div {
+        display: table-cell; /* 항목들을 셀로 설정 */
+        padding: 8px;
+        border: 1px solid #ddd; /* 셀에 테두리 추가 */
       }
     }
   }

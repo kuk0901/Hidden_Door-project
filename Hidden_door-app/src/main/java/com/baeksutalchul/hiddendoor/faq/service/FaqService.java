@@ -87,7 +87,7 @@ public class FaqService {
 
     FaqDto resFaqDto = modelMapper.map(saveFaq, FaqDto.class);
 
-    return new ResponseDto<>(resFaqDto, faq.getTitle() + "제목의 질문이 추가되었습니다.");
+    return new ResponseDto<>(resFaqDto, faq.getTitle() + "의 질문이 추가되었습니다.");
   }
 
   @Transactional
@@ -111,6 +111,6 @@ public class FaqService {
         .orElseThrow(() -> new CustomException(null));
 
     faqRepository.deleteById(id);
-    return new ResponseDto<>("", "질문 " + faqToDelete.getFaqId() + "이(가) 삭제되었습니다.");
+    return new ResponseDto<>("", "질문 " + faqToDelete.getTitle() + "이(가) 삭제되었습니다.");
   }
 }
