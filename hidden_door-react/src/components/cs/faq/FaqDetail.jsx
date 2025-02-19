@@ -5,7 +5,6 @@ const FaqDetail = ({ faqDetail }) => {
 
   return (
     <div className="faq-detail">
-      <h1>FAQ 정보</h1>
       <p>작성자: {faqDetail.writer}</p>
       <p>카테고리: {faqDetail.category}</p>
       <p>제목: {faqDetail.title}</p>

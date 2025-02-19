@@ -2,15 +2,17 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
+import { useAdmin } from "@hooks/useAdmin";
 import FaqList from "../../../components/cs/faq/FaqList";
 
 const FaqPage = () => {
+  const { admin } = useAdmin();
   const [faqList, setFaqList] = useState([]);
   const navigate = useNavigate();
 
   const getAllFaq = async () => {
     try {
-      const res = await Api.get("/api/v1/faqs/list");
+      const res = await Api.get("/faqs/list");
 
       console.log(res.data.data);
       console.log(res.data.msg);
@@ -41,9 +43,11 @@ const FaqPage = () => {
           </div>
 
           <div className="btn-container">
-            <button className="btn" onClick={handleAddFaq}>
-              FAQ추가
-            </button>
+            {admin && (
+              <button className="btn" onClick={handleAddFaq}>
+                FAQ추가
+              </button>
+            )}
           </div>
 
           <div className="cs-main-container">

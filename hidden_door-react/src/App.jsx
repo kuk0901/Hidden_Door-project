@@ -1,35 +1,35 @@
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Suspense, useEffect, useState } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Suspense, useEffect, useState } from "react";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 
-import Confirm from '@components/common/dialogs/Confirm';
-import Loading from '@components/common/loading/Loading';
-import Layout from '@components/common/layout/Layout';
+import Confirm from "@components/common/dialogs/Confirm";
+import Loading from "@components/common/loading/Loading";
+import Layout from "@components/common/layout/Layout";
 
-import { useAdmin } from '@hooks/useAdmin';
-import { useThemeList } from '@hooks/useThemeList';
-import Api from '@axios/api';
-import ProtectedAdminRoute from '@routes/ProtectedAdminRoute';
+import { useAdmin } from "@hooks/useAdmin";
+import { useThemeList } from "@hooks/useThemeList";
+import Api from "@axios/api";
+import ProtectedAdminRoute from "@routes/ProtectedAdminRoute";
 
-import HomePage from '@pages/home/HomePage';
-import LoginPage from '@pages/admin/LoginPage';
-import PrivacyPolicy from '@pages/policy/PrivacyPolicy';
-import TermsOfService from '@pages/policy/TermsOfService';
-import EscapeRoomInfoPage from '@pages/Info/EscapeRoomInfoPage';
-import ThemePage from '@pages/theme/ThemePage';
-import ThemeDetailPage from '@pages/theme/ThemeDetailPage';
-import ThemeAddPage from '@pages/theme/ThemeAddPage';
-import FaqPage from '@pages/cs/faq/FaqPage';
-import FaqAddPage from '@pages/cs/faq/FaqAddPage';
-import CustomerPage from '@pages/cs/customer/CustomerPage';
-import ReservationDetailPage from '@pages/reservation/ReservationDetailPage';
-import ReservationPage from '@pages/reservation/ReservationPage';
-import EventPage from '@pages/event/EventPage';
-import NoticePage from '@pages/notice/NoticePage';
-import NoticeDetailPage from './pages/notice/NoticeDetailPage';
-import AddNoticePage from './pages/notice/AddNoticePage';
-
+import HomePage from "@pages/home/HomePage";
+import LoginPage from "@pages/admin/LoginPage";
+import PrivacyPolicy from "@pages/policy/PrivacyPolicy";
+import TermsOfService from "@pages/policy/TermsOfService";
+import EscapeRoomInfoPage from "@pages/Info/EscapeRoomInfoPage";
+import ThemePage from "@pages/theme/ThemePage";
+import ThemeDetailPage from "@pages/theme/ThemeDetailPage";
+import ThemeAddPage from "@pages/theme/ThemeAddPage";
+import FaqPage from "@pages/cs/faq/FaqPage";
+import FaqAddPage from "@pages/cs/faq/FaqAddPage";
+import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
+import CustomerPage from "@pages/cs/customer/CustomerPage";
+import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
+import ReservationPage from "@pages/reservation/ReservationPage";
+import EventPage from "@pages/event/EventPage";
+import NoticePage from "@pages/notice/NoticePage";
+import NoticeDetailPage from "./pages/notice/NoticeDetailPage";
+import AddNoticePage from "./pages/notice/AddNoticePage";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -167,6 +167,7 @@ function App() {
                 <Route path="faq">
                   <Route index element={<FaqPage />} />
                   <Route path="add" element={<FaqAddPage />} />
+                  <Route path=":faqId" element={<FaqDetailPage />} />
                 </Route>
                 <Route path="customer">
                   <Route index element={<CustomerPage />} />

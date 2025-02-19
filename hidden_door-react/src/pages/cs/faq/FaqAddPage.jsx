@@ -6,8 +6,6 @@ import { useAdmin } from "@hooks/useAdmin";
 const FaqAddPage = () => {
   const { admin } = useAdmin();
 
-  console.log(admin);
-
   const [newFaq, setNewFaq] = useState({
     writer: admin.email,
     title: "",
@@ -34,7 +32,7 @@ const FaqAddPage = () => {
         return;
       }
 
-      const res = await Api.post("/api/v1/faqs/faq/add", newFaq);
+      const res = await Api.post("/faqs/faq/add", newFaq);
 
       toast.success(res.data.msg || "FAQ 추가 완료");
     } catch (error) {

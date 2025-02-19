@@ -1,30 +1,33 @@
 package com.baeksutalchul.hiddendoor.customer.service;
 
+import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baeksutalchul.hiddendoor.customer.domain.Customer;
 import com.baeksutalchul.hiddendoor.customer.repository.CustomerRepository;
 import com.baeksutalchul.hiddendoor.dto.CustomerDto;
-
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
-
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 
 @Service
 public class CustomerService {
+  private MongoTemplate mongoTemplate;
   private CustomerRepository customerRepository;
   private final ModelMapper modelMapper;
-  private static final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+  private final Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
-  public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper) {
+  public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate) {
+    this.mongoTemplate =mongoTemplate;
     this.customerRepository = customerRepository;
     this.modelMapper = modelMapper;
   }
@@ -48,36 +51,52 @@ public class CustomerService {
 
     logger.info("customerDtoList: {}", customerDtoList);
 
-    return new ResponseDto<>(customerDtoList, "Customer 데이터 반환");
+    return new ResponseDto<>(customerDtoList, "고객센터 데이터 반환");
   }
 
-    public ResponseDto<String> addCustomer(CustomerDto customerDto) {
-    
-    Customer customer = customerRepository.save(modelMapper.map(customerDto, Customer.class));
+  public ResponseDto<CustomerDto> getCustomerById(String customerId) {
+    Optional<Customer> customerOptional = customerRepository.findById(customerId);
 
-    return new ResponseDto<>("", customer.getCustomerId() + "번 질문이 추가되었습니다.");
-  }
+    if (customerOptional.isPresent()) {
+      Customer customer = customerOptional.get();
+      CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
 
-  @Transactional
-  public ResponseDto<String> updateCustomerOne(CustomerDto customerDto) throws CustomException {
-    return customerRepository.findById(customerDto.getCustomerId())
-        .map(currentCustomer -> {
+      customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
+      customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDateTime(customer.getAnsCreDate()));
 
-          currentCustomer.setCustomerAnswer(customerDto.getCustomerAnswer());
-          currentCustomer.setAdminName(customerDto.getAdminName());
-          customerRepository.save(currentCustomer);
-          return new ResponseDto<>("", "좌석에 대한 정보가 수정되었습니다.");
-        })
-        .orElseThrow(() -> new CustomException(null));
+      return new ResponseDto<>(customerDto, "고객센터 상세 정보 반환");
+    } else {
+      return new ResponseDto<>(null, "고객센터 정보를 찾을 수 없습니다.");
+    }
+
   }
 
   @Transactional
-  public ResponseDto<String> deleteCustomerOne(String id) throws CustomException { 
+  public ResponseDto<CustomerDto> addCustomer(CustomerDto customerDto) {
+
+    Customer customer = new Customer();
+    customer.setCustomerName(customerDto.getCustomerName());
+    customer.setCustomerEmail(customerDto.getCustomerEmail());
+    customer.setCustomerTitle(customerDto.getCustomerTitle());
+    customer.setCustomerContent(customerDto.getCustomerContent());
+    customer.setCustomerCheck(customerDto.getCustomerCheck());
+    customer.setCustomerPwd(customerDto.getCustomerPwd());
+    customer.setQueCreDate(Instant.now());
+
+    Customer saveCustomer = mongoTemplate.save(customer);
+
+    CustomerDto resCustomerDto = modelMapper.map(saveCustomer, CustomerDto.class);
+
+    return new ResponseDto<>(resCustomerDto, customer.getCustomerTitle() + "의 질문이 추가되었습니다.");
+  }
+
+  @Transactional
+  public ResponseDto<String> deleteCustomerOne(String id) throws CustomException {
 
     Customer customerToDelete = customerRepository.findById(id)
-      .orElseThrow(() -> new CustomException(null));
-    
-      customerRepository.deleteById(id);
-    return new ResponseDto<>("", "질문 " + customerToDelete.getCustomerId() + "이(가) 삭제되었습니다.");
+        .orElseThrow(() -> new CustomException(null));
+
+    customerRepository.deleteById(id);
+    return new ResponseDto<>("", "질문 " + customerToDelete.getCustomerTitle() + "이(가) 삭제되었습니다.");
   }
 }
