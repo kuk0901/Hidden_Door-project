@@ -8,7 +8,7 @@ const ReservationPage = () => {
 
   const getAllReservation = async () => {
     try {
-      const res = await Api.get("/api/v1/reservations/list");
+      const res = await Api.get("/reservations/list");
 
       console.log(res.data.data);
       console.log(res.data.msg);
