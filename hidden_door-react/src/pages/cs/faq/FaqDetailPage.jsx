@@ -12,7 +12,7 @@ const FaqDetailPage = () => {
 
   const getFaqDetail = async () => {
     try {
-      const res = await Api.get(`/api/v1/faqs/${faqId}`);
+      const res = await Api.get(`/faqs/${faqId}`);
       setFaqDetail(res.data.data);
     } catch (error) {
       toast.error(error.message || "오류입니다.");
@@ -20,12 +20,11 @@ const FaqDetailPage = () => {
   };
 
   const deleteFaq = async () => {
-    // 삭제 전 확인을 위한 팝업
     const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
-    if (!confirmDelete) return; // 사용자가 취소하면 삭제하지 않음
+    if (!confirmDelete) return;
 
     try {
-      const res = await Api.delete(`/api/v1/faqs/faq/delete/${faqId}`);
+      const res = await Api.delete(`/faqs/faq/delete/${faqId}`);
       toast.success("FAQ가 삭제되었습니다.");
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");

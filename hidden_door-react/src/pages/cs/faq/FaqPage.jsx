@@ -12,7 +12,7 @@ const FaqPage = () => {
 
   const getAllFaq = async () => {
     try {
-      const res = await Api.get("/api/v1/faqs/list");
+      const res = await Api.get("/faqs/list");
 
       console.log(res.data.data);
       console.log(res.data.msg);
