@@ -23,7 +23,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
     }
 
     const newEvent = { title, description };
-    Api.post('/api/v1/events', newEvent)
+    Api.post('/events', newEvent)
       .then((response) => {
         if (response.data && response.data.data) {
           onEventAdded(response.data.data);

@@ -16,7 +16,7 @@ function NoticePage() {
 
   const fetchNotices = () => {
     setLoading(true);
-    Api.get('/api/v1/notices')
+    Api.get('/notices')
       .then((response) => {
         if (response.data && response.data.data) {
           if (response.data.data.length === 0) {

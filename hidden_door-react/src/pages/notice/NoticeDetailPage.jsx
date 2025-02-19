@@ -20,7 +20,7 @@ function NoticeDetailPage() {
 
   const fetchNotice = () => {
     setLoading(true);
-    Api.get(`/api/v1/notices/${id}`)
+    Api.get(`/notices/${id}`)
       .then((response) => {
         if (response.data && response.data.data) {
           setNotice(response.data.data);
@@ -45,7 +45,7 @@ function NoticeDetailPage() {
   const deleteNotice = () => {
     if (!admin) return;
 
-    Api.delete(`/api/v1/notices/${id}`)
+    Api.delete(`/notices/${id}`)
       .then((response) => {
         toast.success(response.data?.message || '공지사항이 삭제되었습니다.');
         navigate('/hidden_door/notice');
@@ -76,7 +76,7 @@ function NoticeDetailPage() {
     }
 
     const updatedNotice = { title: editTitle, content: editContent };
-    Api.put(`/api/v1/notices/${id}`, updatedNotice)
+    Api.put(`/notices/${id}`, updatedNotice)
       .then((response) => {
         if (response.data && response.data.data) {
           toast.success(response.data.message || '공지사항이 수정되었습니다.');

@@ -82,15 +82,15 @@
       text-decoration: none;
       color: white;
 
-      &-back {
+      &.btn-back {
         background-color: #6c757d;
       }
 
-      &-edit {
+      &.btn-edit {
         background-color: #28a745;
       }
 
-      &-delete {
+      &.btn-delete {
         background-color: #dc3545;
       }
     }

@@ -23,7 +23,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
     }
 
     const updatedEvent = { id: event.id, title, description };
-    Api.put(`/api/v1/events/${event.id}`, updatedEvent)
+    Api.put(`/events/${event.id}`, updatedEvent)
       .then((response) => {
         if (response.data && response.data.data) {
           onEventEdited(response.data.data);

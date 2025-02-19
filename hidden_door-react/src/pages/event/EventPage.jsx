@@ -20,7 +20,7 @@ function EventPage() {
 
   const fetchEvents = () => {
     setLoading(true);
-    Api.get('/api/v1/events')
+    Api.get('/events')
       .then((response) => {
         if (response.data && response.data.data) {
           if (response.data.data.length === 0) {
@@ -66,7 +66,7 @@ function EventPage() {
   const deleteEvent = (id) => {
     if (!admin) return;
 
-    Api.delete(`/api/v1/events/${id}`)
+    Api.delete(`/events/${id}`)
       .then((response) => {
         if (
           response.data &&
@@ -101,7 +101,7 @@ function EventPage() {
   };
 
   const handleEventEdited = (editedEvent) => {
-    Api.put(`/api/v1/events/${editedEvent.id}`, editedEvent)
+    Api.put(`/events/${editedEvent.id}`, editedEvent)
       .then((response) => {
         if (response.data && response.data.data) {
           setEvents(

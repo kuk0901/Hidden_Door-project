@@ -17,7 +17,7 @@ function AddNoticePage() {
     }
 
     const newNotice = { title, content };
-    Api.post('/api/v1/notices', newNotice)
+    Api.post('/notices', newNotice)
       .then((response) => {
         if (response.data && response.data.data) {
           toast.success(response.data.message || '공지사항이 추가되었습니다.');
