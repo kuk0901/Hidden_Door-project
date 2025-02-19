@@ -8,12 +8,14 @@ const ReservationItem = ({ reservation }) => {
   };
 
   return (
-    <div className="reservation-list--div" onClick={handleClick}>
-      <div>{reservation.kstResCreDate}</div>
-      <div>{reservation.name}</div>
-      <div>{reservation.themeId}</div>
-      <div>{reservation.kstResDate}</div>
-    </div>
+    <li className="reservation--item">
+      <button className="detail--link" onClick={handleClick}>
+        <div className="content content__md">{reservation.kstResCreDate}</div>
+        <div className="content content__sm">{reservation.name}</div>
+        <div className="content content__md">{reservation.themeId}</div>
+        <div className="content content__lg">{reservation.kstResDate}</div>
+      </button>
+    </li>
   );
 };
 

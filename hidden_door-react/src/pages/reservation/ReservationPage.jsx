@@ -8,7 +8,7 @@ const ReservationPage = () => {
 
   const getAllReservation = async () => {
     try {
-      const res = await Api.get("/api/v1/reservations/list");
+      const res = await Api.get("/reservations/list");
 
       console.log(res.data.data);
       console.log(res.data.msg);
@@ -28,7 +28,7 @@ const ReservationPage = () => {
       <section>
         <div>예약 확인 페이지</div>
 
-        <div className="reservation-main-container">
+        <div className="reservation-list-container">
           <ReservationList reservationList={reservationList} />
         </div>
       </section>

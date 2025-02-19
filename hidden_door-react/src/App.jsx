@@ -30,7 +30,6 @@ import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
 import NoticeDetailPage from "./pages/notice/NoticeDetailPage";
 import AddNoticePage from "./pages/notice/AddNoticePage";
-import EditNoticePage from "./pages/notice/EditNoticePage";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -40,28 +39,28 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
   }, [location.pathname]); // 라우트 변경 시마다 실행
 
   const checkAdminStatus = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
 
     if (!token) {
       // Access Token이 없을 때 리프레시 토큰으로 로그인 상태 확인
       try {
         const res = await Api.post(
-          "/api/v1/auth/renew",
+          '/api/v1/auth/renew',
           {},
           { withCredentials: true }
         );
 
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem('token', res.data.token);
 
         // 갱신된 액세스 토큰으로 verify 요청
-        const verifyRes = await Api.get("/api/v1/auth/verify", {
+        const verifyRes = await Api.get('/api/v1/auth/verify', {
           headers: {
             Authorization: `Bearer ${res.data.token}`,
           },
@@ -70,15 +69,15 @@ function App() {
       } catch (error) {
         toast.error(
           error.message ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     } else {
       // Access Token이 있을 때 유효성 검사
       try {
-        const res = await Api.get("/api/v1/auth/verify", {
+        const res = await Api.get('/api/v1/auth/verify', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -88,9 +87,9 @@ function App() {
       } catch (error) {
         toast.error(
           error.message ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     }
@@ -100,13 +99,13 @@ function App() {
 
   const getAllThemes = async () => {
     try {
-      const res = await Api.get("/api/v1/themes/all");
+      const res = await Api.get('/api/v1/themes/all');
 
       setThemeList(res.data.data);
     } catch (error) {
       toast.error(
         error.message ||
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
       );
     }
   };
@@ -181,11 +180,11 @@ function App() {
                 <Route index element={<NoticePage />} />
                 <Route path=":id" element={<NoticeDetailPage />} />
                 <Route path="add" element={<AddNoticePage />} />
-                <Route path="edit/:id" element={<EditNoticePage />} />
               </Route>
 
               <Route path="reservation">
                 <Route index element={<ReservationPage />} />
+                <Route path="main" element={<ReservationMainPage />} />
                 <Route
                   path=":reservationId"
                   element={<ReservationDetailPage />}

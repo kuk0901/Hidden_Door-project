@@ -22,55 +22,64 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       return;
     }
 
-    const updatedEvent = { ...event, title, description }; // 기존 이벤트 데이터에 수정된 값 추가
-    Api.put(`/api/v1/events/${event.id}`, updatedEvent)
+    const updatedEvent = { id: event.id, title, description };
+    Api.put(`/events/${event.id}`, updatedEvent)
       .then((response) => {
-        onEventEdited(response.data); // 수정된 데이터 전달
-        toast.success('이벤트가 수정되었습니다.');
-        onClose();
+        if (response.data && response.data.data) {
+          onEventEdited(response.data.data);
+          toast.success(response.data.message || '이벤트가 수정되었습니다.');
+          onClose();
+        } else {
+          toast.error('서버 응답 형식이 올바르지 않습니다.');
+        }
       })
-      .catch(() => {
-        toast.error('이벤트 수정에 실패했습니다.');
+      .catch((error) => {
+        toast.error(
+          error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+        );
       });
   };
 
   if (!isOpen) return null;
 
   return (
-    <div className="event-modal-overlay">
-      <div className="event-modal">
-        <h2>이벤트 수정</h2>
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label htmlFor="title">제목</label>
+    <div className="em-event-modal-overlay">
+      <div className="em-event-modal">
+        <h2 className="em-modal-title">이벤트 수정</h2>
+        <form onSubmit={handleSubmit} className="em-modal-form">
+          <div className="em-form-group">
+            <label htmlFor="title" className="em-form-label">
+              제목
+            </label>
             <input
               type="text"
               id="title"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
+              className="em-form-input"
             />
           </div>
-          <div>
-            <label htmlFor="description">설명</label>
+          <div className="em-form-group">
+            <label htmlFor="description" className="em-form-label">
+              설명
+            </label>
             <textarea
               id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
+              className="em-form-textarea"
             />
           </div>
-          <div className="event-modal__btn-container">
-            <button
-              type="submit"
-              className="event-modal__btn event-modal__btn--edit"
-            >
+          <div className="em-modal-btn-container">
+            <button type="submit" className="em-modal-btn em-modal-btn--edit">
               수정
             </button>
             <button
               type="button"
               onClick={onClose}
-              className="event-modal__btn event-modal__btn--cancel"
+              className="em-modal-btn em-modal-btn--cancel"
             >
               취소
             </button>
