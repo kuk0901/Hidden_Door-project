@@ -34,38 +34,19 @@ public class CustomerController {
     return ResponseEntity.ok().body(customerService.getCustomerAll());
   }
 
+  @GetMapping("/customer/{id}")
+  public ResponseEntity<ResponseDto<CustomerDto>> getCustomerById(@PathVariable("id") String customerId) {
+    return ResponseEntity.ok().body(customerService.getCustomerById(customerId));
+  }
+
   @PostMapping("/customer/add")
-  public ResponseEntity<ResponseDto<String>> addCustomer(@RequestBody CustomerDto customerDto) {
-    try {
-      logger.info("CustomerDto: {}", customerDto);
-
-      ResponseDto<String> res = customerService.addCustomer(customerDto);
-      return ResponseEntity.ok().body(res);
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError()
-          .body(new ResponseDto<>("", "서버 오류로 인해 좌석 추가에 실패하였습니다. 잠시 후 다시 시도해 주세요."));
-    }
+  public ResponseEntity<ResponseDto<CustomerDto>> addCustomer(@RequestBody CustomerDto customerDto) {
+    return ResponseEntity.ok().body(customerService.addCustomer(customerDto));
   }
 
-  @PutMapping("/customer/update")
-  public ResponseEntity<ResponseDto<?>> updateCustomerOne(@RequestBody CustomerDto customerDto) {
-    try {
-      return ResponseEntity.ok().body(customerService.updateCustomerOne(customerDto));
-    } catch (CustomException e) {
-      return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError().body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
-    }
-  }
 
   @DeleteMapping("/customer/delete/{id}")
   public ResponseEntity<ResponseDto<String>> deleteCustomerOne(@PathVariable("id") String customerId) {
-    try {
-      return ResponseEntity.ok().body(customerService.deleteCustomerOne(customerId));
-    } catch (CustomException e) {
-      return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError().body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
-    }
+    return ResponseEntity.ok().body(customerService.deleteCustomerOne(customerId));
   }
 }

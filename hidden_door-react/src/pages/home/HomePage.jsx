@@ -17,7 +17,7 @@ const HomePage = () => {
 
   const getEscapeRoomInfo = async () => {
     try {
-      const res = await Api.get("/api/v1/escape-rooms/info");
+      const res = await Api.get("/escape-rooms/info");
 
       setEscapeRoom({ ...res.data.data });
     } catch (error) {
@@ -107,7 +107,7 @@ const HomePage = () => {
 
       {/* caution */}
       <DefaultSection
-        api="/api/v1/cautions/list"
+        api="/cautions/list"
         className="section section--caution"
         title="주의사항"
         ChildComponent={CautionList}

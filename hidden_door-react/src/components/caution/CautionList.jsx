@@ -38,7 +38,7 @@ const CautionList = ({ data, setSectionData }) => {
         icon: selectedIcon || "FaExclamationTriangle"
       };
 
-      const res = await Api.post("/api/v1/cautions/caution/add", newCaution);
+      const res = await Api.post("/cautions/caution/add", newCaution);
 
       setSectionData(res.data.data);
       setIsAdding(false);
@@ -116,7 +116,7 @@ const CautionList = ({ data, setSectionData }) => {
       };
 
       const res = await Api.put(
-        `/api/v1/cautions/caution/${editingItem.cautionId}`,
+        `/cautions/caution/${editingItem.cautionId}`,
         updatedCaution
       );
 

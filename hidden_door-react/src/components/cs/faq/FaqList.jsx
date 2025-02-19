@@ -2,15 +2,15 @@ import FaqItem from "./FaqItem";
 
 const FaqList = ({ faqList }) => {
   return (
-    <table className="faq-container">
-      <tr className="faq-tr-header">
-        <td className="faq-title">제목</td>
-        <td>날짜</td>
-      </tr>
+    <ul className="faq-container">
+      <li className="faq-li-header">
+        <div className="faq-title">제목</div>
+        <div>날짜</div>
+      </li>
       {faqList.map((faq) => (
         <FaqItem key={faq.faqId} faq={faq} />
       ))}
-    </table>
+    </ul>
   );
 };
 

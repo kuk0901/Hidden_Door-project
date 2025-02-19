@@ -30,7 +30,7 @@ const SigninForm = () => {
   const onSubmit = async (data, reset) => {
     try {
       const res = await Api.post(
-        "/api/v1/auth/authenticate",
+        "/auth/authenticate",
         {
           email: data.email,
           pwd: data.pwd

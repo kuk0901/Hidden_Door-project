@@ -3,7 +3,7 @@ import Api from "@axios/api";
 import { toast } from "react-toastify";
 import ReservationList from "../../components/reservation/ReservationList";
 
-const ReservationPage = () => {
+const AdminReservationPage = () => {
   const [reservationList, setReservationList] = useState([]);
 
   const getAllReservation = async () => {
@@ -38,4 +38,4 @@ const ReservationPage = () => {
   );
 };
 
-export default ReservationPage;
+export default AdminReservationPage;

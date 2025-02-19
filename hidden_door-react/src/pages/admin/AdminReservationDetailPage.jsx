@@ -4,7 +4,7 @@ import Api from "@axios/api";
 import { toast } from "react-toastify";
 import ReservationDetail from "../../components/reservation/ReservationDetail.jsx";
 
-const ReservationDetailPage = () => {
+const AdminReservationDetailPage = () => {
   const { reservationId } = useParams();
   const [reservationDetail, setReservationDetail] = useState(null);
 
@@ -28,4 +28,4 @@ const ReservationDetailPage = () => {
   );
 };
 
-export default ReservationDetailPage;
+export default AdminReservationDetailPage;

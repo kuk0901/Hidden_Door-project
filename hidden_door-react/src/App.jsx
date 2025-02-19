@@ -22,14 +22,18 @@ import ThemeDetailPage from "@pages/theme/ThemeDetailPage";
 import ThemeAddPage from "@pages/theme/ThemeAddPage";
 import FaqPage from "@pages/cs/faq/FaqPage";
 import FaqAddPage from "@pages/cs/faq/FaqAddPage";
+import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
 import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
-import ReservationPage from "@pages/reservation/ReservationPage";
+import ReservationMainPage from "@pages/reservation/ReservationMainPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
-import NoticeDetailPage from "./pages/notice/NoticeDetailPage";
-import AddNoticePage from "./pages/notice/AddNoticePage";
-import EditNoticePage from "./pages/notice/EditNoticePage";
+import NoticeDetailPage from "@pages/notice/NoticeDetailPage";
+import AddNoticePage from "@pages/notice/AddNoticePage";
+import LocationPage from "@pages/location/LocationPage";
+import DashBoardPage from "@pages/admin/DashBoardPage";
+import AdminReservationPage from "@pages/admin/AdminReservationPage";
+import AdminReservationDetailPage from "@pages/admin/AdminReservationDetailPage";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -52,7 +56,7 @@ function App() {
       // Access Token이 없을 때 리프레시 토큰으로 로그인 상태 확인
       try {
         const res = await Api.post(
-          "/api/v1/auth/renew",
+          "/auth/renew",
           {},
           { withCredentials: true }
         );
@@ -60,7 +64,7 @@ function App() {
         localStorage.setItem("token", res.data.token);
 
         // 갱신된 액세스 토큰으로 verify 요청
-        const verifyRes = await Api.get("/api/v1/auth/verify", {
+        const verifyRes = await Api.get("/auth/verify", {
           headers: {
             Authorization: `Bearer ${res.data.token}`
           }
@@ -77,7 +81,7 @@ function App() {
     } else {
       // Access Token이 있을 때 유효성 검사
       try {
-        const res = await Api.get("/api/v1/auth/verify", {
+        const res = await Api.get("/auth/verify", {
           headers: {
             Authorization: `Bearer ${token}`
           }
@@ -99,7 +103,7 @@ function App() {
 
   const getAllThemes = async () => {
     try {
-      const res = await Api.get("/api/v1/themes/all");
+      const res = await Api.get("/themes/all");
 
       setThemeList(res.data.data);
     } catch (error) {
@@ -142,12 +146,12 @@ function App() {
               element={<Navigate to="/hidden_door/main" replace />}
             />
 
-            {/* 사용자, 관리자 공통 페이지 그룹화 */}
             <Route path="/hidden_door">
               <Route path="main" element={<HomePage />} />
 
               <Route path="info" element={<EscapeRoomInfoPage />} />
 
+              {/* 테마 페이지 */}
               <Route path="theme">
                 <Route index element={<ThemePage />} />
                 {themeList.length > 0 &&
@@ -167,6 +171,7 @@ function App() {
                 <Route path="faq">
                   <Route index element={<FaqPage />} />
                   <Route path="add" element={<FaqAddPage />} />
+                  <Route path=":faqId" element={<FaqDetailPage />} />
                 </Route>
                 <Route path="customer">
                   <Route index element={<CustomerPage />} />
@@ -175,33 +180,41 @@ function App() {
 
               {/* 이벤트 및 공지사항 페이지 */}
               <Route path="event" element={<EventPage />} />
+
               <Route path="notice">
                 <Route index element={<NoticePage />} />
                 <Route path=":id" element={<NoticeDetailPage />} />
                 <Route path="add" element={<AddNoticePage />} />
-                <Route path="edit/:id" element={<EditNoticePage />} />
               </Route>
 
+              {/* 예약 페이지 */}
               <Route path="reservation">
-                <Route index element={<ReservationPage />} />
+                <Route index element={<ReservationMainPage />} />
                 <Route
                   path=":reservationId"
                   element={<ReservationDetailPage />}
                 />
               </Route>
-            </Route>
 
-            {/* 정책 관련 페이지 그룹화 */}
-            <Route path="/hidden_door/policy">
-              <Route path="privacy" element={<PrivacyPolicy />} />
-              <Route path="service" element={<TermsOfService />} />
-            </Route>
+              <Route path="location" element={<LocationPage />} />
 
-            {/* 관리자 전용 페이지 그룹화 */}
-            <Route
-              path="/hidden_door/admin"
-              element={<ProtectedAdminRoute />}
-            ></Route>
+              {/* 관리자 전용 페이지 그룹화 */}
+              <Route path="admin" element={<ProtectedAdminRoute />}>
+                <Route index element={<DashBoardPage />} />
+                <Route path="reservation" element={<AdminReservationPage />}>
+                  <Route
+                    path=":reservationId"
+                    element={<AdminReservationDetailPage />}
+                  />
+                </Route>
+              </Route>
+
+              {/* 정책 관련 페이지 그룹화 */}
+              <Route path="policy">
+                <Route path="privacy" element={<PrivacyPolicy />} />
+                <Route path="service" element={<TermsOfService />} />
+              </Route>
+            </Route>
           </Route>
 
           <Route

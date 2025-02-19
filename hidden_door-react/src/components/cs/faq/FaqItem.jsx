@@ -1,9 +1,11 @@
 const FaqItem = ({ faq }) => {
   return (
-    <tr className="faq-tr-content">
-      <td>{faq.title}</td>
-      <td>{faq.kstCreDate}</td>
-    </tr>
+    <li className="faq-tr-content">
+      <div>
+        <a href={`/hidden_door/cs/faq/${faq.faqId}`}>{faq.title}</a>
+      </div>
+      <div>{faq.kstCreDate}</div>
+    </li>
   );
 };
 

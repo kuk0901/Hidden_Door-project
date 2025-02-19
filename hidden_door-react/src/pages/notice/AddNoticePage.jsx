@@ -17,14 +17,20 @@ function AddNoticePage() {
     }
 
     const newNotice = { title, content };
-    Api.post('/api/v1/notices', newNotice)
-      .then(() => {
-        toast.success('공지사항이 추가되었습니다.');
-        navigate('/hidden_door/notice');
+    Api.post('/notices', newNotice)
+      .then((response) => {
+        if (response.data && response.data.data) {
+          toast.success(response.data.message || '공지사항이 추가되었습니다.');
+          navigate('/hidden_door/notice');
+        } else {
+          toast.error('서버 응답 형식이 올바르지 않습니다.');
+        }
       })
       .catch((error) => {
         console.error('Error adding notice:', error);
-        toast.error('공지사항 추가에 실패했습니다.');
+        toast.error(
+          error.response?.data?.message || '공지사항 추가에 실패했습니다.'
+        );
       });
   };
 

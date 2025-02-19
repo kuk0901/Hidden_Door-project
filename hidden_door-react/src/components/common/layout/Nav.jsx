@@ -15,7 +15,7 @@ const Nav = () => {
 
   const handleLogout = async () => {
     try {
-      await Api.post("/api/v1/auth/terminate", {}, { withCredentials: true });
+      await Api.post("/auth/terminate", {}, { withCredentials: true });
       setAdmin(null);
       localStorage.removeItem("token");
       navigate(import.meta.env.VITE_APP_ADMIN_LOGIN_PATH + "?signout=true");
@@ -52,7 +52,7 @@ const Nav = () => {
             <LinkContainer linkList={navLinkList} />
             {admin && (
               <li className="link-item--last">
-                <Link to="#" className="link-item">
+                <Link to="/hidden_door/admin" className="link-item">
                   관리자
                 </Link>
               </li>

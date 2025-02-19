@@ -8,7 +8,7 @@ const CustomerPage = () => {
 
   const getAllCustomer = async () => {
     try {
-      const res = await Api.get("/api/v1/Customers/list");
+      const res = await Api.get("/Customers/list");
 
       console.log(res.data.data);
       console.log(res.data.msg);

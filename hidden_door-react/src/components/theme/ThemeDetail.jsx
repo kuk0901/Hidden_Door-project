@@ -142,7 +142,7 @@ const ThemeDetail = ({ theme }) => {
 
     try {
       // API 호출 로직
-      const res = await Api.put(`/api/v1/themes/theme/update`, submitData, {
+      const res = await Api.put(`/themes/theme/update`, submitData, {
         headers: {
           "Content-Type": "multipart/form-data"
         }
