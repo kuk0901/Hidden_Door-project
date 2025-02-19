@@ -146,12 +146,12 @@ function App() {
               element={<Navigate to="/hidden_door/main" replace />}
             />
 
-            {/* 사용자, 관리자 공통 페이지 그룹화 */}
             <Route path="/hidden_door">
               <Route path="main" element={<HomePage />} />
 
               <Route path="info" element={<EscapeRoomInfoPage />} />
 
+              {/* 테마 페이지 */}
               <Route path="theme">
                 <Route index element={<ThemePage />} />
                 {themeList.length > 0 &&
@@ -180,12 +180,14 @@ function App() {
 
               {/* 이벤트 및 공지사항 페이지 */}
               <Route path="event" element={<EventPage />} />
+
               <Route path="notice">
                 <Route index element={<NoticePage />} />
                 <Route path=":id" element={<NoticeDetailPage />} />
                 <Route path="add" element={<AddNoticePage />} />
               </Route>
 
+              {/* 예약 페이지 */}
               <Route path="reservation">
                 <Route index element={<ReservationMainPage />} />
                 <Route
@@ -193,24 +195,24 @@ function App() {
                   element={<ReservationDetailPage />}
                 />
               </Route>
-            </Route>
 
-            <Route path="/hidden_door/location" element={<LocationPage />} />
+              <Route path="location" element={<LocationPage />} />
 
-            {/* 정책 관련 페이지 그룹화 */}
-            <Route path="/hidden_door/policy">
-              <Route path="privacy" element={<PrivacyPolicy />} />
-              <Route path="service" element={<TermsOfService />} />
-            </Route>
+              {/* 관리자 전용 페이지 그룹화 */}
+              <Route path="admin" element={<ProtectedAdminRoute />}>
+                <Route index element={<DashBoardPage />} />
+                <Route path="reservation" element={<AdminReservationPage />}>
+                  <Route
+                    path=":reservationId"
+                    element={<AdminReservationDetailPage />}
+                  />
+                </Route>
+              </Route>
 
-            {/* 관리자 전용 페이지 그룹화 */}
-            <Route path="/hidden_door/admin" element={<ProtectedAdminRoute />}>
-              <Route index element={<DashBoardPage />} />
-              <Route path="reservation" element={<AdminReservationPage />}>
-                <Route
-                  path=":reservationId"
-                  element={<AdminReservationDetailPage />}
-                />
+              {/* 정책 관련 페이지 그룹화 */}
+              <Route path="policy">
+                <Route path="privacy" element={<PrivacyPolicy />} />
+                <Route path="service" element={<TermsOfService />} />
               </Route>
             </Route>
           </Route>
