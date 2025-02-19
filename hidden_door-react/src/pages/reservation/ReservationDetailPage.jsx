@@ -10,7 +10,7 @@ const ReservationDetailPage = () => {
 
   const getReservationDetail = async () => {
     try {
-      const res = await Api.get(`/api/v1/reservations/${reservationId}`);
+      const res = await Api.get(`reservations/${reservationId}`);
       setReservationDetail(res.data.data);
     } catch (error) {
       toast.error(error.message || "오류입니다.");

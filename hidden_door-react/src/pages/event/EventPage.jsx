@@ -20,15 +20,22 @@ function EventPage() {
 
   const fetchEvents = () => {
     setLoading(true);
-    Api.get('/api/v1/events')
+    Api.get('/events')
       .then((response) => {
-        if (response.data.length === 0) {
+        if (response.data && response.data.data) {
+          if (response.data.data.length === 0) {
+            toast.info('등록된 이벤트가 없습니다.');
+          }
+          setEvents(response.data.data);
+        } else {
+          setEvents([]);
           toast.info('등록된 이벤트가 없습니다.');
         }
-        setEvents(response.data);
       })
-      .catch(() => {
+      .catch((error) => {
+        console.error('Error fetching events:', error);
         toast.error('이벤트를 불러오는 데 실패했습니다.');
+        setEvents([]);
       })
       .finally(() => {
         setLoading(false);
@@ -59,16 +66,27 @@ function EventPage() {
   const deleteEvent = (id) => {
     if (!admin) return;
 
-    Api.delete(`/api/v1/events/${id}`)
-      .then(() => {
-        setEvents(events.filter((event) => event.id !== id));
-        if (selectedEvent && selectedEvent.id === id) {
-          closeModal();
+    Api.delete(`/events/${id}`)
+      .then((response) => {
+        if (
+          response.data &&
+          (response.data.message || response.data.data !== undefined)
+        ) {
+          setEvents(events.filter((event) => event.id !== id));
+          if (selectedEvent && selectedEvent.id === id) {
+            closeModal();
+          }
+          toast.success(
+            response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
+          );
+        } else {
+          toast.error('삭제 응답이 올바르지 않습니다.');
         }
-        toast.success('이벤트가 삭제되었습니다.');
       })
-      .catch(() => {
-        toast.error('이벤트 삭제에 실패했습니다.');
+      .catch((error) => {
+        toast.error(
+          error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
+        );
       });
   };
 
@@ -83,22 +101,28 @@ function EventPage() {
   };
 
   const handleEventEdited = (editedEvent) => {
-    Api.put(`/api/v1/events/${editedEvent.id}`, editedEvent)
+    Api.put(`/events/${editedEvent.id}`, editedEvent)
       .then((response) => {
-        setEvents(
-          events.map((event) =>
-            event.id === editedEvent.id ? response.data : event
-          )
-        );
-        closeEditModal();
-        if (selectedEvent && selectedEvent.id === editedEvent.id) {
-          setSelectedEvent(response.data);
+        if (response.data && response.data.data) {
+          setEvents(
+            events.map((event) =>
+              event.id === editedEvent.id ? response.data.data : event
+            )
+          );
+          closeEditModal();
+          if (selectedEvent && selectedEvent.id === editedEvent.id) {
+            setSelectedEvent(response.data.data);
+          }
+          toast.success(response.data.message || '이벤트가 수정되었습니다.');
+        } else {
+          toast.error('수정 응답이 올바르지 않습니다.');
         }
-        toast.success('이벤트가 수정되었습니다.');
       })
       .catch((error) => {
         console.error('Error editing event:', error);
-        toast.error('이벤트 수정에 실패했습니다.');
+        toast.error(
+          error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+        );
       });
   };
 
@@ -125,15 +149,13 @@ function EventPage() {
         ))}
       </div>
       {selectedEvent && (
-        <div className="event-modal-overlay">
-          <div className="event-modal">
-            <div className="event-modal__msg">
-              <h2>{selectedEvent.title}</h2>
-              <p>{selectedEvent.description}</p>
-            </div>
-            <div className="event-modal__btn-container">
+        <div className="em-event-modal-overlay">
+          <div className="em-event-modal">
+            <h2 className="em-modal-title">{selectedEvent.title}</h2>
+            <p className="em-modal-description">{selectedEvent.description}</p>
+            <div className="em-modal-btn-container">
               <button
-                className="event-modal__btn event-modal__btn--cancel"
+                className="em-modal-btn em-modal-btn--cancel"
                 onClick={closeModal}
               >
                 닫기
@@ -141,13 +163,13 @@ function EventPage() {
               {admin && (
                 <>
                   <button
-                    className="event-modal__btn event-modal__btn--edit"
+                    className="em-modal-btn em-modal-btn--edit"
                     onClick={() => openEditModal(selectedEvent)}
                   >
                     수정
                   </button>
                   <button
-                    className="event-modal__btn event-modal__btn--delete"
+                    className="em-modal-btn em-modal-btn--delete"
                     onClick={() => deleteEvent(selectedEvent.id)}
                   >
                     삭제

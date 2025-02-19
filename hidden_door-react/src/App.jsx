@@ -22,6 +22,7 @@ import ThemeDetailPage from "@pages/theme/ThemeDetailPage";
 import ThemeAddPage from "@pages/theme/ThemeAddPage";
 import FaqPage from "@pages/cs/faq/FaqPage";
 import FaqAddPage from "@pages/cs/faq/FaqAddPage";
+import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
 import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
 import ReservationPage from "@pages/reservation/ReservationPage";
@@ -29,8 +30,8 @@ import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
 import NoticeDetailPage from "@pages/notice/NoticeDetailPage";
 import AddNoticePage from "@pages/notice/AddNoticePage";
-import EditNoticePage from "@pages/notice/EditNoticePage";
 import LocationPage from "@pages/location/LocationPage";
+
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -40,14 +41,14 @@ function App() {
   const location = useLocation();
 
   useEffect(() => {
-    if ("scrollRestoration" in window.history) {
-      window.history.scrollRestoration = "manual";
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
   }, [location.pathname]); // 라우트 변경 시마다 실행
 
   const checkAdminStatus = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
 
     if (!token) {
       // Access Token이 없을 때 리프레시 토큰으로 로그인 상태 확인
@@ -58,21 +59,21 @@ function App() {
           { withCredentials: true }
         );
 
-        localStorage.setItem("token", res.data.token);
+        localStorage.setItem('token', res.data.token);
 
         // 갱신된 액세스 토큰으로 verify 요청
         const verifyRes = await Api.get("/auth/verify", {
           headers: {
-            Authorization: `Bearer ${res.data.token}`
-          }
+            Authorization: `Bearer ${res.data.token}`,
+          },
         });
         setAdmin(verifyRes.data.data);
       } catch (error) {
         toast.error(
           error.message ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     } else {
@@ -80,17 +81,17 @@ function App() {
       try {
         const res = await Api.get("/auth/verify", {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         setAdmin(res.data.data);
       } catch (error) {
         toast.error(
           error.message ||
-            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+            '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
         );
-        localStorage.removeItem("token");
+        localStorage.removeItem('token');
         setAdmin(null);
       }
     }
@@ -106,7 +107,7 @@ function App() {
     } catch (error) {
       toast.error(
         error.message ||
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          '알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.'
       );
     }
   };
@@ -168,6 +169,7 @@ function App() {
                 <Route path="faq">
                   <Route index element={<FaqPage />} />
                   <Route path="add" element={<FaqAddPage />} />
+                  <Route path=":faqId" element={<FaqDetailPage />} />
                 </Route>
                 <Route path="customer">
                   <Route index element={<CustomerPage />} />
@@ -180,11 +182,11 @@ function App() {
                 <Route index element={<NoticePage />} />
                 <Route path=":id" element={<NoticeDetailPage />} />
                 <Route path="add" element={<AddNoticePage />} />
-                <Route path="edit/:id" element={<EditNoticePage />} />
               </Route>
 
               <Route path="reservation">
                 <Route index element={<ReservationPage />} />
+                <Route path="main" element={<ReservationMainPage />} />
                 <Route
                   path=":reservationId"
                   element={<ReservationDetailPage />}
