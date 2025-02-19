@@ -30,6 +30,7 @@ import NoticePage from '@pages/notice/NoticePage';
 import NoticeDetailPage from './pages/notice/NoticeDetailPage';
 import AddNoticePage from './pages/notice/AddNoticePage';
 
+
 function App() {
   const { setAdmin } = useAdmin();
   const [loading, setLoading] = useState(true);
@@ -182,6 +183,7 @@ function App() {
 
               <Route path="reservation">
                 <Route index element={<ReservationPage />} />
+                <Route path="main" element={<ReservationMainPage />} />
                 <Route
                   path=":reservationId"
                   element={<ReservationDetailPage />}

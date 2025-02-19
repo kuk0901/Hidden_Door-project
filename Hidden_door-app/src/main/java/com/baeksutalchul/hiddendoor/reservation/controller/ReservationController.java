@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.reservation.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,8 @@ import com.baeksutalchul.hiddendoor.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequestMapping("/api/v1/reservations")
@@ -34,6 +37,11 @@ public class ReservationController {
   public ResponseEntity<ResponseDto<ReservationDto>> getReservationById(
       @PathVariable("id") String reservationId) {
     return ResponseEntity.ok().body(reservationService.getReservationById(reservationId));
+  }
+  
+  @GetMapping("/main")
+  public ResponseEntity<ResponseDto<Map<String, Object>>> getReservationMainPage() {
+    return ResponseEntity.ok(reservationService.getReservationPageData());
   }
 
 }
