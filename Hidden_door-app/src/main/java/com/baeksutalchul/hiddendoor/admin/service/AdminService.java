@@ -3,6 +3,7 @@ package com.baeksutalchul.hiddendoor.admin.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,14 +26,16 @@ public class AdminService {
   private final AdminRepository adminRepository;
   private final PasswordEncoder passwordEncoder;
   private final TokenService tokenService;
+  private final ModelMapper modelMapper;
 
   private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
   public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder,
-      TokenService tokenService) {
+      TokenService tokenService, ModelMapper modelMapper) {
     this.adminRepository = adminRepository;
     this.passwordEncoder = passwordEncoder;
     this.tokenService = tokenService;
+    this.modelMapper = modelMapper;
   }
 
   // 계정 생성
@@ -125,5 +128,19 @@ public class AdminService {
     } else {
       throw new CustomException(ErrorCode.USER_NOT_FOUND);
     }
+  }
+
+  // FIXME: PageableUtil 사용
+  public ResponseDto<List<AdminDto>> getAllAdmin() {
+
+    List<Admin> adminList = adminRepository.findAll();
+
+    if (adminList.isEmpty()) {
+      throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
+    }
+
+    List<AdminDto> adminDtoList = adminList.stream().map(admin -> modelMapper.map(admin, AdminDto.class)).toList();
+
+    return new ResponseDto<>(adminDtoList, "success");
   }
 }

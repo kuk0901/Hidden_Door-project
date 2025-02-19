@@ -1,5 +1,6 @@
 package com.baeksutalchul.hiddendoor.admin.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,6 @@ public interface AdminRepository extends MongoRepository<Admin, String> {
   boolean existsByEmail(String email);
 
   Optional<Admin> findByAdminId(String adminId);
+
+  List<Admin> findAll();
 }
