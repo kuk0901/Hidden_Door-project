@@ -52,7 +52,7 @@ const Nav = () => {
             <LinkContainer linkList={navLinkList} />
             {admin && (
               <li className="link-item--last">
-                <Link to="#" className="link-item">
+                <Link to="/hidden_door/admin" className="link-item">
                   관리자
                 </Link>
               </li>

@@ -12,7 +12,7 @@ const FaqDetailPage = () => {
 
   const getFaqDetail = async () => {
     try {
-      const res = await Api.get(`/faqs/${faqId}`);
+      const res = await Api.get(`/faqs/faq/${faqId}`);
       setFaqDetail(res.data.data);
     } catch (error) {
       toast.error(error.message || "오류입니다.");

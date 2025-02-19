@@ -25,12 +25,15 @@ import FaqAddPage from "@pages/cs/faq/FaqAddPage";
 import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
 import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
-import ReservationPage from "@pages/reservation/ReservationPage";
+import ReservationMainPage from "@pages/reservation/ReservationMainPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
 import NoticeDetailPage from "@pages/notice/NoticeDetailPage";
 import AddNoticePage from "@pages/notice/AddNoticePage";
 import LocationPage from "@pages/location/LocationPage";
+import DashBoardPage from "@pages/admin/DashBoardPage";
+import AdminReservationPage from "@pages/admin/AdminReservationPage";
+import AdminReservationDetailPage from "@pages/admin/AdminReservationDetailPage";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -184,7 +187,7 @@ function App() {
               </Route>
 
               <Route path="reservation">
-                <Route index element={<ReservationPage />} />
+                <Route index element={<ReservationMainPage />} />
                 <Route
                   path=":reservationId"
                   element={<ReservationDetailPage />}
@@ -201,10 +204,15 @@ function App() {
             </Route>
 
             {/* 관리자 전용 페이지 그룹화 */}
-            <Route
-              path="/hidden_door/admin"
-              element={<ProtectedAdminRoute />}
-            ></Route>
+            <Route path="/hidden_door/admin" element={<ProtectedAdminRoute />}>
+              <Route index element={<DashBoardPage />} />
+              <Route path="reservation" element={<AdminReservationPage />}>
+                <Route
+                  path=":reservationId"
+                  element={<AdminReservationDetailPage />}
+                />
+              </Route>
+            </Route>
           </Route>
 
           <Route
