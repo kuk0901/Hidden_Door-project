@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.dto;
 
 import java.time.Instant;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -31,4 +32,7 @@ public class ReservationDto {
   private String kstResDate;
   private String kstResCreDate;
   private String kstPayDate;
+  private List<ThemeDto> themes;
+  private List<String> availableDates;
+  private List<String> timeSlots;
 }
