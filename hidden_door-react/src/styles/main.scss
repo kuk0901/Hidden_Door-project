@@ -1,12 +1,12 @@
 // abstracts
-@use 'abstracts/mixins';
-@use 'abstracts/variables';
+@use "abstracts/mixins";
+@use "abstracts/variables";
 
 // base
-@use 'base/reset';
-@use 'base/typography';
-@use 'base/borders';
-@use 'base/utilities';
+@use "base/reset";
+@use "base/typography";
+@use "base/borders";
+@use "base/utilities";
 
 @use "components/buttons";
 @use "components/forms";
@@ -19,8 +19,9 @@
 @use "components/theme";
 @use "components/faqs";
 @use "components/reservations";
-@use 'components/events';
-@use 'components/notices';
+@use "components/events";
+@use "components/notices";
+@use "components/location";
 
 // layout
 @use "layout/containers";
@@ -44,6 +45,10 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.Toastify__toast-container {
+  z-index: 9999 !important;
 }
 
 a {

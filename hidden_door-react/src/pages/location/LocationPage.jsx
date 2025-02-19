@@ -2,9 +2,12 @@ import Header from "@components/common/layout/Header";
 import { useEscapeRoom } from "@hooks/useEscapeRoom";
 import LocationInfo from "@components/location/LocationInfo";
 import MapComponent from "@components/location/MapComponent";
+import { useMemo } from "react";
 
 const LocationPage = () => {
   const { escapeRoom } = useEscapeRoom();
+  const address = useMemo(() => escapeRoom.location, [escapeRoom.location]);
+
   return (
     <>
       {/* subtitle만 수정하게끔 처리 */}
@@ -15,7 +18,7 @@ const LocationPage = () => {
       />
 
       {/* map */}
-      <MapComponent address={escapeRoom.location} />
+      <MapComponent address={address} />
 
       {/* 지점, 주소, 연락처 */}
       <LocationInfo

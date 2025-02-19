@@ -38,14 +38,11 @@ const ThemePage = () => {
       const newThemeHeaderTitle = titleRef.current.value;
       const newThemeHeaderSubtitle = subtitleRef.current.value;
 
-      const res = await Api.patch(
-        "/api/v1/escape-rooms/info/theme-title-line",
-        {
-          roomId: escapeRoom.roomId,
-          themeHeaderTitle: newThemeHeaderTitle,
-          themeHeaderSubtitle: newThemeHeaderSubtitle
-        }
-      );
+      const res = await Api.patch("/escape-rooms/info/theme-title-line", {
+        roomId: escapeRoom.roomId,
+        themeHeaderTitle: newThemeHeaderTitle,
+        themeHeaderSubtitle: newThemeHeaderSubtitle
+      });
 
       setEscapeRoom(res.data.data);
 
@@ -76,14 +73,11 @@ const ThemePage = () => {
       console.log(newThemeTitle);
       console.log(newThemeExplanation);
 
-      const res = await Api.patch(
-        "/api/v1/escape-rooms/info/theme-explanation-line",
-        {
-          roomId: escapeRoom.roomId,
-          themeTitle: newThemeTitle,
-          themeExplanation: newThemeExplanation
-        }
-      );
+      const res = await Api.patch("/escape-rooms/info/theme-explanation-line", {
+        roomId: escapeRoom.roomId,
+        themeTitle: newThemeTitle,
+        themeExplanation: newThemeExplanation
+      });
 
       console.log(res.data.data);
 

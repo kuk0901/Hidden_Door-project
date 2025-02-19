@@ -28,8 +28,10 @@ import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
 import ReservationPage from "@pages/reservation/ReservationPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
-import NoticeDetailPage from "./pages/notice/NoticeDetailPage";
-import AddNoticePage from "./pages/notice/AddNoticePage";
+import NoticeDetailPage from "@pages/notice/NoticeDetailPage";
+import AddNoticePage from "@pages/notice/AddNoticePage";
+import LocationPage from "@pages/location/LocationPage";
+
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -52,7 +54,7 @@ function App() {
       // Access Token이 없을 때 리프레시 토큰으로 로그인 상태 확인
       try {
         const res = await Api.post(
-          '/api/v1/auth/renew',
+          "/auth/renew",
           {},
           { withCredentials: true }
         );
@@ -60,7 +62,7 @@ function App() {
         localStorage.setItem('token', res.data.token);
 
         // 갱신된 액세스 토큰으로 verify 요청
-        const verifyRes = await Api.get('/api/v1/auth/verify', {
+        const verifyRes = await Api.get("/auth/verify", {
           headers: {
             Authorization: `Bearer ${res.data.token}`,
           },
@@ -77,7 +79,7 @@ function App() {
     } else {
       // Access Token이 있을 때 유효성 검사
       try {
-        const res = await Api.get('/api/v1/auth/verify', {
+        const res = await Api.get("/auth/verify", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -99,7 +101,7 @@ function App() {
 
   const getAllThemes = async () => {
     try {
-      const res = await Api.get('/api/v1/themes/all');
+      const res = await Api.get("/themes/all");
 
       setThemeList(res.data.data);
     } catch (error) {
@@ -191,6 +193,8 @@ function App() {
                 />
               </Route>
             </Route>
+
+            <Route path="/hidden_door/location" element={<LocationPage />} />
 
             {/* 정책 관련 페이지 그룹화 */}
             <Route path="/hidden_door/policy">

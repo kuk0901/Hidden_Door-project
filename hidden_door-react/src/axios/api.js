@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const Api = axios.create({
-  baseURL: import.meta.env.VITE_APP_API_URL
+  baseURL: "/api"
 });
 
 // * 요청 인터셉터
@@ -40,7 +40,7 @@ Api.interceptors.response.use(
         try {
           // Refresh Token 요청
           const refreshResponse = await Api.post(
-            "/api/v1/auth/renew",
+            "/api/auth/renew",
             {},
             { withCredentials: true }
           );

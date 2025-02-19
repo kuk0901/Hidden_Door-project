@@ -30,9 +30,7 @@ const CautionItem = ({ admin, item, handleVisible, setSectionData }) => {
       const isConfirmed = await confirm("정말 삭제하시겠습니까?");
 
       if (isConfirmed) {
-        const res = await Api.delete(
-          `/api/v1/cautions/caution/${item.cautionId}`
-        );
+        const res = await Api.delete(`/cautions/caution/${item.cautionId}`);
 
         setSectionData(res.data.data);
         toast.success("해당 주의사항이 삭제되었습니다.");

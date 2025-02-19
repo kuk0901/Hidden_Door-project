@@ -12,8 +12,8 @@ export const navLinkList = [
     value: "예약",
   },
   {
-    route: "#",
-    value: "오시는 길",
+    route: "hidden_door/location",
+    value: "오시는 길"
   },
   {
     route: "hidden_door/event",
