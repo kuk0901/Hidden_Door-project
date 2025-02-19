@@ -16,27 +16,37 @@ function NoticePage() {
 
   const fetchNotices = () => {
     setLoading(true);
-    Api.get('/api/v1/notices')
+    Api.get('/notices')
       .then((response) => {
-        if (response.data.length === 0) {
+        if (response.data && response.data.data) {
+          if (response.data.data.length === 0) {
+            toast.info('등록된 공지사항이 없습니다.');
+          }
+          setNotices(response.data.data);
+        } else {
+          setNotices([]);
           toast.info('등록된 공지사항이 없습니다.');
         }
-        setNotices(response.data);
       })
       .catch((error) => {
         console.error('Error fetching notices:', error);
         toast.error('공지사항을 불러오는 데 실패했습니다.');
+        setNotices([]);
       })
       .finally(() => {
         setLoading(false);
       });
   };
 
+  const handleNoticeClick = (id) => {
+    navigate(`/hidden_door/notice/${id}`);
+  };
+
   if (loading) return <div>로딩 중...</div>;
 
   return (
     <div className="notice-page">
-      <h1>공지사항 페이지</h1>
+      <h1 className="notice-page-title">공지사항</h1>
       {admin && (
         <button
           onClick={() => navigate('/hidden_door/notice/add')}
@@ -46,18 +56,20 @@ function NoticePage() {
         </button>
       )}
       <div className="notice-list">
-        {notices.map((notice) => (
-          <div
-            key={notice.id}
-            className="notice-item"
-            onClick={() => navigate(`/hidden_door/notice/${notice.id}`)}
-          >
-            <div className="notice-title">{notice.title}</div>
-            <div className="notice-date">
-              {new Date(notice.createdAt).toLocaleDateString()}
-            </div>
-          </div>
-        ))}
+        <ul>
+          {notices.map((notice) => (
+            <li
+              key={notice.id}
+              className="notice-item"
+              onClick={() => handleNoticeClick(notice.id)}
+            >
+              <div className="notice-title">{notice.title}</div>
+              <div className="notice-date">
+                {new Date(notice.createdAt).toLocaleDateString()}
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );
