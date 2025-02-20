@@ -33,6 +33,7 @@ public enum ErrorCode {
     FILE_UPLOAD_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "FILE_FAILED", "이미지 저장에 실패했습니다."),
     DUPLICATE_ENTITY(HttpStatus.CONFLICT, "DUPLICATE_409", "이미 존재하는 항목입니다."),
     FILE_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "FILE_400", "파일 처리 중 오류가 발생했습니다."),
+    ADMIN_NOT_FOUND(HttpStatus.NOT_FOUND, "ADMIN_404", "관리자 정보를 찾을 수 없습니다."),
 
     // * page
     PAGINATION_ERROR(HttpStatus.BAD_REQUEST, "PAGINATION_400", "페이지 정보가 유효하지 않습니다."),

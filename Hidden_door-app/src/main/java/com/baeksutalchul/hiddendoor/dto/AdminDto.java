@@ -11,8 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class AdminDto {
   private String adminId;
+  private String userName;
+  private String phone;
   private String email;
   private String pwd;
-  private String userName;
+  private String token;
   private List<String> roles;
 }

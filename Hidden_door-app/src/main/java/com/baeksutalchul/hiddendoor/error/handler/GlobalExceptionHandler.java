@@ -12,6 +12,7 @@ import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.error.res.ErrorResponse;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
+import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
@@ -68,11 +69,19 @@ public class GlobalExceptionHandler {
       int page = Integer.parseInt(request.getParameter("page"));
       int size = Integer.parseInt(request.getParameter("size"));
       String sortField = request.getParameter("sortField");
-      boolean isAsc = Boolean.parseBoolean(request.getParameter("isAsc"));
+      String sortDirection = request.getParameter("sortDirection");
 
-      return new PageDto(page, size, sortField, isAsc);
+      return new PageDto(
+          page,
+          size,
+          0, // totalElements
+          0, // totalPages
+          true, // isFirst
+          true, // isLast
+          sortField != null ? sortField : PageableUtil.DEFAULT_SORT_FIELD,
+          sortDirection != null ? sortDirection : PageableUtil.DEFAULT_SORT_DIRECTION);
     } catch (NumberFormatException | NullPointerException e) {
-      return new PageDto(1, 10, "id", true); // 기본값으로 초기화
+      return new PageDto(); // 기본값으로 초기화
     }
   }
 

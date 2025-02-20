@@ -46,7 +46,7 @@ public class DataInitializer implements CommandLineRunner {
       superAdmin.setPwd(passwordEncoder.encode(adminPassword));
       superAdmin.setRoles(Arrays.asList("ROLE_SUPER_ADMIN", "ROLE_ADMIN", "ROLE_USER"));
 
-      superAdmin.setToken(tokenService.generateToken(superAdmin.getEmail())); // JWT 생성
+      superAdmin.setToken(tokenService.generateToken(superAdmin.getEmail(), superAdmin.getRoles())); // JWT 생성
 
       adminRepository.save(superAdmin);
 
@@ -56,7 +56,7 @@ public class DataInitializer implements CommandLineRunner {
       testAdmin.setPwd(passwordEncoder.encode(testAdminPassword));
       testAdmin.setRoles(Arrays.asList("ROLE_ADMIN", "ROLE_USER"));
 
-      testAdmin.setToken(tokenService.generateToken(testAdmin.getEmail())); // JWT 생성
+      testAdmin.setToken(tokenService.generateToken(testAdmin.getEmail(), testAdmin.getRoles())); // JWT 생성
 
       adminRepository.save(testAdmin);
 
