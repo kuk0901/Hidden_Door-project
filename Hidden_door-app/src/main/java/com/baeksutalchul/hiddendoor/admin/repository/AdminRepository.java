@@ -1,12 +1,13 @@
 package com.baeksutalchul.hiddendoor.admin.repository;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
 import com.baeksutalchul.hiddendoor.admin.domain.Admin;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 @Repository
@@ -19,5 +20,7 @@ public interface AdminRepository extends MongoRepository<Admin, String> {
 
   Optional<Admin> findByAdminId(String adminId);
 
-  List<Admin> findAll();
+  Page<Admin> findAll(Pageable pageable);
+
+  Page<Admin> findByEmailContainingOrUserNameContaining(String email, String userName, Pageable pageable);
 }

@@ -34,6 +34,8 @@ import LocationPage from "@pages/location/LocationPage";
 import DashBoardPage from "@pages/admin/DashBoardPage";
 import AdminReservationPage from "@pages/admin/AdminReservationPage";
 import AdminReservationDetailPage from "@pages/admin/AdminReservationDetailPage";
+import AdminAccountPage from "@pages/admin/AdminAccountPage";
+import AdminAccountDetailPage from "@pages/admin/AdminAccountDetailPage";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -154,6 +156,7 @@ function App() {
               {/* 테마 페이지 */}
               <Route path="theme">
                 <Route index element={<ThemePage />} />
+                {/* <Route path=":themeId" element={<ThemeDetailPage />} /> */}
                 {themeList.length > 0 &&
                   themeList.map((theme) => (
                     <Route
@@ -200,7 +203,12 @@ function App() {
 
               {/* 관리자 전용 페이지 그룹화 */}
               <Route path="admin" element={<ProtectedAdminRoute />}>
-                <Route index element={<DashBoardPage />} />
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<DashBoardPage />} />
+                <Route path="account">
+                  <Route index element={<AdminAccountPage />} />
+                  <Route path=":adminId" element={<AdminAccountDetailPage />} />
+                </Route>
                 <Route path="reservation" element={<AdminReservationPage />}>
                   <Route
                     path=":reservationId"

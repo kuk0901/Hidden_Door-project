@@ -144,12 +144,3 @@
 => Render의 무료 인스턴스에서 실행되는 백엔드 코드가 MongoDB Atlas의 무료 티어 데이터베이스에 접근하여 데이터를 읽고 사용 가능
 => Render의 무료 인스턴스는 사용량 제한이 있고, MongoDB Atlas의 무료 티어는 512MB의 스토리지 제한
 ```
-
-## Paging
-
-```
-- RESTful API에서는 현재 페이지에서 해당 코드가 진행됨으로 page refresh할 경우 현재 url 유지(화면)
-- 서버측의 코드는 비동기로 진행
-
--> 에러코드에 pageable 객체 추가 후 에러 객체에 추가된 Pageable을 사용해 화면 재구성 또는 컴포넌트의 state set
-```

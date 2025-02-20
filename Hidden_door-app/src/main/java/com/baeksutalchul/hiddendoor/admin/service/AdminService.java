@@ -2,6 +2,7 @@ package com.baeksutalchul.hiddendoor.admin.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -17,9 +18,14 @@ import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.token.TokenService;
+import com.baeksutalchul.hiddendoor.utils.page.PageDto;
+import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 @Service
 public class AdminService {
@@ -68,7 +74,7 @@ public class AdminService {
     if (adminOptional.isPresent()) {
       Admin admin = adminOptional.get();
       if (passwordEncoder.matches(pwd, admin.getPwd())) {
-        String accessToken = tokenService.generateToken(admin.getEmail()); // 액세스 토큰 생성
+        String accessToken = tokenService.generateToken(admin.getEmail(), admin.getRoles()); // 액세스 토큰 생성
         String refreshToken = tokenService.generateRefreshToken(admin.getEmail()); // 리프레시 토큰 생성
 
         // 쿠키에 리프레시 토큰 저장
@@ -102,21 +108,27 @@ public class AdminService {
       throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
     }
 
-    String id = tokenService.extractEmail(refreshToken); // 사용자 ID 추출
-    return tokenService.generateToken(id); // 새로운 액세스 토큰 생성
+    String email = tokenService.extractEmail(refreshToken);
+    Optional<Admin> adminOptional = adminRepository.findByEmail(email);
+    if (adminOptional.isPresent()) {
+      Admin admin = adminOptional.get();
+      return tokenService.generateToken(admin.getEmail(), admin.getRoles());
+    } else {
+      throw new CustomException(ErrorCode.USER_NOT_FOUND);
+    }
   }
 
   public AdminDto getUserInfoByToken(String token) {
+    // 사용자 ID 추출
+    String email = tokenService.extractEmail(token);
+
     // JWT 검증
-    if (!tokenService.validateToken(token, tokenService.extractEmail(token))) {
+    if (!tokenService.validateToken(token, email)) {
       throw new CustomException(ErrorCode.ACCESS_TOKEN_EXPIRED);
     }
 
-    // 사용자 ID 추출
-    String id = tokenService.extractEmail(token);
-
     // 데이터베이스에서 사용자 정보 조회
-    Optional<Admin> adminOptional = adminRepository.findByEmail(id);
+    Optional<Admin> adminOptional = adminRepository.findByEmail(email);
     if (adminOptional.isPresent()) {
       Admin admin = adminOptional.get();
       AdminDto adminDto = new AdminDto();
@@ -131,16 +143,41 @@ public class AdminService {
   }
 
   // FIXME: PageableUtil 사용
-  public ResponseDto<List<AdminDto>> getAllAdmin() {
+  public ResponseDto<List<AdminDto>> getAllAdmin(PageDto pageDto, String search) {
+    Pageable pageable;
+    if (pageDto != null) {
+      // PageDto의 page는 1-based이므로 0-based로 변환
+      int page = Math.max(0, pageDto.getPage() - 1);
+      int size = pageDto.getSize() > 0 ? pageDto.getSize() : PageableUtil.DEFAULT_SIZE;
+      String sortField = pageDto.getSortField() != null ? pageDto.getSortField() : PageableUtil.DEFAULT_SORT_FIELD;
+      String sortDirection = pageDto.getSortDirection() != null ? pageDto.getSortDirection()
+          : PageableUtil.DEFAULT_SORT_DIRECTION;
 
-    List<Admin> adminList = adminRepository.findAll();
+      pageable = PageableUtil.createPageRequest(page, size, sortField, sortDirection);
+    } else {
+      pageable = PageableUtil.createDefaultPageRequest();
+    }
 
-    if (adminList.isEmpty()) {
+    Page<Admin> adminPage;
+
+    if (search != null && !search.trim().isEmpty()) {
+      adminPage = adminRepository.findByEmailContainingOrUserNameContaining(search, search, pageable);
+    } else {
+      adminPage = adminRepository.findAll(pageable);
+    }
+
+    if (adminPage.isEmpty()) {
       throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
     }
 
-    List<AdminDto> adminDtoList = adminList.stream().map(admin -> modelMapper.map(admin, AdminDto.class)).toList();
+    List<AdminDto> adminDtoList = adminPage.getContent().stream()
+        .map(admin -> modelMapper.map(admin, AdminDto.class))
+        .toList();
 
-    return new ResponseDto<>(adminDtoList, "success");
+    PageDto resultPageDto = PageableUtil.createPageDto(adminPage);
+    logger.info("resultPageDto; {}", resultPageDto);
+
+    return new ResponseDto<>(adminDtoList, "success", resultPageDto, search);
   }
+
 }
