@@ -22,5 +22,11 @@ public interface AdminRepository extends MongoRepository<Admin, String> {
 
   Page<Admin> findAll(Pageable pageable);
 
+  Page<Admin> findByEmailContaining(String email, Pageable pageable);
+
+  Page<Admin> findByUserNameContaining(String userName, Pageable pageable);
+
+  Page<Admin> findByRolesContaining(String role, Pageable pageable);
+
   Page<Admin> findByEmailContainingOrUserNameContaining(String email, String userName, Pageable pageable);
 }

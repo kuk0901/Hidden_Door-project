@@ -142,26 +142,33 @@ public class AdminService {
     }
   }
 
-  // FIXME: PageableUtil 사용
-  public ResponseDto<List<AdminDto>> getAllAdmin(PageDto pageDto, String search) {
-    Pageable pageable;
-    if (pageDto != null) {
-      // PageDto의 page는 1-based이므로 0-based로 변환
-      int page = Math.max(0, pageDto.getPage() - 1);
-      int size = pageDto.getSize() > 0 ? pageDto.getSize() : PageableUtil.DEFAULT_SIZE;
-      String sortField = pageDto.getSortField() != null ? pageDto.getSortField() : PageableUtil.DEFAULT_SORT_FIELD;
-      String sortDirection = pageDto.getSortDirection() != null ? pageDto.getSortDirection()
-          : PageableUtil.DEFAULT_SORT_DIRECTION;
-
-      pageable = PageableUtil.createPageRequest(page, size, sortField, sortDirection);
-    } else {
-      pageable = PageableUtil.createDefaultPageRequest();
-    }
+  public ResponseDto<List<AdminDto>> getAllAdmin(PageDto pageDto, String searchField, String searchTerm) {
+    Pageable pageable = PageableUtil.createPageRequest(
+        Math.max(0, pageDto.getPage() - 1),
+        pageDto.getSize(),
+        pageDto.getSortField(),
+        pageDto.getSortDirection());
 
     Page<Admin> adminPage;
 
-    if (search != null && !search.trim().isEmpty()) {
-      adminPage = adminRepository.findByEmailContainingOrUserNameContaining(search, search, pageable);
+    // FIXME: searchField == all 일 때 searchTerm으로 검색이 동작하는 이유
+    if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+      switch (searchField) {
+        case "all":
+          adminPage = adminRepository.findAll(pageable);
+          break;
+        case "email":
+          adminPage = adminRepository.findByEmailContaining(searchTerm, pageable);
+          break;
+        case "userName":
+          adminPage = adminRepository.findByUserNameContaining(searchTerm, pageable);
+          break;
+        case "roles":
+          adminPage = adminRepository.findByRolesContaining(searchTerm, pageable);
+          break;
+        default:
+          adminPage = adminRepository.findByEmailContainingOrUserNameContaining(searchTerm, searchTerm, pageable);
+      }
     } else {
       adminPage = adminRepository.findAll(pageable);
     }
@@ -175,9 +182,9 @@ public class AdminService {
         .toList();
 
     PageDto resultPageDto = PageableUtil.createPageDto(adminPage);
-    logger.info("resultPageDto; {}", resultPageDto);
+    logger.info("resultPageDto: {}", resultPageDto);
 
-    return new ResponseDto<>(adminDtoList, "success", resultPageDto, search);
+    return new ResponseDto<>(adminDtoList, "success", resultPageDto, searchTerm);
   }
 
 }

@@ -74,7 +74,7 @@ public class GlobalExceptionHandler {
       return new PageDto(
           page,
           size,
-          0, // totalElements
+          0L, // totalElements
           0, // totalPages
           true, // isFirst
           true, // isLast

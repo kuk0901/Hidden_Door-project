@@ -8,7 +8,7 @@ import lombok.Data;
 public class PageDto {
   private int page; // 현재 페이지 번호 (1-based)
   private int size; // 페이지 크기 (항목 수)
-  private long totalElements; // 전체 항목 수
+  private Long totalElements; // 전체 항목 수
   private int totalPages; // 전체 페이지 수
   private boolean isFirst; // 첫 번째 페이지 여부
   private boolean isLast; // 마지막 페이지 여부
@@ -19,7 +19,7 @@ public class PageDto {
   public PageDto() {
     this.page = 1;
     this.size = PageableUtil.DEFAULT_SIZE;
-    this.totalElements = 0;
+    this.totalElements = totalElements != null ? totalElements : 0L;
     this.totalPages = 0;
     this.isFirst = true;
     this.isLast = true;

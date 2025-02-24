@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.admin.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baeksutalchul.hiddendoor.admin.service.AdminService;
@@ -23,12 +24,25 @@ public class AdminController {
     this.adminService = adminService;
   }
 
-  // FIXME: PageableUtil 사용 코드로 변경 필요
   @GetMapping("/all")
-  public ResponseEntity<ResponseDto<List<AdminDto>>> getAllAdmin(@RequestBody(required = false) PageDto pageDto,
-      @RequestBody(required = false) String search) {
+  public ResponseEntity<ResponseDto<List<AdminDto>>> getAllAdmin(
+      @RequestParam(required = false, defaultValue = "1") int page,
+      @RequestParam(required = false, defaultValue = "10") int size,
+      @RequestParam(required = false, defaultValue = "id") String sortField,
+      @RequestParam(required = false, defaultValue = "ASC") String sortDirection,
+      @RequestParam(required = false) String searchField,
+      @RequestParam(required = false) String searchTerm) {
 
-    return ResponseEntity.ok().body(adminService.getAllAdmin(pageDto, search));
+    PageDto pageDto = new PageDto(
+        page,
+        size,
+        0L,
+        0,
+        page == 1,
+        false,
+        sortField,
+        sortDirection);
+    return ResponseEntity.ok().body(adminService.getAllAdmin(pageDto, searchField, searchTerm));
   }
 
 }

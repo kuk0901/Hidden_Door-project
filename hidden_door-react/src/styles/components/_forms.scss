@@ -116,3 +116,33 @@
     }
   }
 }
+
+.search--form--section {
+  .search--account--header {
+    margin: 0 0 5px;
+  }
+
+  .search-form {
+    @include mixins.flex-layout-row(flex-start, center);
+    gap: 10px;
+
+    .search-select {
+      display: inline-block;
+      min-height: 25px;
+      font-size: 18px;
+      padding: 5px 10px;
+    }
+
+    .search-input {
+      min-height: 25px;
+      min-width: 330px;
+      margin: 0;
+      font-size: 18px;
+      border: 1px solid;
+      padding: 5px 10px;
+    }
+
+    .btn--search {
+    }
+  }
+}

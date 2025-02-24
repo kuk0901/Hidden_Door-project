@@ -23,6 +23,7 @@
 @use "components/notices";
 @use "components/location";
 @use "components/account";
+@use "components//pagination";
 
 // layout
 @use "layout/containers";
@@ -32,6 +33,7 @@
 @use "layout/footer";
 @use "layout/header";
 @use "layout/slide";
+@use "layout/page";
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
