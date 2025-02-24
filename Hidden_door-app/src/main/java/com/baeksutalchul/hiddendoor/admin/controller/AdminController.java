@@ -9,10 +9,13 @@ import com.baeksutalchul.hiddendoor.dto.AdminDto;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 
+import okhttp3.Response;
+
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
@@ -43,6 +46,11 @@ public class AdminController {
         sortField,
         sortDirection);
     return ResponseEntity.ok().body(adminService.getAllAdmin(pageDto, searchField, searchTerm));
+  }
+
+  @GetMapping("/account/{id}")
+  public ResponseEntity<ResponseDto<AdminDto>> getAdminInfo(@PathVariable("id") String id) {
+    return ResponseEntity.ok().body(adminService.getAdminInfo(id));
   }
 
 }

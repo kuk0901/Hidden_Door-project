@@ -1,10 +1,10 @@
 const Pagination = ({ page, onPageChange }) => {
-  // if (!page || page.totalPages <= 1) return null;
+  if (!page || page.totalPages <= 1) return null;
 
   const currentPage = page.page;
   const totalPages = page.totalPages;
   const pageNumbers = [];
-  const pageWindow = 5; // 표시할 페이지 번호의 개수
+  const pageWindow = 5;
 
   let startPage = Math.max(currentPage - Math.floor(pageWindow / 2), 1);
   let endPage = startPage + pageWindow - 1;

@@ -42,6 +42,11 @@ public class AdminService {
     this.passwordEncoder = passwordEncoder;
     this.tokenService = tokenService;
     this.modelMapper = modelMapper;
+
+    this.modelMapper.typeMap(Admin.class, AdminDto.class).addMappings(mapper -> {
+      mapper.skip(AdminDto::setPwd);
+      mapper.skip(AdminDto::setToken);
+    });
   }
 
   // 계정 생성
@@ -184,7 +189,15 @@ public class AdminService {
     PageDto resultPageDto = PageableUtil.createPageDto(adminPage);
     logger.info("resultPageDto: {}", resultPageDto);
 
-    return new ResponseDto<>(adminDtoList, "success", resultPageDto, searchTerm);
+    return new ResponseDto<>(adminDtoList, "success", resultPageDto, searchField, searchTerm);
+  }
+
+  public ResponseDto<AdminDto> getAdminInfo(String adminId) {
+    Admin admin = adminRepository.findById(adminId).orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+
+    AdminDto adminDto = modelMapper.map(admin, AdminDto.class);
+
+    return new ResponseDto<>(adminDto, "success");
   }
 
 }

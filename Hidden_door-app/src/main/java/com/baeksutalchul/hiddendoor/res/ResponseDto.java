@@ -14,7 +14,8 @@ public class ResponseDto<T> {
   private T data;
   private String msg;
   private PageDto pageDto;
-  private String search;
+  private String searchField; // select option
+  private String searchTerm; // input value
 
   public ResponseDto(String token) {
     this.token = token;
@@ -34,17 +35,19 @@ public class ResponseDto<T> {
     this.pageDto = new PageDto();
   }
 
-  public ResponseDto(T data, String msg, String search) {
+  public ResponseDto(T data, String msg, String searchField, String searchTerm) {
     this.data = data;
     this.msg = msg;
     this.pageDto = new PageDto();
-    this.search = search;
+    this.searchField = searchField;
+    this.searchTerm = searchTerm;
   }
 
-  public ResponseDto(T data, String msg, PageDto pageDto, String search) {
+  public ResponseDto(T data, String msg, PageDto pageDto, String searchField, String searchTerm) {
     this.data = data;
     this.msg = msg;
     this.pageDto = pageDto;
-    this.search = search;
+    this.searchField = searchField;
+    this.searchTerm = searchTerm;
   }
 }
