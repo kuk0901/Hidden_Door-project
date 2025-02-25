@@ -1,25 +1,30 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Calendar from "react-calendar"; // 달력 컴포넌트를 위해 필요합니다
-import "react-calendar/dist/Calendar.css"; // 달력 스타일
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
 
-const ReservationPage = () => {
+const ReservationMainPage = () => {
   const [pageData, setPageData] = useState({
     availableDates: [],
     timeSlots: [],
-    themes: []
+    themes: [],
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
   const [selectedTheme, setSelectedTheme] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const fetchPageData = async () => {
+      setIsLoading(true);
       try {
-        const response = await axios.get("/api/v1/reservations/main");
+        const response = await axios.get("/reservations/main");
+        console.log("Server response:", response.data);
         setPageData(response.data.data);
       } catch (error) {
         console.error("Error fetching reservation data:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -28,16 +33,20 @@ const ReservationPage = () => {
 
   const handleDateChange = (date) => setSelectedDate(date);
   const handleTimeChange = (time) => setSelectedTime(time);
-  const handleThemeChange = (theme) => setSelectedTheme(theme);
+  const handleThemeChange = (themeId) => setSelectedTheme(themeId);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log("Reservation submitted:", {
       selectedDate,
       selectedTime,
-      selectedTheme
+      selectedTheme,
     });
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="reservation-page">
@@ -50,7 +59,7 @@ const ReservationPage = () => {
             value={selectedDate}
             minDate={new Date()}
             tileDisabled={({ date }) =>
-              !pageData.availableDates?.includes(
+              !pageData?.availableDates?.includes(
                 date.toISOString().split("T")[0]
               )
             }
@@ -58,27 +67,31 @@ const ReservationPage = () => {
         </div>
         <div className="time-selection">
           <h2>시간 선택</h2>
-          {pageData.timeSlots?.map((time) => (
-            <button
-              key={time}
-              onClick={() => handleTimeChange(time)}
-              className={selectedTime === time ? "selected" : ""}
-            >
-              {time}
-            </button>
-          ))}
+          {pageData &&
+            pageData.timeSlots &&
+            pageData.timeSlots.map((time) => (
+              <button
+                key={time}
+                onClick={() => handleTimeChange(time)}
+                className={selectedTime === time ? "selected" : ""}
+              >
+                {time}
+              </button>
+            ))}
         </div>
         <div className="theme-selection">
           <h2>테마 선택</h2>
-          {pageData.themes?.map((theme) => (
-            <button
-              key={theme.id}
-              onClick={() => handleThemeChange(theme.id)}
-              className={selectedTheme === theme.id ? "selected" : ""}
-            >
-              {theme.name}
-            </button>
-          ))}
+          {pageData &&
+            pageData.themes &&
+            pageData.themes.map((theme) => (
+              <button
+                key={theme.themeId}
+                onClick={() => handleThemeChange(theme.themeId)}
+                className={selectedTheme === theme.themeId ? "selected" : ""}
+              >
+                {theme.name}
+              </button>
+            ))}
         </div>
         <button type="submit">예약하기</button>
       </form>
@@ -86,4 +99,4 @@ const ReservationPage = () => {
   );
 };
 
-export default ReservationPage;
+export default ReservationMainPage;

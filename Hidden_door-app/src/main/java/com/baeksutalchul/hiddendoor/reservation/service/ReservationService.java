@@ -20,6 +20,8 @@ import com.baeksutalchul.hiddendoor.dto.ReservationDto;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.reservation.domain.Reservation;
 import com.baeksutalchul.hiddendoor.reservation.repository.ReservationRepository;
+import com.baeksutalchul.hiddendoor.theme.domain.Theme;
+import com.baeksutalchul.hiddendoor.theme.repository.ThemeRepository;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 
 @Service
@@ -27,13 +29,15 @@ public class ReservationService {
   private ReservationRepository reservationRepository;
   private MongoTemplate mongoTemplate;
   private final ModelMapper modelMapper;
+  private final ThemeRepository themeRepository;
   private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
   private final Instant defaulInstant = Instant.parse("1970-01-01T00:00:00Z");
 
-  public ReservationService(ReservationRepository reservationRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate) {
+  public ReservationService(ReservationRepository reservationRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate, ThemeRepository themeRepository) {
     this.reservationRepository = reservationRepository;
     this.modelMapper = modelMapper;
     this.mongoTemplate = mongoTemplate;
+    this.themeRepository = themeRepository;
   }
 
   // admin
@@ -89,17 +93,21 @@ public class ReservationService {
 
   public ResponseDto<Map<String, Object>> getReservationPageData() {
     Map<String, Object> pageData = new HashMap<>();
-        
+
     // 예약 가능한 날짜 설정 (현재부터 15일)
     List<String> availableDates = getAvailableDates(15);
     pageData.put("availableDates", availableDates);
-    
+
     // 시간 슬롯 설정
     List<String> timeSlots = getTimeSlots();
     pageData.put("timeSlots", timeSlots);
-        
+
+    // 테마 목록 설정
+    List<Theme> themes = themeRepository.findAll(); // ThemeRepository를 사용하여 모든 테마 가져오기
+    pageData.put("themes", themes);
+
     return new ResponseDto<>(pageData, "예약 메인 페이지 데이터를 성공적으로 로드했습니다.");
-  }
+}
 
   private List<String> getAvailableDates(int days) {
     LocalDate startDate = LocalDate.now();
