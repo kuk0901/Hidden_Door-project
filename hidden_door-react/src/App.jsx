@@ -24,6 +24,7 @@ import FaqPage from "@pages/cs/faq/FaqPage";
 import FaqAddPage from "@pages/cs/faq/FaqAddPage";
 import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
+import CustomerAddPage from "./pages/cs/customer/CustomerAddPage";
 import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
 import ReservationMainPage from "@pages/reservation/ReservationMainPage";
 import EventPage from "@pages/event/EventPage";
@@ -66,8 +67,8 @@ function App() {
         // 갱신된 액세스 토큰으로 verify 요청
         const verifyRes = await Api.get("/auth/verify", {
           headers: {
-            Authorization: `Bearer ${res.data.token}`
-          }
+            Authorization: `Bearer ${res.data.token}`,
+          },
         });
         setAdmin(verifyRes.data.data);
       } catch (error) {
@@ -83,8 +84,8 @@ function App() {
       try {
         const res = await Api.get("/auth/verify", {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         setAdmin(res.data.data);
@@ -175,6 +176,7 @@ function App() {
                 </Route>
                 <Route path="customer">
                   <Route index element={<CustomerPage />} />
+                  <Route path="add" element={<CustomerAddPage />} />
                 </Route>
               </Route>
 

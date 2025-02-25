@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
 
 const FaqAddPage = () => {
   const { admin } = useAdmin();
+  const navigate = useNavigate();
 
   const [newFaq, setNewFaq] = useState({
     writer: admin.email,
@@ -24,6 +26,10 @@ const FaqAddPage = () => {
     setNewFaq({ ...newFaq, [name]: value });
   };
 
+  const handleListFaq = () => {
+    navigate("/hidden_door/cs/faq");
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -35,6 +41,7 @@ const FaqAddPage = () => {
       const res = await Api.post("/faqs/faq/add", newFaq);
 
       toast.success(res.data.msg || "FAQ 추가 완료");
+      navigate("/hidden_door/cs/faq");
     } catch (error) {
       console.log(error);
       toast.error("서버 오류가 발생했습니다.");
@@ -89,6 +96,9 @@ const FaqAddPage = () => {
             </div>
             <button className="faqadd-input-button" type="submit">
               추가
+            </button>
+            <button className="btn" onClick={handleListFaq}>
+              목록으로
             </button>
           </form>
         </div>
