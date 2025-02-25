@@ -1,4 +1,10 @@
-import { emailRegex, pwdRegex, priceRegex } from "./regex";
+import {
+  emailRegex,
+  pwdRegex,
+  priceRegex,
+  phoneRegex,
+  userNameRegex
+} from "./regex";
 
 export const validationRules = {
   email: {
@@ -12,7 +18,7 @@ export const validationRules = {
     required: "비밀번호는 필수입니다.",
     pattern: {
       value: pwdRegex,
-      message: "대소문자, 특수문자를 포함하는 8글자 이상이어야 합니다."
+      message: "대소문자 + 특수문자 + 숫자 포함 8글자 이상"
     }
   },
   title: {
@@ -27,6 +33,20 @@ export const validationRules = {
     maxLength: {
       value: 500,
       message: "내용은 500자 이내로 입력해주세요."
+    }
+  },
+  phone: {
+    required: "휴대폰 번호는 필수입니다.",
+    pattern: {
+      value: phoneRegex,
+      message: "유효한 휴대폰 번호 형식이 아닙니다."
+    }
+  },
+  userName: {
+    required: "이름은 필수입니다.",
+    pattern: {
+      value: userNameRegex,
+      message: "한글 2~8자로 입력해주세요."
     }
   }
 };

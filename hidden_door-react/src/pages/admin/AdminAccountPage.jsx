@@ -6,8 +6,8 @@ import AccountList from "@components/admin/AccountList";
 import SearchForm from "@components/common/form/SearchForm";
 import Pagination from "@components/common/navigation/pagination/Pagination";
 import { useLocation, useNavigate } from "react-router-dom";
+import NewAdminAddForm from "@components/admin/NewAdminAddForm";
 
-// FIXME: 관리자 추가 영역: NewAdminAccountForm 컴포넌트 생성 또는 기존 Form 컴포넌트 사용
 const AdminAccountPage = () => {
   const location = useLocation();
   const { admin } = useAdmin();
@@ -75,14 +75,22 @@ const AdminAccountPage = () => {
   };
 
   const handlePageChange = (newPage) => {
-    handleGetAdminList(newPage, "", search);
+    handleGetAdminList(newPage, search.searchField, search.searchTerm);
   };
 
-  // FIXME: handleAddAdmin 함수 -> newAdminData를 인자로 받아 새로운 관리자 추가
   const handleAddAdmin = async (newAdminData) => {
     try {
-      const res = await Api.post("/admins", newAdminData);
-      navigate(`/hidden_door/admin/account/${res.data.adminId}?new=true`, {
+      const res = await Api.post("/auth/register", newAdminData, {
+        withCredentials: true
+      });
+      console.log(res.data.data);
+      await handleGetAdminList(
+        page.page,
+        search.searchField,
+        search.searchTerm
+      );
+
+      navigate(`/hidden_door/admin/account/${res.data.data.adminId}?new=true`, {
         state: { page, search }
       });
     } catch (error) {
@@ -93,9 +101,6 @@ const AdminAccountPage = () => {
 
   useEffect(() => {
     if (location.state?.page || location.state?.search) {
-      console.log(location.state);
-      console.log("page", location.state.page);
-      console.log("search", location.state.search);
       handleGetAdminList(page.page, search.searchField, search.searchTerm);
     } else {
       handleGetAdminList();
@@ -137,12 +142,25 @@ const AdminAccountPage = () => {
           page={page}
           search={search}
           adminList={adminList}
+          setAdminList={setAdminList}
+          setPage={setPage}
+          setSearch={setSearch}
           role={admin.roles.includes("ROLE_SUPER_ADMIN") ? true : false}
         />
       </section>
 
       {/* Pagination */}
       <Pagination page={page} onPageChange={handlePageChange} />
+
+      {newAccountAddVisible && (
+        <>
+          <div className="overlay"></div>
+          <NewAdminAddForm
+            onSubmit={handleAddAdmin}
+            onCancel={() => setNewAccountAddVisible(false)}
+          />
+        </>
+      )}
     </div>
   );
 };

@@ -19,6 +19,7 @@ const AdminAccountDetailPage = () => {
   const [adminData, setAdminData] = useState(location.state?.adminData || null);
   const { page, search } = location.state || {};
   const { admin } = useAdmin();
+  console.log(admin);
   const isSuperAdmin = admin.roles.includes("ROLE_SUPER_ADMIN");
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -36,8 +37,8 @@ const AdminAccountDetailPage = () => {
 
   const fetchAdminData = async () => {
     try {
-      const response = await Api.get(`/admins/${id}`);
-      setAdminData(response.data);
+      const res = await Api.get(`/admins/account/${id}`);
+      setAdminData(res.data.data);
     } catch (error) {
       toast.error("관리자 정보를 불러오는데 실패했습니다.");
       console.error("Error fetching admin data:", error);

@@ -10,9 +10,11 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.baeksutalchul.hiddendoor.admin.domain.Admin;
 import com.baeksutalchul.hiddendoor.admin.repository.AdminRepository;
+import com.baeksutalchul.hiddendoor.dto.AdminDeleteRequestDto;
 import com.baeksutalchul.hiddendoor.dto.AdminDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
@@ -50,24 +52,37 @@ public class AdminService {
   }
 
   // 계정 생성
-  public void registerUser(AdminDto adminDto) {
+  public ResponseDto<AdminDto> registerUser(AdminDto adminDto) {
+    // 중복 사용자 ID 체크
+    if (adminRepository.existsById(adminDto.getEmail())) {
+      throw new CustomException(ErrorCode.ADMIN_ALREADY_EXISTS);
+    }
+
     // 비밀번호 인코딩
     String encodedPassword = passwordEncoder.encode(adminDto.getPwd());
 
     Admin admin = new Admin();
+    admin.setUserName(adminDto.getUserName());
+    admin.setPhone(adminDto.getPhone());
     admin.setEmail(adminDto.getEmail());
     admin.setPwd(encodedPassword);
-    admin.setUserName(adminDto.getUserName());
-    admin.setRoles(List.of("ROLE_ADMIN", "ROLE_USER"));
 
-    // 중복 사용자 ID 체크
-    if (adminRepository.existsById(admin.getEmail())) {
-      throw new CustomException(ErrorCode.ADMIN_ALREADY_EXISTS);
+    if (adminDto.getRoles() == null) {
+      admin.setRoles(List.of("ROLE_ADMIN", "ROLE_USER"));
+    } else {
+      admin.setRoles(adminDto.getRoles());
     }
 
     // 사용자 정보를 데이터베이스에 저장
     try {
       adminRepository.save(admin);
+
+      Admin adminRes = adminRepository.findByEmail(admin.getEmail())
+          .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+      AdminDto adminDtoRes = modelMapper.map(adminRes, AdminDto.class);
+      logger.info("adminDtoRes: {}", adminDtoRes);
+      return new ResponseDto<>(adminDtoRes, "success");
+
     } catch (Exception e) {
       throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
@@ -156,7 +171,6 @@ public class AdminService {
 
     Page<Admin> adminPage;
 
-    // FIXME: searchField == all 일 때 searchTerm으로 검색이 동작하는 이유
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
       switch (searchField) {
         case "all":
@@ -200,4 +214,27 @@ public class AdminService {
     return new ResponseDto<>(adminDto, "success");
   }
 
+  @Transactional
+  public ResponseDto<List<AdminDto>> deleteAdminOne(AdminDeleteRequestDto requestDto) {
+    Admin admin = adminRepository.findById(requestDto.getId())
+        .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+
+    adminRepository.delete(admin);
+
+    PageDto pageDto = new PageDto(
+        requestDto.getPage(),
+        requestDto.getSize(),
+        0L,
+        0,
+        requestDto.getPage() == 1,
+        false,
+        requestDto.getSortField(),
+        requestDto.getSortDirection());
+
+    ResponseDto<List<AdminDto>> responseDto = getAllAdmin(pageDto, requestDto.getSearchField(),
+        requestDto.getSearchTerm());
+    responseDto.setMsg(admin.getUserName() + "님의 계정이 삭제되었습니다.");
+
+    return responseDto;
+  }
 }

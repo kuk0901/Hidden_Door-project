@@ -448,6 +448,26 @@
   margin-top: 10px;
 }
 
+.admin--form--section {
+  position: absolute;
+  top: 400px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+  border: 2px solid;
+  padding: 10px;
+  margin: auto;
+  border-radius: 7px;
+  z-index: 30;
+  overflow-y: auto;
+  background-color: variables.$dark-background-color;
+
+  .title {
+    text-align: center;
+    font-size: 27px;
+  }
+}
+
 // 라이트 모드
 @media (prefers-color-scheme: light) {
   .section--caution,
@@ -472,5 +492,9 @@
         color: variables.$light-background-color;
       }
     }
+  }
+
+  .admin--form--section {
+    background-color: variables.$light-background-color;
   }
 }

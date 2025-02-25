@@ -14,7 +14,9 @@ const Form = ({ onSubmit, fields, btnText, id }) => {
 
   const renderField = (field) => {
     const commonProps = {
-      register: register(field.name), // 유효성 검사 규칙 적용
+      register: field.validation
+        ? register(field.name, field.validation)
+        : register(field.name), // 유효성 검사 규칙 적용
       name: field.name,
       placeholder: field.placeholder,
       error: errors[field.name]?.message,

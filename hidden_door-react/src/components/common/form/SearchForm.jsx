@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 
-// FIXME: 구조만 잡아놓은 상태
 const SearchForm = ({ onSearch, fields, initialValues }) => {
   const { register, handleSubmit } = useForm({
-    defaultValues: initialValues // 초기값 설정
+    defaultValues: initialValues
   });
 
   const onSubmit = (data) => {

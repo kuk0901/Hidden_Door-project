@@ -5,15 +5,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baeksutalchul.hiddendoor.admin.service.AdminService;
+import com.baeksutalchul.hiddendoor.dto.AdminDeleteRequestDto;
 import com.baeksutalchul.hiddendoor.dto.AdminDto;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 
-import okhttp3.Response;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,6 +51,11 @@ public class AdminController {
   @GetMapping("/account/{id}")
   public ResponseEntity<ResponseDto<AdminDto>> getAdminInfo(@PathVariable("id") String id) {
     return ResponseEntity.ok().body(adminService.getAdminInfo(id));
+  }
+
+  @DeleteMapping("/account/delete/one")
+  public ResponseEntity<ResponseDto<List<AdminDto>>> deleteAdminOne(@RequestBody AdminDeleteRequestDto requestDto) {
+    return ResponseEntity.ok().body(adminService.deleteAdminOne(requestDto));
   }
 
 }

@@ -35,10 +35,8 @@ public class AuthController {
   }
 
   @PostMapping("/register")
-  public ResponseEntity<ResponseDto<String>> signUp(@RequestBody AdminDto adminDto) {
-
-    adminService.registerUser(adminDto);
-    return ResponseEntity.ok(new ResponseDto<>(null, "회원가입 되었습니다."));
+  public ResponseEntity<ResponseDto<AdminDto>> signUp(@RequestBody AdminDto adminDto) {
+    return ResponseEntity.ok().body(adminService.registerUser(adminDto));
 
   }
 

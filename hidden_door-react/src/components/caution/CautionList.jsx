@@ -7,6 +7,7 @@ import InfoEditForm from "@components/common/form/InfoEditForm";
 import IconSelector from "@components/common/form/select/IconSelector";
 import Form from "@components/common/form/Form";
 import useConfirm from "@hooks/useConfirm";
+import { validationRules } from "@validation/validationRules";
 
 const CautionList = ({ data, setSectionData }) => {
   const [editingItem, setEditingItem] = useState(null);
@@ -59,7 +60,8 @@ const CautionList = ({ data, setSectionData }) => {
       label: "새 주의사항 제목",
       className: "l column caution",
       id: "add-title",
-      autoFocus: true
+      autoFocus: true,
+      validation: validationRules.title
     },
     {
       name: "content",
@@ -68,7 +70,8 @@ const CautionList = ({ data, setSectionData }) => {
       label: "새 주의사항 내용",
       className: "l column",
       id: "add-content",
-      field: "textarea"
+      field: "textarea",
+      validation: validationRules.content
     }
   ];
 
