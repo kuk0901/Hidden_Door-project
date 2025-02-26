@@ -8,6 +8,7 @@ import Pagination from "@components/common/navigation/pagination/Pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import NewAdminAddForm from "@components/admin/NewAdminAddForm";
 
+// FIXME: 검색 버튼 옆에 reset 버튼 추가 <-> 전체는 전체 검색 처리 결정 필요
 const AdminAccountPage = () => {
   const location = useLocation();
   const { admin } = useAdmin();
@@ -24,12 +25,14 @@ const AdminAccountPage = () => {
       sortDirection: "ASC"
     }
   );
+
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "all",
       searchTerm: ""
     }
   );
+
   const [newAccountAddVisible, setNewAccountAddVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -51,9 +54,8 @@ const AdminAccountPage = () => {
         }
       });
       setAdminList(res.data.data);
-      setPage({ ...page, ...res.data.pageDto });
+      setPage(res.data.pageDto);
       setSearch({
-        ...search,
         searchField: res.data.searchField,
         searchTerm: res.data.searchTerm
       });
@@ -83,7 +85,7 @@ const AdminAccountPage = () => {
       const res = await Api.post("/auth/register", newAdminData, {
         withCredentials: true
       });
-      console.log(res.data.data);
+
       await handleGetAdminList(
         page.page,
         search.searchField,
@@ -101,11 +103,17 @@ const AdminAccountPage = () => {
 
   useEffect(() => {
     if (location.state?.page || location.state?.search) {
-      handleGetAdminList(page.page, search.searchField, search.searchTerm);
+      setPage(location.state.page);
+      setSearch(location.state.search);
+      handleGetAdminList(
+        location.state.page.page,
+        location.state.search.searchField,
+        location.state.search.searchTerm
+      );
     } else {
       handleGetAdminList();
     }
-  }, []);
+  }, [location.state]);
 
   const searchFields = [
     { value: "all", label: "전체" },
@@ -139,8 +147,8 @@ const AdminAccountPage = () => {
       {/* Account List */}
       <section className="account--section">
         <AccountList
-          page={page}
-          search={search}
+          page={{ ...page }}
+          search={{ ...search }}
           adminList={adminList}
           setAdminList={setAdminList}
           setPage={setPage}

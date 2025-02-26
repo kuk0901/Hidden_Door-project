@@ -3,6 +3,6 @@ const pwdRegex =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,21}$/;
 const priceRegex = /^\d{1,3}(,\d{3})*$/;
 const phoneRegex = /^\d{3}-\d{3,4}-\d{4}$/;
-const userNameRegex = /^[가-힣]{2,8}$\d/;
+const userNameRegex = /^([가-힣]{2,8}|[가-힣\d]{4,8})$/;
 
 export { emailRegex, pwdRegex, priceRegex, phoneRegex, userNameRegex };

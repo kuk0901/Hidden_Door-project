@@ -53,7 +53,7 @@ const AccountItem = ({
   };
 
   return (
-    <button className="account--item" onClick={handleDetail}>
+    <li className="account--item" onClick={handleDetail}>
       <div className="content content--sm">{adminData.userName}</div>
       <div className="content content--md">{adminData.email}</div>
       <div className="content content--sm">{adminData.phone}</div>
@@ -75,7 +75,7 @@ const AccountItem = ({
           </div>
         </>
       )}
-    </button>
+    </li>
   );
 };
 

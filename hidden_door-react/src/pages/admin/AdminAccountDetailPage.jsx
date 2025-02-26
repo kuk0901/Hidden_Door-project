@@ -17,23 +17,29 @@ const AdminAccountDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [adminData, setAdminData] = useState(location.state?.adminData || null);
-  const { page, search } = location.state || {};
+  const [page, setPage] = useState(location.state?.page || {});
+  const [search, setSearch] = useState(location.state?.search || {});
+
   const { admin } = useAdmin();
-  console.log(admin);
   const isSuperAdmin = admin.roles.includes("ROLE_SUPER_ADMIN");
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
+    if (location.state) {
+      setAdminData(location.state.adminData || null);
+      setPage(location.state.page || {});
+      setSearch(location.state.search || {});
+    }
+
     if (!adminData) {
       fetchAdminData();
     }
 
     if (searchParams.get("new") === "true") {
       toast.success("관리자 계정이 생성되었습니다.");
+      setSearchParams({});
     }
-
-    setSearchParams({});
-  }, []);
+  }, [location.state, searchParams]);
 
   const fetchAdminData = async () => {
     try {
