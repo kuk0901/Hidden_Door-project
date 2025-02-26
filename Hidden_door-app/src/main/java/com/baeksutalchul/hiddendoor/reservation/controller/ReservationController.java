@@ -39,8 +39,7 @@ public class ReservationController {
   
   @GetMapping("/main")
   public ResponseEntity<ResponseDto<Map<String, Object>>> getReservationMainPage() {
-    return ResponseEntity.ok(reservationService.getReservationPageData());
+    return ResponseEntity.ok(reservationService.getReservationMainPage());
   }
 
-  
 }

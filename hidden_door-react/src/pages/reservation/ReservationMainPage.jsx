@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import Api from "@axios/api";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
@@ -14,20 +14,20 @@ const ReservationMainPage = () => {
   const [selectedTheme, setSelectedTheme] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchPageData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await axios.get("/reservations/main");
-        console.log("Server response:", response.data);
-        setPageData(response.data.data);
-      } catch (error) {
-        console.error("Error fetching reservation data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchPageData = async () => {
+    setIsLoading(true);
+    try {
+      const response = await Api.get("/reservations/main");
+      console.log("Full server response:", response);
+      setPageData(response.data.data); // 여기를 수정
+    } catch (error) {
+      console.error("Error fetching reservation data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchPageData();
   }, []);
 

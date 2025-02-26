@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.baeksutalchul.hiddendoor.dto.ReservationDto;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
@@ -30,14 +31,16 @@ public class ReservationService {
   private MongoTemplate mongoTemplate;
   private final ModelMapper modelMapper;
   private final ThemeRepository themeRepository;
+  private final ObjectMapper objectMapper;
   private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
   private final Instant defaulInstant = Instant.parse("1970-01-01T00:00:00Z");
 
-  public ReservationService(ReservationRepository reservationRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate, ThemeRepository themeRepository) {
+  public ReservationService(ReservationRepository reservationRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate, ThemeRepository themeRepository, ObjectMapper objectMapper) {
     this.reservationRepository = reservationRepository;
     this.modelMapper = modelMapper;
     this.mongoTemplate = mongoTemplate;
     this.themeRepository = themeRepository;
+    this.objectMapper = objectMapper;
   }
 
   // admin
@@ -91,32 +94,38 @@ public class ReservationService {
 
   }
 
-  public ResponseDto<Map<String, Object>> getReservationPageData() {
+  public ResponseDto<Map<String, Object>> getReservationMainPage() {
     Map<String, Object> pageData = new HashMap<>();
 
     // 예약 가능한 날짜 설정 (현재부터 15일)
     List<String> availableDates = getAvailableDates(15);
     pageData.put("availableDates", availableDates);
+    logger.info("availableDates: {}", availableDates);
+    System.out.println("availableDates :" + availableDates.toString());
 
     // 시간 슬롯 설정
     List<String> timeSlots = getTimeSlots();
     pageData.put("timeSlots", timeSlots);
+    logger.info("timeSlots: {}", timeSlots);
+    System.out.println("timeSlots :" + timeSlots);
 
     // 테마 목록 설정
     List<Theme> themes = themeRepository.findAll(); // ThemeRepository를 사용하여 모든 테마 가져오기
     pageData.put("themes", themes);
+    logger.info("themes: {}", themes);
+    logger.info("Returning data: {}", pageData);
 
     return new ResponseDto<>(pageData, "예약 메인 페이지 데이터를 성공적으로 로드했습니다.");
-}
+  }
 
   private List<String> getAvailableDates(int days) {
     LocalDate startDate = LocalDate.now();
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    
+
     return IntStream.range(0, days)
             .mapToObj(startDate::plusDays)
             .map(date -> date.format(formatter))
-            .collect(Collectors.toList());
+            .toList();
   }
 
   private List<String> getTimeSlots() {
