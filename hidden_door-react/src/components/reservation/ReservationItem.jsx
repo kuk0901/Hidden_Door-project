@@ -4,7 +4,7 @@ const ReservationItem = ({ reservation }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/hidden_door/reservation/${reservation.reservationId}`);
+    navigate(`/hidden_door/admin/reservation/${reservation.reservationId}`);
   };
 
   return (
