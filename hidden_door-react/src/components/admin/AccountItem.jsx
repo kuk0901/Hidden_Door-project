@@ -57,23 +57,20 @@ const AccountItem = ({
       <div className="content content--sm">{adminData.userName}</div>
       <div className="content content--md">{adminData.email}</div>
       <div className="content content--sm">{adminData.phone}</div>
+      <div className="content content--md roles-container">
+        {filteredRoles.map((r, i, arr) => (
+          <span key={i} className="role">
+            {formatRole(r)}
+            {i < arr.length - 1 ? ", " : ""}
+          </span>
+        ))}
+      </div>
       {role && (
-        <>
-          <div className="content content--md roles-container">
-            {filteredRoles.map((r, i, arr) => (
-              <span key={i} className="role">
-                {formatRole(r)}
-                {i < arr.length - 1 ? ", " : ""}
-              </span>
-            ))}
-          </div>
-
-          <div className="content content--sm">
-            <button className="btn delete" onClick={handleDelete}>
-              삭제
-            </button>
-          </div>
-        </>
+        <div className="content content--sm">
+          <button className="btn delete" onClick={handleDelete}>
+            삭제
+          </button>
+        </div>
       )}
     </li>
   );

@@ -19,7 +19,6 @@ const AdminAccountDetailPage = () => {
   const [adminData, setAdminData] = useState(location.state?.adminData || null);
   const [page, setPage] = useState(location.state?.page || {});
   const [search, setSearch] = useState(location.state?.search || {});
-
   const { admin } = useAdmin();
   const isSuperAdmin = admin.roles.includes("ROLE_SUPER_ADMIN");
   const [searchParams, setSearchParams] = useSearchParams();
