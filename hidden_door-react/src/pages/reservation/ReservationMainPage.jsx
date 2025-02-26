@@ -7,7 +7,7 @@ const ReservationMainPage = () => {
   const [pageData, setPageData] = useState({
     availableDates: [],
     timeSlots: [],
-    themes: [],
+    themes: []
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -17,9 +17,10 @@ const ReservationMainPage = () => {
   const fetchPageData = async () => {
     setIsLoading(true);
     try {
-      const response = await Api.get("/reservations/main");
-      console.log("Full server response:", response);
-      setPageData(response.data.data); // 여기를 수정
+      const res = await Api.get("/reservations/main");
+      console.log("Full server response:", res);
+      console.log(res.data.data);
+      setPageData(res.data.data); // 여기를 수정
     } catch (error) {
       console.error("Error fetching reservation data:", error);
     } finally {
@@ -40,7 +41,7 @@ const ReservationMainPage = () => {
     console.log("Reservation submitted:", {
       selectedDate,
       selectedTime,
-      selectedTheme,
+      selectedTheme
     });
   };
 
@@ -65,6 +66,8 @@ const ReservationMainPage = () => {
             }
           />
         </div>
+
+        {/* TODO: 컴포넌트로 분리 */}
         <div className="time-selection">
           <h2>시간 선택</h2>
           {pageData &&
@@ -79,6 +82,8 @@ const ReservationMainPage = () => {
               </button>
             ))}
         </div>
+
+        {/* TODO: 컴포넌트로 분리 */}
         <div className="theme-selection">
           <h2>테마 선택</h2>
           {pageData &&
