@@ -13,7 +13,7 @@ public class ErrorResponse {
   private final PageDto page;
 
   public ErrorResponse(int status, String errorCode, String msg) {
-    this(status, errorCode, msg, new PageDto(1, 10, "id", false));
+    this(status, errorCode, msg, new PageDto());
   }
 
 }

@@ -1,16 +1,14 @@
 import { useAdmin } from "@hooks/useAdmin";
-import { useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 
-const ProtectedAdminRoute = ({ children }) => {
+const ProtectedAdminRoute = () => {
   const { admin } = useAdmin();
-  const navigate = useNavigate();
 
   if (!admin) {
-    navigate(import.meta.env.VITE_APP_ADMIN_LOGIN_PATH);
-    return null;
+    return <Navigate to={import.meta.env.VITE_APP_ADMIN_LOGIN_PATH} replace />;
   }
 
-  return children;
+  return <Outlet />;
 };
 
 export default ProtectedAdminRoute;

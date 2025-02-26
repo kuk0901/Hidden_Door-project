@@ -134,12 +134,13 @@
           @include mixins.flex-layout-row(flex-start, center);
           margin-bottom: 50px;
           font-size: 18px;
-          min-width: 195px;
+          min-width: 220px;
           font-weight: 700;
 
           &.theme--description {
             flex-direction: column;
             align-items: baseline;
+            min-width: 500px;
 
             .theme-info--item--title {
               margin-bottom: 10px;

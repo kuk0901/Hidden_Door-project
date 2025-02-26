@@ -21,7 +21,6 @@
 
   &.btn--link {
     border: 1px solid;
-
     transform: none;
     background-color: variables.$primary-color;
 
@@ -84,6 +83,10 @@
     &.scroll-to-top-button {
       background-color: #000;
       color: #fff;
+    }
+
+    &.btn--link {
+      border-color: variables.$light-text-color;
     }
   }
 }

@@ -41,29 +41,33 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/register",
+            .requestMatchers("/api/v1/auth/authenticate",
                 "/api/v1/auth/terminate", "/images/**")
             .permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**", "/api/v1/customers/**")
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
+                "/api/v1/customers/**")
             .permitAll()
             .requestMatchers(HttpMethod.POST, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**", "/api/v1/customers/**")
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
+                "/api/v1/customers/**")
             .authenticated()
             .requestMatchers(HttpMethod.PATCH, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**", "/api/v1/customers/**")
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
+                "/api/v1/customers/**")
             .authenticated()
             .requestMatchers(HttpMethod.PUT, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**", "/api/v1/customers/**")
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
+                "/api/v1/customers/**")
             .authenticated()
             .requestMatchers(HttpMethod.DELETE, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**", "/api/v1/customers/**")
+                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
+                "/api/v1/customers/**")
             .authenticated()
             .requestMatchers("/api/v1/auth/renew", "/api/v1/auth/verify").authenticated()
-            .requestMatchers("/api/v1/admin/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
-            .requestMatchers("/api/v1/super-admin/**").hasAuthority("ROLE_SUPER_ADMIN")
-            .requestMatchers("/api/v1/reservations/**")
-            .authenticated()
+            .requestMatchers("/api/v1/admins/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
+            .requestMatchers("/api/v1/auth/register", "/api/v1/admins/account/delete/one", "/api/v1/super-admin/**")
+            .hasAuthority("ROLE_SUPER_ADMIN")
             .anyRequest().authenticated())
         .exceptionHandling(exceptions -> exceptions
             .authenticationEntryPoint(customAuthenticationEntryPoint())

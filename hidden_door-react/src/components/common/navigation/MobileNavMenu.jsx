@@ -2,8 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { useAdmin } from "@hooks/useAdmin";
 import { IoIosMenu } from "react-icons/io";
 import LinkContainer from "@components/common/navigation/LinkContainer";
-import { navLinkList } from "@routes/linkList";
-import { Link } from "react-router-dom";
+import { navLinkList, adminLinkList } from "@routes/linkList";
 
 const MobileNavMenu = () => {
   const { admin } = useAdmin();
@@ -23,23 +22,19 @@ const MobileNavMenu = () => {
     };
   }, []);
 
+  const handleClose = () => setOpen(false);
+
+  const combinedLinkList = admin
+    ? [...navLinkList, ...adminLinkList]
+    : navLinkList;
+
   return (
     <div ref={menuRef}>
       <IoIosMenu onClick={() => setOpen(!open)} size={30} />
 
       {open && (
         <div className="link-items">
-          <LinkContainer
-            linkList={navLinkList}
-            onClick={() => setOpen(false)}
-          />
-          {admin && (
-            <li className="link-item--last">
-              <Link to="#" className="link-item" onClick={() => setOpen(false)}>
-                관리자
-              </Link>
-            </li>
-          )}
+          <LinkContainer linkList={combinedLinkList} onClick={handleClose} />
         </div>
       )}
     </div>

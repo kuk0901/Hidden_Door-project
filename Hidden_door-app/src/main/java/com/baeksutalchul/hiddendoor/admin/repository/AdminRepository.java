@@ -6,6 +6,8 @@ import org.springframework.stereotype.Repository;
 
 import com.baeksutalchul.hiddendoor.admin.domain.Admin;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 @Repository
@@ -16,5 +18,15 @@ public interface AdminRepository extends MongoRepository<Admin, String> {
 
   boolean existsByEmail(String email);
 
-  Optional<Admin> findByAdminId(String adminId);
+  Optional<Admin> findById(String id);
+
+  Page<Admin> findAll(Pageable pageable);
+
+  Page<Admin> findByEmailContaining(String email, Pageable pageable);
+
+  Page<Admin> findByUserNameContaining(String userName, Pageable pageable);
+
+  Page<Admin> findByRolesContaining(String role, Pageable pageable);
+
+  Page<Admin> findByEmailContainingOrUserNameContaining(String email, String userName, Pageable pageable);
 }

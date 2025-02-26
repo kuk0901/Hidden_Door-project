@@ -13,23 +13,41 @@ public class ResponseDto<T> {
   private String token;
   private T data;
   private String msg;
-  private PageDto page;
+  private PageDto pageDto;
+  private String searchField; // select option
+  private String searchTerm; // input value
 
   public ResponseDto(String token) {
     this.token = token;
-    this.page = new PageDto(0, 0, token, false);
+    this.pageDto = new PageDto();
   }
 
   public ResponseDto(T data, String msg) {
     this.data = data;
     this.msg = msg;
-    this.page = new PageDto(0, 0, token, false);
+    this.pageDto = new PageDto();
   }
 
   public ResponseDto(String token, T data, String msg) {
     this.token = token;
     this.data = data;
     this.msg = msg;
-    this.page = new PageDto(0, 0, token, false);
+    this.pageDto = new PageDto();
+  }
+
+  public ResponseDto(T data, String msg, String searchField, String searchTerm) {
+    this.data = data;
+    this.msg = msg;
+    this.pageDto = new PageDto();
+    this.searchField = searchField;
+    this.searchTerm = searchTerm;
+  }
+
+  public ResponseDto(T data, String msg, PageDto pageDto, String searchField, String searchTerm) {
+    this.data = data;
+    this.msg = msg;
+    this.pageDto = pageDto;
+    this.searchField = searchField;
+    this.searchTerm = searchTerm;
   }
 }
