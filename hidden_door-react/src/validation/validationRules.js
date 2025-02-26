@@ -6,6 +6,7 @@ import {
   userNameRegex
 } from "./regex";
 
+// FIXME: 관리 계정 생성 비밀번호
 export const validationRules = {
   email: {
     required: "이메일은 필수입니다.",
