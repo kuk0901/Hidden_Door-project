@@ -288,3 +288,59 @@
     background-color: color.adjust(#6c757d, $lightness: 10%);
   }
 }
+
+// 페이지네이션 스타일
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+  gap: 10px;
+
+  button {
+    padding: 8px 12px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    color: #495057;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #e9ecef;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    &.active {
+      background-color: variables.$light-blue-color;
+      color: #fff;
+      border-color: variables.$light-blue-color;
+    }
+
+    @include dark-mode {
+      background-color: variables.$dark-background-color;
+      color: variables.$dark-text-color;
+      border-color: color.adjust(
+        variables.$dark-background-color,
+        $lightness: 20%
+      );
+
+      &:hover {
+        background-color: color.adjust(
+          variables.$dark-background-color,
+          $lightness: 10%
+        );
+      }
+
+      &.active {
+        background-color: variables.$dark-blue-color;
+        color: variables.$dark-text-color;
+        border-color: variables.$dark-blue-color;
+      }
+    }
+  }
+}
