@@ -22,6 +22,8 @@
 @use "components/events";
 @use "components/notices";
 @use "components/location";
+@use "components/account";
+@use "components//pagination";
 
 // layout
 @use "layout/containers";
@@ -31,6 +33,7 @@
 @use "layout/footer";
 @use "layout/header";
 @use "layout/slide";
+@use "layout/page";
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -59,6 +62,16 @@ a {
       background-color: transparent;
     }
   }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10;
 }
 
 @media (prefers-color-scheme: light) {

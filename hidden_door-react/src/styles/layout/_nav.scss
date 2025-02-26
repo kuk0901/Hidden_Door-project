@@ -22,8 +22,50 @@
       font-weight: bold;
       color: variables.$dark-link-color;
 
+      &.btn--no {
+        border: none;
+        font-size: 16px;
+        background-color: transparent;
+      }
+
       &:hover {
         color: variables.$light-link-color;
+      }
+    }
+
+    .link-item--last {
+      position: relative;
+
+      .admin-submenu {
+        @include mixins.border(1px, solid, #fff);
+        border-radius: 4px;
+        position: absolute;
+        top: 30px;
+        left: 0;
+        z-index: 10;
+        @include mixins.flex-layout-column(space-between, align-center);
+        background-color: variables.$dark-background-color;
+        padding: 3px 10px 10px;
+        min-width: 100%;
+        width: auto;
+        white-space: nowrap;
+
+        li {
+          border-bottom: 1px solid black;
+          padding: 3px;
+
+          .link--item {
+            background-color: transparent;
+            border: none;
+            font-size: 16px;
+            min-width: auto;
+            color: variables.$light-link-color;
+
+            &:hover {
+              color: variables.$dark-link-color;
+            }
+          }
+        }
       }
     }
 

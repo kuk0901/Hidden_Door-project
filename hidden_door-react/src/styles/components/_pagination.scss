@@ -1,0 +1,82 @@
+@use "../abstracts/mixins";
+@use "../abstracts//variables";
+@use "sass:color";
+
+.pagination {
+  margin-top: 20px;
+  @include mixins.flex-layout-row(center, center);
+  gap: 10px;
+
+  .page-nav,
+  .page-number {
+    background-color: variables.$page-bg-color;
+    color: variables.$page-text-color;
+    padding: 7px;
+    font-size: 16px;
+    @include mixins.border(1px, solid, variables.$page-bg-color);
+    border-radius: 3px;
+
+    &:hover {
+      background-color: color.scale(variables.$page-bg-color, $lightness: -40%);
+      border-color: color.scale(variables.$page-bg-color, $lightness: -40%);
+    }
+  }
+
+  .page-nav {
+    &.prev {
+      margin-right: 5px;
+    }
+
+    &.next {
+      margin-left: 5px;
+    }
+  }
+
+  .page-number {
+    &.active {
+      background-color: variables.$page-active-bg-color;
+      border-color: variables.$page-active-bg-color;
+
+      &:hover {
+        background-color: color.scale(
+          variables.$page-active-bg-color,
+          $lightness: 15%
+        );
+        border-color: color.scale(
+          variables.$page-active-bg-color,
+          $lightness: 15%
+        );
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .pagination {
+    .page-nav,
+    .page-number {
+      &:hover {
+        background-color: color.scale(
+          variables.$page-bg-color,
+          $lightness: 25%
+        );
+        border-color: color.scale(variables.$page-bg-color, $lightness: 30%);
+      }
+    }
+
+    .page-number {
+      &.active {
+        &:hover {
+          background-color: color.scale(
+            variables.$page-active-bg-color,
+            $lightness: -15%
+          );
+          border-color: color.scale(
+            variables.$page-active-bg-color,
+            $lightness: -15%
+          );
+        }
+      }
+    }
+  }
+}

@@ -24,7 +24,7 @@ import FaqPage from "@pages/cs/faq/FaqPage";
 import FaqAddPage from "@pages/cs/faq/FaqAddPage";
 import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
-import ReservationDetailPage from "@pages/reservation/ReservationDetailPage";
+import CustomerAddPage from "./pages/cs/customer/CustomerAddPage";
 import ReservationMainPage from "@pages/reservation/ReservationMainPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
@@ -34,6 +34,8 @@ import LocationPage from "@pages/location/LocationPage";
 import DashBoardPage from "@pages/admin/DashBoardPage";
 import AdminReservationPage from "@pages/admin/AdminReservationPage";
 import AdminReservationDetailPage from "@pages/admin/AdminReservationDetailPage";
+import AdminAccountPage from "@pages/admin/AdminAccountPage";
+import AdminAccountDetailPage from "@pages/admin/AdminAccountDetailPage";
 
 function App() {
   const { setAdmin } = useAdmin();
@@ -66,8 +68,8 @@ function App() {
         // 갱신된 액세스 토큰으로 verify 요청
         const verifyRes = await Api.get("/auth/verify", {
           headers: {
-            Authorization: `Bearer ${res.data.token}`
-          }
+            Authorization: `Bearer ${res.data.token}`,
+          },
         });
         setAdmin(verifyRes.data.data);
       } catch (error) {
@@ -83,8 +85,8 @@ function App() {
       try {
         const res = await Api.get("/auth/verify", {
           headers: {
-            Authorization: `Bearer ${token}`
-          }
+            Authorization: `Bearer ${token}`,
+          },
         });
 
         setAdmin(res.data.data);
@@ -154,6 +156,7 @@ function App() {
               {/* 테마 페이지 */}
               <Route path="theme">
                 <Route index element={<ThemePage />} />
+                {/* <Route path=":themeId" element={<ThemeDetailPage />} /> */}
                 {themeList.length > 0 &&
                   themeList.map((theme) => (
                     <Route
@@ -175,6 +178,7 @@ function App() {
                 </Route>
                 <Route path="customer">
                   <Route index element={<CustomerPage />} />
+                  <Route path="add" element={<CustomerAddPage />} />
                 </Route>
               </Route>
 
@@ -190,17 +194,18 @@ function App() {
               {/* 예약 페이지 */}
               <Route path="reservation">
                 <Route index element={<ReservationMainPage />} />
-                <Route
-                  path=":reservationId"
-                  element={<ReservationDetailPage />}
-                />
               </Route>
 
               <Route path="location" element={<LocationPage />} />
 
               {/* 관리자 전용 페이지 그룹화 */}
               <Route path="admin" element={<ProtectedAdminRoute />}>
-                <Route index element={<DashBoardPage />} />
+                <Route index element={<Navigate to="dashboard" replace />} />
+                <Route path="dashboard" element={<DashBoardPage />} />
+                <Route path="account">
+                  <Route index element={<AdminAccountPage />} />
+                  <Route path=":id" element={<AdminAccountDetailPage />} />
+                </Route>
                 <Route path="reservation" element={<AdminReservationPage />}>
                   <Route
                     path=":reservationId"

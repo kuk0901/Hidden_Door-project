@@ -94,7 +94,7 @@ const HomePage = () => {
 
       {/* FIXME: Event section */}
 
-      <div
+      {/* <div 
         style={{
           border: "1px solid white",
           height: "300px",
@@ -103,7 +103,7 @@ const HomePage = () => {
         }}
       >
         Event section
-      </div>
+      </div> */}
 
       {/* caution */}
       <DefaultSection

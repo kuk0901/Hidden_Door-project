@@ -1,4 +1,5 @@
-@use "../abstracts/mixins" as mixins;
+@use "../abstracts/mixins";
+@use "../abstracts/variables";
 
 .form-container {
   @include mixins.flex-layout-column(center, stretch);
@@ -113,6 +114,60 @@
       .textarea--edit {
         width: 100%;
       }
+    }
+  }
+}
+
+.search--form--section {
+  .search--account--header {
+    margin: 0 0 5px;
+  }
+
+  .search-form {
+    @include mixins.flex-layout-row(flex-start, center);
+    gap: 10px;
+
+    .search-select {
+      display: inline-block;
+      min-height: 25px;
+      font-size: 18px;
+      padding: 5px 10px;
+    }
+
+    .search-input {
+      min-height: 25px;
+      min-width: 330px;
+      margin: 0;
+      font-size: 18px;
+      border: 1px solid;
+      padding: 5px 10px;
+    }
+  }
+}
+
+#newAdminAddForm {
+  align-items: baseline;
+
+  .form-container {
+    margin: 10px 0;
+
+    .container {
+      gap: 10px;
+
+      .label-container {
+        label {
+          font-weight: 700;
+        }
+      }
+    }
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  .form-container {
+    .input-container,
+    .textarea-container {
+      border-color: variables.$light-text-color;
     }
   }
 }
