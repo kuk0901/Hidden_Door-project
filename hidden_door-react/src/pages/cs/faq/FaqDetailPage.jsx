@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
@@ -9,6 +9,7 @@ const FaqDetailPage = () => {
   const { admin } = useAdmin();
   const { faqId } = useParams();
   const [faqDetail, setFaqDetail] = useState(null);
+  const navigate = useNavigate();
 
   const getFaqDetail = async () => {
     try {
@@ -17,6 +18,10 @@ const FaqDetailPage = () => {
     } catch (error) {
       toast.error(error.message || "오류입니다.");
     }
+  };
+
+  const handleListFaq = () => {
+    navigate("/hidden_door/cs/faq");
   };
 
   const deleteFaq = async () => {
@@ -39,6 +44,10 @@ const FaqDetailPage = () => {
     <div className="faq-detail-container">
       <FaqDetail faqDetail={faqDetail} />
       {admin && <button onClick={deleteFaq}>삭제</button>}
+
+      <button className="btn" onClick={handleListFaq}>
+        목록으로
+      </button>
     </div>
   );
 };

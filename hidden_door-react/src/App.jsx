@@ -24,6 +24,7 @@ import FaqPage from "@pages/cs/faq/FaqPage";
 import FaqAddPage from "@pages/cs/faq/FaqAddPage";
 import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
+import CustomerAddPage from "./pages/cs/customer/CustomerAddPage";
 import ReservationMainPage from "@pages/reservation/ReservationMainPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
@@ -174,6 +175,7 @@ function App() {
                 </Route>
                 <Route path="customer">
                   <Route index element={<CustomerPage />} />
+                  <Route path="add" element={<CustomerAddPage />} />
                 </Route>
               </Route>
 

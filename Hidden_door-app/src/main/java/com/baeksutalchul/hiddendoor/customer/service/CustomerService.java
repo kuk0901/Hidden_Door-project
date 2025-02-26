@@ -25,6 +25,7 @@ public class CustomerService {
   private CustomerRepository customerRepository;
   private final ModelMapper modelMapper;
   private final Logger logger = LoggerFactory.getLogger(CustomerService.class);
+  private final Instant defaulInstant = Instant.parse("1970-01-01T00:00:00Z");
 
   public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate) {
     this.mongoTemplate =mongoTemplate;
@@ -82,6 +83,7 @@ public class CustomerService {
     customer.setCustomerCheck(customerDto.getCustomerCheck());
     customer.setCustomerPwd(customerDto.getCustomerPwd());
     customer.setQueCreDate(Instant.now());
+    customer.setAnsCreDate(customerDto.getAnsCreDate());
 
     Customer saveCustomer = mongoTemplate.save(customer);
 
