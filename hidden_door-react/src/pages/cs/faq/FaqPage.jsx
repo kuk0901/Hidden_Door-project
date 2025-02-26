@@ -38,8 +38,12 @@ const FaqPage = () => {
           <div className="cs-header">고객센터</div>
 
           <div className="cs-move">
-            <div>FAQ</div>
-            <div>1:1 문의</div>
+            <div>
+              <a href={`/hidden_door/cs/faq`}>FAQ</a>
+            </div>
+            <div>
+              <a href={`/hidden_door/cs/customer`}>1:1 문의</a>
+            </div>
           </div>
 
           <div className="btn-container">

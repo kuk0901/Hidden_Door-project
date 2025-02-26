@@ -6,6 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.baeksutalchul.hiddendoor.notice.domain.Notice;
@@ -15,6 +17,11 @@ import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 import com.baeksutalchul.hiddendoor.dto.NoticeDto;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @Service
 public class NoticeService {
@@ -89,5 +96,18 @@ public class NoticeService {
       throw new CustomException(ErrorCode.NOTICE_NOT_FOUND);
     }
   }
+
+  public ResponseDto<Page<NoticeDto>> getAllNotices(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
+        Page<Notice> noticePage = noticeRepository.findAll(pageable);
+
+        Page<NoticeDto> noticeDtoPage = noticePage.map(notice -> {
+            NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
+            noticeDto.setKstCreatedAt(DateTimeUtil.convertToKoreanDate(noticeDto.getCreatedAt()));
+            return noticeDto;
+        });
+
+        return new ResponseDto<>(noticeDtoPage, "공지사항 목록을 성공적으로 조회했습니다.");
+    }
 
 }

@@ -1,13 +1,25 @@
 @use '../abstracts/variables';
 @use 'sass:color';
 
-// event main scss
+// 다크 모드 미디어 쿼리
+@mixin dark-mode {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+}
 
 .event-page {
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 20px;
+  background-color: variables.$light-background-color;
+  color: variables.$light-text-color;
+
+  @include dark-mode {
+    background-color: variables.$dark-background-color;
+    color: variables.$dark-text-color;
+  }
 
   .add-event-btn {
     margin-bottom: 20px;
@@ -19,11 +31,23 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 
+    @include dark-mode {
+      background-color: variables.$dark-blue-color;
+      color: variables.$dark-text-color;
+    }
+
     &:hover {
       background-color: color.adjust(
         variables.$light-blue-color,
         $lightness: -15%
       );
+
+      @include dark-mode {
+        background-color: color.adjust(
+          variables.$dark-blue-color,
+          $lightness: 15%
+        );
+      }
     }
   }
 
@@ -42,6 +66,7 @@
       .event-circle {
         width: 150px;
         height: 150px;
+        border: 1px solid black;
         border-radius: 50%;
         background-color: variables.$background-color;
         display: flex;
@@ -50,15 +75,27 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
 
+        @include dark-mode {
+          background-color: color.adjust(
+            variables.$dark-background-color,
+            $lightness: 10%
+          );
+        }
+
         &:hover {
           background-color: #e0e0e0;
+
+          @include dark-mode {
+            background-color: color.adjust(
+              variables.$dark-background-color,
+              $lightness: 20%
+            );
+          }
         }
       }
     }
   }
 }
-
-// event 추가 & 수정 modal scss
 
 .em-event-modal-overlay {
   position: fixed;
@@ -81,10 +118,22 @@
     z-index: 9999;
     width: 800px;
 
+    @include dark-mode {
+      background-color: variables.$dark-background-color;
+      border-color: color.adjust(
+        variables.$dark-background-color,
+        $lightness: 20%
+      );
+    }
+
     .em-modal-title {
       color: variables.$confirm-text-color;
       margin-bottom: 20px;
       font-weight: 700;
+
+      @include dark-mode {
+        color: variables.$dark-text-color;
+      }
     }
 
     .em-modal-form {
@@ -101,6 +150,10 @@
         color: variables.$confirm-text-color;
         font-weight: 600;
         margin-bottom: 5px;
+
+        @include dark-mode {
+          color: variables.$dark-text-color;
+        }
       }
 
       .em-form-input,
@@ -109,6 +162,20 @@
         padding: 8px;
         border: 1px solid variables.$confirm-border-color;
         border-radius: 4px;
+        background-color: variables.$background-color;
+        color: variables.$light-text-color;
+
+        @include dark-mode {
+          background-color: color.adjust(
+            variables.$dark-background-color,
+            $lightness: 10%
+          );
+          color: variables.$dark-text-color;
+          border-color: color.adjust(
+            variables.$dark-background-color,
+            $lightness: 20%
+          );
+        }
       }
 
       .em-form-textarea {
@@ -133,6 +200,10 @@
           background-color: variables.$delete-btn-color;
           color: variables.$confirm-bg-color;
 
+          @include dark-mode {
+            color: variables.$dark-text-color;
+          }
+
           &:hover {
             background-color: color.adjust(
               variables.$delete-btn-color,
@@ -145,11 +216,26 @@
           background-color: variables.$confirm-bg-color;
           color: variables.$confirm-text-color;
 
+          @include dark-mode {
+            background-color: color.adjust(
+              variables.$dark-background-color,
+              $lightness: 10%
+            );
+            color: variables.$dark-text-color;
+          }
+
           &:hover {
             background-color: color.adjust(
               variables.$confirm-bg-color,
               $lightness: -5%
             );
+
+            @include dark-mode {
+              background-color: color.adjust(
+                variables.$dark-background-color,
+                $lightness: 15%
+              );
+            }
           }
         }
 
@@ -157,6 +243,10 @@
         &--edit {
           background-color: variables.$confirm-button-color;
           color: white;
+
+          @include dark-mode {
+            color: variables.$dark-text-color;
+          }
 
           &:hover {
             background-color: color.adjust(
