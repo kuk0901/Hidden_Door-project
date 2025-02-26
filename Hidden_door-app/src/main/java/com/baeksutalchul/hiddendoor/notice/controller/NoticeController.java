@@ -6,6 +6,8 @@ import com.baeksutalchul.hiddendoor.dto.NoticeDto;
 import com.baeksutalchul.hiddendoor.notice.service.NoticeService;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -19,12 +21,14 @@ public class NoticeController {
 
     public NoticeController(NoticeService noticeService) {
         this.noticeService = noticeService;
-    }
+    }    
 
     @GetMapping
-    public ResponseEntity<ResponseDto<List<NoticeDto>>> getAllNotices() {
+    public ResponseEntity<ResponseDto<Page<NoticeDto>>> getAllNotices(
+            @RequestParam(name = "page", defaultValue = "0") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size) {
         try {
-            ResponseDto<List<NoticeDto>> response = noticeService.getAllNotices();
+            ResponseDto<Page<NoticeDto>> response = noticeService.getAllNotices(page, size);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             logger.error("공지사항 목록 조회 중 오류 발생", e);
@@ -87,4 +91,7 @@ public class NoticeController {
                 .body(new ResponseDto<>("", "서버 오류로 인해 공지사항 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요."));
         }
     }
+
+    
+
 }
