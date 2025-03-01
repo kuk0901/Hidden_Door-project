@@ -39,6 +39,7 @@ const AccountItem = ({
       const res = await Api.delete("/admins/account/delete/one", {
         data: deleteRequestDto
       });
+
       setAdminList(res.data.data);
       setPage({ ...page, ...res.data.pageDto });
       setSearch({
@@ -46,6 +47,8 @@ const AccountItem = ({
         searchField: res.data.searchField,
         searchTerm: res.data.searchTerm
       });
+
+      toast.success(res.data.msg);
     } catch (error) {
       console.log("Error deleting admin:", error);
       toast.error("계정 삭제에 실패했습니다.");
@@ -53,25 +56,33 @@ const AccountItem = ({
   };
 
   return (
-    <li className="account--item" onClick={handleDetail}>
-      <div className="content content--sm">{adminData.userName}</div>
-      <div className="content content--md">{adminData.email}</div>
-      <div className="content content--sm">{adminData.phone}</div>
-      <div className="content content--md roles-container">
-        {filteredRoles.map((r, i, arr) => (
-          <span key={i} className="role">
-            {formatRole(r)}
-            {i < arr.length - 1 ? ", " : ""}
-          </span>
-        ))}
-      </div>
-      {role && (
-        <div className="content content--sm">
-          <button className="btn delete" onClick={handleDelete}>
-            삭제
-          </button>
+    <li className="account--item">
+      <button onClick={handleDetail} className="account--item-content">
+        <div className="content content--sm">{adminData.userName}</div>
+        <div className="content content--md">{adminData.email}</div>
+        <div className="content content--sm">{adminData.phone}</div>
+        <div className="content content--md roles-container">
+          {filteredRoles.map((r, i, arr) => (
+            <span key={i} className="role">
+              {formatRole(r)}
+              {i < arr.length - 1 ? ", " : ""}
+            </span>
+          ))}
         </div>
-      )}
+        {role && (
+          <div className="content content--sm">
+            <button
+              className="btn delete"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(e);
+              }}
+            >
+              삭제
+            </button>
+          </div>
+        )}
+      </button>
     </li>
   );
 };

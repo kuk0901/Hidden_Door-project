@@ -38,7 +38,7 @@ const AdminAccountPage = () => {
 
   const handleGetAdminList = async (
     newPage = 1,
-    searchField = "all",
+    searchField = "userName",
     searchTerm = ""
   ) => {
     try {
@@ -116,11 +116,16 @@ const AdminAccountPage = () => {
   }, [location.state]);
 
   const searchFields = [
-    { value: "all", label: "전체" },
+    { value: "", label: "검색 필드 선택" },
     { value: "userName", label: "이름" },
     { value: "email", label: "이메일" },
     { value: "roles", label: "역할" }
   ];
+
+  const handleReset = () => {
+    setSearch({ searchField: "userName", searchTerm: "" });
+    handleGetAdminList(1, "userName", "");
+  };
 
   return (
     <div className="admin--account--page">
@@ -132,7 +137,9 @@ const AdminAccountPage = () => {
             onSearch={handleSearch}
             fields={searchFields}
             initialValues={search}
+            onReset={handleReset}
           />
+
           {admin.roles.includes("ROLE_SUPER_ADMIN") && (
             <button
               onClick={() => setNewAccountAddVisible(!newAccountAddVisible)}

@@ -33,25 +33,32 @@
         );
       }
 
-      .content {
-        font-size: 16px;
-        text-align: center;
+      .account--item-content {
+        @include mixins.flex-layout-row(space-around, center);
+        width: 100%;
+        border: none;
+        background-color: transparent;
 
-        &.content--sm {
-          width: 150px;
-        }
+        .content {
+          font-size: 16px;
+          text-align: center;
 
-        &.content--md {
-          width: 250px;
-        }
+          &.content--sm {
+            width: 150px;
+          }
 
-        &.content--lg {
-          width: 350px;
-        }
+          &.content--md {
+            width: 250px;
+          }
 
-        &.roles-container {
-          @include mixins.flex-layout-row(center, center);
-          gap: 10px;
+          &.content--lg {
+            width: 350px;
+          }
+
+          &.roles-container {
+            @include mixins.flex-layout-row(center, center);
+            gap: 10px;
+          }
         }
       }
     }

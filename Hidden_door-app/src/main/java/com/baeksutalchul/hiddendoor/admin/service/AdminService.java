@@ -173,9 +173,6 @@ public class AdminService {
 
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
       switch (searchField) {
-        case "all":
-          adminPage = adminRepository.findAll(pageable);
-          break;
         case "email":
           adminPage = adminRepository.findByEmailContaining(searchTerm, pageable);
           break;
