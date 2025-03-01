@@ -1,49 +1,48 @@
-import EditTextareaField from "@components/common/form/textarea/EditTextareaField";
-import EditInputField from "@components/common/form/input/EditInputField";
-import ButtonGroup from "@components/common/buttons/ButtonGroup";
+import { useCallback } from "react";
 
-const InfoEditForm = ({
-  labelVal,
-  currentTitle,
-  onUpdate,
-  onCancel,
+const EditTextareaField = ({
+  id,
+  name,
+  value,
+  defaultValue,
   onChange,
   onRef,
-  area,
-  viewButton,
-  autoFocus
+  autoFocus,
+  className
 }) => {
-  const renderField = () => {
-    const commonProps = {
-      id: "title",
-      name: "title",
-      defaultValue: onRef ? currentTitle : undefined,
-      value: onChange ? currentTitle : undefined,
-      onChange: onChange,
-      onRef: onRef,
-      autoFocus: autoFocus
-    };
+  const resizeTextarea = useCallback((e) => {
+    e.target.style.height = "auto";
+    e.target.style.height = `${e.target.scrollHeight}px`;
+  }, []);
 
-    return area ? (
-      <EditTextareaField {...commonProps} />
-    ) : (
-      <EditInputField {...commonProps} />
-    );
-  };
-
-  if (!onRef && !onChange) return null;
+  const onFocus = useCallback((e) => {
+    const element = e.target;
+    element.selectionStart = element.value.length;
+  }, []);
 
   return (
-    <article className="edit-form">
-      <div className="input-section">
-        <div className="label-container">
-          <label htmlFor="title">{labelVal}</label>
-        </div>
-        {renderField()}
-      </div>
-      {viewButton && <ButtonGroup onUpdate={onUpdate} onCancel={onCancel} />}
-    </article>
+    <div className="textarea-container textarea-container--edit">
+      <textarea
+        required
+        id={id}
+        name={name}
+        value={value}
+        defaultValue={defaultValue}
+        onChange={(e) => {
+          resizeTextarea(e);
+          if (onChange) onChange(e);
+        }}
+        onFocus={onFocus}
+        ref={onRef}
+        autoFocus={autoFocus}
+        className={className || "textarea--edit"}
+        style={{
+          minHeight: "150px",
+          maxHeight: "170px"
+        }}
+      />
+    </div>
   );
 };
 
-export default InfoEditForm;
+export default EditTextareaField;

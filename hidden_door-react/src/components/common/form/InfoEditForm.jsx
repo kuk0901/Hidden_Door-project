@@ -11,12 +11,14 @@ const InfoEditForm = ({
   onRef,
   area,
   viewButton,
-  autoFocus
+  autoFocus,
+  id = "title",
+  name = "title"
 }) => {
   const renderField = () => {
     const commonProps = {
-      id: "title",
-      name: "title",
+      id,
+      name,
       defaultValue: onRef ? currentTitle : undefined,
       value: onChange ? currentTitle : undefined,
       onChange: onChange,
@@ -37,7 +39,7 @@ const InfoEditForm = ({
     <article className="edit-form">
       <div className="input-section">
         <div className="label-container">
-          <label htmlFor="title">{labelVal}</label>
+          <label htmlFor={id}>{labelVal}</label>
         </div>
         {renderField()}
       </div>

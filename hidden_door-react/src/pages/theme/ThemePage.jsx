@@ -70,16 +70,11 @@ const ThemePage = () => {
       const newThemeTitle = titleDetailRef.current.value;
       const newThemeExplanation = explanationRef.current.value;
 
-      console.log(newThemeTitle);
-      console.log(newThemeExplanation);
-
       const res = await Api.patch("/escape-rooms/info/theme-explanation-line", {
         roomId: escapeRoom.roomId,
         themeTitle: newThemeTitle,
         themeExplanation: newThemeExplanation
       });
-
-      console.log(res.data.data);
 
       setEscapeRoom(res.data.data);
 
@@ -122,6 +117,8 @@ const ThemePage = () => {
             currentTitle={escapeRoom.themeHeaderTitle}
             onRef={titleRef}
             autoFocus={true}
+            id="themeHeaderTitle"
+            name="themeHeaderTitle"
           />
 
           <InfoEditForm
@@ -131,6 +128,8 @@ const ThemePage = () => {
             viewButton={true}
             onUpdate={handleThemeTitleLineUpdate}
             onCancel={() => setTitleVisible(false)}
+            id="themeHeaderSubtitle"
+            name="themeHeaderSubtitle"
           />
         </>
       )}
@@ -159,6 +158,8 @@ const ThemePage = () => {
             currentTitle={escapeRoom.themeTitle}
             onRef={titleDetailRef}
             autoFocus={true}
+            id="themeTitle"
+            name="themeTitle"
           />
 
           <InfoEditForm
@@ -169,6 +170,8 @@ const ThemePage = () => {
             area={true}
             onUpdate={handleThemeDetailUpdate}
             onCancel={() => setTitleDetailVisible(false)}
+            id="themeExplanation"
+            name="themeExplanation"
           />
         </>
       )}

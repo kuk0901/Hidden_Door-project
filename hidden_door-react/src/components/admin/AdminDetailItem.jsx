@@ -1,7 +1,7 @@
 const AdminDetailItem = ({ label, value }) => (
   <div className="admin--detail--item">
-    <label className="admin--detail--label">{label}</label>
-    <input className="admin--detail--value" defaultValue={value} />
+    <div className="admin--detail--label">{label}</div>
+    <div className="admin--detail--value">{value}</div>
   </div>
 );
 

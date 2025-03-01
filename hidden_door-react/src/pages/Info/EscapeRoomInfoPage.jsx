@@ -120,6 +120,8 @@ const EscapeRoomInfoPage = () => {
           onRef={titleRef}
           viewButton={true}
           autoFocus={true}
+          id="title"
+          name="title"
         />
       )}
 
@@ -149,6 +151,8 @@ const EscapeRoomInfoPage = () => {
             area={true}
             viewButton={true}
             autoFocus={true}
+            id="explanation"
+            name="explanation"
           />
         )}
       </section>

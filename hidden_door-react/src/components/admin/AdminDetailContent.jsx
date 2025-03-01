@@ -1,8 +1,14 @@
-import AdminDetailItem from "@components/admin/AdminDetailItem";
-import RolesCheckboxGroup from "@components/admin/RolesCheckboxGroup";
+import EditableAdminDetail from "@components/admin/EditableAdminDetail";
+import ReadOnlyAdminDetail from "@components/admin/ReadOnlyAdminDetail";
+import SuperAdminEditableDetail from "@components/admin/SuperAdminEditableDetail";
 
 // FIXME: 정보 수정 추가
-const AdminDetailContent = ({ adminData, isSuperAdmin, onRolesChange }) => {
+const AdminDetailContent = ({
+  adminData,
+  setAdminData,
+  isSuperAdmin,
+  currentAdminEmail
+}) => {
   const availableRoles = [
     "ROLE_USER",
     "ROLE_ADMIN",
@@ -10,22 +16,21 @@ const AdminDetailContent = ({ adminData, isSuperAdmin, onRolesChange }) => {
     "ROLE_SUPER_ADMIN"
   ];
 
-  return (
-    <div className="admin--detail--content">
-      <AdminDetailItem label="이름" value={adminData.userName} />
-      <AdminDetailItem label="이메일" value={adminData.email} />
-      <AdminDetailItem label="전화번호" value={adminData.phone} />
-      <div className="admin--detail--item">
-        <label className="admin--detail--label">역할</label>
-        <RolesCheckboxGroup
-          roles={availableRoles}
-          userRoles={adminData.roles}
-          onChange={onRolesChange}
-          disabled={!isSuperAdmin}
-        />
-      </div>
-    </div>
-  );
+  if (isSuperAdmin) {
+    return (
+      <SuperAdminEditableDetail
+        adminData={adminData}
+        setAdminData={setAdminData}
+        availableRoles={availableRoles}
+      />
+    );
+  } else if (currentAdminEmail === adminData.email) {
+    return (
+      <EditableAdminDetail adminData={adminData} setAdminData={setAdminData} />
+    );
+  } else {
+    return <ReadOnlyAdminDetail adminData={adminData} />;
+  }
 };
 
 export default AdminDetailContent;

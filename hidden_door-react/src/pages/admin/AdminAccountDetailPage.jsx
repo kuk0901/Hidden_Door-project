@@ -54,16 +54,6 @@ const AdminAccountDetailPage = () => {
     navigate("/hidden_door/admin/account", { state: { page, search } });
   };
 
-  const handleRolesChange = (event) => {
-    const { value, checked } = event.target;
-    setAdminData((prevData) => ({
-      ...prevData,
-      roles: checked
-        ? [...prevData.roles, value]
-        : prevData.roles.filter((role) => role !== value)
-    }));
-  };
-
   if (!adminData) {
     return <Loading />;
   }
@@ -86,8 +76,9 @@ const AdminAccountDetailPage = () => {
       <section className="admin--detail">
         <AdminDetailContent
           adminData={adminData}
+          setAdminData={setAdminData}
           isSuperAdmin={isSuperAdmin}
-          onRolesChange={handleRolesChange}
+          currentAdminEmail={admin.email}
         />
       </section>
     </div>

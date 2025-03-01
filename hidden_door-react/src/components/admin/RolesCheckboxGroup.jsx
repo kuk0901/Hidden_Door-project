@@ -1,6 +1,19 @@
-const RolesCheckboxGroup = ({ roles, userRoles, onChange, disabled }) => {
+const RolesCheckboxGroup = ({ roles, userRoles, setAdminData, disabled }) => {
+  const handleChange = (event) => {
+    const { value, checked } = event.target;
+    setAdminData((prevData) => ({
+      ...prevData,
+      roles: checked
+        ? [...prevData.roles, value]
+        : prevData.roles.filter((role) => role !== value)
+    }));
+  };
+
   return (
     <div className="roles-checkbox-group">
+      <div className="label-container role-label-container">
+        <label htmlFor="">권한</label>
+      </div>
       {roles.map((role) => (
         <div key={role} className="role-checkbox">
           <input
@@ -8,7 +21,7 @@ const RolesCheckboxGroup = ({ roles, userRoles, onChange, disabled }) => {
             id={`role-${role}`}
             value={role}
             checked={userRoles.includes(role)}
-            onChange={onChange}
+            onChange={handleChange}
             disabled={disabled}
             className="checkbox--role"
           />
