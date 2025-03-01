@@ -8,7 +8,6 @@ import Pagination from "@components/common/navigation/pagination/Pagination";
 import { useLocation, useNavigate } from "react-router-dom";
 import NewAdminAddForm from "@components/admin/NewAdminAddForm";
 
-// FIXME: 검색 버튼 옆에 reset 버튼 추가 <-> 전체는 전체 검색 처리 결정 필요
 const AdminAccountPage = () => {
   const location = useLocation();
   const { admin } = useAdmin();
