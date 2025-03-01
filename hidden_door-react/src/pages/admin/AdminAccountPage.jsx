@@ -27,7 +27,7 @@ const AdminAccountPage = () => {
 
   const [search, setSearch] = useState(
     location.state?.search || {
-      searchField: "all",
+      searchField: "",
       searchTerm: ""
     }
   );
@@ -37,7 +37,7 @@ const AdminAccountPage = () => {
 
   const handleGetAdminList = async (
     newPage = 1,
-    searchField = "userName",
+    searchField = "",
     searchTerm = ""
   ) => {
     try {
@@ -122,8 +122,8 @@ const AdminAccountPage = () => {
   ];
 
   const handleReset = () => {
-    setSearch({ searchField: "userName", searchTerm: "" });
-    handleGetAdminList(1, "userName", "");
+    setSearch({ searchField: "", searchTerm: "" });
+    handleGetAdminList(1, "", "");
   };
 
   return (

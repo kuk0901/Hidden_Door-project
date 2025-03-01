@@ -1,12 +1,7 @@
 import { useForm } from "react-hook-form";
 
 const SearchForm = ({ onSearch, fields, initialValues, onReset }) => {
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors }
-  } = useForm({
+  const { register, handleSubmit, watch } = useForm({
     defaultValues: initialValues
   });
 
@@ -37,7 +32,7 @@ const SearchForm = ({ onSearch, fields, initialValues, onReset }) => {
           </option>
         ))}
       </select>
-      {errors.searchField && <span>검색 필드를 선택해주세요.</span>}
+
       <input
         {...register("searchTerm")}
         name="searchTerm"

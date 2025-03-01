@@ -2,6 +2,7 @@ const EditInputField = ({
   id,
   name,
   value,
+  defaultValue,
   onChange,
   onRef,
   autoFocus,
@@ -13,6 +14,7 @@ const EditInputField = ({
       id={id}
       name={name}
       value={value}
+      defaultValue={defaultValue}
       onChange={onChange}
       ref={onRef}
       autoFocus={autoFocus}

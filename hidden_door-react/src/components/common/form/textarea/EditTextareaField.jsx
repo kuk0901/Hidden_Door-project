@@ -1,46 +1,49 @@
-import { useCallback } from "react";
+import EditTextareaField from "@components/common/form/textarea/EditTextareaField";
+import EditInputField from "@components/common/form/input/EditInputField";
+import ButtonGroup from "@components/common/buttons/ButtonGroup";
 
-const EditTextareaField = ({
-  id,
-  name,
-  value,
+const InfoEditForm = ({
+  labelVal,
+  currentTitle,
+  onUpdate,
+  onCancel,
   onChange,
   onRef,
-  autoFocus,
-  className
+  area,
+  viewButton,
+  autoFocus
 }) => {
-  const resizeTextarea = useCallback((e) => {
-    e.target.style.height = "auto";
-    e.target.style.height = `${e.target.scrollHeight}px`;
-  }, []);
+  const renderField = () => {
+    const commonProps = {
+      id: "title",
+      name: "title",
+      defaultValue: onRef ? currentTitle : undefined,
+      value: onChange ? currentTitle : undefined,
+      onChange: onChange,
+      onRef: onRef,
+      autoFocus: autoFocus
+    };
 
-  const onFocus = useCallback((e) => {
-    const element = e.target;
-    element.selectionStart = element.value.length;
-  }, []);
+    return area ? (
+      <EditTextareaField {...commonProps} />
+    ) : (
+      <EditInputField {...commonProps} />
+    );
+  };
+
+  if (!onRef && !onChange) return null;
 
   return (
-    <div className="textarea-container textarea-container--edit">
-      <textarea
-        required
-        id={id}
-        name={name}
-        value={value}
-        onChange={(e) => {
-          resizeTextarea(e);
-          onChange(e);
-        }}
-        onFocus={onFocus}
-        ref={onRef}
-        autoFocus={autoFocus}
-        className={className || "textarea--edit"}
-        style={{
-          minHeight: "150px",
-          maxHeight: "170px"
-        }}
-      />
-    </div>
+    <article className="edit-form">
+      <div className="input-section">
+        <div className="label-container">
+          <label htmlFor="title">{labelVal}</label>
+        </div>
+        {renderField()}
+      </div>
+      {viewButton && <ButtonGroup onUpdate={onUpdate} onCancel={onCancel} />}
+    </article>
   );
 };
 
-export default EditTextareaField;
+export default InfoEditForm;

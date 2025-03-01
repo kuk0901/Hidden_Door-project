@@ -1,4 +1,4 @@
-import EditTextareaField from "@components/common/form/textarea/textarea/EditTextareaField";
+import EditTextareaField from "@components/common/form/textarea/EditTextareaField";
 import EditInputField from "@components/common/form/input/EditInputField";
 import ButtonGroup from "@components/common/buttons/ButtonGroup";
 
@@ -17,7 +17,8 @@ const InfoEditForm = ({
     const commonProps = {
       id: "title",
       name: "title",
-      value: currentTitle,
+      defaultValue: onRef ? currentTitle : undefined,
+      value: onChange ? currentTitle : undefined,
       onChange: onChange,
       onRef: onRef,
       autoFocus: autoFocus
@@ -29,6 +30,8 @@ const InfoEditForm = ({
       <EditInputField {...commonProps} />
     );
   };
+
+  if (!onRef && !onChange) return null;
 
   return (
     <article className="edit-form">
