@@ -5,6 +5,7 @@ import RolesCheckboxGroup from "@components/admin/RolesCheckboxGroup";
 import { useEffect } from "react";
 import { validationRules } from "@validation/validationRules";
 
+// FIXME: 작성 중
 const AdminEditForm = ({
   adminData,
   onSubmit,
@@ -19,7 +20,7 @@ const AdminEditForm = ({
     formState: { errors },
     reset
   } = useForm({
-    mode: "onBlur" // 또는 "onTouched"
+    mode: "onBlur"
   });
 
   useEffect(() => {

@@ -3,6 +3,7 @@ import useConfirm from "@hooks/useConfirm";
 import Api from "@axios/api";
 import AdminEditForm from "@components/common/form/AdminEditForm";
 
+// FIXME: 작성 중
 const SuperAdminEditableDetail = ({
   adminData,
   setAdminData,
