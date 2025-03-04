@@ -4,7 +4,7 @@ const FaqItem = ({ faq }) => {
       <div>
         <a href={`/hidden_door/cs/faq/${faq.faqId}`}>{faq.title}</a>
       </div>
-      <div className="cs-date">{faq.kstCreDate}</div>
+      <div>{faq.kstCreDate}</div>
     </li>
   );
 };
