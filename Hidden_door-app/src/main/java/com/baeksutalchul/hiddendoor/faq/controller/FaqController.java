@@ -44,16 +44,11 @@ public class FaqController {
     return ResponseEntity.ok().body(faqService.addFaq(faqDto));
   }
 
-  @PutMapping("/faq/update")
-  public ResponseEntity<ResponseDto<?>> updateFaqOne(@RequestBody FaqDto faqDto) {
-    try {
-      return ResponseEntity.ok().body(faqService.updateFaqOne(faqDto));
-    } catch (CustomException e) {
-      return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
-    } catch (Exception e) {
-      return ResponseEntity.internalServerError().body(new ResponseDto<>("", "서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요."));
-    }
+  @PostMapping("/faq/update/{id}")
+  public ResponseEntity<ResponseDto<FaqDto>> updateFaqOne(@PathVariable("id") String faqId, @RequestBody FaqDto faqDto) {
+      return ResponseEntity.ok().body(faqService.updateFaq(faqId, faqDto));
   }
+  
 
   @DeleteMapping("/faq/delete/{id}")
   public ResponseEntity<ResponseDto<String>> deleteFaqOne(@PathVariable("id") String faqId) {
