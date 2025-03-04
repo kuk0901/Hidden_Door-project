@@ -6,6 +6,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baeksutalchul.hiddendoor.dto.ReservationDto;
@@ -15,6 +16,8 @@ import com.baeksutalchul.hiddendoor.reservation.service.ReservationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/v1/reservations")
@@ -39,8 +42,18 @@ public class ReservationController {
   
   @GetMapping("/main")
   public ResponseEntity<ResponseDto<Map<String, Object>>> getReservationMainPage() {
-    return ResponseEntity.ok(reservationService.getReservationPageData());
+    return ResponseEntity.ok(reservationService.getReservationMainPage());
   }
 
-  
+  @GetMapping("/availability")
+  public ResponseEntity<ResponseDto<Map<String, Object>>> getAvailability(
+      @RequestParam String date,
+      @RequestParam String themeId) {
+      return ResponseEntity.ok(reservationService.checkAvailability(date, themeId));
+  }
+
+  @PostMapping("/create")
+    public ResponseEntity<ResponseDto<ReservationDto>> createReservation(@RequestBody ReservationDto reservationDto) {
+        return ResponseEntity.ok(reservationService.createReservation(reservationDto));
+    }
 }
