@@ -14,6 +14,7 @@ import com.baeksutalchul.hiddendoor.notice.domain.Notice;
 import com.baeksutalchul.hiddendoor.notice.repository.NoticeRepository;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
+import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 import com.baeksutalchul.hiddendoor.dto.NoticeDto;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
@@ -97,17 +98,20 @@ public class NoticeService {
     }
   }
 
-  public ResponseDto<Page<NoticeDto>> getAllNotices(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by("createdAt").descending());
-        Page<Notice> noticePage = noticeRepository.findAll(pageable);
+  public ResponseDto<Page<NoticeDto>> getAllNotices(int page, int size, String sortField, String sortDirection) {
+    // 클라이언트에서 받은 페이지 번호(1-based)를 0-based로 변환
+    int adjustedPage = Math.max(0, page - 1);
+    
+    Pageable pageable = PageableUtil.createPageRequest(adjustedPage, size, sortField, sortDirection);
+    Page<Notice> noticePage = noticeRepository.findAll(pageable);
 
-        Page<NoticeDto> noticeDtoPage = noticePage.map(notice -> {
-            NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
-            noticeDto.setKstCreatedAt(DateTimeUtil.convertToKoreanDate(noticeDto.getCreatedAt()));
-            return noticeDto;
-        });
+    Page<NoticeDto> noticeDtoPage = noticePage.map(notice -> {
+        NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
+        noticeDto.setKstCreatedAt(DateTimeUtil.convertToKoreanDate(noticeDto.getCreatedAt()));
+        return noticeDto;
+    });
 
-        return new ResponseDto<>(noticeDtoPage, "공지사항 목록을 성공적으로 조회했습니다.");
-    }
+    return new ResponseDto<>(noticeDtoPage, "공지사항 목록을 성공적으로 조회했습니다.");
+}
 
 }

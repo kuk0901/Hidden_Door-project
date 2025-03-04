@@ -25,10 +25,12 @@ public class NoticeController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<Page<NoticeDto>>> getAllNotices(
-            @RequestParam(name = "page", defaultValue = "0") int page,
-            @RequestParam(name = "size", defaultValue = "10") int size) {
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "sortField", defaultValue = "createdAt") String sortField,
+            @RequestParam(name = "sortDirection", defaultValue = "DESC") String sortDirection) {
         try {
-            ResponseDto<Page<NoticeDto>> response = noticeService.getAllNotices(page, size);
+            ResponseDto<Page<NoticeDto>> response = noticeService.getAllNotices(page, size, sortField, sortDirection);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
             logger.error("공지사항 목록 조회 중 오류 발생", e);
