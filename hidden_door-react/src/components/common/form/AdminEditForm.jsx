@@ -38,11 +38,11 @@ const AdminEditForm = ({
   const watchPassword = watch("pwd");
 
   const onFormSubmit = (data) => {
-    console.log("Form submitted", data);
     if (!data.pwd) {
       delete data.pwd;
       delete data.pwdCheck;
     }
+
     onSubmit(data);
   };
 
@@ -123,9 +123,11 @@ const AdminEditForm = ({
           disabled={false}
         />
       )}
-      <button type="submit" className="btn">
-        저장
-      </button>
+      <div className="btn-container">
+        <button type="submit" className="btn">
+          저장
+        </button>
+      </div>
     </form>
   );
 };

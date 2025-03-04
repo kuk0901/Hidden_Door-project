@@ -54,18 +54,19 @@ public class AdminController {
     return ResponseEntity.ok().body(adminService.getAdminInfo(id));
   }
 
-  // FIXME: id 전달
   @DeleteMapping("/account/delete/{id}")
-  public ResponseEntity<ResponseDto<List<AdminDto>>> deleteAdminOne(@RequestBody AdminDeleteRequestDto requestDto) {
+  public ResponseEntity<ResponseDto<List<AdminDto>>> deleteAdminOne(@PathVariable("id") String id,
+      @RequestBody AdminDeleteRequestDto requestDto) {
+    requestDto.setId(id);
     return ResponseEntity.ok().body(adminService.deleteAdminOne(requestDto));
   }
 
-  // FIXME: id 전달
   @PostMapping("/account/update/{id}")
-  public String postMethodName(@RequestBody String entity) {
-    // TODO: process POST request
+  public ResponseEntity<ResponseDto<AdminDto>> updateAdminOne(@PathVariable("id") String id,
+      @RequestBody AdminDto adminDto) {
 
-    return entity;
+    adminDto.setAdminId(id);
+    return ResponseEntity.ok().body(adminService.updateAdminOne(adminDto));
   }
 
 }

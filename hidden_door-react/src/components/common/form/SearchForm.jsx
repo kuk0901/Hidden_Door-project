@@ -1,7 +1,8 @@
+import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
 const SearchForm = ({ onSearch, fields, initialValues, onReset }) => {
-  const { register, handleSubmit, watch } = useForm({
+  const { register, handleSubmit, watch, reset } = useForm({
     defaultValues: initialValues
   });
 
@@ -14,6 +15,10 @@ const SearchForm = ({ onSearch, fields, initialValues, onReset }) => {
     }
     onSearch(data.searchField, data.searchTerm);
   };
+
+  useEffect(() => {
+    reset(initialValues);
+  }, [initialValues, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="search-form">
@@ -47,7 +52,11 @@ const SearchForm = ({ onSearch, fields, initialValues, onReset }) => {
         </button>
 
         {onReset && (
-          <button type="button" onClick={onReset} className="btn btn--search">
+          <button
+            type="button"
+            onClick={() => onReset()}
+            className="btn btn--search"
+          >
             초기화
           </button>
         )}

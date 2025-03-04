@@ -24,10 +24,8 @@ const SuperAdminEditableDetail = ({
 
       delete data.pwdCheck;
 
-      console.log("handleSubmit: ", data);
-
       const res = await Api.post(
-        `/admins/account/update/${adminData.id}`,
+        `/admins/account/update/${adminData.adminId}`,
         data
       );
 

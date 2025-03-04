@@ -123,7 +123,7 @@ const AdminAccountPage = () => {
 
   const handleReset = () => {
     setSearch({ searchField: "", searchTerm: "" });
-    handleGetAdminList(1, "", "");
+    handleGetAdminList();
   };
 
   return (

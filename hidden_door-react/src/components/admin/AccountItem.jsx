@@ -26,7 +26,6 @@ const AccountItem = ({
     event.stopPropagation();
 
     const deleteRequestDto = {
-      id: adminData.adminId,
       page: page.page,
       size: page.size,
       sortField: page.sortField,
@@ -36,9 +35,12 @@ const AccountItem = ({
     };
 
     try {
-      const res = await Api.delete("/admins/account/delete/one", {
-        data: deleteRequestDto
-      });
+      const res = await Api.delete(
+        `/admins/account/delete/${adminData.adminId}`,
+        {
+          data: deleteRequestDto
+        }
+      );
 
       setAdminList(res.data.data);
       setPage({ ...page, ...res.data.pageDto });
