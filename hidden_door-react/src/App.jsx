@@ -26,6 +26,7 @@ import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
 import CustomerAddPage from "./pages/cs/customer/CustomerAddPage";
 import ReservationMainPage from "@pages/reservation/ReservationMainPage";
+import ReservationConfirmPage from "./pages/reservation/ReservationConfirmPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
 import NoticeDetailPage from "@pages/notice/NoticeDetailPage";
@@ -194,6 +195,7 @@ function App() {
               {/* 예약 페이지 */}
               <Route path="reservation">
                 <Route index element={<ReservationMainPage />} />
+                <Route path="confirm" element={<ReservationConfirmPage />} />
               </Route>
 
               <Route path="location" element={<LocationPage />} />
