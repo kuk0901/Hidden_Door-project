@@ -56,4 +56,5 @@ public class ReservationController {
     public ResponseEntity<ResponseDto<ReservationDto>> createReservation(@RequestBody ReservationDto reservationDto) {
         return ResponseEntity.ok(reservationService.createReservation(reservationDto));
     }
+    
 }
