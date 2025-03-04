@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequestMapping("/api/v1/admins")
@@ -53,9 +54,18 @@ public class AdminController {
     return ResponseEntity.ok().body(adminService.getAdminInfo(id));
   }
 
-  @DeleteMapping("/account/delete/one")
+  // FIXME: id 전달
+  @DeleteMapping("/account/delete/{id}")
   public ResponseEntity<ResponseDto<List<AdminDto>>> deleteAdminOne(@RequestBody AdminDeleteRequestDto requestDto) {
     return ResponseEntity.ok().body(adminService.deleteAdminOne(requestDto));
+  }
+
+  // FIXME: id 전달
+  @PostMapping("/account/update/{id}")
+  public String postMethodName(@RequestBody String entity) {
+    // TODO: process POST request
+
+    return entity;
   }
 
 }

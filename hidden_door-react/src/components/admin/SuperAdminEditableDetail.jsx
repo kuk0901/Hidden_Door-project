@@ -7,7 +7,11 @@ import AdminEditForm from "@components/common/form/AdminEditForm";
 const SuperAdminEditableDetail = ({
   adminData,
   setAdminData,
-  availableRoles
+  availableRoles,
+  page,
+  setPage,
+  search,
+  setSearch
 }) => {
   const confirm = useConfirm();
 
@@ -18,8 +22,24 @@ const SuperAdminEditableDetail = ({
       );
       if (!isConfirmed) return;
 
-      const res = await Api.put(`/admins/account/${adminData.id}`, data);
-      setAdminData(res.data.data);
+      delete data.pwdCheck;
+
+      console.log("handleSubmit: ", data);
+
+      const res = await Api.post(
+        `/admins/account/update/${adminData.id}`,
+        data
+      );
+
+      const updatedState = {
+        adminData: res.data.data,
+        page: page,
+        search: search
+      };
+
+      setAdminData(updatedState.adminData);
+      setPage(updatedState.page);
+      setSearch(updatedState.search);
       toast.success("관리자 정보가 성공적으로 수정되었습니다.");
     } catch (error) {
       toast.error(error.message || "");

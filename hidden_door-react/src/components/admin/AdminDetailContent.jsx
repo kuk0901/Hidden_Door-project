@@ -7,7 +7,11 @@ const AdminDetailContent = ({
   adminData,
   setAdminData,
   isSuperAdmin,
-  currentAdminEmail
+  currentAdminEmail,
+  page,
+  setPage,
+  search,
+  setSearch
 }) => {
   const availableRoles = [
     "ROLE_USER",
@@ -22,14 +26,32 @@ const AdminDetailContent = ({
         adminData={adminData}
         setAdminData={setAdminData}
         availableRoles={availableRoles}
+        page={page}
+        setPage={setPage}
+        search={search}
+        setSearch={setSearch}
       />
     );
   } else if (currentAdminEmail === adminData.email) {
     return (
-      <EditableAdminDetail adminData={adminData} setAdminData={setAdminData} />
+      <EditableAdminDetail
+        adminData={adminData}
+        setAdminData={setAdminData}
+        page={page}
+        setPage={setPage}
+        search={search}
+        setSearch={setSearch}
+      />
     );
   } else {
-    return <ReadOnlyAdminDetail adminData={adminData} />;
+    return (
+      <ReadOnlyAdminDetail
+        adminData={adminData}
+        page={page}
+        setPage={setPage}
+        search={search}
+      />
+    );
   }
 };
 

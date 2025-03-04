@@ -78,6 +78,10 @@ const AdminAccountDetailPage = () => {
           setAdminData={setAdminData}
           isSuperAdmin={isSuperAdmin}
           currentAdminEmail={admin.email}
+          page={page}
+          setPage={setPage}
+          search={search}
+          setSearch={setSearch}
         />
       </section>
     </div>

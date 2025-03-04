@@ -18,7 +18,8 @@ const AdminEditForm = ({
     handleSubmit,
     watch,
     formState: { errors },
-    reset
+    reset,
+    setFocus
   } = useForm({
     mode: "onBlur"
   });
@@ -70,17 +71,20 @@ const AdminEditForm = ({
     {
       name: "pwd",
       label: "새 비밀번호",
-      rules: validationRules.pwd
+      rules: validationRules.optionalPwd
     },
     {
       name: "pwdCheck",
       label: "새 비밀번호 확인",
       rules: {
-        validate: (value) =>
-          !watchPassword ||
-          !value ||
-          value === watchPassword ||
-          "비밀번호가 일치하지 않습니다."
+        validate: (value) => {
+          if (!watchPassword && !value) return true;
+          if (value !== watchPassword) {
+            setFocus("pwdCheck");
+            return "비밀번호가 일치하지 않습니다.";
+          }
+          return true;
+        }
       }
     }
   ];
