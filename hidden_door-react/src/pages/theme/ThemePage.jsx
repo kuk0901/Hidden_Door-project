@@ -11,7 +11,7 @@ import useConfirm from "@hooks/useConfirm";
 
 const ThemePage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
-  const { admin } = useAdmin();
+  const { isAdmin } = useAdmin();
 
   const [titleVisible, setTitleVisible] = useState(false);
   const titleRef = useRef(null);
@@ -139,7 +139,7 @@ const ThemePage = () => {
         <p className="theme--explanation text-center">
           {escapeRoom.themeExplanation}
         </p>
-        {admin && (
+        {isAdmin && (
           <div className="btn-container">
             <button
               className="btn"

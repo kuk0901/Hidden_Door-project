@@ -13,9 +13,12 @@ import { useEscapeRoom } from "@hooks/useEscapeRoom";
 import PriceSection from "@components/price/PriceSection";
 import useConfirm from "@hooks/useConfirm";
 import MiniPriceSection from "@components/price/MiniPriceSection";
+import { useAdmin } from "@hooks/useAdmin";
 
 const EscapeRoomInfoPage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
+
+  const { isAdmin } = useAdmin();
 
   const [titleVisible, setTitleVisible] = useState(false);
   const titleRef = useRef(null);
@@ -133,13 +136,16 @@ const EscapeRoomInfoPage = () => {
         <div className="info-explanation text-center">
           {escapeRoom.explanation}
         </div>
-        <div className="btn-container">
-          <Button
-            className="btn"
-            text="수정"
-            onClick={() => setExplanationVisible(!explanationVisible)}
-          />
-        </div>
+
+        {isAdmin && (
+          <div className="btn-container">
+            <Button
+              className="btn"
+              text="수정"
+              onClick={() => setExplanationVisible(!explanationVisible)}
+            />
+          </div>
+        )}
 
         {explanationVisible && (
           <InfoEditForm

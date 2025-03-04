@@ -17,7 +17,7 @@ const CautionList = ({ data, setSectionData }) => {
   const [isAdding, setIsAdding] = useState(false);
   const confirm = useConfirm();
 
-  const { admin } = useAdmin();
+  const { isAdmin } = useAdmin();
 
   const handleAddCaution = async (formData, reset) => {
     if (!selectedIcon) {
@@ -140,7 +140,7 @@ const CautionList = ({ data, setSectionData }) => {
 
   return (
     <>
-      {admin && !editingItem && (
+      {isAdmin && !editingItem && (
         <div className="btn-container btn-container__right">
           <button onClick={handleAddStart} className="btn">
             주의사항 추가
@@ -151,7 +151,7 @@ const CautionList = ({ data, setSectionData }) => {
       <ul className="caution--list">
         {data.map((caution) => (
           <CautionItem
-            admin={admin}
+            isAdmin={isAdmin}
             key={caution.cautionId}
             item={caution}
             handleVisible={() => handleEditStart(caution)}
@@ -160,7 +160,7 @@ const CautionList = ({ data, setSectionData }) => {
         ))}
       </ul>
 
-      {admin && isAdding && (
+      {isAdmin && isAdding && (
         <div className="caution--add">
           <IconSelector
             selectedIcon={selectedIcon}
@@ -182,7 +182,7 @@ const CautionList = ({ data, setSectionData }) => {
         </div>
       )}
 
-      {admin && editingItem && (
+      {isAdmin && editingItem && (
         <div className="caution--edit">
           <IconSelector
             selectedIcon={selectedIcon}

@@ -3,7 +3,7 @@ import Button from "@components/common/buttons/Button";
 import { useAdmin } from "@hooks/useAdmin";
 
 const Header = ({ title, subtitle, text, handleUpdate, reservation }) => {
-  const { admin } = useAdmin();
+  const { isAdmin } = useAdmin();
 
   return (
     <header className="header">
@@ -14,7 +14,7 @@ const Header = ({ title, subtitle, text, handleUpdate, reservation }) => {
         </div>
 
         <div className="link-container">
-          {handleUpdate && text && admin ? (
+          {handleUpdate && text && isAdmin ? (
             <Button
               text={text}
               onClick={handleUpdate}
