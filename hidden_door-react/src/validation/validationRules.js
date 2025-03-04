@@ -1,25 +1,23 @@
+import { priceRegex } from "@validation/regex";
+
 import {
-  emailRegex,
-  pwdRegex,
-  priceRegex,
-  phoneRegex,
-  userNameRegex
-} from "./regex";
+  emailPattern,
+  passwordPattern,
+  phonePattern,
+  userNamePattern
+} from "@validation/pattern";
 
 export const validationRules = {
   email: {
     required: "이메일은 필수입니다.",
-    pattern: {
-      value: emailRegex,
-      message: "유효한 이메일 형식이 아닙니다."
-    }
+    pattern: emailPattern
   },
-  password: {
+  pwd: {
     required: "비밀번호는 필수입니다.",
-    pattern: {
-      value: pwdRegex,
-      message: "대소문자 + 특수문자 + 숫자 포함 8글자 이상"
-    }
+    pattern: passwordPattern
+  },
+  optionalPwd: {
+    pattern: passwordPattern
   },
   title: {
     required: "주의사항 제목은 필수입니다.",
@@ -37,17 +35,11 @@ export const validationRules = {
   },
   phone: {
     required: "휴대폰 번호는 필수입니다.",
-    pattern: {
-      value: phoneRegex,
-      message: "유효한 휴대폰 번호 형식이 아닙니다."
-    }
+    pattern: phonePattern
   },
   userName: {
     required: "이름은 필수입니다.",
-    pattern: {
-      value: userNameRegex,
-      message: "한글 2~8자로 입력해주세요."
-    }
+    pattern: userNamePattern
   }
 };
 

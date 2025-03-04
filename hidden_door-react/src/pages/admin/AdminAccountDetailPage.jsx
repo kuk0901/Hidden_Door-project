@@ -17,23 +17,27 @@ const AdminAccountDetailPage = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const [adminData, setAdminData] = useState(location.state?.adminData || null);
-  const { page, search } = location.state || {};
-  const { admin } = useAdmin();
-  console.log(admin);
-  const isSuperAdmin = admin.roles.includes("ROLE_SUPER_ADMIN");
+  const [page, setPage] = useState(location.state?.page || {});
+  const [search, setSearch] = useState(location.state?.search || {});
+  const { admin, isSuperAdmin } = useAdmin();
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
+    if (location.state) {
+      setAdminData(location.state.adminData || null);
+      setPage(location.state.page || {});
+      setSearch(location.state.search || {});
+    }
+
     if (!adminData) {
       fetchAdminData();
     }
 
     if (searchParams.get("new") === "true") {
       toast.success("관리자 계정이 생성되었습니다.");
+      setSearchParams({});
     }
-
-    setSearchParams({});
-  }, []);
+  }, [location.state, searchParams]);
 
   const fetchAdminData = async () => {
     try {
@@ -47,16 +51,6 @@ const AdminAccountDetailPage = () => {
 
   const handleGoBack = () => {
     navigate("/hidden_door/admin/account", { state: { page, search } });
-  };
-
-  const handleRolesChange = (event) => {
-    const { value, checked } = event.target;
-    setAdminData((prevData) => ({
-      ...prevData,
-      roles: checked
-        ? [...prevData.roles, value]
-        : prevData.roles.filter((role) => role !== value)
-    }));
   };
 
   if (!adminData) {
@@ -81,8 +75,13 @@ const AdminAccountDetailPage = () => {
       <section className="admin--detail">
         <AdminDetailContent
           adminData={adminData}
+          setAdminData={setAdminData}
           isSuperAdmin={isSuperAdmin}
-          onRolesChange={handleRolesChange}
+          currentAdminEmail={admin.email}
+          page={page}
+          setPage={setPage}
+          search={search}
+          setSearch={setSearch}
         />
       </section>
     </div>

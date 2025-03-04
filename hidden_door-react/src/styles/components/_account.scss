@@ -33,25 +33,32 @@
         );
       }
 
-      .content {
-        font-size: 16px;
-        text-align: center;
+      .account--item-content {
+        @include mixins.flex-layout-row(space-around, center);
+        width: 100%;
+        border: none;
+        background-color: transparent;
 
-        &.content--sm {
-          width: 150px;
-        }
+        .content {
+          font-size: 16px;
+          text-align: center;
 
-        &.content--md {
-          width: 250px;
-        }
+          &.content--sm {
+            width: 150px;
+          }
 
-        &.content--lg {
-          width: 350px;
-        }
+          &.content--md {
+            width: 250px;
+          }
 
-        &.roles-container {
-          @include mixins.flex-layout-row(center, center);
-          gap: 10px;
+          &.content--lg {
+            width: 350px;
+          }
+
+          &.roles-container {
+            @include mixins.flex-layout-row(center, center);
+            gap: 10px;
+          }
         }
       }
     }
@@ -74,8 +81,58 @@
     border-radius: 4px;
 
     .admin--detail--content {
-      @include mixins.flex-layout-column(baseline, flex-start);
+      @include mixins.flex-layout-column(flex-start, baseline);
       gap: 20px;
+
+      .admin-edit--form {
+        width: 100%;
+
+        .form-container {
+          &.column {
+            align-items: baseline;
+          }
+
+          .label-container {
+            font-weight: 700;
+            font-size: 18px;
+            min-width: 120px;
+            text-align: center;
+          }
+        }
+
+        .roles-checkbox-group {
+          @include mixins.flex-layout-row(flex-start, baseline);
+          padding: 10px;
+
+          .role-label-container {
+            font-weight: 700;
+            font-size: 18px;
+            min-width: 120px;
+            text-align: center;
+          }
+
+          .checkbox-container {
+            border: 1px solid;
+            padding: 5px 10px;
+            margin: 10px 5px 15px;
+
+            .role-checkbox {
+              @include mixins.flex-layout-row(flex-start, baseline);
+              gap: 20px;
+              margin: 10px;
+
+              .checkbox--role {
+                margin: 0;
+              }
+
+              .label--role {
+                width: 200px;
+                margin: 0;
+              }
+            }
+          }
+        }
+      }
 
       .admin--detail--item {
         padding: 10px;

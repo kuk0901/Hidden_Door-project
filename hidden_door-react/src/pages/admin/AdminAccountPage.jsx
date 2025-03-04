@@ -24,18 +24,20 @@ const AdminAccountPage = () => {
       sortDirection: "ASC"
     }
   );
+
   const [search, setSearch] = useState(
     location.state?.search || {
-      searchField: "all",
+      searchField: "",
       searchTerm: ""
     }
   );
+
   const [newAccountAddVisible, setNewAccountAddVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleGetAdminList = async (
     newPage = 1,
-    searchField = "all",
+    searchField = "",
     searchTerm = ""
   ) => {
     try {
@@ -51,9 +53,8 @@ const AdminAccountPage = () => {
         }
       });
       setAdminList(res.data.data);
-      setPage({ ...page, ...res.data.pageDto });
+      setPage(res.data.pageDto);
       setSearch({
-        ...search,
         searchField: res.data.searchField,
         searchTerm: res.data.searchTerm
       });
@@ -83,7 +84,7 @@ const AdminAccountPage = () => {
       const res = await Api.post("/auth/register", newAdminData, {
         withCredentials: true
       });
-      console.log(res.data.data);
+
       await handleGetAdminList(
         page.page,
         search.searchField,
@@ -101,18 +102,29 @@ const AdminAccountPage = () => {
 
   useEffect(() => {
     if (location.state?.page || location.state?.search) {
-      handleGetAdminList(page.page, search.searchField, search.searchTerm);
+      setPage(location.state.page);
+      setSearch(location.state.search);
+      handleGetAdminList(
+        location.state.page.page,
+        location.state.search.searchField,
+        location.state.search.searchTerm
+      );
     } else {
       handleGetAdminList();
     }
-  }, []);
+  }, [location.state]);
 
   const searchFields = [
-    { value: "all", label: "전체" },
+    { value: "", label: "검색 필드 선택" },
     { value: "userName", label: "이름" },
     { value: "email", label: "이메일" },
     { value: "roles", label: "역할" }
   ];
+
+  const handleReset = () => {
+    setSearch({ searchField: "", searchTerm: "" });
+    handleGetAdminList();
+  };
 
   return (
     <div className="admin--account--page">
@@ -124,7 +136,9 @@ const AdminAccountPage = () => {
             onSearch={handleSearch}
             fields={searchFields}
             initialValues={search}
+            onReset={handleReset}
           />
+
           {admin.roles.includes("ROLE_SUPER_ADMIN") && (
             <button
               onClick={() => setNewAccountAddVisible(!newAccountAddVisible)}
@@ -139,8 +153,8 @@ const AdminAccountPage = () => {
       {/* Account List */}
       <section className="account--section">
         <AccountList
-          page={page}
-          search={search}
+          page={{ ...page }}
+          search={{ ...search }}
           adminList={adminList}
           setAdminList={setAdminList}
           setPage={setPage}
