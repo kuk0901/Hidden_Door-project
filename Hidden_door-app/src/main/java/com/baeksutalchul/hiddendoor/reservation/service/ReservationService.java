@@ -93,6 +93,7 @@ public class ReservationService {
     }
 
   }
+  // admin 상세보기 고쳐야함
 
   public ResponseDto<Map<String, Object>> getReservationMainPage() {
     Map<String, Object> pageData = new HashMap<>();
@@ -167,6 +168,7 @@ public class ReservationService {
     reservation.setPhone(dto.getPhone());
     reservation.setEmail(dto.getEmail());
     reservation.setReservationDate(dto.getReservationDate());
+
     // 필요한 다른 필드들도 복사
     return reservation;
   }
