@@ -43,6 +43,7 @@ const CustomerDetailPage = () => {
   return (
     <div className="customer-detail-container">
       <CustomerDetail customerDetail={customerDetail} />
+      {/* 홀리리 */}
       {admin && <button onClick={deleteCustomer}>삭제</button>}
 
       <button className="btn" onClick={handleListCustomer}>
