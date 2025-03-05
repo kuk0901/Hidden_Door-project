@@ -10,6 +10,7 @@ import { formatNumberToPrice } from "@utils/format/number";
 import { useThemeList } from "@hooks/useThemeList";
 import DeleteThemeButton from "@components/theme/DeleteThemeButton";
 import useConfirm from "@hooks/useConfirm";
+import { useAdmin } from "@hooks/useAdmin";
 
 const ThemeDetail = ({ theme }) => {
   const [themeEditVisible, setThemeEditVisible] = useState(false);
@@ -35,6 +36,7 @@ const ThemeDetail = ({ theme }) => {
     description: theme.description
   });
   const confirm = useConfirm();
+  const { isAdmin } = useAdmin();
 
   const handleEditClick = () => {
     setThemeEditVisible(true);
@@ -178,15 +180,17 @@ const ThemeDetail = ({ theme }) => {
       <div className="container theme-title--line">
         <h3 className="theme-title">The door: {theme.themeName}</h3>
 
-        <div className="btn-container">
-          <button className="btn" onClick={handleEditClick}>
-            테마 정보 수정
-          </button>
-          <DeleteThemeButton
-            themeId={theme.themeId}
-            themeName={theme.themeName}
-          />
-        </div>
+        {isAdmin && (
+          <div className="btn-container">
+            <button className="btn" onClick={handleEditClick}>
+              테마 정보 수정
+            </button>
+            <DeleteThemeButton
+              themeId={theme.themeId}
+              themeName={theme.themeName}
+            />
+          </div>
+        )}
       </div>
 
       <div className="info-line">

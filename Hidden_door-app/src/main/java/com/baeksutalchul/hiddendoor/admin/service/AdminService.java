@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.admin.service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -173,9 +174,6 @@ public class AdminService {
 
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
       switch (searchField) {
-        case "all":
-          adminPage = adminRepository.findAll(pageable);
-          break;
         case "email":
           adminPage = adminRepository.findByEmailContaining(searchTerm, pageable);
           break;
@@ -237,4 +235,58 @@ public class AdminService {
 
     return responseDto;
   }
+
+  @Transactional
+  public ResponseDto<AdminDto> updateAdminOne(AdminDto adminDto) {
+    // admin이 존재하는지 확인
+    Admin admin = adminRepository.findById(adminDto.getAdminId())
+        .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
+
+    // email 중복 검사, 단 본인 email 제외
+    if (!admin.getEmail().equals(adminDto.getEmail()) && adminRepository.existsByEmail(adminDto.getEmail())) {
+      throw new CustomException(ErrorCode.ADMIN_ALREADY_EXISTS);
+    }
+
+    // 비밀번호가 존재하는 경우 인코딩
+    if (adminDto.getPwd() != null) {
+      String encodedPassword = passwordEncoder.encode(adminDto.getPwd());
+      adminDto.setPwd(encodedPassword);
+    }
+
+    // 변경사항 확인
+    boolean hasChanges = false;
+
+    if (!Objects.equals(admin.getUserName(), adminDto.getUserName())) {
+      admin.setUserName(adminDto.getUserName());
+      hasChanges = true;
+    }
+
+    if (!Objects.equals(admin.getEmail(), adminDto.getEmail())) {
+      admin.setEmail(adminDto.getEmail());
+      hasChanges = true;
+    }
+
+    if (adminDto.getPwd() != null) {
+      admin.setPwd(adminDto.getPwd());
+      hasChanges = true;
+    }
+
+    if (!Objects.equals(admin.getRoles(), adminDto.getRoles())) {
+      admin.setRoles(adminDto.getRoles());
+      hasChanges = true;
+    }
+
+    // 변경사항이 없는 경우 에러 반환
+    if (!hasChanges) {
+      throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+    }
+
+    // 변경사항이 있는 경우 저장
+    Admin updatedAdmin = adminRepository.save(admin);
+    AdminDto updatedAdminDto = modelMapper.map(updatedAdmin, AdminDto.class);
+    logger.info("updatedAdminDto: {}", updatedAdminDto);
+
+    return new ResponseDto<>(updatedAdminDto, updatedAdminDto.getUserName() + "님의 정보가 수정되었습니다.");
+  }
+
 }

@@ -4,7 +4,7 @@ import Button from "@components/common/buttons/Button";
 import Api from "@axios/api";
 import useConfirm from "@hooks/useConfirm";
 
-const CautionItem = ({ admin, item, handleVisible, setSectionData }) => {
+const CautionItem = ({ isAdmin, item, handleVisible, setSectionData }) => {
   const confirm = useConfirm();
 
   const IconComponent = FaIcons[item.icon];
@@ -55,7 +55,7 @@ const CautionItem = ({ admin, item, handleVisible, setSectionData }) => {
         </div>
       </div>
 
-      {admin && (
+      {isAdmin && (
         <div className="btn-container">
           <Button text="수정" onClick={handleVisible} className="btn" />
           <Button

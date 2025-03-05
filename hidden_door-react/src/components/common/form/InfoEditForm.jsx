@@ -1,4 +1,6 @@
-import Button from "@components/common/buttons/Button";
+import EditTextareaField from "@components/common/form/textarea/EditTextareaField";
+import EditInputField from "@components/common/form/input/EditInputField";
+import ButtonGroup from "@components/common/buttons/ButtonGroup";
 
 const InfoEditForm = ({
   labelVal,
@@ -9,133 +11,41 @@ const InfoEditForm = ({
   onRef,
   area,
   viewButton,
-  autoFocus
+  autoFocus,
+  id = "title",
+  name = "title"
 }) => {
-  const resizeTextarea = (e) => {
-    e.target.style.height = "auto";
-    e.target.style.height = `${e.target.scrollHeight}px`;
+  const renderField = () => {
+    const commonProps = {
+      id,
+      name,
+      defaultValue: onRef ? currentTitle : undefined,
+      value: onChange ? currentTitle : undefined,
+      onChange: onChange,
+      onRef: onRef,
+      autoFocus: autoFocus
+    };
+
+    return area ? (
+      <EditTextareaField {...commonProps} />
+    ) : (
+      <EditInputField {...commonProps} />
+    );
   };
 
-  const onFocus = (e) => {
-    const element = e.target;
-    element.selectionStart = element.value.length;
-  };
+  if (!onRef && !onChange) return null;
 
-  const autoFocusProps = autoFocus ? { autoFocus: true } : {};
-
-  if (onRef) {
-    return (
-      <article className="edit-form">
-        <div className="input-section">
-          {area ? (
-            <>
-              <div className="label-container">
-                <label htmlFor="title">{labelVal}</label>
-              </div>
-              <div className="textarea-container textarea-container--edit">
-                <textarea
-                  required
-                  onChange={resizeTextarea}
-                  onFocus={onFocus}
-                  id="title"
-                  name="title"
-                  ref={onRef}
-                  defaultValue={currentTitle}
-                  className="textarea--edit"
-                  style={{
-                    minHeight: "150px",
-                    maxHeight: "170px"
-                  }}
-                  {...autoFocusProps}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="label-container">
-                <label htmlFor="title">{labelVal}</label>
-              </div>
-              <div className="input-container input-container--edit">
-                <input
-                  required
-                  id="title"
-                  name="title"
-                  ref={onRef}
-                  defaultValue={currentTitle}
-                  className="input--edit"
-                  {...autoFocusProps}
-                />
-              </div>
-            </>
-          )}
+  return (
+    <article className="edit-form">
+      <div className="input-section">
+        <div className="label-container">
+          <label htmlFor={id}>{labelVal}</label>
         </div>
-        {viewButton && (
-          <div className="btn-container">
-            <Button text="수정" className="btn" onClick={onUpdate} />
-            <Button text="취소" className="btn" onClick={onCancel} />
-          </div>
-        )}
-      </article>
-    );
-  } else if (onChange) {
-    return (
-      <article className="edit-form">
-        <div className="input-section">
-          {area ? (
-            <>
-              <div className="label-container">
-                <label htmlFor="title">{labelVal}</label>
-              </div>
-              <div className="textarea-container textarea-container--edit">
-                <textarea
-                  required
-                  onChange={(e) => {
-                    resizeTextarea(e);
-                    onChange(e);
-                  }}
-                  onFocus={onFocus}
-                  id="title"
-                  name="title"
-                  value={currentTitle}
-                  className="textarea--edit"
-                  style={{
-                    minHeight: "150px",
-                    maxHeight: "170px"
-                  }}
-                  {...autoFocusProps}
-                />
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="label-container">
-                <label htmlFor="title">{labelVal}</label>
-              </div>
-              <div className="input-container input-container--edit">
-                <input
-                  required
-                  id="title"
-                  name="title"
-                  value={currentTitle}
-                  onChange={onChange}
-                  className="input--edit"
-                  {...autoFocusProps}
-                />
-              </div>
-            </>
-          )}
-        </div>
-        {viewButton && (
-          <div className="btn-container">
-            <Button text="수정" className="btn" onClick={onUpdate} />
-            <Button text="취소" className="btn" onClick={onCancel} />
-          </div>
-        )}
-      </article>
-    );
-  } else {
-    return null;
-  }
+        {renderField()}
+      </div>
+      {viewButton && <ButtonGroup onUpdate={onUpdate} onCancel={onCancel} />}
+    </article>
+  );
 };
 
 export default InfoEditForm;

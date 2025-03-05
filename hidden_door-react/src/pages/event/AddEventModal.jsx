@@ -61,6 +61,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
               onChange={(e) => setTitle(e.target.value)}
               required
               className="em-form-input"
+              placeholder="제목을 입력해주세요"
             />
           </div>
           <div className="em-form-group">
@@ -73,6 +74,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
               onChange={(e) => setDescription(e.target.value)}
               required
               className="em-form-textarea"
+              placeholder="설명을 입력해주세요"
             />
           </div>
           <div className="em-modal-btn-container">

@@ -49,6 +49,7 @@ function AddNoticePage() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
+            placeholder="제목을 입력해주세요"
           />
         </div>
         <div className="add-notice-form-group">
@@ -61,6 +62,7 @@ function AddNoticePage() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
+            placeholder="내용을 입력해주세요"
           />
         </div>
         <div className="add-notice-form-buttons">

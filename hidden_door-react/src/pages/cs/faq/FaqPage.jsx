@@ -6,7 +6,7 @@ import { useAdmin } from "@hooks/useAdmin";
 import FaqList from "../../../components/cs/faq/FaqList";
 
 const FaqPage = () => {
-  const { admin } = useAdmin();
+  const { isSuperAdmin } = useAdmin();
   const [faqList, setFaqList] = useState([]);
   const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ const FaqPage = () => {
           </div>
 
           <div className="btn-container">
-            {admin && (
+            {isSuperAdmin && (
               <button className="btn" onClick={handleAddFaq}>
                 FAQ추가
               </button>

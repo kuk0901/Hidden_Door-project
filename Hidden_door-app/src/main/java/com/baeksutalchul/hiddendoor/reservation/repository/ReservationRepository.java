@@ -12,4 +12,5 @@ import com.baeksutalchul.hiddendoor.reservation.domain.Reservation;
 public interface ReservationRepository extends MongoRepository<Reservation, String> {
   List<Reservation> findAll();
   Optional<Reservation> findById(String id);
+  List<Reservation> findByReservationDateAndThemeId(String reservationDate, String themeId);
 }
