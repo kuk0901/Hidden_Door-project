@@ -16,7 +16,7 @@ const AdminDetailContent = ({
   const availableRoles = [
     "ROLE_USER",
     "ROLE_ADMIN",
-    "ROLE_MANAGER",
+    "ROLE_DIRECTOR",
     "ROLE_SUPER_ADMIN"
   ];
 

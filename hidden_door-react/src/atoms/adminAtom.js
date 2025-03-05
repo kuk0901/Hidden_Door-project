@@ -13,6 +13,14 @@ export const isSuperAdminSelector = selector({
   }
 });
 
+export const isDirectorSelector = selector({
+  key: "isDirectorSelector",
+  get: ({ get }) => {
+    const admin = get(adminState);
+    return admin?.roles.includes("ROLE_DIRECTOR") || false;
+  }
+});
+
 export const isAdminSelector = selector({
   key: "isAdminSelector",
   get: ({ get }) => {
