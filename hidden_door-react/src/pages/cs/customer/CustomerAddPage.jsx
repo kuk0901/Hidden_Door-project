@@ -11,7 +11,6 @@ const CustomerAddPage = () => {
     customerTitle: "",
     customerPwd: "",
     customerContent: "",
-    ansCreDate: new Date("1970-01-01T00:00:00Z").toISOString(),
   });
 
   const handleInputChange = (e) => {

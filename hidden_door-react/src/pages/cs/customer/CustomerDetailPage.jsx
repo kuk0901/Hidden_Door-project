@@ -30,7 +30,7 @@ const CustomerDetailPage = () => {
 
     try {
       const res = await Api.delete(`/customers/customer/delete/${customerId}`);
-      toast.success("고객 정보가 삭제되었습니다.");
+      toast.success(res.data.msg);
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
     }
@@ -43,7 +43,6 @@ const CustomerDetailPage = () => {
   return (
     <div className="customer-detail-container">
       <CustomerDetail customerDetail={customerDetail} />
-      {/* 홀리 */}
       {admin && <button onClick={deleteCustomer}>삭제</button>}
 
       <button className="btn" onClick={handleListCustomer}>

@@ -2,11 +2,12 @@ const CustomerItem = ({ customer }) => {
   return (
     <li className="faq-tr-content">
       <div>
-        <a href={`/hidden_door/cs/faq/${customer.customerId}`}>
+        <a href={`/hidden_door/cs/customer/${customer.customerId}`}>
           {customer.customerTitle}
         </a>
       </div>
-      <div>{customer.kstQueCreDate}</div>
+      <div className="cs-check">{customer.customerCheck}</div>
+      <div className="cs-date">{customer.kstQueCreDate}</div>
     </li>
   );
 };
