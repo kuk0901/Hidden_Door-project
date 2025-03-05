@@ -24,6 +24,10 @@ const FaqDetailPage = () => {
     navigate("/hidden_door/cs/faq");
   };
 
+  const handleUpdateFaq = () => {
+    navigate(`/hidden_door/cs/faq/update/${faqId}`);
+  };
+
   const deleteFaq = async () => {
     const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
     if (!confirmDelete) return;
@@ -43,7 +47,17 @@ const FaqDetailPage = () => {
   return (
     <div className="faq-detail-container">
       <FaqDetail faqDetail={faqDetail} />
-      {admin && <button onClick={deleteFaq}>삭제</button>}
+      {admin && (
+        <button className="btn" onClick={handleUpdateFaq}>
+          수정하기
+        </button>
+      )}
+
+      {admin && (
+        <button className="btn" onClick={deleteFaq}>
+          삭제
+        </button>
+      )}
 
       <button className="btn" onClick={handleListFaq}>
         목록으로

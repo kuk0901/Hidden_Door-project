@@ -83,7 +83,7 @@ public class CustomerService {
     customer.setCustomerCheck(customerDto.getCustomerCheck());
     customer.setCustomerPwd(customerDto.getCustomerPwd());
     customer.setQueCreDate(Instant.now());
-    customer.setAnsCreDate(customerDto.getAnsCreDate());
+    customer.setAnsCreDate(defaulInstant);
 
     Customer saveCustomer = mongoTemplate.save(customer);
 

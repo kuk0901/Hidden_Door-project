@@ -23,8 +23,10 @@ import ThemeAddPage from "@pages/theme/ThemeAddPage";
 import FaqPage from "@pages/cs/faq/FaqPage";
 import FaqAddPage from "@pages/cs/faq/FaqAddPage";
 import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
+import FaqUpdatePage from "@pages/cs/faq/FaqUpdatePage";
 import CustomerPage from "@pages/cs/customer/CustomerPage";
 import CustomerAddPage from "./pages/cs/customer/CustomerAddPage";
+import CustomerDetailPage from "./pages/cs/customer/CustomerDetailPage";
 import ReservationMainPage from "@pages/reservation/ReservationMainPage";
 import ReservationConfirmPage from "./pages/reservation/ReservationConfirmPage";
 import EventPage from "@pages/event/EventPage";
@@ -176,10 +178,12 @@ function App() {
                   <Route index element={<FaqPage />} />
                   <Route path="add" element={<FaqAddPage />} />
                   <Route path=":faqId" element={<FaqDetailPage />} />
+                  <Route path="update/:faqId" element={<FaqUpdatePage />} />
                 </Route>
                 <Route path="customer">
                   <Route index element={<CustomerPage />} />
                   <Route path="add" element={<CustomerAddPage />} />
+                  <Route path=":customerId" element={<CustomerDetailPage />} />
                 </Route>
               </Route>
 

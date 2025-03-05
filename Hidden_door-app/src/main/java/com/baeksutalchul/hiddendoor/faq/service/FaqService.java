@@ -90,19 +90,22 @@ public class FaqService {
     return new ResponseDto<>(resFaqDto, faq.getTitle() + "의 질문이 추가되었습니다.");
   }
 
-  @Transactional
-  public ResponseDto<String> updateFaqOne(FaqDto faqDto) throws CustomException {
-    return faqRepository.findById(faqDto.getFaqId())
-        .map(currentFaq -> {
+  public ResponseDto<FaqDto> updateFaq(String id, FaqDto faqDto) {
+    // ID로 해당 FAQ를 조회
+    Faq faq = faqRepository.findById(id).orElseThrow();
 
-          currentFaq.setCategory(faqDto.getCategory());
-          currentFaq.setQuestion(faqDto.getQuestion());
-          currentFaq.setAnswer(faqDto.getAnswer());
-          faqRepository.save(currentFaq);
-          return new ResponseDto<>("", "좌석에 대한 정보가 수정되었습니다.");
-        })
-        .orElseThrow(() -> new CustomException(null));
-  }
+    // faqDto에서 받은 정보를 이용하여 faq 업데이트
+    faq.setTitle(faqDto.getTitle());
+    faq.setQuestion(faqDto.getQuestion());
+    faq.setAnswer(faqDto.getAnswer());
+    faq.setModDate(Instant.now());
+
+    // 저장 후 결과 반환
+    Faq updatedFaq = faqRepository.save(faq);
+    FaqDto updatedFaqDto = modelMapper.map(updatedFaq, FaqDto.class);
+
+    return new ResponseDto<>(updatedFaqDto, "FAQ has been updated.");
+}
 
   @Transactional
   public ResponseDto<String> deleteFaqOne(String id) throws CustomException {
