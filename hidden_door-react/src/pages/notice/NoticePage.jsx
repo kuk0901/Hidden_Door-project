@@ -4,6 +4,8 @@ import Api from '@axios/api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 
+// pr test 용
+
 function NoticePage() {
   const { admin } = useAdmin();
   const [notices, setNotices] = useState([]);
