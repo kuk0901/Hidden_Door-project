@@ -119,7 +119,14 @@ function NoticePage() {
             >
               <div className="notice-title">{notice.title}</div>
               <div className="notice-date">
-                {new Date(notice.createdAt).toLocaleDateString()}
+                {new Date(notice.createdAt)
+                  .toLocaleDateString('ko-KR', {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                  })
+                  .replace(/\. /g, '.')
+                  .replace(/\.$/, '')}
               </div>
             </li>
           ))}
