@@ -1,14 +1,6 @@
-const RolesCheckboxGroup = ({ roles, userRoles, setAdminData, disabled }) => {
-  const handleChange = (event) => {
-    const { value, checked } = event.target;
-    setAdminData((prevData) => ({
-      ...prevData,
-      roles: checked
-        ? [...prevData.roles, value]
-        : prevData.roles.filter((role) => role !== value)
-    }));
-  };
+import { Controller } from "react-hook-form";
 
+const RolesCheckboxGroup = ({ roles, control, name, disabled }) => {
   return (
     <div className="roles-checkbox-group">
       <div className="label-container role-label-container">
@@ -16,22 +8,38 @@ const RolesCheckboxGroup = ({ roles, userRoles, setAdminData, disabled }) => {
       </div>
 
       <div className="checkbox-container">
-        {roles.map((role) => (
-          <div key={role} className="role-checkbox">
-            <input
-              type="checkbox"
-              id={`role-${role}`}
-              value={role}
-              checked={userRoles.includes(role)}
-              onChange={handleChange}
-              disabled={disabled}
-              className="checkbox--role"
-            />
-            <label className="label--role" htmlFor={`role-${role}`}>
-              {role}
-            </label>
-          </div>
-        ))}
+        <Controller
+          name={name}
+          control={control}
+          render={({ field }) => {
+            const { value, onChange } = field;
+
+            const handleChange = (event) => {
+              const { value: roleValue, checked } = event.target;
+              const updatedRoles = checked
+                ? [...value, roleValue]
+                : value.filter((role) => role !== roleValue);
+              onChange(updatedRoles);
+            };
+
+            return roles.map((role) => (
+              <div key={role} className="role-checkbox">
+                <input
+                  type="checkbox"
+                  id={`role-${role}`}
+                  value={role}
+                  checked={value.includes(role)}
+                  onChange={handleChange}
+                  disabled={disabled}
+                  className="checkbox--role"
+                />
+                <label className="label--role" htmlFor={`role-${role}`}>
+                  {role}
+                </label>
+              </div>
+            ));
+          }}
+        />
       </div>
     </div>
   );

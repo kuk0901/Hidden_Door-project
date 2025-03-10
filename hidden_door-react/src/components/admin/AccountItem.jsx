@@ -14,11 +14,12 @@ const AccountItem = ({
 }) => {
   const navigate = useNavigate();
 
+  // FIXME: format 수정
   const filteredRoles = adminData.roles.filter((r) => r !== "ROLE_USER");
 
   const handleDetail = () => {
     navigate(`/hidden_door/admin/account/${adminData.adminId}`, {
-      state: { adminData, page, search }
+      state: { page, search }
     });
   };
 

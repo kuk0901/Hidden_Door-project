@@ -3,7 +3,6 @@ package com.baeksutalchul.hiddendoor.admin.service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -54,9 +53,14 @@ public class AdminService {
 
   // 계정 생성
   public ResponseDto<AdminDto> registerUser(AdminDto adminDto) {
-    // 중복 사용자 ID 체크
-    if (adminRepository.existsById(adminDto.getEmail())) {
-      throw new CustomException(ErrorCode.ADMIN_ALREADY_EXISTS);
+    // 중복 사용자 email 체크
+    if (adminRepository.existsByEmail(adminDto.getEmail())) {
+      throw new CustomException(ErrorCode.ADMIN_DUPLICATE_EMAIL);
+    }
+
+    // 중복 사용자 phone 체크
+    if (adminRepository.existsByPhone(adminDto.getPhone())) {
+      throw new CustomException(ErrorCode.ADMIN_DUPLICATE_PHONE);
     }
 
     // 비밀번호 인코딩
@@ -244,7 +248,12 @@ public class AdminService {
 
     // email 중복 검사, 단 본인 email 제외
     if (!admin.getEmail().equals(adminDto.getEmail()) && adminRepository.existsByEmail(adminDto.getEmail())) {
-      throw new CustomException(ErrorCode.ADMIN_ALREADY_EXISTS);
+      throw new CustomException(ErrorCode.ADMIN_DUPLICATE_EMAIL);
+    }
+
+    // phone 중복 검사, 단 본인 phone 제외
+    if (!admin.getPhone().equals(adminDto.getPhone()) && adminRepository.existsByPhone(adminDto.getPhone())) {
+      throw new CustomException(ErrorCode.ADMIN_DUPLICATE_PHONE);
     }
 
     // 비밀번호가 존재하는 경우 인코딩
@@ -263,6 +272,11 @@ public class AdminService {
 
     if (!Objects.equals(admin.getEmail(), adminDto.getEmail())) {
       admin.setEmail(adminDto.getEmail());
+      hasChanges = true;
+    }
+
+    if (!Objects.equals(admin.getPhone(), adminDto.getPhone())) {
+      admin.setPhone(adminDto.getPhone());
       hasChanges = true;
     }
 
