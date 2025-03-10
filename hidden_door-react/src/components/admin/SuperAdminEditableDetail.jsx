@@ -51,6 +51,7 @@ const SuperAdminEditableDetail = ({
         setAdminData={setAdminData}
         availableRoles={availableRoles}
         isSuperAdmin={true}
+        btnText="저장"
       />
     </div>
   );

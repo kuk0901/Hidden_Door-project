@@ -11,33 +11,15 @@ import AdminDetailContent from "@components/admin/AdminDetailContent";
 import { useAdmin } from "@hooks/useAdmin";
 import Loading from "@components/common/loading/Loading";
 
-// FIXME: 데이터 수정 부분 추가해야 함
 const AdminAccountDetailPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
-  const [adminData, setAdminData] = useState(location.state?.adminData || null);
+  const [adminData, setAdminData] = useState(null);
   const [page, setPage] = useState(location.state?.page || {});
   const [search, setSearch] = useState(location.state?.search || {});
   const { admin, isSuperAdmin } = useAdmin();
   const [searchParams, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    if (location.state) {
-      setAdminData(location.state.adminData || null);
-      setPage(location.state.page || {});
-      setSearch(location.state.search || {});
-    }
-
-    if (!adminData) {
-      fetchAdminData();
-    }
-
-    if (searchParams.get("new") === "true") {
-      toast.success("관리자 계정이 생성되었습니다.");
-      setSearchParams({});
-    }
-  }, [location.state, searchParams]);
 
   const fetchAdminData = async () => {
     try {
@@ -48,6 +30,20 @@ const AdminAccountDetailPage = () => {
       console.error("Error fetching admin data:", error);
     }
   };
+
+  useEffect(() => {
+    fetchAdminData();
+
+    if (location.state) {
+      setPage(location.state.page || {});
+      setSearch(location.state.search || {});
+    }
+
+    if (searchParams.get("new") === "true") {
+      toast.success("관리자 계정이 생성되었습니다.");
+      setSearchParams({});
+    }
+  }, [location.state, searchParams]);
 
   const handleGoBack = () => {
     navigate("/hidden_door/admin/account", { state: { page, search } });

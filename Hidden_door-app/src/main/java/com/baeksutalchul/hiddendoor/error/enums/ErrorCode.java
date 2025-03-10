@@ -34,6 +34,8 @@ public enum ErrorCode {
     DUPLICATE_ENTITY(HttpStatus.CONFLICT, "DUPLICATE_409", "이미 존재하는 항목입니다."),
     FILE_PROCESSING_ERROR(HttpStatus.BAD_REQUEST, "FILE_400", "파일 처리 중 오류가 발생했습니다."),
     ADMIN_NOT_FOUND(HttpStatus.NOT_FOUND, "ADMIN_404", "관리자 정보를 찾을 수 없습니다."),
+    ADMIN_DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "DUPLICATE_EMAIL", "이미 사용 중인 이메일입니다."),
+    ADMIN_DUPLICATE_PHONE(HttpStatus.BAD_REQUEST, "DUPLICATE_PHONE", "이미 사용 중인 휴대폰번호입니다."),
 
     // * page
     PAGINATION_ERROR(HttpStatus.BAD_REQUEST, "PAGINATION_400", "페이지 정보가 유효하지 않습니다."),

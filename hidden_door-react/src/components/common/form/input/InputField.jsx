@@ -3,6 +3,7 @@ import RegisteredInputField from "./RegisteredInputField";
 import RegisteredThemeInputField from "./RegisteredThemeInputField";
 import ThemeInputField from "./ThemeInputField";
 
+// FIXME: 리팩토링 필요
 const InputField = ({
   register,
   type,

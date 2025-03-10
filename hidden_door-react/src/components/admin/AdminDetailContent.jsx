@@ -36,6 +36,7 @@ const AdminDetailContent = ({
       <EditableAdminDetail
         adminData={adminData}
         setAdminData={setAdminData}
+        availableRoles={availableRoles}
         page={page}
         setPage={setPage}
         search={search}
