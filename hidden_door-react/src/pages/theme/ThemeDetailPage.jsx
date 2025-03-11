@@ -34,9 +34,8 @@ const ThemeDetailPage = ({ theme }) => {
       const newThemeDetailHeaderSubtitle = subtitleRef.current.value;
 
       const res = await Api.patch(
-        "/escape-rooms/info/theme-detail-title-line",
+        `/escape-rooms/info/theme-detail-title-line/${escapeRoom.roomId}`,
         {
-          roomId: escapeRoom.roomId,
           themeDetailHeaderTitle: newThemeDetailHeaderTitle,
           themeDetailHeaderSubtitle: newThemeDetailHeaderSubtitle
         }

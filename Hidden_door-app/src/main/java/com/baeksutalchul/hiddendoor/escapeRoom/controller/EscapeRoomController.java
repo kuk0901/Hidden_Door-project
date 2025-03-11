@@ -34,45 +34,47 @@ public class EscapeRoomController {
     return ResponseEntity.ok().body(escapeRoomService.getEscapeRoomInfo());
   }
 
-  @PatchMapping("/info/title")
-  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomTitle(@RequestBody EscapeRoomDto escapeRoomDto) {
-    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomTitle(escapeRoomDto));
-  }
-
-  @PatchMapping("/info/explanation")
-  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomExplanation(
+  @PatchMapping("/info/title/{id}")
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomTitle(@PathVariable String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
-    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomExplanation(escapeRoomDto));
+    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomTitle(id, escapeRoomDto));
   }
 
-  @PatchMapping("/info/theme-title-line")
-  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeTitleLine(
+  // patchVariable 추가 -> 수정 필요
+  @PatchMapping("/info/explanation/{id}")
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomExplanation(@PathVariable String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
-    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeTitleLine(escapeRoomDto));
+    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomExplanation(id, escapeRoomDto));
   }
 
-  @PatchMapping("/info/theme-explanation-line")
-  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeExplanationLine(
+  @PatchMapping("/info/theme-title-line/{id}")
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeTitleLine(@PathVariable String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
-    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeExplanationLine(escapeRoomDto));
+    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeTitleLine(id, escapeRoomDto));
   }
 
-  @PatchMapping("/info/update-image/{roomId}")
+  @PatchMapping("/info/theme-explanation-line/{id}")
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeExplanationLine(@PathVariable String id,
+      @RequestBody EscapeRoomDto escapeRoomDto) {
+    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeExplanationLine(id, escapeRoomDto));
+  }
+
+  @PatchMapping("/info/update-image/{id}")
   public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomImg(
-      @PathVariable String roomId,
+      @PathVariable String id,
       @RequestPart("file") MultipartFile file) {
 
-    logger.info("roomId: {}", roomId);
     logger.info("Received file: name={}, size={}, contentType={}",
         file.getOriginalFilename(),
         file.getSize(),
         file.getContentType());
-    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomImg(roomId, file));
+    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomImg(id, file));
   }
 
-  @PatchMapping("/info/theme-detail-title-line")
+  @PatchMapping("/info/theme-detail-title-line/{id}")
   public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeDetailTitleLine(
+      @PathVariable String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
-    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeDetailTitleLine(escapeRoomDto));
+    return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeDetailTitleLine(id, escapeRoomDto));
   }
 }

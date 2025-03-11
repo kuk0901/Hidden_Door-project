@@ -48,14 +48,14 @@ public class EscapeRoomService {
 
   // admin
   @Transactional
-  public ResponseDto<EscapeRoomDto> updateEscapeRoomTitle(EscapeRoomDto escapeRoomDto) {
-    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomTitle(String id, EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(id);
 
     if (existingEscapeRoom.getTitle().equals(escapeRoomDto.getTitle())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
-    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Query query = new Query(Criteria.where("roomId").is(id));
     Update update = new Update().set("title", escapeRoomDto.getTitle());
 
     UpdateResult result = mongoTemplate.updateFirst(query, update, EscapeRoom.class);
@@ -64,21 +64,21 @@ public class EscapeRoomService {
       throw new CustomException(ErrorCode.UPDATE_FAILED);
     }
 
-    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(id);
     EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
 
     return new ResponseDto<>(updatedDto, "방탈출 제목이 업데이트되었습니다.");
   }
 
   @Transactional
-  public ResponseDto<EscapeRoomDto> updateEscapeRoomExplanation(EscapeRoomDto escapeRoomDto) {
-    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomExplanation(String id, EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(id);
 
     if (existingEscapeRoom.getExplanation().equals(escapeRoomDto.getExplanation())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
-    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Query query = new Query(Criteria.where("roomId").is(id));
     Update update = new Update().set("explanation", escapeRoomDto.getExplanation());
 
     UpdateResult result = mongoTemplate.updateFirst(query, update, EscapeRoom.class);
@@ -87,22 +87,22 @@ public class EscapeRoomService {
       throw new CustomException(ErrorCode.UPDATE_FAILED);
     }
 
-    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(id);
     EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
 
     return new ResponseDto<>(updatedDto, "방탈출 설명이 업데이트되었습니다.");
   }
 
   @Transactional
-  public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeTitleLine(EscapeRoomDto escapeRoomDto) {
-    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeTitleLine(String id, EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(id);
 
     if (existingEscapeRoom.getThemeHeaderTitle().equals(escapeRoomDto.getThemeHeaderTitle())
         && existingEscapeRoom.getThemeHeaderSubtitle().equals(escapeRoomDto.getThemeHeaderSubtitle())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
-    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Query query = new Query(Criteria.where("roomId").is(id));
     Update update = new Update()
         .set("themeHeaderTitle", escapeRoomDto.getThemeHeaderTitle())
         .set("themeHeaderSubtitle", escapeRoomDto.getThemeHeaderSubtitle());
@@ -113,21 +113,21 @@ public class EscapeRoomService {
       throw new CustomException(ErrorCode.UPDATE_FAILED);
     }
 
-    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(id);
     EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
 
     return new ResponseDto<>(updatedDto, "방탈출 설명이 업데이트되었습니다.");
   }
 
   @Transactional
-  public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeExplanationLine(EscapeRoomDto escapeRoomDto) {
-    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeExplanationLine(String id, EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(id);
 
     if (existingEscapeRoom.getThemeExplanation().equals(escapeRoomDto.getThemeExplanation())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
-    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Query query = new Query(Criteria.where("roomId").is(id));
     Update update = new Update()
         .set("themeTitle", escapeRoomDto.getThemeTitle())
         .set("themeExplanation", escapeRoomDto.getThemeExplanation());
@@ -138,7 +138,7 @@ public class EscapeRoomService {
       throw new CustomException(ErrorCode.UPDATE_FAILED);
     }
 
-    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(id);
     EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
 
     return new ResponseDto<>(updatedDto, "테마 설명이 업데이트되었습니다.");
@@ -185,15 +185,15 @@ public class EscapeRoomService {
   }
 
   @Transactional
-  public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeDetailTitleLine(EscapeRoomDto escapeRoomDto) {
-    EscapeRoom existingEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+  public ResponseDto<EscapeRoomDto> updateEscapeRoomThemeDetailTitleLine(String id, EscapeRoomDto escapeRoomDto) {
+    EscapeRoom existingEscapeRoom = findEscapeRoomById(id);
 
     if (existingEscapeRoom.getThemeDetailHeaderTitle().equals(escapeRoomDto.getThemeDetailHeaderTitle())
         && existingEscapeRoom.getThemeDetailHeaderSubtitle().equals(escapeRoomDto.getThemeDetailHeaderSubtitle())) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
-    Query query = new Query(Criteria.where("roomId").is(escapeRoomDto.getRoomId()));
+    Query query = new Query(Criteria.where("roomId").is(id));
     Update update = new Update()
         .set("themeDetailHeaderTitle", escapeRoomDto.getThemeDetailHeaderTitle())
         .set("themeDetailHeaderSubtitle", escapeRoomDto.getThemeDetailHeaderSubtitle());
@@ -204,7 +204,7 @@ public class EscapeRoomService {
       throw new CustomException(ErrorCode.UPDATE_FAILED);
     }
 
-    EscapeRoom updatedEscapeRoom = findEscapeRoomById(escapeRoomDto.getRoomId());
+    EscapeRoom updatedEscapeRoom = findEscapeRoomById(id);
     EscapeRoomDto updatedDto = modelMapper.map(updatedEscapeRoom, EscapeRoomDto.class);
 
     return new ResponseDto<>(updatedDto, "테마 상세 페이지의 제목이 업데이트되었습니다.");

@@ -61,7 +61,6 @@ public class AdminController {
     return ResponseEntity.ok().body(adminService.deleteAdminOne(requestDto));
   }
 
-  // FIXME: SUPER_ADMIN / ADMIN 둘 다 수정 가능하게끔 || method 분리
   @PostMapping("/account/update/{id}")
   public ResponseEntity<ResponseDto<AdminDto>> updateAdminOne(@PathVariable("id") String id,
       @RequestBody AdminDto adminDto) {

@@ -14,7 +14,7 @@ import Loading from "@components/common/loading/Loading";
 const AdminAccountDetailPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { id } = useParams();
+  const { accountId } = useParams();
   const [adminData, setAdminData] = useState(null);
   const [page, setPage] = useState(location.state?.page || {});
   const [search, setSearch] = useState(location.state?.search || {});
@@ -23,7 +23,7 @@ const AdminAccountDetailPage = () => {
 
   const fetchAdminData = async () => {
     try {
-      const res = await Api.get(`/admins/account/${id}`);
+      const res = await Api.get(`/admins/account/${accountId}`);
       setAdminData(res.data.data);
     } catch (error) {
       toast.error("관리자 정보를 불러오는데 실패했습니다.");

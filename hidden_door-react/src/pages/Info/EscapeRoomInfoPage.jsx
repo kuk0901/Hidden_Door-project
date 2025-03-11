@@ -42,10 +42,14 @@ const EscapeRoomInfoPage = () => {
     try {
       const newTitle = titleRef.current.value;
 
-      const res = await Api.patch("/escape-rooms/info/title", {
-        roomId: escapeRoom.roomId,
-        title: newTitle
-      });
+      console.log(newTitle);
+
+      const res = await Api.patch(
+        `/escape-rooms/info/title/${escapeRoom.roomId}`,
+        {
+          title: newTitle
+        }
+      );
 
       setEscapeRoom(res.data.data);
 
@@ -72,10 +76,12 @@ const EscapeRoomInfoPage = () => {
     try {
       const newExplanation = explanationRef.current.value;
 
-      const res = await Api.patch("/escape-rooms/info/explanation", {
-        roomId: escapeRoom.roomId,
-        explanation: newExplanation
-      });
+      const res = await Api.patch(
+        `/escape-rooms/info/explanation/${escapeRoom.roomId}`,
+        {
+          explanation: newExplanation
+        }
+      );
 
       setEscapeRoom(res.data.data);
 
