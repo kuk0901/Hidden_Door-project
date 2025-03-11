@@ -8,7 +8,7 @@ const CustoemrDetail = ({ customerDetail }) => {
       <p>제목: {customerDetail.customerTitle}</p>
       <p>질문: {customerDetail.customerContent}</p>
       <p>질문날짜: {customerDetail.kstQueCreDate}</p>
-      {customerDetail.customerCheck === "o" ? (
+      {customerDetail.customerCheck === "O" ? (
         <>
           <p>답변: {customerDetail.customerAnswer}</p>
           <p>답변날짜: {customerDetail.kstAnsCreDate}</p>

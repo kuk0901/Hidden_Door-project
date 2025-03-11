@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baeksutalchul.hiddendoor.customer.service.CustomerService;
 import com.baeksutalchul.hiddendoor.dto.CustomerDto;
+import com.baeksutalchul.hiddendoor.dto.FaqDto;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 
 @RestController
@@ -40,6 +41,11 @@ public class CustomerController {
   @PostMapping("/customer/add")
   public ResponseEntity<ResponseDto<CustomerDto>> addCustomer(@RequestBody CustomerDto customerDto) {
     return ResponseEntity.ok().body(customerService.addCustomer(customerDto));
+  }
+
+   @PostMapping("/customer/update/{id}")
+  public ResponseEntity<ResponseDto<CustomerDto>> updateCustomerOne(@PathVariable("id") String customerId, @RequestBody CustomerDto customerDto) {
+      return ResponseEntity.ok().body(customerService.updateCustomer(customerId, customerDto));
   }
 
 

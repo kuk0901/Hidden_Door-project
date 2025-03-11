@@ -5,12 +5,13 @@ const FaqDetail = ({ faqDetail }) => {
 
   return (
     <div className="faq-detail">
-      <p>작성자: {faqDetail.writer}</p>
-      <p>카테고리: {faqDetail.category}</p>
-      <p>제목: {faqDetail.title}</p>
-      <p>질문: {faqDetail.question}</p>
-      <p>답변: {faqDetail.answer}</p>
-      <p>작성날짜: {faqDetail.kstModDate}</p>
+      <div>
+        <p className="faq-title p">제목: {faqDetail.title}</p>
+        <p className="faq-credate-p">작성날짜: {faqDetail.kstModDate}</p>
+      </div>
+
+      <p className="faq-que-p">질문: {faqDetail.question}</p>
+      <p className="faq-ans-p">답변: {faqDetail.answer}</p>
     </div>
   );
 };

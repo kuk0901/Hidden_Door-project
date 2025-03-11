@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baeksutalchul.hiddendoor.customer.domain.Customer;
 import com.baeksutalchul.hiddendoor.customer.repository.CustomerRepository;
 import com.baeksutalchul.hiddendoor.dto.CustomerDto;
+import com.baeksutalchul.hiddendoor.dto.FaqDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
@@ -44,7 +45,7 @@ public class CustomerService {
         .map(customer -> {
           CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
           customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
-          customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDateTime(customer.getAnsCreDate()));
+          customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
 
           return customerDto;
         })
@@ -63,7 +64,7 @@ public class CustomerService {
       CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
 
       customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
-      customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDateTime(customer.getAnsCreDate()));
+      customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
 
       return new ResponseDto<>(customerDto, "고객센터 상세 정보 반환");
     } else {
@@ -90,6 +91,21 @@ public class CustomerService {
     CustomerDto resCustomerDto = modelMapper.map(saveCustomer, CustomerDto.class);
 
     return new ResponseDto<>(resCustomerDto, customer.getCustomerTitle() + "의 질문이 추가되었습니다.");
+  }
+
+  public ResponseDto<CustomerDto> updateCustomer(String id, CustomerDto customerDto) {
+
+    Customer customer = customerRepository.findById(id).orElseThrow();
+
+    customer.setCustomerCheck(customerDto.getCustomerCheck());
+    customer.setCustomerAnswer(customerDto.getCustomerAnswer());
+    customer.setAdminName(customerDto.getAdminName());
+    customer.setAnsCreDate(Instant.now());
+    
+    Customer updatedCustomer = customerRepository.save(customer);
+    CustomerDto updatedCustomerDto = modelMapper.map(updatedCustomer, CustomerDto.class);
+
+    return new ResponseDto<>(updatedCustomerDto, "Customer has been updated.");
   }
 
   @Transactional

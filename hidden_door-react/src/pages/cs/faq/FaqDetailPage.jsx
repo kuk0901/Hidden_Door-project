@@ -47,21 +47,24 @@ const FaqDetailPage = () => {
   return (
     <div className="faq-detail-container">
       <FaqDetail faqDetail={faqDetail} />
-      {admin && (
-        <button className="btn" onClick={handleUpdateFaq}>
-          수정하기
-        </button>
-      )}
 
-      {admin && (
-        <button className="btn" onClick={deleteFaq}>
-          삭제
-        </button>
-      )}
+      <div className="faq-btn-container">
+        {admin && (
+          <button className="btn" onClick={handleUpdateFaq}>
+            수정하기
+          </button>
+        )}
 
-      <button className="btn" onClick={handleListFaq}>
-        목록으로
-      </button>
+        {admin && (
+          <button className="btn" onClick={deleteFaq}>
+            삭제
+          </button>
+        )}
+
+        <button className="btn" onClick={handleListFaq}>
+          목록으로
+        </button>
+      </div>
     </div>
   );
 };
