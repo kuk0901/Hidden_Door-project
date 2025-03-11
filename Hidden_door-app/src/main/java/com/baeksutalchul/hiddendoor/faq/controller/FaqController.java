@@ -45,7 +45,7 @@ public class FaqController {
   }
   @PostMapping("/faq/update/{id}")
   public ResponseEntity<ResponseDto<FaqDto>> updateFaqOne(@PathVariable("id") String faqId, @RequestBody FaqDto faqDto) {
-      return ResponseEntity.ok().body(faqService.updateFaq(faqId, faqDto));
+      return ResponseEntity.ok().body(faqService.updateFaqOne(faqId, faqDto));
   }
 
   @DeleteMapping("/faq/delete/{id}")

@@ -90,7 +90,7 @@ public class FaqService {
     return new ResponseDto<>(resFaqDto, faq.getTitle() + "의 질문이 추가되었습니다.");
   }
 
-  public ResponseDto<FaqDto> updateFaq(String id, FaqDto faqDto) {
+  public ResponseDto<FaqDto> updateFaqOne(String id, FaqDto faqDto) {
     // ID로 해당 FAQ를 조회
     Faq faq = faqRepository.findById(id).orElseThrow();
 
@@ -104,7 +104,7 @@ public class FaqService {
     Faq updatedFaq = faqRepository.save(faq);
     FaqDto updatedFaqDto = modelMapper.map(updatedFaq, FaqDto.class);
 
-    return new ResponseDto<>(updatedFaqDto, "FAQ has been updated.");
+    return new ResponseDto<>(updatedFaqDto,  "질문 " + faq.getTitle() +"이(가) 수정되었습니다");
 }
 
   @Transactional

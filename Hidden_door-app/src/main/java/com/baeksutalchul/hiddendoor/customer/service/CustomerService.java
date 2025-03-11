@@ -14,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.baeksutalchul.hiddendoor.customer.domain.Customer;
 import com.baeksutalchul.hiddendoor.customer.repository.CustomerRepository;
 import com.baeksutalchul.hiddendoor.dto.CustomerDto;
-import com.baeksutalchul.hiddendoor.dto.FaqDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
@@ -93,7 +92,7 @@ public class CustomerService {
     return new ResponseDto<>(resCustomerDto, customer.getCustomerTitle() + "의 질문이 추가되었습니다.");
   }
 
-  public ResponseDto<CustomerDto> updateCustomer(String id, CustomerDto customerDto) {
+  public ResponseDto<CustomerDto> updateCustomerOne(String id, CustomerDto customerDto) {
 
     Customer customer = customerRepository.findById(id).orElseThrow();
 
@@ -105,7 +104,7 @@ public class CustomerService {
     Customer updatedCustomer = customerRepository.save(customer);
     CustomerDto updatedCustomerDto = modelMapper.map(updatedCustomer, CustomerDto.class);
 
-    return new ResponseDto<>(updatedCustomerDto, "Customer has been updated.");
+    return new ResponseDto<>(updatedCustomerDto, customer.getCustomerTitle() + "의 질문이 수정되었습니다.");
   }
 
   @Transactional
