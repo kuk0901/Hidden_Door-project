@@ -2,9 +2,8 @@ import AdminEditForm from "@components/common/form/AdminEditForm";
 import { toast } from "react-toastify";
 import useConfirm from "@hooks/useConfirm";
 import Api from "@axios/api";
-import AdminRoleItem from "@components/admin/AdminRoleItem";
+import AdminRoleInputItem from "@components/admin/AdminRoleInputItem";
 
-// FIXME: AdminEditForm 컴포넌트 사용으로 변경
 const EditableAdminDetail = ({
   adminData,
   setAdminData,
@@ -53,9 +52,9 @@ const EditableAdminDetail = ({
         setAdminData={setAdminData}
         availableRoles={availableRoles}
         formId="adminInfoUpdateForm"
-      />
-
-      <AdminRoleItem roles={adminData.roles} />
+      >
+        <AdminRoleInputItem roles={adminData.roles} />
+      </AdminEditForm>
 
       <div className="btn-container">
         <button type="submit" form="adminInfoUpdateForm" className="btn">

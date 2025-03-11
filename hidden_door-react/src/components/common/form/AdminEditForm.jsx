@@ -6,14 +6,9 @@ import { validationRules } from "@validation/validationRules";
 import { formatPhoneNumber } from "@utils/format/number.js";
 import InputError from "@components/error/InputError";
 
-const AdminEditForm = ({
-  adminData,
-  onSubmit,
-  availableRoles,
-  isSuperAdmin,
-  btnText,
-  formId
-}) => {
+const AdminEditForm = ({ children, onSubmit, formId, ...props }) => {
+  const { adminData, isSuperAdmin, availableRoles, btnText } = props;
+
   const {
     control,
     handleSubmit,
@@ -185,6 +180,8 @@ const AdminEditForm = ({
         error={errors["pwdCheck"]?.message}
         className="m"
       />
+
+      {children ? children : null}
 
       {/* 권한 체크박스 그룹 */}
       {isSuperAdmin && (
