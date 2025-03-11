@@ -19,7 +19,6 @@ public class DateTimeUtil {
 
   public static String convertToKSTDate(Instant instant) {
     if (instant.equals(DEFAULT_INSTANT)) {
-      System.out.println(instant);
       return "";
     }
 
@@ -29,7 +28,6 @@ public class DateTimeUtil {
 
   public static String convertToKSTDateTime(Instant instant) {
     if (instant.equals(DEFAULT_INSTANT)) {
-      System.out.println(instant);
       return "";
     }
 
@@ -39,7 +37,6 @@ public class DateTimeUtil {
 
   public static String convertToKoreanDate(Instant instant) {
     if (instant.equals(DEFAULT_INSTANT)) {
-      System.out.println(instant);
       return "";
     }
 
@@ -49,7 +46,6 @@ public class DateTimeUtil {
 
   public static String convertToKoreanDateTime(Instant instant) {
     if (instant.equals(DEFAULT_INSTANT)) {
-      System.out.println(instant);
       return "";
     }
 
