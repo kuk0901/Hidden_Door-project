@@ -2,8 +2,8 @@ import { useForm } from "react-hook-form";
 import InputField from "./input/InputField";
 import SubmitButton from "./SubmitButton";
 import TextareaField from "./textarea/TextareaField";
-// import { validationRules } from "../../../validation/validationRules";
 
+// FIXME: RegisterForm과 일반 Form 컴포넌트 분리 고려
 const Form = ({ onSubmit, fields, btnText, id }) => {
   const {
     register,
