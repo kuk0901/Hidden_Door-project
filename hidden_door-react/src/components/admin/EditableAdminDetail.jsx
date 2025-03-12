@@ -1,26 +1,68 @@
-import AdminDetailItem from "@components/admin/AdminDetailItem";
-import InfoEditForm from "@components/common/form/InfoEditForm";
+import AdminEditForm from "@components/common/form/AdminEditForm";
+import { toast } from "react-toastify";
+import useConfirm from "@hooks/useConfirm";
+import Api from "@axios/api";
+import AdminRoleInputItem from "@components/admin/AdminRoleInputItem";
 
-// FIXME: AdminEditForm 컴포넌트 사용으로 변경
-const EditableAdminDetail = ({ adminData }) => (
-  <div className="admin--detail--content">
-    <InfoEditForm labelVal="이름" currentTitle={adminData.userName} />
-    <AdminDetailItem label="이메일" value={adminData.email} />
-    <InfoEditForm labelVal="전화번호" currentTitle={adminData.phone} />
-    <AdminDetailItem label="역할" value={adminData.roles.join(", ")} />
+const EditableAdminDetail = ({
+  adminData,
+  setAdminData,
+  availableRoles,
+  page,
+  setPage,
+  search,
+  setSearch
+}) => {
+  const confirm = useConfirm();
 
-    {/* pwd */}
-    <div className="">
-      <label htmlFor="pwd"></label>
-      <input id="pwd" name="pwd" type="password" />
+  const handleSubmit = async (data) => {
+    try {
+      const isConfirmed = await confirm(
+        `관리자 정보를 정말로 수정하시겠습니까?`
+      );
+      if (!isConfirmed) return;
+
+      delete data.pwdCheck;
+
+      const res = await Api.post(
+        `/admins/account/update/${adminData.adminId}`,
+        data
+      );
+
+      const updatedState = {
+        adminData: res.data.data,
+        page: page,
+        search: search
+      };
+
+      setAdminData(updatedState.adminData);
+      setPage(updatedState.page);
+      setSearch(updatedState.search);
+      toast.success("관리자 정보가 성공적으로 수정되었습니다.");
+    } catch (error) {
+      toast.error(error.message || "");
+    }
+  };
+
+  return (
+    <div className="admin--detail--content">
+      <AdminEditForm
+        adminData={adminData}
+        onSubmit={handleSubmit}
+        setAdminData={setAdminData}
+        availableRoles={availableRoles}
+        formId="adminInfoUpdateForm"
+      >
+        <AdminRoleInputItem roles={adminData.roles} />
+      </AdminEditForm>
+
+      <div className="btn-container">
+        <button type="submit" form="adminInfoUpdateForm" className="btn">
+          저장
+        </button>
+      </div>
     </div>
-
-    {/* pwd check*/}
-    <div>
-      <label htmlFor="pwdCheck"></label>
-      <input id="pwdCheck" name="pwdCheck" type="password" />
-    </div>
-  </div>
-);
+  );
+};
 
 export default EditableAdminDetail;

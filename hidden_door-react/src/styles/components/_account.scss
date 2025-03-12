@@ -152,6 +152,8 @@
           margin: 0;
           font-size: 18px;
           min-width: 400px;
+          @include mixins.flex-layout-row(flex-start, center);
+          flex-wrap: wrap;
         }
 
         .roles-checkbox-group {
@@ -169,6 +171,11 @@
             }
           }
         }
+      }
+
+      .btn-container {
+        justify-content: center;
+        margin: 10px auto;
       }
     }
   }

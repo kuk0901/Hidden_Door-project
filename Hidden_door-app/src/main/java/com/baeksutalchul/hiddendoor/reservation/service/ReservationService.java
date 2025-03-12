@@ -33,7 +33,7 @@ public class ReservationService {
   private final ThemeRepository themeRepository;
   private final ObjectMapper objectMapper;
   private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
-  private final Instant defaulInstant = Instant.parse("1970-01-01T00:00:00Z");
+  private final Instant defaultInstant = Instant.parse("1970-01-01T00:00:00Z");
 
   public ReservationService(ReservationRepository reservationRepository, ModelMapper modelMapper,
       MongoTemplate mongoTemplate, ThemeRepository themeRepository, ObjectMapper objectMapper) {
@@ -97,16 +97,13 @@ public class ReservationService {
   public ResponseDto<Map<String, Object>> getReservationMainPage() {
     Map<String, Object> pageData = new HashMap<>();
 
-    // 예약 가능한 날짜 설정 (현재부터 15일)
     List<String> availableDates = getAvailableDates(15);
     pageData.put("availableDates", availableDates);
 
-    // 시간 슬롯 설정
     List<String> timeSlots = getTimeSlots();
     pageData.put("timeSlots", timeSlots);
 
-    // 테마 목록 설정
-    List<Theme> themes = themeRepository.findAll(); // ThemeRepository를 사용하여 모든 테마 가져오기
+    List<Theme> themes = themeRepository.findAll();
     pageData.put("themes", themes);
 
     return new ResponseDto<>(pageData, "예약 메인 페이지 데이터를 성공적으로 로드했습니다.");
@@ -155,25 +152,33 @@ public class ReservationService {
   public ResponseDto<ReservationDto> createReservation(ReservationDto reservationDto) {
     Reservation reservation = convertToReservation(reservationDto);
     reservation.setReservationCreDate(Instant.now());
+    reservation.setAvailability("N");
+    reservation.setPaymentState("N");
+    reservation.setPaymentMethod("현장");
+    reservation.setPaymentDate(defaultInstant);
+    reservation.setRefundState("N");
     Reservation savedReservation = reservationRepository.save(reservation);
     return new ResponseDto<>(convertToDto(savedReservation), "예약이 성공적으로 생성되었습니다.");
-}
+  }
 
   private Reservation convertToReservation(ReservationDto dto) {
     Reservation reservation = new Reservation();
-    // DTO의 필드들을 Reservation 엔티티에 복사
     reservation.setThemeId(dto.getThemeId());
     reservation.setName(dto.getName());
     reservation.setPhone(dto.getPhone());
     reservation.setEmail(dto.getEmail());
     reservation.setReservationDate(dto.getReservationDate());
-    // 필요한 다른 필드들도 복사
+    reservation.setAvailability("N");
+    reservation.setPaymentAmount(dto.getPaymentAmount());
+    reservation.setPaymentState("N");
+    reservation.setPaymentMethod("현장");
+    reservation.setPaymentDate(defaultInstant);
+    reservation.setRefundState("N");
     return reservation;
   }
 
-private ReservationDto convertToDto(Reservation reservation) {
+  private ReservationDto convertToDto(Reservation reservation) {
     ReservationDto dto = new ReservationDto();
-    // Reservation 엔티티의 필드들을 DTO에 복사
     dto.setReservationId(reservation.getReservationId());
     dto.setThemeId(reservation.getThemeId());
     dto.setName(reservation.getName());
@@ -181,7 +186,12 @@ private ReservationDto convertToDto(Reservation reservation) {
     dto.setEmail(reservation.getEmail());
     dto.setReservationDate(reservation.getReservationDate());
     dto.setReservationCreDate(reservation.getReservationCreDate());
-    // 필요한 다른 필드들도 복사
+    dto.setAvailability(reservation.getAvailability());
+    dto.setPaymentAmount(reservation.getPaymentAmount());
+    dto.setPaymentState(reservation.getPaymentState());
+    dto.setPaymentMethod(reservation.getPaymentMethod());
+    dto.setPaymentDate(reservation.getPaymentDate());
+    dto.setRefundState(reservation.getRefundState());
     return dto;
   }
 }

@@ -144,11 +144,15 @@ const ThemeDetail = ({ theme }) => {
 
     try {
       // API 호출 로직
-      const res = await Api.put(`/themes/theme/update`, submitData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
+      const res = await Api.put(
+        `/themes/theme/update/${theme.themeId}`,
+        submitData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
         }
-      });
+      );
 
       setThemeList(res.data.data);
       setThemeEditVisible(false);

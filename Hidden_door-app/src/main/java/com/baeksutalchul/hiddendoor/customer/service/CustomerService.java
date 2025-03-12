@@ -44,7 +44,7 @@ public class CustomerService {
         .map(customer -> {
           CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
           customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
-          customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDateTime(customer.getAnsCreDate()));
+          customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
 
           return customerDto;
         })
@@ -63,7 +63,7 @@ public class CustomerService {
       CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
 
       customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
-      customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDateTime(customer.getAnsCreDate()));
+      customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
 
       return new ResponseDto<>(customerDto, "고객센터 상세 정보 반환");
     } else {
@@ -83,13 +83,28 @@ public class CustomerService {
     customer.setCustomerCheck(customerDto.getCustomerCheck());
     customer.setCustomerPwd(customerDto.getCustomerPwd());
     customer.setQueCreDate(Instant.now());
-    customer.setAnsCreDate(customerDto.getAnsCreDate());
+    customer.setAnsCreDate(defaulInstant);
 
     Customer saveCustomer = mongoTemplate.save(customer);
 
     CustomerDto resCustomerDto = modelMapper.map(saveCustomer, CustomerDto.class);
 
     return new ResponseDto<>(resCustomerDto, customer.getCustomerTitle() + "의 질문이 추가되었습니다.");
+  }
+
+  public ResponseDto<CustomerDto> updateCustomerOne(String id, CustomerDto customerDto) {
+
+    Customer customer = customerRepository.findById(id).orElseThrow();
+
+    customer.setCustomerCheck(customerDto.getCustomerCheck());
+    customer.setCustomerAnswer(customerDto.getCustomerAnswer());
+    customer.setAdminName(customerDto.getAdminName());
+    customer.setAnsCreDate(Instant.now());
+    
+    Customer updatedCustomer = customerRepository.save(customer);
+    CustomerDto updatedCustomerDto = modelMapper.map(updatedCustomer, CustomerDto.class);
+
+    return new ResponseDto<>(updatedCustomerDto, customer.getCustomerTitle() + "의 질문이 수정되었습니다.");
   }
 
   @Transactional
