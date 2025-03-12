@@ -93,21 +93,17 @@ public class ReservationService {
     }
 
   }
-  // admin 상세보기 고쳐야함
 
   public ResponseDto<Map<String, Object>> getReservationMainPage() {
     Map<String, Object> pageData = new HashMap<>();
 
-    // 예약 가능한 날짜 설정 (현재부터 15일)
     List<String> availableDates = getAvailableDates(15);
     pageData.put("availableDates", availableDates);
 
-    // 시간 슬롯 설정
     List<String> timeSlots = getTimeSlots();
     pageData.put("timeSlots", timeSlots);
 
-    // 테마 목록 설정
-    List<Theme> themes = themeRepository.findAll(); // ThemeRepository를 사용하여 모든 테마 가져오기
+    List<Theme> themes = themeRepository.findAll();
     pageData.put("themes", themes);
 
     return new ResponseDto<>(pageData, "예약 메인 페이지 데이터를 성공적으로 로드했습니다.");
@@ -172,12 +168,12 @@ public class ReservationService {
     reservation.setPhone(dto.getPhone());
     reservation.setEmail(dto.getEmail());
     reservation.setReservationDate(dto.getReservationDate());
-    reservation.setAvailability("N"); // 기본값 설정
-    reservation.setPaymentAmount(dto.getPaymentAmount()); // DTO에서 전달받은 값 사용
-    reservation.setPaymentState("N"); // 기본값 설정
-    reservation.setPaymentMethod("현장"); // 기본값 설정
-    reservation.setPaymentDate(defaultInstant); // 기본값 설정
-    reservation.setRefundState("N"); // 기본값 설정
+    reservation.setAvailability("N");
+    reservation.setPaymentAmount(dto.getPaymentAmount());
+    reservation.setPaymentState("N");
+    reservation.setPaymentMethod("현장");
+    reservation.setPaymentDate(defaultInstant);
+    reservation.setRefundState("N");
     return reservation;
   }
 

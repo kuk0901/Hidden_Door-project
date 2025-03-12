@@ -14,17 +14,13 @@ const ReservationConfirmPage = () => {
   const [totalPrice, setTotalPrice] = useState(0);
 
   useEffect(() => {
-    console.log("Themes in useEffect:", themes); // 로그 추가
-    console.log("Selected Theme ID:", selectedTheme);
-
     if (themes && themes.length > 0) {
-      const theme = themes.find((t) => t.themeId === selectedTheme); // themeId로 비교
+      const theme = themes.find((t) => t.themeId === selectedTheme);
       if (theme) {
         setSelectedThemeDetails(theme);
         setPartySize(theme.minParticipants);
         setTotalPrice(theme.price * theme.minParticipants);
       } else {
-        console.error("테마를 찾을 수 없습니다.");
         alert("선택한 테마를 찾을 수 없습니다.");
       }
     } else {
@@ -128,12 +124,10 @@ const ReservationConfirmPage = () => {
           </div>
         )}
 
-        {/* 총 가격 표시 */}
         <div className="form-group">
           <p>총 가격: {totalPrice}원</p>
         </div>
 
-        {/* 예약 버튼 */}
         <button type="submit">예약하기</button>
       </form>
     </div>
