@@ -42,6 +42,11 @@ public class CustomerController {
     return ResponseEntity.ok().body(customerService.addCustomer(customerDto));
   }
 
+   @PostMapping("/customer/update/{id}")
+  public ResponseEntity<ResponseDto<CustomerDto>> updateCustomerOne(@PathVariable("id") String customerId, @RequestBody CustomerDto customerDto) {
+      return ResponseEntity.ok().body(customerService.updateCustomerOne(customerId, customerDto));
+  }
+
 
   @DeleteMapping("/customer/delete/{id}")
   public ResponseEntity<ResponseDto<String>> deleteCustomerOne(@PathVariable("id") String customerId) {

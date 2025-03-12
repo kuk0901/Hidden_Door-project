@@ -9,6 +9,8 @@ const CustomerDetailPage = () => {
   const { admin } = useAdmin();
   const { customerId } = useParams();
   const [customerDetail, setCustomerDetail] = useState(null);
+  const [customerAnswer, setCustomerAnswer] = useState(""); // 답변 상태 관리
+  const [isAnswering, setIsAnswering] = useState(false); // 답변 입력 상태 관리
   const navigate = useNavigate();
 
   const getCustomerDetail = async () => {
@@ -30,9 +32,35 @@ const CustomerDetailPage = () => {
 
     try {
       const res = await Api.delete(`/customers/customer/delete/${customerId}`);
-      toast.success("고객 정보가 삭제되었습니다.");
+      toast.success(res.data.msg);
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
+    }
+  };
+
+  const handleAnswerChange = (e) => {
+    setCustomerAnswer(e.target.value);
+  };
+
+  const handleSubmitAnswer = async () => {
+    if (!customerAnswer) {
+      toast.error("답변을 입력해주세요.");
+      return;
+    }
+
+    try {
+      const res = await Api.post(`/customers/customer/update/${customerId}`, {
+        customerAnswer: customerAnswer,
+        adminName: admin.email,
+        customerCheck: "O",
+      });
+      toast.success(res.data.msg);
+      setIsAnswering(false);
+      setCustomerAnswer("");
+
+      navigate(0);
+    } catch (error) {
+      toast.error(error.message || "답변 제출에 실패했습니다.");
     }
   };
 
@@ -43,12 +71,41 @@ const CustomerDetailPage = () => {
   return (
     <div className="customer-detail-container">
       <CustomerDetail customerDetail={customerDetail} />
-      {/* 홀리 */}
-      {admin && <button onClick={deleteCustomer}>삭제</button>}
 
-      <button className="btn" onClick={handleListCustomer}>
-        목록으로
-      </button>
+      <div className="faq-btn-container">
+        {admin && (
+          <>
+            <button className="btn" onClick={deleteCustomer}>
+              삭제
+            </button>
+
+            <button
+              className="btn"
+              onClick={() => setIsAnswering(!isAnswering)}
+            >
+              답변하기
+            </button>
+
+            {/* 답변 입력 상태가 true일 때 인풋 칸과 제출 버튼을 보여줌 */}
+            {isAnswering && (
+              <div className="answer-section">
+                <textarea
+                  value={customerAnswer}
+                  onChange={handleAnswerChange}
+                  placeholder="답변을 작성하세요."
+                />
+                <button className="btn" onClick={handleSubmitAnswer}>
+                  답변 제출
+                </button>
+              </div>
+            )}
+          </>
+        )}
+
+        <button className="btn" onClick={handleListCustomer}>
+          목록으로
+        </button>
+      </div>
     </div>
   );
 };

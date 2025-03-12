@@ -94,7 +94,7 @@ const FaqAddPage = () => {
                 rows="6"
               />
             </div>
-            <button className="faqadd-input-button" type="submit">
+            <button className="btn" type="submit">
               추가
             </button>
             <button className="btn" onClick={handleListFaq}>
