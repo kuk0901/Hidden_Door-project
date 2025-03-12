@@ -212,7 +212,8 @@ function App() {
                   <Route index element={<AdminAccountPage />} />
                   <Route path=":id" element={<AdminAccountDetailPage />} />
                 </Route>
-                <Route path="reservation" element={<AdminReservationPage />}>
+                <Route path="reservation">
+                  <Route index element={<AdminReservationPage />} />
                   <Route
                     path=":reservationId"
                     element={<AdminReservationDetailPage />}
