@@ -3,6 +3,7 @@ import { useAdmin } from '@hooks/useAdmin';
 import Api from '@axios/api';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { formatKoreanDate } from '../../utils/format/date';
 
 function NoticePage() {
   const { admin } = useAdmin();
@@ -117,7 +118,7 @@ function NoticePage() {
             >
               <div className="notice-title">{notice.title}</div>
               <div className="notice-date">
-                {new Date(notice.createdAt).toLocaleDateString()}
+                {formatKoreanDate(notice.createdAt)}
               </div>
             </li>
           ))}
