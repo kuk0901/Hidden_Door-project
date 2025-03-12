@@ -2,7 +2,6 @@ import EditableAdminDetail from "@components/admin/EditableAdminDetail";
 import ReadOnlyAdminDetail from "@components/admin/ReadOnlyAdminDetail";
 import SuperAdminEditableDetail from "@components/admin/SuperAdminEditableDetail";
 
-// FIXME: 정보 수정 추가
 const AdminDetailContent = ({
   adminData,
   setAdminData,
@@ -37,6 +36,7 @@ const AdminDetailContent = ({
       <EditableAdminDetail
         adminData={adminData}
         setAdminData={setAdminData}
+        availableRoles={availableRoles}
         page={page}
         setPage={setPage}
         search={search}

@@ -2,7 +2,6 @@ package com.baeksutalchul.hiddendoor.theme.service;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -56,7 +55,7 @@ public class ThemeService {
 
   @Transactional
   public ResponseDto<List<ThemeDto>> addThemeWithFile(ThemeDto themeDto, MultipartFile file) {
-    // 파일 이름을 themeDto에 설정
+
     if (file != null && !file.isEmpty()) {
       themeDto.setOriginalFileName(file.getOriginalFilename());
     }
@@ -86,7 +85,6 @@ public class ThemeService {
       throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
     }
 
-    // 4. db 저장
     Theme savedTheme = modelMapper.map(themeDto, Theme.class);
     themeRepository.save(savedTheme);
 
@@ -97,19 +95,31 @@ public class ThemeService {
   }
 
   @Transactional
-  public ResponseDto<List<ThemeDto>> updateThemeWithFile(ThemeDto themeDto, MultipartFile file) {
-    Theme theme = themeRepository.findById(themeDto.getThemeId())
+  public ResponseDto<List<ThemeDto>> updateThemeWithFile(String id, ThemeDto themeDto, MultipartFile file) {
+    Theme theme = themeRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.THEME_NOT_FOUND));
 
-    String existingOriginalFileName = themeDto.getOriginalFileName();
     String existingStoredFileName = theme.getStoredFileName();
+    themeDto.setOriginalFileName(themeDto.getOriginalFileName());
 
-    themeDto.setOriginalFileName(existingOriginalFileName);
+    handleFileUpload(theme, themeDto, file, existingStoredFileName);
 
+    checkDuplicateThemeNameAndDescription(theme, themeDto);
+
+    modelMapper.map(themeDto, theme);
+    themeRepository.save(theme);
+
+    ResponseDto<List<ThemeDto>> themeList = getAllTheme();
+    themeList.setMsg("작성하신 테마 정보가 업데이트되었습니다.");
+
+    return themeList;
+  }
+
+  private void handleFileUpload(Theme theme, ThemeDto themeDto, MultipartFile file, String existingStoredFileName) {
     if (file != null && !file.isEmpty()) {
       try {
         // 이미지 중복 검사
-        Criteria criteria = Criteria.where("originalFileName").is(existingOriginalFileName);
+        Criteria criteria = Criteria.where("originalFileName").is(themeDto.getOriginalFileName());
         Query query = new Query(criteria);
 
         Theme existingTheme = mongoTemplate.findOne(query, Theme.class);
@@ -117,7 +127,6 @@ public class ThemeService {
           throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 이미지가 이미 존재합니다.");
         }
 
-        // 새로운 파일 저장
         String storedFileName = fileUtils.saveFile(file);
         themeDto.setStoredFileName(storedFileName);
 
@@ -136,8 +145,9 @@ public class ThemeService {
       // 파일이 없는 경우 기존 이미지 유지
       themeDto.setStoredFileName(existingStoredFileName);
     }
+  }
 
-    // 테마 이름과 설명에 대한 중복 검사
+  private void checkDuplicateThemeNameAndDescription(Theme theme, ThemeDto themeDto) {
     Criteria nameAndDescriptionCriteria = new Criteria().orOperator(
         Criteria.where("themeName").is(themeDto.getThemeName()),
         Criteria.where("description").is(themeDto.getDescription()));
@@ -153,16 +163,6 @@ public class ThemeService {
         throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 테마 설명이 이미 존재합니다.");
       }
     }
-
-    // 기존 테마 정보를 업데이트하여 저장
-    modelMapper.map(themeDto, theme);
-
-    themeRepository.save(theme);
-
-    ResponseDto<List<ThemeDto>> themeList = getAllTheme();
-    themeList.setMsg("작성하신 테마 정보가 업데이트되었습니다.");
-
-    return themeList;
   }
 
   @Transactional

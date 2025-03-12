@@ -14,11 +14,12 @@ const AccountItem = ({
 }) => {
   const navigate = useNavigate();
 
+  // FIXME: format 수정
   const filteredRoles = adminData.roles.filter((r) => r !== "ROLE_USER");
 
   const handleDetail = () => {
     navigate(`/hidden_door/admin/account/${adminData.adminId}`, {
-      state: { adminData, page, search }
+      state: { page, search }
     });
   };
 
@@ -63,14 +64,17 @@ const AccountItem = ({
         <div className="content content--sm">{adminData.userName}</div>
         <div className="content content--md">{adminData.email}</div>
         <div className="content content--sm">{adminData.phone}</div>
+
         <div className="content content--md roles-container">
-          {filteredRoles.map((r, i, arr) => (
+          {filteredRoles.slice(0, 3).map((r, i, arr) => (
             <span key={i} className="role">
               {formatRole(r)}
               {i < arr.length - 1 ? ", " : ""}
             </span>
           ))}
+          {filteredRoles.length > 3 && <span className="role">...</span>}
         </div>
+
         {role && (
           <div className="content content--sm">
             <button

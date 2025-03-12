@@ -26,8 +26,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class CautionController {
   private CautionService cautionService;
 
-  private static final Logger logger = LoggerFactory.getLogger(CautionController.class);
-
   public CautionController(CautionService cautionService) {
     this.cautionService = cautionService;
   }

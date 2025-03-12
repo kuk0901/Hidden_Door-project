@@ -210,7 +210,7 @@ function App() {
                 <Route path="dashboard" element={<DashBoardPage />} />
                 <Route path="account">
                   <Route index element={<AdminAccountPage />} />
-                  <Route path=":id" element={<AdminAccountDetailPage />} />
+                  <Route path=":accountId" element={<AdminAccountDetailPage />} />
                 </Route>
                 <Route path="reservation">
                   <Route index element={<AdminReservationPage />} />
