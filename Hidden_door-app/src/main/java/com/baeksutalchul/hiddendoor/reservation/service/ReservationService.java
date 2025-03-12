@@ -44,7 +44,6 @@ public class ReservationService {
     this.objectMapper = objectMapper;
   }
 
-  // admin
   public ResponseDto<List<ReservationDto>> getReservationAll() {
     List<Reservation> reservationList = reservationRepository.findAll();
 
@@ -75,7 +74,6 @@ public class ReservationService {
     return new ResponseDto<>(reservationDtoList, "예약 데이터 반환");
   }
 
-  // admin
   public ResponseDto<ReservationDto> getReservationById(String reservationId) {
     Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
 
