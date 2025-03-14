@@ -14,7 +14,6 @@ const AccountItem = ({
 }) => {
   const navigate = useNavigate();
 
-  // FIXME: format 수정
   const filteredRoles = adminData.roles.filter((r) => r !== "ROLE_USER");
 
   const handleDetail = () => {
@@ -65,6 +64,7 @@ const AccountItem = ({
         <div className="content content--md">{adminData.email}</div>
         <div className="content content--sm">{adminData.phone}</div>
 
+        {/* FIXME: 컴포넌트 분리 고려 */}
         <div className="content content--md roles-container">
           {filteredRoles.slice(0, 3).map((r, i, arr) => (
             <span key={i} className="role">

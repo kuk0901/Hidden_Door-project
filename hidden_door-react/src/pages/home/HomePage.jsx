@@ -92,7 +92,7 @@ const HomePage = () => {
 
       <HomeThemeSection />
 
-      {/* FIXME: Event section */}
+      {/* FIXME: Event section 추가 */}
 
       {/* <div 
         style={{

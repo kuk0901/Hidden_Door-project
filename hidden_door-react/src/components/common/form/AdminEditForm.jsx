@@ -47,7 +47,7 @@ const AdminEditForm = ({ children, onSubmit, formId, ...props }) => {
     onSubmit(data);
   };
 
-  // FIXME: 수정 필요
+  // FIXME: 컴포넌트 분리 고려
   return (
     <form
       id={formId}
