@@ -385,7 +385,6 @@
     border-top: 1px solid;
     border-bottom: 1px solid;
     padding: 10px;
-    // border-radius: 5px;
 
     .price--title {
       padding: 5px;
@@ -446,6 +445,28 @@
   @include mixins.flex-layout-row(space-between, center);
   gap: 20px;
   margin-top: 10px;
+  flex-wrap: wrap;
+
+  .btn-container:has(.btn--link) {
+    margin: 0;
+  }
+
+  @media (max-width: variables.$breakpoint-lg) {
+    & {
+      gap: 10px;
+
+      .btn-container:has(.btn--link) {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    & {
+      gap: 0;
+    }
+  }
 }
 
 .admin--form--section {

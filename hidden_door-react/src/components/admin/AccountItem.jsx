@@ -61,11 +61,11 @@ const AccountItem = ({
     <li className="account--item">
       <button onClick={handleDetail} className="account--item-content">
         <div className="content content--sm">{adminData.userName}</div>
-        <div className="content content--md">{adminData.email}</div>
-        <div className="content content--sm">{adminData.phone}</div>
+        <div className="content content--md content--email">{adminData.email}</div>
+        <div className="content content--sm content--phone">{adminData.phone}</div>
 
         {/* FIXME: 컴포넌트 분리 고려 */}
-        <div className="content content--md roles-container">
+        <div className="content content--lg roles-container">
           {filteredRoles.slice(0, 3).map((r, i, arr) => (
             <span key={i} className="role">
               {formatRole(r)}
@@ -76,7 +76,7 @@ const AccountItem = ({
         </div>
 
         {role && (
-          <div className="content content--sm">
+          <div className="content content--xs">
             <button
               className="btn delete"
               onClick={(e) => {

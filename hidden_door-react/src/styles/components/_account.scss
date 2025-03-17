@@ -24,6 +24,10 @@
           font-weight: 700;
           text-align: center;
 
+          &.content--xs {
+            width: 130px;
+          }
+
           &.content--sm {
             width: 150px;
           }
@@ -33,7 +37,7 @@
           }
 
           &.content--lg {
-            width: 350px;
+            width: 330px;
           }
         }
       }
@@ -54,11 +58,15 @@
         width: 100%;
         border: none;
         background-color: transparent;
-        padding: 0;
+        height: 37px;
 
         .content {
           font-size: 16px;
           text-align: center;
+
+          &.content--xs {
+            width: 130px;
+          }
 
           &.content--sm {
             width: 150px;
@@ -69,12 +77,118 @@
           }
 
           &.content--lg {
-            width: 350px;
+            width: 330px;
           }
 
           &.roles-container {
             @include mixins.flex-layout-row(center, center);
             gap: 10px;
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-lg) {
+    & {
+      .account--list {
+        .account--item {
+          padding: 10px 0;
+
+          &.account--header {
+            .content {
+              font-size: 18px;
+
+              &.content--xs {
+                width: 90px;
+              }
+
+              &.content--sm {
+                width: 130px;
+              }
+
+              &.content--md {
+                width: 210px;
+              }
+
+              &.content--lg {
+                width: 260px;
+              }
+            }
+          }
+
+          .account--item-content {
+            .content {
+              font-size: 16px;
+
+              &.content--xs {
+                width: 90px;
+              }
+
+              &.content--sm {
+                width: 130px;
+
+                .btn.delete {
+                  padding: 8px 13px;
+                }
+              }
+
+              &.content--md {
+                width: 210px;
+              }
+
+              &.content--lg {
+                width: 260px;
+              }
+
+              &.roles-container {
+                gap: 8px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-md) {
+    .account--list {
+      .account--item {
+        &.account--header {
+          .content {
+            &.content--email {
+              display: none;
+            }
+          }
+        }
+
+        .account--item-content {
+          .content {
+            &.content--email {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    .account--list {
+      .account--item {
+        &.account--header {
+          .content {
+            &.content--phone {
+              display: none;
+            }
+          }
+        }
+
+        .account--item-content {
+          .content {
+            &.content--phone {
+              display: none;
+            }
           }
         }
       }
@@ -161,6 +275,12 @@
           font-size: 18px;
           min-width: 70px;
           text-align: center;
+
+          @media (max-width: variables.$breakpoint-sm) {
+            & {
+              font-size: 16px;
+            }
+          }
         }
 
         .admin--detail--value {
@@ -171,6 +291,19 @@
           min-width: 400px;
           @include mixins.flex-layout-row(flex-start, center);
           flex-wrap: wrap;
+
+          @media (max-width: variables.$breakpoint-sm) {
+            & {
+              font-size: 16px;
+              min-width: 300px;
+            }
+          }
+
+          @media (max-width: 414px) {
+            & {
+              min-width: 260px;
+            }
+          }
         }
 
         .roles-checkbox-group {
@@ -186,6 +319,13 @@
             .label--role {
               width: 200px;
             }
+          }
+        }
+
+        @media (max-width: 414px) {
+          & {
+            padding: 5px;
+            gap: 0;
           }
         }
       }
