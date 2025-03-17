@@ -129,8 +129,6 @@ const AdminAccountPage = () => {
   return (
     <div className="admin--account--page">
       <section className="search--form--section">
-        <h2 className="search--account--header">관리자 검색</h2>
-
         <div className="btn--contain--section">
           <SearchForm
             onSearch={handleSearch}

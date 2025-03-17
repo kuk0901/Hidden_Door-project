@@ -10,15 +10,31 @@
     .account--item {
       @include mixins.flex-layout-row(space-around, center);
       width: 100%;
-      padding: 10px;
+      padding: 7px 10px;
       border: none;
       background-color: transparent;
       border-bottom: 1px solid;
 
       &.account--header {
+        padding-top: 0px;
+        padding-bottom: 10px;
+
         .content {
           font-size: 20px;
           font-weight: 700;
+          text-align: center;
+
+          &.content--sm {
+            width: 150px;
+          }
+
+          &.content--md {
+            width: 250px;
+          }
+
+          &.content--lg {
+            width: 350px;
+          }
         }
       }
 
@@ -38,6 +54,7 @@
         width: 100%;
         border: none;
         background-color: transparent;
+        padding: 0;
 
         .content {
           font-size: 16px;

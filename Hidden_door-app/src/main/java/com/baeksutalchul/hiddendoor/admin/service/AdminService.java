@@ -22,12 +22,14 @@ import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.token.TokenService;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
+import com.baeksutalchul.hiddendoor.utils.sort.AdminSortUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 @Service
 public class AdminService {
@@ -77,6 +79,8 @@ public class AdminService {
     } else {
       admin.setRoles(adminDto.getRoles());
     }
+
+    admin.setRolesCount(admin.getRoles().size());
 
     // 사용자 정보를 데이터베이스에 저장
     try {
@@ -171,27 +175,27 @@ public class AdminService {
     Pageable pageable = PageableUtil.createPageRequest(
         Math.max(0, pageDto.getPage() - 1),
         pageDto.getSize(),
-        pageDto.getSortField(),
-        pageDto.getSortDirection());
+        "rolesCount", // Always sort by rolesCount
+        "ASC");
 
     Page<Admin> adminPage;
 
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
       switch (searchField) {
         case "email":
-          adminPage = adminRepository.findByEmailContaining(searchTerm, pageable);
+          adminPage = adminRepository.findByEmailContainingOrderByRolesCountDesc(searchTerm, pageable);
           break;
         case "userName":
-          adminPage = adminRepository.findByUserNameContaining(searchTerm, pageable);
+          adminPage = adminRepository.findByUserNameContainingOrderByRolesCountDesc(searchTerm, pageable);
           break;
         case "roles":
-          adminPage = adminRepository.findByRolesContaining(searchTerm, pageable);
+          adminPage = adminRepository.findByRolesContainingOrderByRolesCountDesc(searchTerm, pageable);
           break;
         default:
-          adminPage = adminRepository.findByEmailContainingOrUserNameContaining(searchTerm, searchTerm, pageable);
+          adminPage = adminRepository.findAllByOrderByRolesCountDesc(pageable);
       }
     } else {
-      adminPage = adminRepository.findAll(pageable);
+      adminPage = adminRepository.findAllByOrderByRolesCountDesc(pageable);
     }
 
     if (adminPage.isEmpty()) {
@@ -202,8 +206,9 @@ public class AdminService {
         .map(admin -> modelMapper.map(admin, AdminDto.class))
         .toList();
 
+    logger.info("adminDtoList: {}", adminDtoList);
+
     PageDto resultPageDto = PageableUtil.createPageDto(adminPage);
-    logger.info("resultPageDto: {}", resultPageDto);
 
     return new ResponseDto<>(adminDtoList, "success", resultPageDto, searchField, searchTerm);
   }
@@ -287,6 +292,7 @@ public class AdminService {
 
     if (!Objects.equals(admin.getRoles(), adminDto.getRoles())) {
       admin.setRoles(adminDto.getRoles());
+      admin.setRolesCount(adminDto.getRoles().size());
       hasChanges = true;
     }
 
