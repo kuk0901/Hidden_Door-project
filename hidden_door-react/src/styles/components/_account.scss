@@ -263,6 +263,57 @@
             }
           }
         }
+
+        @media (max-width: variables.$breakpoint-sm) {
+          & {
+            .form-container {
+              .container {
+                flex-direction: column;
+                align-items: flex-start;
+
+                .label-container {
+                  text-align: left;
+                  margin: 5px 5px 0;
+                }
+              }
+            }
+
+            .roles-checkbox-group {
+              flex-direction: column;
+
+              .role-label-container {
+                text-align: left;
+              }
+            }
+          }
+        }
+
+        @media (max-width: variables.$breakpoint-xs) {
+          & {
+            .form-container {
+              .container {
+                .label-container {
+                  margin: 0 0 5px;
+
+                  label,
+                  .role--label {
+                    &::after {
+                      content: ":";
+                    }
+                  }
+                }
+
+                .input-container {
+                  margin: 0;
+
+                  &.input-container__m {
+                    width: 322px;
+                  }
+                }
+              }
+            }
+          }
+        }
       }
 
       .admin--detail--item {
@@ -279,6 +330,11 @@
           @media (max-width: variables.$breakpoint-sm) {
             & {
               font-size: 16px;
+              text-align: left;
+
+              &::after {
+                content: ":";
+              }
             }
           }
         }
@@ -322,10 +378,12 @@
           }
         }
 
-        @media (max-width: 414px) {
+        @media (max-width: variables.$breakpoint-sm) {
           & {
             padding: 5px;
-            gap: 0;
+            gap: 10px;
+            flex-direction: column;
+            align-items: flex-start;
           }
         }
       }
@@ -333,6 +391,12 @@
       .btn-container {
         justify-content: center;
         margin: 10px auto;
+      }
+    }
+
+    @media (max-width: variables.$breakpoint-sm) {
+      & {
+        padding: 10px 5px;
       }
     }
   }

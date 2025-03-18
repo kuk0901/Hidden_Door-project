@@ -7,7 +7,7 @@ const AdminRoleInputItem = ({ roles }) => {
     <div className="form-container column">
       <div className="container m">
         <div className="label-container text-center">
-          <div>역할</div>
+          <div className="role--label">역할</div>
         </div>
 
         <div className="input-container">

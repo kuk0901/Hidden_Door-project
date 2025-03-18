@@ -1,6 +1,7 @@
 @use "../abstracts/mixins";
 @use "../abstracts/variables";
 
+// form
 .form-container {
   @include mixins.flex-layout-column(center, stretch);
   gap: 10px;
@@ -103,6 +104,7 @@
   min-width: 70px;
 }
 
+// edit form
 .edit-form {
   margin: 10px;
 
@@ -120,6 +122,7 @@
   }
 }
 
+// search form
 .search--form--section {
   .search--account--header {
     margin: 0 0 5px;
@@ -176,6 +179,7 @@
   }
 }
 
+// newAdminAddForm
 #newAdminAddForm {
   align-items: baseline;
 
