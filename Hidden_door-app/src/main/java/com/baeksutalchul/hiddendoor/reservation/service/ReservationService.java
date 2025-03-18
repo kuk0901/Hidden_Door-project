@@ -2,6 +2,9 @@ package com.baeksutalchul.hiddendoor.reservation.service;
 
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
@@ -15,6 +18,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.baeksutalchul.hiddendoor.dto.ReservationDto;
@@ -147,49 +152,39 @@ public class ReservationService {
     return new ResponseDto<>(availabilityData, "가용성 데이터를 성공적으로 로드했습니다.");
   }
 
-  public ResponseDto<ReservationDto> createReservation(ReservationDto reservationDto) {
-    Reservation reservation = convertToReservation(reservationDto);
-    reservation.setReservationCreDate(Instant.now());
-    reservation.setAvailability("N");
-    reservation.setPaymentState("N");
-    reservation.setPaymentMethod("현장");
-    reservation.setPaymentDate(defaultInstant);
-    reservation.setRefundState("N");
-    Reservation savedReservation = reservationRepository.save(reservation);
-    return new ResponseDto<>(convertToDto(savedReservation), "예약이 성공적으로 생성되었습니다.");
-  }
-
-  private Reservation convertToReservation(ReservationDto dto) {
+  @Transactional
+  public ResponseDto<Reservation> createReservation(ReservationDto dto) {
     Reservation reservation = new Reservation();
     reservation.setThemeId(dto.getThemeId());
     reservation.setName(dto.getName());
     reservation.setPhone(dto.getPhone());
     reservation.setEmail(dto.getEmail());
-    reservation.setReservationDate(dto.getReservationDate());
-    reservation.setAvailability("N");
+    
+    // reservationDate와 reservationTime 처리
+    Instant combinedDateTime = combineDateTime(dto.getReservationDate(), dto.getReservationTime());
+    reservation.setReservationDate(combinedDateTime);
+    
+    reservation.setPartySize(dto.getPartySize());
     reservation.setPaymentAmount(dto.getPaymentAmount());
-    reservation.setPaymentState("N");
-    reservation.setPaymentMethod("현장");
+    reservation.setAvailability(dto.getAvailability());
+    reservation.setPaymentState(dto.getPaymentState());
+    reservation.setPaymentMethod(dto.getPaymentMethod());
+    reservation.setRefundState(dto.getRefundState());
+
+    // 서버에서 관리하는 값 설정
+    reservation.setReservationCreDate(Instant.now());
     reservation.setPaymentDate(defaultInstant);
-    reservation.setRefundState("N");
-    return reservation;
+
+    Reservation saved = mongoTemplate.save(reservation);
+
+    return new ResponseDto<>(saved, "예약이 성공적으로 생성되었습니다.");
   }
 
-  private ReservationDto convertToDto(Reservation reservation) {
-    ReservationDto dto = new ReservationDto();
-    dto.setReservationId(reservation.getReservationId());
-    dto.setThemeId(reservation.getThemeId());
-    dto.setName(reservation.getName());
-    dto.setPhone(reservation.getPhone());
-    dto.setEmail(reservation.getEmail());
-    dto.setReservationDate(reservation.getReservationDate());
-    dto.setReservationCreDate(reservation.getReservationCreDate());
-    dto.setAvailability(reservation.getAvailability());
-    dto.setPaymentAmount(reservation.getPaymentAmount());
-    dto.setPaymentState(reservation.getPaymentState());
-    dto.setPaymentMethod(reservation.getPaymentMethod());
-    dto.setPaymentDate(reservation.getPaymentDate());
-    dto.setRefundState(reservation.getRefundState());
-    return dto;
+  // 날짜와 시간을 결합하는 헬퍼 메서드
+  private Instant combineDateTime(String dateStr, String timeStr) {
+    LocalDate date = LocalDate.parse(dateStr);
+    LocalTime time = LocalTime.parse(timeStr);
+    LocalDateTime dateTime = LocalDateTime.of(date, time);
+    return dateTime.atZone(ZoneId.systemDefault()).toInstant();
   }
 }
