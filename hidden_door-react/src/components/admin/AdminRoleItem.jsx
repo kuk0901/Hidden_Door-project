@@ -10,7 +10,7 @@ const AdminRoleItem = ({ roles }) => {
         {filteredRoles.map((r, i, arr) => (
           <span key={i} className="role">
             {formatRole(r)}
-            {i < arr.length - 1 ? ", " : ""}
+            {i < arr.length - 1 ? ",\u00A0" : ""}
           </span>
         ))}
       </div>

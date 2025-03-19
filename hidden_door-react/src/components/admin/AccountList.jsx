@@ -13,10 +13,10 @@ const AccountList = ({
     <ul className="account--list">
       <li className="account--item account--header">
         <div className="content content--sm">이름</div>
-        <div className="content content--md">이메일</div>
-        <div className="content content--sm">연락처</div>
-        <div className="content content--md">권한</div>
-        {role && <div className="content content--sm">계정 삭제</div>}
+        <div className="content content--md content--email">이메일</div>
+        <div className="content content--sm content--phone">연락처</div>
+        <div className="content content--lg">권한</div>
+        {role && <div className="content content--xs">계정 삭제</div>}
       </li>
 
       {adminList.map((adminData) => (

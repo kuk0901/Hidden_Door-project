@@ -1,7 +1,6 @@
 import AdminDetailItem from "@components/admin/AdminDetailItem";
 import AdminRoleItem from "@components/admin/AdminRoleItem";
 
-// FIXME: 수정
 const ReadOnlyAdminDetail = ({ adminData }) => {
   return (
     <div className="admin--detail--content">

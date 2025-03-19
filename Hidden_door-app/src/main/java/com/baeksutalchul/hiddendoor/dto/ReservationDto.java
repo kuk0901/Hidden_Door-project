@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Document(collection = "reservation")
 public class ReservationDto {
   @Id
   private String reservationId;
@@ -21,7 +20,7 @@ public class ReservationDto {
   private String name;
   private String phone;
   private String email;
-  private Instant reservationDate;
+  private String reservationDate;
   private Instant reservationCreDate;
   private String availability;
   private int paymentAmount;
@@ -35,4 +34,6 @@ public class ReservationDto {
   private List<ThemeDto> themes;
   private List<String> availableDates;
   private List<String> timeSlots;
+  private int partySize;
+  private String reservationTime;
 }

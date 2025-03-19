@@ -7,10 +7,13 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.baeksutalchul.hiddendoor.admin.domain.Admin;
 import com.baeksutalchul.hiddendoor.dto.FaqDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
@@ -18,6 +21,8 @@ import com.baeksutalchul.hiddendoor.faq.domain.Faq;
 import com.baeksutalchul.hiddendoor.faq.repository.FaqRepository;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
+import com.baeksutalchul.hiddendoor.utils.page.PageDto;
+import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 
 @Service
 public class FaqService {
@@ -32,26 +37,41 @@ public class FaqService {
     this.modelMapper = modelMapper;
   }
 
-  public ResponseDto<List<FaqDto>> getFaqAll() {
-    List<Faq> faqList = faqRepository.findAll();
+  public ResponseDto<List<FaqDto>> getFaqAll(PageDto pageDto, String searchField, String searchTerm) {
+        Pageable pageable = PageableUtil.createPageRequest(
+        Math.max(0, pageDto.getPage() - 1),
+        pageDto.getSize(),
+        pageDto.getSortField(),
+        pageDto.getSortDirection());
 
+    Page<Faq> faqList;
+
+    if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+      switch (searchField) {
+        case "title":
+        faqList = faqRepository.findByTitleContaining(searchTerm, pageable);
+          break;
+        case "question":
+        faqList = faqRepository.findByQuestionContaining(searchTerm, pageable);
+          break;
+        default:
+        faqList = faqRepository.findByTitleContainingOrQuestionContaining(searchTerm, searchTerm, pageable);
+      }
+    } else {
+      faqList = faqRepository.findAll(pageable);
+    }
     if (faqList.isEmpty()) {
       throw new CustomException(ErrorCode.FAQ_NOT_FOUND);
     }
 
-    List<FaqDto> faqDtoList = faqList.stream()
-        .map(faq -> {
-          FaqDto faqDto = modelMapper.map(faq, FaqDto.class);
-          faqDto.setKstCreDate(DateTimeUtil.convertToKoreanDate(faq.getCreDate()));
-          faqDto.setKstModDate(DateTimeUtil.convertToKoreanDateTime(faq.getModDate()));
-
-          return faqDto;
-        })
+    List<FaqDto> faqDtoList = faqList.getContent().stream()
+        .map(faq -> modelMapper.map(faq, FaqDto.class))
         .toList();
 
-    logger.info("faqDtoList: {}", faqDtoList);
+        PageDto resultPageDto = PageableUtil.createPageDto(faqList);
+        logger.info("resultPageDto: {}", resultPageDto);
 
-    return new ResponseDto<>(faqDtoList, "FAQ 데이터 반환");
+        return new ResponseDto<>(faqDtoList, "success", resultPageDto, searchField, searchTerm);
   }
 
   public ResponseDto<FaqDto> getFaqById(String faqId) {

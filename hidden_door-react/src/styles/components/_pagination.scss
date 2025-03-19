@@ -3,7 +3,7 @@
 @use "sass:color";
 
 .pagination {
-  margin-top: 20px;
+  margin: 30px;
   @include mixins.flex-layout-row(center, center);
   gap: 10px;
 

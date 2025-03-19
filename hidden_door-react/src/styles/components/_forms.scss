@@ -1,6 +1,7 @@
 @use "../abstracts/mixins";
 @use "../abstracts/variables";
 
+// form
 .form-container {
   @include mixins.flex-layout-column(center, stretch);
   gap: 10px;
@@ -103,6 +104,7 @@
   min-width: 70px;
 }
 
+// edit form
 .edit-form {
   margin: 10px;
 
@@ -120,14 +122,17 @@
   }
 }
 
+// search form
 .search--form--section {
   .search--account--header {
     margin: 0 0 5px;
   }
 
+  // FIXME: font-size
   .search-form {
     @include mixins.flex-layout-row(flex-start, center);
     gap: 10px;
+    flex-wrap: wrap;
 
     .search-select {
       display: inline-block;
@@ -150,8 +155,31 @@
       gap: 15px;
     }
   }
+
+  @media (max-width: variables.$breakpoint-md) {
+    .search-form {
+      .search-input {
+        min-width: 300px;
+      }
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-sm) {
+    .search-form {
+      .search-select {
+        font-size: 16px;
+        padding: 5px;
+      }
+
+      .search-input {
+        min-width: 280px;
+        font-size: 16px;
+      }
+    }
+  }
 }
 
+// newAdminAddForm
 #newAdminAddForm {
   align-items: baseline;
 

@@ -21,14 +21,14 @@ const AdminAccountPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "id",
-      sortDirection: "ASC"
+      sortDirection: "ASC",
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: ""
+      searchTerm: "",
     }
   );
 
@@ -49,14 +49,14 @@ const AdminAccountPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm
-        }
+          searchTerm,
+        },
       });
       setAdminList(res.data.data);
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm
+        searchTerm: res.data.searchTerm,
       });
     } catch (error) {
       if (error.response && error.response.status === 403) {
@@ -82,7 +82,7 @@ const AdminAccountPage = () => {
   const handleAddAdmin = async (newAdminData) => {
     try {
       const res = await Api.post("/auth/register", newAdminData, {
-        withCredentials: true
+        withCredentials: true,
       });
 
       await handleGetAdminList(
@@ -92,7 +92,7 @@ const AdminAccountPage = () => {
       );
 
       navigate(`/hidden_door/admin/account/${res.data.data.adminId}?new=true`, {
-        state: { page, search }
+        state: { page, search },
       });
     } catch (error) {
       toast.error("관리자 추가에 실패했습니다.");
@@ -118,7 +118,7 @@ const AdminAccountPage = () => {
     { value: "", label: "검색 필드 선택" },
     { value: "userName", label: "이름" },
     { value: "email", label: "이메일" },
-    { value: "roles", label: "역할" }
+    { value: "roles", label: "역할" },
   ];
 
   const handleReset = () => {
@@ -129,8 +129,6 @@ const AdminAccountPage = () => {
   return (
     <div className="admin--account--page">
       <section className="search--form--section">
-        <h2 className="search--account--header">관리자 검색</h2>
-
         <div className="btn--contain--section">
           <SearchForm
             onSearch={handleSearch}
@@ -140,12 +138,14 @@ const AdminAccountPage = () => {
           />
 
           {admin.roles.includes("ROLE_SUPER_ADMIN") && (
-            <button
-              onClick={() => setNewAccountAddVisible(!newAccountAddVisible)}
-              className="btn btn--link"
-            >
-              관리자 추가
-            </button>
+            <div className="btn-container">
+              <button
+                onClick={() => setNewAccountAddVisible(!newAccountAddVisible)}
+                className="btn btn--link"
+              >
+                관리자 추가
+              </button>
+            </div>
           )}
         </div>
       </section>

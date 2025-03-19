@@ -15,6 +15,7 @@
   padding: 20px;
   background-color: variables.$light-background-color;
   color: variables.$light-text-color;
+  min-height: calc(100vh - 136px - 70px);
 
   @include dark-mode {
     background-color: variables.$dark-background-color;

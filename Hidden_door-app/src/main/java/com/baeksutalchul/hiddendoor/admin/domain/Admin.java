@@ -22,4 +22,5 @@ public class Admin {
   private String pwd;
   private String token;
   private List<String> roles;
+  private int rolesCount;
 }
