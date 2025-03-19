@@ -5,7 +5,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,8 +22,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.baeksutalchul.hiddendoor.dto.ReservationDto;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
@@ -36,17 +37,15 @@ public class ReservationService {
   private MongoTemplate mongoTemplate;
   private final ModelMapper modelMapper;
   private final ThemeRepository themeRepository;
-  private final ObjectMapper objectMapper;
   private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
   private final Instant defaultInstant = Instant.parse("1970-01-01T00:00:00Z");
 
   public ReservationService(ReservationRepository reservationRepository, ModelMapper modelMapper,
-      MongoTemplate mongoTemplate, ThemeRepository themeRepository, ObjectMapper objectMapper) {
+      MongoTemplate mongoTemplate, ThemeRepository themeRepository) {
     this.reservationRepository = reservationRepository;
     this.modelMapper = modelMapper;
     this.mongoTemplate = mongoTemplate;
     this.themeRepository = themeRepository;
-    this.objectMapper = objectMapper;
   }
 
   public ResponseDto<List<ReservationDto>> getReservationAll() {
@@ -153,7 +152,8 @@ public class ReservationService {
   }
 
   @Transactional
-  public ResponseDto<Reservation> createReservation(ReservationDto dto) {
+  public ResponseDto<ReservationDto> createReservation(ReservationDto dto) {
+
     Reservation reservation = new Reservation();
     reservation.setThemeId(dto.getThemeId());
     reservation.setName(dto.getName());
@@ -163,6 +163,8 @@ public class ReservationService {
     // reservationDate와 reservationTime 처리
     Instant combinedDateTime = combineDateTime(dto.getReservationDate(), dto.getReservationTime());
     reservation.setReservationDate(combinedDateTime);
+
+    logger.info("combine확인 {}", combinedDateTime);
     
     reservation.setPartySize(dto.getPartySize());
     reservation.setPaymentAmount(dto.getPaymentAmount());
@@ -175,16 +177,29 @@ public class ReservationService {
     reservation.setReservationCreDate(Instant.now());
     reservation.setPaymentDate(defaultInstant);
 
-    Reservation saved = mongoTemplate.save(reservation);
+    Reservation saved = reservationRepository.save(reservation);
 
-    return new ResponseDto<>(saved, "예약이 성공적으로 생성되었습니다.");
+    ReservationDto responseDto = modelMapper.map(saved, ReservationDto.class);
+
+    return new ResponseDto<>(responseDto, "예약이 성공적으로 생성되었습니다.");
   }
 
   // 날짜와 시간을 결합하는 헬퍼 메서드
   private Instant combineDateTime(String dateStr, String timeStr) {
-    LocalDate date = LocalDate.parse(dateStr);
-    LocalTime time = LocalTime.parse(timeStr);
-    LocalDateTime dateTime = LocalDateTime.of(date, time);
-    return dateTime.atZone(ZoneId.systemDefault()).toInstant();
-  }
+    try {
+        // 날짜 파싱 (yyyy-MM-dd 형식 가정)
+        LocalDate date = LocalDate.parse(dateStr.split("T")[0]);
+
+        // 시간 파싱 (HH:mm 형식 가정)
+        LocalTime time = LocalTime.parse(timeStr, DateTimeFormatter.ofPattern("HH:mm"));
+
+        // 날짜와 시간 결합
+        LocalDateTime dateTime = LocalDateTime.of(date, time);
+
+        // UTC 기준으로 Instant 변환 (시간대 정보 없음)
+        return dateTime.toInstant(ZoneOffset.UTC);
+    } catch (DateTimeParseException e) {
+        throw new IllegalArgumentException("Invalid date or time format", e);
+    }
+}
 }

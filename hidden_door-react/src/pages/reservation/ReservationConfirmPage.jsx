@@ -58,17 +58,32 @@ const ReservationConfirmPage = () => {
     }));
   };
 
-  // 폼 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // 필수 필드 검증
       if (!reservation.name || !reservation.email || !reservation.phone) {
         toast.error("이름, 이메일, 전화번호는 필수 입력 항목입니다");
         return;
       }
+      // ReservationDto 구조에 맞게 데이터 변환
+      const reservationDto = {
+        themeId: reservation.themeId,
+        name: reservation.name,
+        phone: reservation.phone,
+        email: reservation.email,
+        reservationDate: reservation.reservationDate,
+        reservationTime: reservation.reservationTime,
+        partySize: reservation.partySize,
+        paymentAmount: reservation.paymentAmount,
+        availability: reservation.availability,
+        paymentState: reservation.paymentState,
+        paymentMethod: reservation.paymentMethod,
+        refundState: reservation.refundState,
+      };
 
-      const res = await Api.post("/reservations/create", reservation);
+      console.log(reservationDto);
+
+      const res = await Api.post("/reservations/create", reservationDto);
 
       if (res.data.success) {
         toast.success(res.data.msg);
