@@ -28,4 +28,5 @@ public class Reservation {
   private String paymentMethod;
   private Instant paymentDate;
   private String refundState;
+  private int partySize;
 }
