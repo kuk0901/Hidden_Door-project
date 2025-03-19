@@ -173,7 +173,6 @@ public class ReservationService {
     reservation.setPaymentMethod(dto.getPaymentMethod());
     reservation.setRefundState(dto.getRefundState());
 
-    // 서버에서 관리하는 값 설정
     reservation.setReservationCreDate(Instant.now());
     reservation.setPaymentDate(defaultInstant);
 
