@@ -1,6 +1,8 @@
 package com.baeksutalchul.hiddendoor.notice.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +20,9 @@ import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 import com.baeksutalchul.hiddendoor.dto.NoticeDto;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
+import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 @Service
 public class NoticeService {
@@ -37,20 +37,53 @@ public class NoticeService {
     this.modelMapper = modelMapper;
   }
 
-  // TODO: 모든 반환 데이터는 ResponseDto
-  // TODO: 데이터 변환은 modelMapper 사용
+  public ResponseDto<Map<String, Object>> getAllNotices(PageDto pageDto, String searchField, String searchTerm) {
 
-  public ResponseDto<List<NoticeDto>> getAllNotices() {
-    List<Notice> noticeList = noticeRepository.findAll();
+    logger.info("Requested page: {}, size: {}", pageDto.getPage(), pageDto.getSize());
 
-    List<NoticeDto> noticeDtoList = noticeList.stream().map(notice -> {
-      NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
-      noticeDto.setKstCreatedAt(DateTimeUtil.convertToKoreanDate(noticeDto.getCreatedAt()));
+    Pageable pageable = PageableUtil.createPageRequest(
+        pageDto.getPage() - 1,
+        pageDto.getSize(),
+        pageDto.getSortField(),
+        pageDto.getSortDirection());
 
-      return noticeDto;
-    }).toList();
+    Page<Notice> noticePage;
 
-    return new ResponseDto<>(noticeDtoList, "success");
+    if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+        switch (searchField) {
+            case "title":
+                noticePage = noticeRepository.findByTitleContaining(searchTerm, pageable);
+                break;
+            case "content":
+                noticePage = noticeRepository.findByContentContaining(searchTerm, pageable);
+                break;
+            default:
+                noticePage = noticeRepository.findByTitleContainingOrContentContaining(searchTerm, searchTerm, pageable);
+        }
+    } else {
+        noticePage = noticeRepository.findAll(pageable);
+    }
+
+    if (noticePage.isEmpty()) {
+        throw new CustomException(ErrorCode.NOTICE_NOT_FOUND);
+    }
+
+    List<NoticeDto> noticeDtoList = noticePage.getContent().stream()
+        .map(notice -> {
+            NoticeDto dto = modelMapper.map(notice, NoticeDto.class);
+            dto.setKstCreatedAt(DateTimeUtil.convertToKoreanDate(dto.getCreatedAt()));
+            return dto;
+        })
+        .toList();
+
+    PageDto resultPageDto = PageableUtil.createPageDto(noticePage);
+    logger.info("resultPageDto: {}", resultPageDto);
+
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("content", noticeDtoList);
+    responseData.put("page", resultPageDto);
+
+    return new ResponseDto<>(responseData, "success");
   }
 
   public ResponseDto<NoticeDto> getNoticeById(String id) {
@@ -62,8 +95,7 @@ public class NoticeService {
     } catch (CustomException e) {
         return new ResponseDto<>(null, e.getMessage());
     }
-}
-
+  }
 
   public ResponseDto<NoticeDto> createNotice(NoticeDto noticeDto) {
     Notice notice = modelMapper.map(noticeDto, Notice.class);
@@ -97,21 +129,4 @@ public class NoticeService {
       throw new CustomException(ErrorCode.NOTICE_NOT_FOUND);
     }
   }
-
-  public ResponseDto<Page<NoticeDto>> getAllNotices(int page, int size, String sortField, String sortDirection) {
-    // 클라이언트에서 받은 페이지 번호(1-based)를 0-based로 변환
-    int adjustedPage = Math.max(0, page - 1);
-    
-    Pageable pageable = PageableUtil.createPageRequest(adjustedPage, size, sortField, sortDirection);
-    Page<Notice> noticePage = noticeRepository.findAll(pageable);
-
-    Page<NoticeDto> noticeDtoPage = noticePage.map(notice -> {
-        NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
-        noticeDto.setKstCreatedAt(DateTimeUtil.convertToKoreanDate(noticeDto.getCreatedAt()));
-        return noticeDto;
-    });
-
-    return new ResponseDto<>(noticeDtoPage, "공지사항 목록을 성공적으로 조회했습니다.");
-}
-
 }
