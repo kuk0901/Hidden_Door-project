@@ -1,7 +1,5 @@
 package com.baeksutalchul.hiddendoor.escapeRoom.domain;
 
-import java.time.Instant;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

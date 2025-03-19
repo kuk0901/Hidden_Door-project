@@ -22,14 +22,12 @@ import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.token.TokenService;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
-import com.baeksutalchul.hiddendoor.utils.sort.AdminSortUtil;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 
 @Service
 public class AdminService {
