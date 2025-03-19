@@ -129,8 +129,6 @@ const AdminAccountPage = () => {
   return (
     <div className="admin--account--page">
       <section className="search--form--section">
-        <h2 className="search--account--header">관리자 검색</h2>
-
         <div className="btn--contain--section">
           <SearchForm
             onSearch={handleSearch}
@@ -140,12 +138,14 @@ const AdminAccountPage = () => {
           />
 
           {admin.roles.includes("ROLE_SUPER_ADMIN") && (
-            <button
-              onClick={() => setNewAccountAddVisible(!newAccountAddVisible)}
-              className="btn btn--link"
-            >
-              관리자 추가
-            </button>
+            <div className="btn-container">
+              <button
+                onClick={() => setNewAccountAddVisible(!newAccountAddVisible)}
+                className="btn btn--link"
+              >
+                관리자 추가
+              </button>
+            </div>
           )}
         </div>
       </section>

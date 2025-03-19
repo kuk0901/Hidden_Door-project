@@ -38,6 +38,7 @@ $breakpoint-xl: 1199px; // 1200px 미만 -> 초대형 화면 (대형 데스크�
 $breakpoint-lg: 991px; // 992px 미만 -> 큰 화면 (데스크탑)
 $breakpoint-md: 767px; // 768px 미만 -> 중간 화면 (태블릿)
 $breakpoint-sm: 575px; // 576px 미만 -> 작은 화면 (모바일)
+$breakpoint-xs: 414px; // 414px 미만 -> 일반 스마트폰
 
 /* // * 미디어쿼리 예시
 .example-class {
@@ -57,6 +58,14 @@ $breakpoint-sm: 575px; // 576px 미만 -> 작은 화면 (모바일)
 
   @media (max-width: $breakpoint-sm) {
     576px 미만의 화면에 적용될 스타일
+  }
+
+  @media (max-width: 414px) {
+    일반적인 스마트폰
+  }
+  
+  @media (max-width: 360px) {
+     소형 스마트폰
   }
 }
 */
