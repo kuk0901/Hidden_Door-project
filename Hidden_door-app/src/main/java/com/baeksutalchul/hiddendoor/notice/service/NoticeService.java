@@ -4,12 +4,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+
 import org.springframework.stereotype.Service;
 
 import com.baeksutalchul.hiddendoor.notice.domain.Notice;
@@ -27,7 +25,7 @@ import org.springframework.data.domain.Pageable;
 @Service
 public class NoticeService {
 
-  private static final Logger logger = LoggerFactory.getLogger(NoticeService.class);
+
   
   private final NoticeRepository noticeRepository;
   private final ModelMapper modelMapper;
@@ -39,7 +37,7 @@ public class NoticeService {
 
   public ResponseDto<Map<String, Object>> getAllNotices(PageDto pageDto, String searchField, String searchTerm) {
 
-    logger.info("Requested page: {}, size: {}", pageDto.getPage(), pageDto.getSize());
+   
 
     Pageable pageable = PageableUtil.createPageRequest(
         pageDto.getPage() - 1,
@@ -77,7 +75,7 @@ public class NoticeService {
         .toList();
 
     PageDto resultPageDto = PageableUtil.createPageDto(noticePage);
-    logger.info("resultPageDto: {}", resultPageDto);
+    
 
     Map<String, Object> responseData = new HashMap<>();
     responseData.put("content", noticeDtoList);
