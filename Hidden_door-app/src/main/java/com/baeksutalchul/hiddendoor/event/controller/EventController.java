@@ -4,8 +4,6 @@ import com.baeksutalchul.hiddendoor.dto.EventDto;
 import com.baeksutalchul.hiddendoor.event.service.EventService;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +13,7 @@ import java.util.List;
 @RequestMapping("/api/v1/events")
 public class EventController {
 
-    private final EventService eventService;
-    private static final Logger logger = LoggerFactory.getLogger(EventController.class);
+    private final EventService eventService;    
 
     public EventController(EventService eventService) {
         this.eventService = eventService;
@@ -47,9 +44,8 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {
-        try {
-            logger.info("EventDto: {}", eventDto);
+    public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {        try {
+            
             EventDto createdEvent = eventService.createEvent(eventDto);
             return ResponseEntity.ok().body(new ResponseDto<>(createdEvent, "이벤트가 성공적으로 추가되었습니다."));
         } catch (Exception e) {
