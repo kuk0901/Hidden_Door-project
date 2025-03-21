@@ -41,6 +41,13 @@ const CautionList = ({ data, setSectionData }) => {
 
       const res = await Api.post("/cautions/caution/add", newCaution);
 
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
+
       setSectionData(res.data.data);
       setIsAdding(false);
       reset();
@@ -123,12 +130,22 @@ const CautionList = ({ data, setSectionData }) => {
         updatedCaution
       );
 
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
+
       setSectionData(res.data.data);
       handleEditCancel();
 
       toast.success("해당 주의사항이 수정되었습니다.");
     } catch (error) {
-      toast.error(error.message || "알 수 없는 오류가 발생했습니다.");
+      toast.error(
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
     }
   };
 

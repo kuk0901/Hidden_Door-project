@@ -8,8 +8,8 @@ import PresentImageUploader from "@components/common/form/file/PresentImageUploa
 import DefaultSection from "@components/common/sections/DefaultSection";
 import CautionList from "@components/caution/CautionList";
 import HomeThemeSection from "@components/home/HomeThemeSection";
+import EventList from "@components/home/EventList";
 
-// * FIXME: 개별 페이지 완성 후 내용 수정
 const HomePage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
   const { admin } = useAdmin();
@@ -92,18 +92,13 @@ const HomePage = () => {
 
       <HomeThemeSection />
 
-      {/* FIXME: Event section 추가 */}
-
-      {/* <div 
-        style={{
-          border: "1px solid white",
-          height: "300px",
-          marginBottom: "10px",
-          textAlign: "center"
-        }}
-      >
-        Event section
-      </div> */}
+      {/* Event */}
+      <DefaultSection
+        api="/events"
+        className="section section--event"
+        title="놓치지 마세요!"
+        ChildComponent={EventList}
+      />
 
       {/* caution */}
       <DefaultSection

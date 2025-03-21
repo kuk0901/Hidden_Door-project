@@ -1,4 +1,4 @@
-@use 'functions';
+@use "functions";
 
 // flex
 @mixin flex {
@@ -72,5 +72,17 @@
 
   &:hover {
     color: auto-hover-color($base-color, $amount);
+  }
+}
+
+@mixin dark-mode {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+}
+
+@mixin light-mode {
+  @media (prefers-color-scheme: light) {
+    @content;
   }
 }
