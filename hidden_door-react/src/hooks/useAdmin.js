@@ -6,6 +6,10 @@ import {
   isDirectorSelector
 } from "../atoms/adminAtom";
 
+/**
+ * @description useAdmin Hook
+ * @returns {Object} admin, setAdmin, isSuperAdmin, isDirector, isAdmin
+ */
 export const useAdmin = () => {
   const [admin, setAdmin] = useRecoilState(adminState);
   const isSuperAdmin = useRecoilValue(isSuperAdminSelector);

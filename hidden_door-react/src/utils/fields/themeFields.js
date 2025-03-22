@@ -8,7 +8,7 @@ export const themeFields = (theme = null) => {
       placeholder: "테마 이미지",
       label: "테마 이미지",
       themeForm: true,
-      required: !theme, // 테마가 없으면 필수, 테마가 있으면 선택 사항
+      required: !theme,
       onChange: null
     },
     {

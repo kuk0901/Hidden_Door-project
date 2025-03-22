@@ -4,12 +4,14 @@ const Api = axios.create({
   baseURL: "/api"
 });
 
-// * 요청 인터셉터
+/**
+ * @description 요청 인터셉터를 설정하여 모든 요청에 Authorization 헤더를 추가
+ */
 Api.interceptors.request.use(
   async (config) => {
-    const token = localStorage.getItem("token"); // Access Token 가져옴
+    const token = localStorage.getItem("token");
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`; // 헤더에 Access Token 추가
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
@@ -18,7 +20,9 @@ Api.interceptors.request.use(
   }
 );
 
-// * 응답 인터셉터
+/**
+ * @description 응답 인터셉터를 설정하여 401 상태 코드 처리 및 Access Token 갱신
+ */
 Api.interceptors.response.use(
   (response) => {
     return response;
@@ -26,11 +30,9 @@ Api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    // error.response가 정의되어 있는지 확인
     if (error.response) {
       const errorRes = error.response;
 
-      // 401 상태 코드와 ACCESS_DENIED 코드 확인
       const accessDeniedResult =
         errorRes.status === 401 && errorRes.data.code === "ACCESS_DENIED";
 
@@ -45,12 +47,12 @@ Api.interceptors.response.use(
             { withCredentials: true }
           );
 
-          const newAccessToken = refreshResponse.data.token; // 새로운 Access Token
+          const newAccessToken = refreshResponse.data.token;
 
-          localStorage.setItem("token", newAccessToken); // 새로운 Access Token 저장
-          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`; // 재요청 시 새로운 Access Token 추가
+          localStorage.setItem("token", newAccessToken);
+          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
 
-          return Api(originalRequest); // 원래 요청 다시 전송
+          return Api(originalRequest);
         } catch (refreshError) {
           if (
             refreshError.response &&

@@ -1,5 +1,8 @@
 import { atom, selector } from "recoil";
 
+/**
+ * @description: Admin state atom
+ */
 export const adminState = atom({
   key: "adminState",
   default: null
