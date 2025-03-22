@@ -1,6 +1,10 @@
 import { useSetRecoilState } from "recoil";
 import { confirmState } from "../atoms/confirmAtom";
 
+/**
+ * @description useConfirm Hook
+ * @returns function(string): Promise<boolean>} confirm
+ */
 const useConfirm = () => {
   const setConfirmState = useSetRecoilState(confirmState);
 
@@ -10,7 +14,7 @@ const useConfirm = () => {
         isOpen: true,
         message,
         onConfirm: () => resolve(true),
-        onCancel: () => resolve(false),
+        onCancel: () => resolve(false)
       });
     });
   };

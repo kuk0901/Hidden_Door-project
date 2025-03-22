@@ -35,33 +35,33 @@ public class EscapeRoomController {
   }
 
   @PatchMapping("/info/title/{id}")
-  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomTitle(@PathVariable String id,
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomTitle(@PathVariable("id") String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
     return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomTitle(id, escapeRoomDto));
   }
 
   // patchVariable 추가 -> 수정 필요
   @PatchMapping("/info/explanation/{id}")
-  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomExplanation(@PathVariable String id,
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomExplanation(@PathVariable("id") String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
     return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomExplanation(id, escapeRoomDto));
   }
 
   @PatchMapping("/info/theme-title-line/{id}")
-  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeTitleLine(@PathVariable String id,
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeTitleLine(@PathVariable("id") String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
     return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeTitleLine(id, escapeRoomDto));
   }
 
   @PatchMapping("/info/theme-explanation-line/{id}")
-  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeExplanationLine(@PathVariable String id,
+  public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeExplanationLine(@PathVariable("id") String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
     return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeExplanationLine(id, escapeRoomDto));
   }
 
   @PatchMapping("/info/update-image/{id}")
   public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomImg(
-      @PathVariable String id,
+      @PathVariable("id") String id,
       @RequestPart("file") MultipartFile file) {
 
     logger.info("Received file: name={}, size={}, contentType={}",
@@ -73,7 +73,7 @@ public class EscapeRoomController {
 
   @PatchMapping("/info/theme-detail-title-line/{id}")
   public ResponseEntity<ResponseDto<EscapeRoomDto>> updateEscapeRoomThemeDetailTitleLine(
-      @PathVariable String id,
+      @PathVariable("id") String id,
       @RequestBody EscapeRoomDto escapeRoomDto) {
     return ResponseEntity.ok().body(escapeRoomService.updateEscapeRoomThemeDetailTitleLine(id, escapeRoomDto));
   }

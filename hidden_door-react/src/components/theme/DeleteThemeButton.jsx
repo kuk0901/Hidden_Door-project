@@ -23,7 +23,13 @@ const DeleteThemeButton = ({ themeId, themeName }) => {
     try {
       const res = await Api.delete(`/api/v1/themes/theme/delete/${themeId}`);
 
-      console.log(res.data.data);
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
+
       setThemeList(res.data.data);
       navigate(`/hidden_door/theme?delete=true&tn=${themeName}`);
     } catch (error) {

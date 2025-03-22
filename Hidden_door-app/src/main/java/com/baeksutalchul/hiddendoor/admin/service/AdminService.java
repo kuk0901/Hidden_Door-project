@@ -87,7 +87,7 @@ public class AdminService {
       Admin adminRes = adminRepository.findByEmail(admin.getEmail())
           .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
       AdminDto adminDtoRes = modelMapper.map(adminRes, AdminDto.class);
-      logger.info("adminDtoRes: {}", adminDtoRes);
+
       return new ResponseDto<>(adminDtoRes, "success");
 
     } catch (Exception e) {
@@ -204,8 +204,6 @@ public class AdminService {
         .map(admin -> modelMapper.map(admin, AdminDto.class))
         .toList();
 
-    logger.info("adminDtoList: {}", adminDtoList);
-
     PageDto resultPageDto = PageableUtil.createPageDto(adminPage);
 
     return new ResponseDto<>(adminDtoList, "success", resultPageDto, searchField, searchTerm);
@@ -302,7 +300,6 @@ public class AdminService {
     // 변경사항이 있는 경우 저장
     Admin updatedAdmin = adminRepository.save(admin);
     AdminDto updatedAdminDto = modelMapper.map(updatedAdmin, AdminDto.class);
-    logger.info("updatedAdminDto: {}", updatedAdminDto);
 
     return new ResponseDto<>(updatedAdminDto, updatedAdminDto.getUserName() + "님의 정보가 수정되었습니다.");
   }

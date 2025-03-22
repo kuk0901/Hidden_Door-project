@@ -1,6 +1,10 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
+/**
+ * @description: Theme state atom
+ * @use persistAtom
+ */
 const { persistAtom } = recoilPersist({
   key: "theme-list-persist",
   storage: sessionStorage

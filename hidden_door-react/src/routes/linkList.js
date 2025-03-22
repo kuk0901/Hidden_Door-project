@@ -1,3 +1,4 @@
+// Description: Link List for Navigation Bar
 export const navLinkList = [
   {
     route: "hidden_door/info",
@@ -21,6 +22,7 @@ export const navLinkList = [
   }
 ];
 
+// Description: Link List for Footer
 export const csLinkList = [
   {
     route: "hidden_door/notice",
@@ -36,6 +38,7 @@ export const csLinkList = [
   }
 ];
 
+// Description: Link List for Security Policy
 export const securityLinkList = [
   {
     route: "hidden_door/policy/privacy",
@@ -47,6 +50,7 @@ export const securityLinkList = [
   }
 ];
 
+// Description: Link List for Admin Navigation Bar
 export const adminLinkList = [
   {
     route: "hidden_door/admin/dashboard",

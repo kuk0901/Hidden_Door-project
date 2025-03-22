@@ -9,7 +9,10 @@ const DefaultSection = ({ api, className, title, ChildComponent }) => {
     try {
       const res = await Api.get(api);
 
-      console.log("default section res: {}", res);
+      if (res.status !== 200) {
+        toast.error("관련 데이터를 불러오지 못했습니다.");
+        return;
+      }
 
       setSectionData(res.data.data);
     } catch (error) {

@@ -1,3 +1,9 @@
+/**
+ * @description 카카오 API를 사용하여 주소에 해당하는 위도, 경도 정보를 가져오는 함수
+ * @param {string} address - 주소
+ * @returns {Promise<{x: string, y: string}>} 위도(x)와 경도(y) 정보를 담은 객체
+ * @throws {Error} 주소를 찾을 수 없는 경우 "Address not found" 에러 발생
+ */
 export const fetchLocationData = async (address) => {
   const encodedAddress = encodeURIComponent(address);
 

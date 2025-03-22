@@ -15,7 +15,6 @@ public class PageDto {
   private String sortField; // 정렬 필드
   private String sortDirection; // 정렬 방향
 
-  // 기본 생성자 (기본값 설정)
   public PageDto() {
     this.page = 1;
     this.size = PageableUtil.DEFAULT_SIZE;

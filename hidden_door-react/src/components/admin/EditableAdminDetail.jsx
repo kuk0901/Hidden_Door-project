@@ -16,18 +16,23 @@ const EditableAdminDetail = ({
   const confirm = useConfirm();
 
   const handleSubmit = async (data) => {
-    try {
-      const isConfirmed = await confirm(
-        `관리자 정보를 정말로 수정하시겠습니까?`
-      );
-      if (!isConfirmed) return;
+    const isConfirmed = await confirm(`관리자 정보를 정말로 수정하시겠습니까?`);
+    if (!isConfirmed) return;
 
+    try {
       delete data.pwdCheck;
 
       const res = await Api.post(
         `/admins/account/update/${adminData.adminId}`,
         data
       );
+
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
 
       const updatedState = {
         adminData: res.data.data,

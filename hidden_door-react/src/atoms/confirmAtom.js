@@ -1,5 +1,8 @@
 import { atom } from "recoil";
 
+/**
+ * @description Confirm state atom
+ */
 export const confirmState = atom({
   key: "confirmState",
   default: {
