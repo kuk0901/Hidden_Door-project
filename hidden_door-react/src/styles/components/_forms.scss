@@ -128,7 +128,6 @@
     margin: 0 0 5px;
   }
 
-  // FIXME: font-size
   .search-form {
     @include mixins.flex-layout-row(flex-start, center);
     gap: 10px;

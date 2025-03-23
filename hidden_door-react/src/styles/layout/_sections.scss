@@ -1,6 +1,8 @@
 @use "../abstracts/variables";
 @use "../abstracts/mixins";
 
+// FIXME: 반복되는 코드 mixins로 변경
+
 // 로그인
 .login-section {
   height: 550px;
@@ -168,6 +170,7 @@
 }
 
 // 주의사항, 가격, 테마 슬라이드
+// FIXME: border 삭제 후 각 background-color로 대체
 .section--caution,
 .section--price,
 .theme-slide-section,
