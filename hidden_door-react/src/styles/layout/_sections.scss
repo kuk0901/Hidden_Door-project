@@ -3,7 +3,7 @@
 
 // FIXME: 반복되는 코드 mixins로 변경
 
-// 로그인
+// login
 .login-section {
   height: 550px;
   max-width: 1100px;
@@ -22,7 +22,7 @@
   }
 }
 
-// 이미지
+// main img
 .main-section__img {
   margin-top: 25px;
   margin-bottom: 50px;
@@ -74,6 +74,7 @@
   }
 }
 
+// media query
 @media (max-width: variables.$breakpoint-lg) {
   .main-section__img {
     .guide-container {
@@ -111,7 +112,7 @@
   }
 }
 
-/* 애니메이션 효과 */
+/* animation */
 @keyframes move-left {
   0% {
     transform: translateX(0);
@@ -160,6 +161,7 @@
   }
 }
 
+// description
 .section--description {
   padding: 10px;
 
@@ -169,7 +171,7 @@
   }
 }
 
-// 주의사항, 가격, 테마 슬라이드
+// caution, price, event
 // FIXME: border 삭제 후 각 background-color로 대체
 .section--caution,
 .section--price,
@@ -189,7 +191,7 @@
   }
 }
 
-// 가격
+// price
 .section--price {
   .price--line {
     @include mixins.flex-layout-row(center, center);
@@ -280,7 +282,7 @@
   }
 }
 
-// 단일 가격
+// price one
 .section--price--one {
   padding: 40px 10px;
 
@@ -374,6 +376,7 @@
   }
 }
 
+// price mini
 .section--price--mini {
   border: 1px solid;
   border-radius: 6px;
@@ -429,6 +432,7 @@
   }
 }
 
+// img update
 .img-update--section {
   @include mixins.flex-layout-column(center, center);
   gap: 10px;
@@ -445,6 +449,7 @@
   }
 }
 
+// btn contain
 .btn--contain--section {
   @include mixins.flex-layout-row(space-between, center);
   gap: 20px;
@@ -473,6 +478,7 @@
   }
 }
 
+// admin form
 .admin--form--section {
   position: absolute;
   top: 400px;
@@ -493,7 +499,7 @@
   }
 }
 
-// 라이트 모드
+// system mode FIXME: mixins로 변경
 @media (prefers-color-scheme: light) {
   .section--caution,
   .section--price,

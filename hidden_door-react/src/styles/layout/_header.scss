@@ -1,6 +1,7 @@
 @use "../abstracts/mixins";
 @use "../abstracts/variables";
 
+// header
 .header {
   .header-container {
     @include mixins.flex-layout-row($justify: space-between, $align: center);
@@ -51,6 +52,7 @@
   }
 }
 
+// media query
 @media (max-width: variables.$breakpoint-sm) {
   // 576px 미만의 화면에 적용될 스타일
   .header {

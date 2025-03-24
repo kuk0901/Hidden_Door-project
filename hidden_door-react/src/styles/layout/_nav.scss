@@ -2,6 +2,7 @@
 @use "../abstracts//mixins";
 @use "../abstracts/variables";
 
+// nav
 .nav {
   position: sticky;
   top: 0;
@@ -119,6 +120,7 @@
   }
 }
 
+// system mode FIXME: mixins로 변경
 @media (prefers-color-scheme: light) {
   .nav {
     background-color: rgba(variables.$dark-background-color, 0.9);
