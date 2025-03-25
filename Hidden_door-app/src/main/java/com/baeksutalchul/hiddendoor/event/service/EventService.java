@@ -41,18 +41,19 @@ public class EventService {
         Event savedEvent = eventRepository.save(event);
         return convertToDto(savedEvent);
     }
+    
 
     public EventDto updateEvent(String id, EventDto eventDto) {
-        Optional<Event> eventOptional = eventRepository.findById(id);
-        if (eventOptional.isPresent()) {
-            Event event = eventOptional.get();
-            event.setTitle(eventDto.getTitle());
-            event.setDescription(eventDto.getDescription());
-            Event updatedEvent = eventRepository.save(event);
-            return convertToDto(updatedEvent);
-        } else {
-            throw new CustomException(ErrorCode.EVENT_NOT_FOUND);
-        }
+        Event event = eventRepository.findById(id)
+            .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND));
+        
+        event.setTitle(eventDto.getTitle());
+        event.setDescription(eventDto.getDescription());
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(eventDto.getEndDate());
+        
+        Event updatedEvent = eventRepository.save(event);
+        return convertToDto(updatedEvent);
     }
 
     public void deleteEvent(String id) {
@@ -64,10 +65,10 @@ public class EventService {
     }
 
     private EventDto convertToDto(Event event) {
-        return new EventDto(event.getId(), event.getTitle(), event.getDescription());
+        return new EventDto(event.getId(), event.getTitle(), event.getDescription(), event.getStartDate(), event.getEndDate());
     }
 
     private Event convertToEntity(EventDto eventDto) {
-        return new Event(eventDto.getId(), eventDto.getTitle(), eventDto.getDescription());
+        return new Event(eventDto.getId(), eventDto.getTitle(), eventDto.getDescription(), eventDto.getStartDate(), eventDto.getEndDate());
     }
 }

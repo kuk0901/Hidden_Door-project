@@ -169,13 +169,109 @@
 
         @include dark-mode {
           background-color: white;
-
           color: black;
         }
       }
       .em-form-textarea {
         min-height: 100px;
         resize: vertical;
+      }
+
+      // 새로 추가된 날짜 선택 섹션 스타일
+      .date-picker-container {
+        display: flex;
+        gap: 20px;
+        margin-top: 10px;
+
+        .event-calendar-wrapper {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+
+          .event-calendar-label {
+            font-size: 0.9em;
+            font-weight: 500;
+            color: variables.$confirm-text-color;
+            margin-bottom: -5px;
+
+            @include dark-mode {
+              color: black;
+            }
+          }
+        }
+
+        .em-form-calendar {
+          width: 100% !important;
+          border: 1px solid variables.$confirm-border-color !important;
+          border-radius: 8px !important;
+          padding: 15px !important;
+          background: variables.$background-color !important;
+
+          @include dark-mode {
+            background: color.adjust(
+              variables.$light-background-color,
+              $lightness: -10%
+            ) !important;
+            border-color: #444 !important;
+          }
+
+          // 달력 내부 요소 스타일링
+          .react-calendar__navigation button {
+            color: variables.$confirm-text-color;
+
+            @include dark-mode {
+              color: black;
+            }
+          }
+
+          .react-calendar__tile {
+            color: variables.$confirm-text-color;
+
+            @include dark-mode {
+              color: black;
+            }
+
+            &--active {
+              background: variables.$light-blue-color !important;
+              color: white !important;
+
+              @include dark-mode {
+                background: variables.$dark-blue-color !important;
+              }
+            }
+
+            // 선택할 수 없는 날짜 스타일
+            &:disabled {
+              opacity: 0.3;
+              color: #ccc;
+
+              @include dark-mode {
+                color: #555;
+              }
+            }
+
+            // 이전 달과 다음 달의 날짜 스타일
+            &--neighboringMonth {
+              font-weight: normal; // 이전/다음 달의 날짜는 일반 굵기로 표시
+              opacity: 0.5; // 투명도를 조절하여 연하게 표시
+              color: #999; // 더 밝은 회색으로 설정
+
+              @include dark-mode {
+                color: #777; // 다크 모드에서는 조금 더 어두운 회색
+              }
+            }
+
+            // 오늘 날짜 스타일
+            &--now {
+              background-color: #ffff76;
+
+              @include dark-mode {
+                background-color: #5f5f00;
+              }
+            }
+          }
+        }
       }
     }
 
@@ -251,6 +347,25 @@
           }
         }
       }
+    }
+  }
+}
+
+// 반응형 처리 (모바일)
+@media (max-width: 768px) {
+  .em-event-modal-overlay {
+    .em-event-modal {
+      width: 90%;
+      max-width: 500px;
+    }
+  }
+
+  .date-picker-container {
+    flex-direction: column;
+    gap: 15px;
+
+    .event-calendar-wrapper {
+      width: 100%;
     }
   }
 }

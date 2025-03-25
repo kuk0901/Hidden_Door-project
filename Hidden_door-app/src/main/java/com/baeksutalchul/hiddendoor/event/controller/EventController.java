@@ -44,8 +44,12 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {        try {
-            
+    public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {        
+        try {
+            if (eventDto.getStartDate().isAfter(eventDto.getEndDate())) {
+                return ResponseEntity.badRequest()
+                    .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
+            }
             EventDto createdEvent = eventService.createEvent(eventDto);
             return ResponseEntity.ok().body(new ResponseDto<>(createdEvent, "이벤트가 성공적으로 추가되었습니다."));
         } catch (Exception e) {
@@ -57,6 +61,10 @@ public class EventController {
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
         try {
+            if (eventDto.getStartDate().isAfter(eventDto.getEndDate())) {
+                return ResponseEntity.badRequest()
+                    .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
+            }
             EventDto updatedEvent = eventService.updateEvent(id, eventDto);
             return ResponseEntity.ok().body(new ResponseDto<>(updatedEvent, "이벤트가 성공적으로 수정되었습니다."));
         } catch (CustomException e) {

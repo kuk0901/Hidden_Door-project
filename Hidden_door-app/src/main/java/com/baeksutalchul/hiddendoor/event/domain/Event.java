@@ -1,5 +1,7 @@
 package com.baeksutalchul.hiddendoor.event.domain;
 
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -16,6 +18,8 @@ public class Event {
     private String id;
     private String title;
     private String description;
+    private LocalDate startDate;
+    private LocalDate endDate;
 }
 
 

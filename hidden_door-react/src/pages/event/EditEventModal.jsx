@@ -1,16 +1,29 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Api from '@axios/api';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
 
-  // 이벤트 데이터가 변경될 때마다 폼에 값을 채워줌
   useEffect(() => {
     if (event) {
       setTitle(event.title || '');
       setDescription(event.description || '');
+      setStartDate(
+        event.startDate && !isNaN(new Date(event.startDate))
+          ? new Date(event.startDate)
+          : new Date()
+      );
+      setEndDate(
+        event.endDate && !isNaN(new Date(event.endDate))
+          ? new Date(event.endDate)
+          : new Date()
+      );
     }
   }, [event]);
 
@@ -22,7 +35,19 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       return;
     }
 
-    const updatedEvent = { id: event.id, title, description };
+    if (startDate > endDate) {
+      toast.error('종료일은 시작일 이후로 설정해주세요.');
+      return;
+    }
+
+    const updatedEvent = {
+      id: event.id,
+      title,
+      description,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+    };
+
     Api.put(`/events/${event.id}`, updatedEvent)
       .then((response) => {
         if (response.data && response.data.data) {
@@ -71,6 +96,29 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
               required
               className="em-form-textarea"
             />
+          </div>
+          <div className="em-form-group">
+            <label className="em-form-label">이벤트 기간</label>
+            <div className="date-picker-container">
+              <div className="event-calendar-wrapper">
+                <p className="event-calendar-label">시작일</p>
+                <Calendar
+                  onChange={setStartDate}
+                  value={startDate}
+                  minDate={new Date()}
+                  className="em-form-calendar react-calendar"
+                />
+              </div>
+              <div className="event-calendar-wrapper">
+                <p className="event-calendar-label">종료일</p>
+                <Calendar
+                  onChange={setEndDate}
+                  value={endDate}
+                  minDate={startDate}
+                  className="em-form-calendar react-calendar"
+                />
+              </div>
+            </div>
           </div>
           <div className="em-modal-btn-container">
             <button type="submit" className="em-modal-btn em-modal-btn--edit">
