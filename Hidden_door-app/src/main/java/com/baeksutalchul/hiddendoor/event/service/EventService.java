@@ -55,29 +55,34 @@ public class EventService {
 }
     
 
-    public EventDto updateEvent(String id, EventDto eventDto) {
-        Event event = eventRepository.findById(id)
-            .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND));
-    
-        event.setTitle(eventDto.getTitle());
-        event.setDescription(eventDto.getDescription());
-        event.setIsOngoing(eventDto.getIsOngoing());
-        event.setNoEndDate(eventDto.getNoEndDate());
-    
-        if ("true".equals(event.getIsOngoing())) {
-            event.setStartDate(null);
-            event.setEndDate(null);
-        } else if ("true".equals(event.getNoEndDate())) {
-            event.setStartDate(eventDto.getStartDate());
-            event.setEndDate(null);
-        } else {
-            event.setStartDate(eventDto.getStartDate());
-            event.setEndDate(eventDto.getEndDate());
-        }
-    
-        Event updatedEvent = eventRepository.save(event);
-        return convertToDto(updatedEvent);
+public EventDto updateEvent(String id, EventDto eventDto) {
+    Event event = eventRepository.findById(id)
+        .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND));
+
+    event.setTitle(eventDto.getTitle());
+    event.setDescription(eventDto.getDescription());
+    event.setIsOngoing(eventDto.getIsOngoing());
+    event.setNoEndDate(eventDto.getNoEndDate());
+
+    // 상시 이벤트 처리
+    if ("true".equals(event.getIsOngoing())) {
+        event.setStartDate(null);
+        event.setEndDate(null);
     }
+    // 종료 기한 없는 이벤트 처리
+    else if ("true".equals(event.getNoEndDate())) {
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(null);
+    }
+    // 일반 이벤트 처리
+    else {
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(eventDto.getEndDate());
+    }
+
+    Event updatedEvent = eventRepository.save(event);
+    return convertToDto(updatedEvent);
+}
 
     public void deleteEvent(String id) {
         if (eventRepository.existsById(id)) {

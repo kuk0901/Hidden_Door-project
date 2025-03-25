@@ -63,21 +63,25 @@ public class EventController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
-        try {
-            if (eventDto.getStartDate().isAfter(eventDto.getEndDate())) {
-                return ResponseEntity.badRequest()
-                    .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
-            }
-            EventDto updatedEvent = eventService.updateEvent(id, eventDto);
-            return ResponseEntity.ok().body(new ResponseDto<>(updatedEvent, "이벤트가 성공적으로 수정되었습니다."));
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError()
-                .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요."));
+public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
+    try {
+        // 날짜 검증 로직 수정
+        if (!"true".equals(eventDto.getIsOngoing()) && !"true".equals(eventDto.getNoEndDate())
+                && eventDto.getStartDate() != null && eventDto.getEndDate() != null
+                && eventDto.getStartDate().isAfter(eventDto.getEndDate())) {
+            return ResponseEntity.badRequest()
+                .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
         }
+
+        EventDto updatedEvent = eventService.updateEvent(id, eventDto);
+        return ResponseEntity.ok().body(new ResponseDto<>(updatedEvent, "이벤트가 성공적으로 수정되었습니다."));
+    } catch (CustomException e) {
+        return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError()
+            .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요."));
     }
+}
 
     @DeleteMapping("/{id}")
     public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable("id") String id) {
