@@ -30,7 +30,7 @@ const HomePage = () => {
   }, []);
 
   return (
-    <>
+    <div className="section--home">
       {/* main img */}
       <section className="main-section__img">
         <div className="guide-container">
@@ -107,7 +107,7 @@ const HomePage = () => {
         title="주의사항"
         ChildComponent={CautionList}
       />
-    </>
+    </div>
   );
 };
 

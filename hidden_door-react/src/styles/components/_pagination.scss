@@ -4,13 +4,14 @@
 
 .pagination {
   margin: 30px;
-  @include mixins.flex-layout-row(center, center);
-  gap: 10px;
+  @include mixins.flex-layout-row-with-gap(center, center, 10px);
 
   .page-nav,
   .page-number {
-    background-color: variables.$page-bg-color;
-    color: variables.$page-text-color;
+    @include mixins.color-scheme(
+      variables.$page-bg-color,
+      variables.$page-text-color
+    );
     padding: 7px;
     font-size: 16px;
     @include mixins.border(1px, solid, variables.$page-bg-color);

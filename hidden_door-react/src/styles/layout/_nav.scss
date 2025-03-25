@@ -1,36 +1,34 @@
 @use "sass:color";
-@use "../abstracts//mixins";
+@use "../abstracts/mixins";
 @use "../abstracts/variables";
 
 // nav
 .nav {
   position: sticky;
   top: 0;
-  @include mixins.flex-layout-row(space-between, align-center);
+  @include mixins.flex-layout-row(space-between, center);
   padding: 10px;
   background-color: rgba(variables.$light-background-color, 0.7);
   z-index: 1000;
 
   .link-container {
-    width: 600px;
+    @include mixins.size(600px, auto);
 
-    @media (max-width: variables.$breakpoint-md) {
-      // 768px 미만의 화면에 적용될 스타일
+    @include mixins.md-mode {
       width: fit-content;
     }
 
     .link-item {
-      font-weight: bold;
-      color: variables.$dark-link-color;
+      @include mixins.font-weight(bold);
+      @include mixins.text-color-hover(
+        variables.$dark-link-color,
+        variables.$light-link-color
+      );
 
       &.btn--no {
         border: none;
-        font-size: 16px;
+        @include mixins.font-size(16px);
         background-color: transparent;
-      }
-
-      &:hover {
-        color: variables.$light-link-color;
       }
     }
 
@@ -44,7 +42,7 @@
         top: 30px;
         left: 0;
         z-index: 10;
-        @include mixins.flex-layout-column(space-between, align-center);
+        @include mixins.flex-layout-column(space-between, center);
         background-color: variables.$dark-background-color;
         padding: 3px 10px 10px;
         min-width: 100%;
@@ -52,18 +50,22 @@
         white-space: nowrap;
 
         li {
+          @include mixins.border(0, none, transparent);
           border-bottom: 1px solid black;
           padding: 3px;
+          width: 100%;
 
           .link--item {
-            background-color: transparent;
+            @include mixins.color-scheme(
+              transparent,
+              variables.$light-link-color
+            );
             border: none;
-            font-size: 16px;
+            @include mixins.font-size(16px);
             min-width: auto;
-            color: variables.$light-link-color;
 
             &:hover {
-              color: variables.$dark-link-color;
+              @include mixins.text-color(variables.$dark-link-color);
             }
           }
         }
@@ -71,13 +73,13 @@
     }
 
     &.link-container__mini {
-      width: 30px;
+      @include mixins.size(30px, auto);
       margin: 0;
-      @include mixins.flex-layout-row(space-between, align-center);
+      @include mixins.flex-layout-row(space-between, center);
       position: relative;
 
       svg {
-        color: #000;
+        @include mixins.text-color(#000);
       }
 
       .link-items {
@@ -87,16 +89,28 @@
         top: 45px;
         left: 0;
         z-index: 10;
-        @include mixins.flex-layout-column(space-between, align-center);
-        background-color: variables.$dark-background-color;
+        @include mixins.flex-layout-column(space-between, center);
+        @include mixins.color-scheme(
+          variables.$dark-background-color,
+          variables.$light-background-color
+        );
         padding: 3px 10px 10px;
 
         li {
+          width: 100%;
           border-bottom: 1px solid black;
           padding: 3px;
 
           &.link-item--last {
             border-bottom: none;
+          }
+
+          .link-item {
+            color: variables.$light-link-color;
+
+            &:hover {
+              color: variables.$dark-link-color;
+            }
           }
         }
       }
@@ -104,12 +118,15 @@
   }
 
   .btn--signout {
+    padding: 10px 5px;
     margin-right: 5px;
     border-radius: 3px;
     border: none;
-    background-color: variables.$dark-background-color;
-    color: variables.$light-background-color;
-    font-weight: 700;
+    @include mixins.color-scheme(
+      variables.$dark-background-color,
+      variables.$light-background-color
+    );
+    @include mixins.font-weight(700);
 
     &:hover {
       background-color: color.scale(
@@ -120,36 +137,35 @@
   }
 }
 
-// system mode FIXME: mixins로 변경
-@media (prefers-color-scheme: light) {
+@include mixins.light-mode {
   .nav {
     background-color: rgba(variables.$dark-background-color, 0.9);
 
     .link-container {
       &.link-container__mini {
         .link-items {
-          border-width: 1.5px;
-          border-color: #000;
+          @include mixins.border(1.5px, solid, #000);
           li {
             .link-item {
-              color: white;
+              @include mixins.text-color(white);
             }
           }
         }
       }
 
       .link-item {
-        color: variables.$light-link-color;
-
-        &:hover {
-          color: variables.$dark-link-color;
-        }
+        @include mixins.text-color-hover(
+          variables.$light-link-color,
+          variables.$dark-link-color
+        );
       }
     }
 
     .btn--signout {
-      background-color: variables.$light-background-color;
-      color: variables.$dark-background-color;
+      @include mixins.color-scheme(
+        variables.$light-background-color,
+        variables.$dark-background-color
+      );
 
       &:hover {
         background-color: color.scale(

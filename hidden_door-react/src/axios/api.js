@@ -7,6 +7,7 @@ const Api = axios.create({
 /**
  * @description 요청 인터셉터를 설정하여 모든 요청에 Authorization 헤더를 추가
  */
+// FIXME: accessToken 만료 후의 refreshToken 자동 업데이트 유무 체크
 Api.interceptors.request.use(
   async (config) => {
     const token = localStorage.getItem("token");

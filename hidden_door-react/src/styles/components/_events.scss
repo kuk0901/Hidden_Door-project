@@ -264,7 +264,10 @@
       border-radius: 7px;
 
       @include mixins.light-mode {
-        background-color: variables.$dark-background-color;
+        background-color: color.adjust(
+          variables.$dark-background-color,
+          $lightness: -10%
+        );
         color: variables.$dark-text-color;
       }
 
@@ -278,7 +281,7 @@
         @include mixins.light-mode {
           background-color: color.adjust(
             variables.$dark-background-color,
-            $lightness: 5%
+            $lightness: -15%
           );
         }
       }

@@ -1,4 +1,5 @@
 @use "../abstracts/variables";
+@use "../abstracts/mixins";
 @use "sass:color";
 
 .btn {
@@ -11,8 +12,7 @@
   cursor: pointer;
   font-size: 1rem;
   font-weight: bold;
-  color: white;
-  background-color: variables.$light-blue-color;
+  @include mixins.color-scheme(variables.$light-blue-color, white);
 
   &:hover {
     text-decoration: none;
@@ -25,8 +25,10 @@
     background-color: variables.$primary-color;
 
     &:hover {
-      color: variables.$dark-text-color;
-      background-color: variables.$dark-blue-color;
+      @include mixins.color-scheme(
+        variables.$dark-text-color,
+        variables.$dark-blue-color
+      );
     }
   }
 
@@ -52,20 +54,18 @@
     position: fixed;
     bottom: 20px;
     right: 15px;
-    background-color: #fff;
-    color: #000;
+    @include mixins.color-scheme(#fff, #000);
     border: none;
     padding: 7px;
     cursor: pointer;
 
     .icon {
-      width: 30px;
-      height: 30px;
+      @include mixins.size(30px, 30px);
     }
   }
 }
 
-@media (max-width: variables.$breakpoint-md) {
+@mixin lg-mode {
   .btn {
     &.btn--search {
       padding: 7px 10px;
@@ -73,7 +73,7 @@
   }
 }
 
-@media (prefers-color-scheme: light) {
+@mixin light-mode {
   .btn {
     background-color: variables.$light-text-color;
 
@@ -89,8 +89,7 @@
     }
 
     &.scroll-to-top-button {
-      background-color: #000;
-      color: #fff;
+      @include mixins.color-scheme(#000, #fff);
     }
 
     &.btn--link {

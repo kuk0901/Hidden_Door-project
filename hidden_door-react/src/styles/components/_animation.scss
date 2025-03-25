@@ -16,11 +16,9 @@
       .circle-core {
         background-color: #1d2630;
         border-radius: 50%;
-        @include mixins.flex-layout-row(center, center);
-        gap: 20px;
+        @include mixins.flex-layout-row-with-gap(center, center, 20px);
         @include mixins.border(2px, solid, white);
-        width: 500px;
-        height: 450px;
+        @include mixins.size(500px, 450px);
         margin: auto;
       }
     }
@@ -33,11 +31,8 @@
 }
 
 .door-container {
-  width: 250px;
-  height: 300px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include mixins.size(250px, 300px);
+  @include mixins.flex-layout-row(center, center);
   border-radius: 10px;
   overflow: hidden;
 

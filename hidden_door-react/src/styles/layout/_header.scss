@@ -4,13 +4,10 @@
 // header
 .header {
   .header-container {
-    @include mixins.flex-layout-row($justify: space-between, $align: center);
+    @include mixins.flex-layout-row(space-between, center);
 
     .title-container {
-      @include mixins.flex-layout-column(
-        $justify: space-between,
-        $align: baseline
-      );
+      @include mixins.flex-layout-column(space-between, baseline);
 
       .title {
         margin-bottom: 0;
@@ -18,33 +15,36 @@
 
       .subtitle {
         padding: 5px 10px 10px;
-        font-size: 16px;
+        @include mixins.font-size(16px);
       }
     }
 
     .link-container {
-      @include mixins.flex-layout-row($justify: space-around, $align: center);
+      @include mixins.flex-layout-row-with-gap(space-around, center, 30px);
       margin-right: 10px;
-      gap: 30px;
 
       .btn {
         text-decoration: none;
         transition: none;
         text-underline-offset: 0;
-        height: 45px;
+        @include mixins.size(auto, 45px);
 
         &.header--btn {
           padding: 10px;
           border-radius: 5px;
-          background-color: variables.$light-background-color;
-          color: variables.$dark-blue-color;
-          border: 1px solid variables.$dark-blue-color;
+          @include mixins.color-scheme-with-border(
+            variables.$light-background-color,
+            variables.$dark-blue-color,
+            variables.$dark-blue-color
+          );
           transition: all 0.3s ease;
           transform: none;
 
           &:hover {
-            background-color: variables.$dark-blue-color;
-            color: variables.$light-background-color;
+            @include mixins.color-scheme(
+              variables.$dark-blue-color,
+              variables.$light-background-color
+            );
           }
         }
       }
@@ -53,21 +53,17 @@
 }
 
 // media query
-@media (max-width: variables.$breakpoint-sm) {
-  // 576px 미만의 화면에 적용될 스타일
+@include mixins.sm-mode {
   .header {
     .header-container {
-      @include mixins.flex-layout-column(
-        $justify: space-between,
-        $align: baseline
-      );
+      @include mixins.flex-layout-column(space-between, baseline);
       padding-bottom: 10px;
     }
 
     .link-container {
       .btn {
         &.header--btn {
-          height: 40px;
+          @include mixins.size(auto, 40px);
         }
       }
     }

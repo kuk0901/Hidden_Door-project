@@ -5,6 +5,7 @@
   @include mixins.flex-layout-row(space-around, center);
   flex-wrap: wrap;
   gap: 10px;
+  color: white;
 
   .caution--item {
     padding: 10px;
@@ -13,7 +14,7 @@
       @include mixins.flex-layout-row(center, center);
       gap: 15px;
 
-      @include mixins.border(3px, solid, gray);
+      @include mixins.border(3px, solid, rgb(213, 208, 208));
       border-radius: 10px;
       width: 370px;
       height: 170px;
