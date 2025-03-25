@@ -81,16 +81,34 @@ const ReservationConfirmPage = () => {
         refundState: reservation.refundState,
       };
 
-      console.log(reservationDto);
+      console.log("요청 데이터:", reservationDto);
 
       const res = await Api.post("/reservations/create", reservationDto);
 
-      if (res.data.success) {
+      if (res.data && res.data.msg.includes("성공")) {
         toast.success(res.data.msg);
-        navigate("/");
+        console.log("예약 성공. 응답 데이터:", res.data);
+
+        // 예약 번호 확인
+        const reservationNumber = res.data.data.reservationNumber;
+        if (!reservationNumber) {
+          console.error("예약 번호가 없습니다.");
+          toast.error("예약 번호를 받지 못했습니다.");
+          return;
+        }
+
+        console.log("네비게이션 시작:", reservationNumber);
+        navigate(
+          `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
+        );
+        console.log("네비게이션 완료");
+      } else {
+        console.error("예약 실패 (서버 응답):", res.data);
+        toast.error(res.data.msg || "예약 처리 실패");
       }
     } catch (error) {
-      toast.error(error.response?.data?.msg || "예약 처리 실패");
+      console.error("예약 처리 중 예외 발생:", error);
+      toast.error("예약 처리 중 오류가 발생했습니다.");
     }
   };
 

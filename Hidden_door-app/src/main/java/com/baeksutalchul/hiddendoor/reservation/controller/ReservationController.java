@@ -47,13 +47,24 @@ public class ReservationController {
 
   @GetMapping("/availability")
   public ResponseEntity<ResponseDto<Map<String, Object>>> getAvailability(
-      @RequestParam String date,
-      @RequestParam String themeId) {
-      return ResponseEntity.ok(reservationService.checkAvailability(date, themeId));
+    @RequestParam String date,
+    @RequestParam String themeId) {
+    return ResponseEntity.ok(reservationService.checkAvailability(date, themeId));
   }
 
   @PostMapping("/create")
   public ResponseEntity<ResponseDto<ReservationDto>> createReservation(@RequestBody ReservationDto reservationDto) {
-      return ResponseEntity.ok(reservationService.createReservation(reservationDto));
+    return ResponseEntity.ok(reservationService.createReservation(reservationDto));
+  }
+
+  @GetMapping("/summary/{reservationNumber}")
+  public ResponseDto<ReservationDto> getReservationSummary(@PathVariable String reservationNumber) {
+    return reservationService.getReservationSummary(reservationNumber);
+  }
+
+  @PostMapping("/check")
+  public ResponseDto<Boolean> checkReservation(@RequestBody ReservationDto reservationDto) {
+    boolean exists = reservationService.checkReservation(reservationDto.getReservationNumber(), reservationDto.getName());
+    return new ResponseDto<>(exists, exists ? "예약이 확인되었습니다." : "예약을 찾을 수 없습니다.");
   }
 }

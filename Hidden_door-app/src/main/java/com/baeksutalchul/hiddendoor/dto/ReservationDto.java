@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,4 +35,5 @@ public class ReservationDto {
   private List<String> timeSlots;
   private int partySize;
   private String reservationTime;
+  private String reservationNumber;
 }
