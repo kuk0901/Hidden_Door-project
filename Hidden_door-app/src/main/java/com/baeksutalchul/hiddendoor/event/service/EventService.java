@@ -1,5 +1,6 @@
 package com.baeksutalchul.hiddendoor.event.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,21 +38,43 @@ public class EventService {
     }
 
     public EventDto createEvent(EventDto eventDto) {
-        Event event = convertToEntity(eventDto);
-        Event savedEvent = eventRepository.save(event);
-        return convertToDto(savedEvent);
+    Event event = convertToEntity(eventDto);
+    if (event.getEventType().equals("상시")) {
+        event.setStartDate(null);
+        event.setEndDate(null);
+    } else if (event.getEventType().equals("종료일 미정")) {        
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(null);
+    } else {        
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(eventDto.getEndDate());
     }
+
+    Event savedEvent = eventRepository.save(event);
+    return convertToDto(savedEvent);
+}
     
 
     public EventDto updateEvent(String id, EventDto eventDto) {
         Event event = eventRepository.findById(id)
             .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND));
-        
+    
         event.setTitle(eventDto.getTitle());
         event.setDescription(eventDto.getDescription());
-        event.setStartDate(eventDto.getStartDate());
-        event.setEndDate(eventDto.getEndDate());
-        
+        event.setIsOngoing(eventDto.getIsOngoing());
+        event.setNoEndDate(eventDto.getNoEndDate());
+    
+        if ("true".equals(event.getIsOngoing())) {
+            event.setStartDate(null);
+            event.setEndDate(null);
+        } else if ("true".equals(event.getNoEndDate())) {
+            event.setStartDate(eventDto.getStartDate());
+            event.setEndDate(null);
+        } else {
+            event.setStartDate(eventDto.getStartDate());
+            event.setEndDate(eventDto.getEndDate());
+        }
+    
         Event updatedEvent = eventRepository.save(event);
         return convertToDto(updatedEvent);
     }
@@ -65,10 +88,10 @@ public class EventService {
     }
 
     private EventDto convertToDto(Event event) {
-        return new EventDto(event.getId(), event.getTitle(), event.getDescription(), event.getStartDate(), event.getEndDate());
+        return new EventDto(event.getId(), event.getTitle(), event.getDescription(), event.getStartDate(), event.getEndDate(), event.getIsOngoing(), event.getNoEndDate(), event.getEventType());
     }
 
     private Event convertToEntity(EventDto eventDto) {
-        return new Event(eventDto.getId(), eventDto.getTitle(), eventDto.getDescription(), eventDto.getStartDate(), eventDto.getEndDate());
+        return new Event(eventDto.getId(), eventDto.getTitle(), eventDto.getDescription(), eventDto.getStartDate(), eventDto.getEndDate(), eventDto.getIsOngoing(), eventDto.getNoEndDate(), eventDto.getEventType());
     }
 }

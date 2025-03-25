@@ -146,6 +146,13 @@
       .em-form-group {
         display: flex;
         flex-direction: column;
+
+        & > div {
+          // 이벤트 유형 (체크박스)
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
       }
 
       .em-form-label {
@@ -214,6 +221,11 @@
               $lightness: -10%
             ) !important;
             border-color: #444 !important;
+          }
+
+          &.disabled {
+            opacity: 0.5;
+            pointer-events: none;
           }
 
           // 달력 내부 요소 스타일링

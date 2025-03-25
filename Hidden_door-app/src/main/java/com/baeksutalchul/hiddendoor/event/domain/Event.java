@@ -20,10 +20,7 @@ public class Event {
     private String description;
     private LocalDate startDate;
     private LocalDate endDate;
+    private String isOngoing;
+    private String noEndDate;
+    private String eventType; // "상시", "종료일 미정", "기간 지정" 중 하나
 }
-
-
-
-
-
-

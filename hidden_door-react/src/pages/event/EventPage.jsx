@@ -4,6 +4,7 @@ import Api from '@axios/api';
 import { toast } from 'react-toastify';
 import AddEventModal from './AddEventModal';
 import EditEventModal from './EditEventModal';
+import { formatKoreanDate } from '../../utils/format/date';
 
 function EventPage() {
   const { admin } = useAdmin();
@@ -126,6 +127,23 @@ function EventPage() {
       });
   };
 
+  const formatEventDate = (date) => {
+    if (!date) return '';
+    return formatKoreanDate(date);
+  };
+
+  const renderEventPeriod = (event) => {
+    if (event.isOngoing === 'true') {
+      return '상시';
+    } else if (event.noEndDate === 'true') {
+      return `${formatEventDate(event.startDate)} ~`;
+    } else {
+      return `${formatEventDate(event.startDate)} ~ ${formatEventDate(
+        event.endDate
+      )}`;
+    }
+  };
+
   if (loading) return <div>로딩 중...</div>;
 
   return (
@@ -153,6 +171,9 @@ function EventPage() {
           <div className="em-event-modal">
             <h2 className="em-modal-title">{selectedEvent.title}</h2>
             <p className="em-modal-description">{selectedEvent.description}</p>
+            <p className="em-modal-dates">
+              기간 : {renderEventPeriod(selectedEvent)}
+            </p>
             <div className="em-modal-btn-container">
               <button
                 className="em-modal-btn em-modal-btn--cancel"

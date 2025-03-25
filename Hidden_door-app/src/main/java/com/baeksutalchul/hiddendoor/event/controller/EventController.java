@@ -7,6 +7,7 @@ import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -46,17 +47,20 @@ public class EventController {
     @PostMapping
     public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {        
         try {
-            if (eventDto.getStartDate().isAfter(eventDto.getEndDate())) {
-                return ResponseEntity.badRequest()
-                    .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
-            }
-            EventDto createdEvent = eventService.createEvent(eventDto);
-            return ResponseEntity.ok().body(new ResponseDto<>(createdEvent, "이벤트가 성공적으로 추가되었습니다."));
+            if (!"true".equals(eventDto.getIsOngoing()) && !"true".equals(eventDto.getNoEndDate()) 
+                    && eventDto.getStartDate() != null && eventDto.getEndDate() != null
+                    && eventDto.getStartDate().isAfter(eventDto.getEndDate())) {
+             return ResponseEntity.badRequest()
+                .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
+        }
+        EventDto createdEvent = eventService.createEvent(eventDto);
+        return ResponseEntity.ok().body(new ResponseDto<>(createdEvent, "이벤트가 성공적으로 추가되었습니다."));
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
-                .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 추가에 실패했습니다. 잠시 후 다시 시도해 주세요."));
-        }
+            .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 추가에 실패했습니다."));
+     }
     }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") String id, @RequestBody EventDto eventDto) {

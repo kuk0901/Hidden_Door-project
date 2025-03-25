@@ -9,6 +9,8 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [isOngoing, setIsOngoing] = useState('false');
+  const [noEndDate, setNoEndDate] = useState('false');
 
   useEffect(() => {
     if (event) {
@@ -24,6 +26,8 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
           ? new Date(event.endDate)
           : new Date()
       );
+      setIsOngoing(event.isOngoing || 'false');
+      setNoEndDate(event.noEndDate || 'false');
     }
   }, [event]);
 
@@ -35,7 +39,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       return;
     }
 
-    if (startDate > endDate) {
+    if (isOngoing !== 'true' && noEndDate !== 'true' && startDate > endDate) {
       toast.error('종료일은 시작일 이후로 설정해주세요.');
       return;
     }
@@ -44,8 +48,14 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       id: event.id,
       title,
       description,
-      startDate: startDate.toISOString(),
-      endDate: endDate.toISOString(),
+      startDate:
+        isOngoing === 'true' ? null : startDate.toISOString().split('T')[0],
+      endDate:
+        isOngoing === 'true' || noEndDate === 'true'
+          ? null
+          : endDate.toISOString().split('T')[0],
+      isOngoing,
+      noEndDate,
     };
 
     Api.put(`/events/${event.id}`, updatedEvent)
@@ -83,8 +93,10 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
               onChange={(e) => setTitle(e.target.value)}
               required
               className="em-form-input"
+              placeholder="제목을 입력해주세요"
             />
           </div>
+
           <div className="em-form-group">
             <label htmlFor="description" className="em-form-label">
               설명
@@ -95,8 +107,10 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
               onChange={(e) => setDescription(e.target.value)}
               required
               className="em-form-textarea"
+              placeholder="설명을 입력해주세요"
             />
           </div>
+
           <div className="em-form-group">
             <label className="em-form-label">이벤트 기간</label>
             <div className="date-picker-container">
@@ -106,20 +120,62 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
                   onChange={setStartDate}
                   value={startDate}
                   minDate={new Date()}
-                  className="em-form-calendar react-calendar"
+                  className={`em-form-calendar react-calendar ${
+                    isOngoing === 'true' ? 'disabled' : ''
+                  }`}
+                  disabled={isOngoing === 'true'}
                 />
               </div>
+
               <div className="event-calendar-wrapper">
                 <p className="event-calendar-label">종료일</p>
                 <Calendar
                   onChange={setEndDate}
                   value={endDate}
                   minDate={startDate}
-                  className="em-form-calendar react-calendar"
+                  className={`em-form-calendar react-calendar ${
+                    isOngoing === 'true' || noEndDate === 'true'
+                      ? 'disabled'
+                      : ''
+                  }`}
+                  disabled={isOngoing === 'true' || noEndDate === 'true'}
                 />
               </div>
             </div>
           </div>
+
+          <div className="em-form-group">
+            <label className="em-form-label">이벤트 유형</label>
+            <div>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={isOngoing === 'true'}
+                  onChange={(e) => {
+                    setIsOngoing(e.target.checked ? 'true' : 'false');
+                    if (e.target.checked) {
+                      setNoEndDate('false');
+                    }
+                  }}
+                />
+                상시
+              </label>
+              <label>
+                <input
+                  type="checkbox"
+                  checked={noEndDate === 'true'}
+                  onChange={(e) => {
+                    setNoEndDate(e.target.checked ? 'true' : 'false');
+                    if (e.target.checked) {
+                      setIsOngoing('false');
+                    }
+                  }}
+                />
+                종료 기한 정하지 않음
+              </label>
+            </div>
+          </div>
+
           <div className="em-modal-btn-container">
             <button type="submit" className="em-modal-btn em-modal-btn--edit">
               수정

@@ -9,15 +9,23 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
   const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [isOngoing, setIsOngoing] = useState(false);
+  const [noEndDate, setNoEndDate] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
-      setTitle('');
-      setDescription('');
-      setStartDate(new Date());
-      setEndDate(new Date());
+      resetForm();
     }
   }, [isOpen]);
+
+  const resetForm = () => {
+    setTitle('');
+    setDescription('');
+    setStartDate(new Date());
+    setEndDate(new Date());
+    setIsOngoing(false);
+    setNoEndDate(false);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,7 +35,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
       return;
     }
 
-    if (startDate > endDate) {
+    if (!isOngoing && !noEndDate && startDate > endDate) {
       toast.error('종료일은 시작일 이후로 설정해주세요.');
       return;
     }
@@ -35,9 +43,23 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
     const newEvent = {
       title,
       description,
-      startDate: startDate.toISOString().split('T')[0],
-      endDate: endDate.toISOString().split('T')[0],
+      isOngoing,
+      noEndDate,
     };
+
+    if (isOngoing) {
+      newEvent.eventType = '상시';
+      newEvent.startDate = null;
+      newEvent.endDate = null;
+    } else if (noEndDate) {
+      newEvent.eventType = '종료일 미정';
+      newEvent.startDate = startDate.toISOString().split('T')[0];
+      newEvent.endDate = null;
+    } else {
+      newEvent.eventType = '기간 지정';
+      newEvent.startDate = startDate.toISOString().split('T')[0];
+      newEvent.endDate = endDate.toISOString().split('T')[0];
+    }
 
     Api.post('/events', newEvent)
       .then((response) => {
@@ -45,10 +67,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
           onEventAdded(response.data.data);
           toast.success(response.data.message || '이벤트가 추가되었습니다.');
           onClose();
-          setTitle('');
-          setDescription('');
-          setStartDate(new Date());
-          setEndDate(new Date());
+          resetForm();
         } else {
           toast.error('서버 응답 형식이 올바르지 않습니다.');
         }
@@ -105,7 +124,10 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
                   onChange={setStartDate}
                   value={startDate}
                   minDate={new Date()}
-                  className="em-form-calendar react-calendar"
+                  className={`em-form-calendar react-calendar ${
+                    isOngoing ? 'disabled' : ''
+                  }`}
+                  disabled={isOngoing}
                 />
               </div>
 
@@ -115,9 +137,44 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
                   onChange={setEndDate}
                   value={endDate}
                   minDate={startDate}
-                  className="em-form-calendar react-calendar"
+                  className={`em-form-calendar react-calendar ${
+                    isOngoing || noEndDate ? 'disabled' : ''
+                  }`}
+                  disabled={isOngoing || noEndDate}
                 />
               </div>
+            </div>
+          </div>
+
+          <div className="em-form-group">
+            <label className="em-form-label">이벤트 유형</label>
+            <div>
+              <label className="eventDate_checkbox">
+                <input
+                  type="checkbox"
+                  checked={isOngoing}
+                  onChange={(e) => {
+                    setIsOngoing(e.target.checked);
+                    if (e.target.checked) {
+                      setNoEndDate(false);
+                    }
+                  }}
+                />
+                상시
+              </label>
+              <label className="eventDate_checkbox">
+                <input
+                  type="checkbox"
+                  checked={noEndDate}
+                  onChange={(e) => {
+                    setNoEndDate(e.target.checked);
+                    if (e.target.checked) {
+                      setIsOngoing(false);
+                    }
+                  }}
+                />
+                종료 기한 정하지 않음
+              </label>
             </div>
           </div>
 
@@ -132,10 +189,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
               type="button"
               onClick={() => {
                 onClose();
-                setTitle('');
-                setDescription('');
-                setStartDate(new Date());
-                setEndDate(new Date());
+                resetForm();
               }}
               className="em-modal-btn em-modal-btn--cancel"
             >
