@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +20,8 @@ import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
+import com.baeksutalchul.hiddendoor.utils.page.PageDto;
+import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 
 @Service
 public class CustomerService {
@@ -33,26 +37,48 @@ public class CustomerService {
     this.modelMapper = modelMapper;
   }
 
-  public ResponseDto<List<CustomerDto>> getCustomerAll() {
-    List<Customer> customerList = customerRepository.findAll();
+  public ResponseDto<List<CustomerDto>> getCustomerAll(PageDto pageDto, String searchField, String searchTerm) {
+      Pageable pageable = PageableUtil.createPageRequest(
+      Math.max(0, pageDto.getPage() - 1),
+      pageDto.getSize(),
+      pageDto.getSortField(),
+      pageDto.getSortDirection());
 
+    Page<Customer> customerList;
+
+    if (searchTerm != null && !searchTerm.trim().isEmpty()) {
+      switch (searchField) {
+        case "customerTitle":
+        customerList = customerRepository.findByCustomerTitleContaining(searchTerm, pageable);
+          break;
+        case "customerContent":
+        customerList = customerRepository.findByCustomerContentContaining(searchTerm, pageable);
+          break;
+        default:
+        customerList = customerRepository.findByCustomerTitleContainingOrCustomerContentContaining(searchTerm, searchTerm, pageable);
+      }
+    } else {
+      customerList = customerRepository.findAll(pageable);
+    }
     if (customerList.isEmpty()) {
       throw new CustomException(ErrorCode.FAQ_NOT_FOUND);
     }
 
-    List<CustomerDto> customerDtoList = customerList.stream()
-        .map(customer -> {
-          CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
-          customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
-          customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
+    List<CustomerDto> customerDtoList = customerList.getContent().stream()
+    .map(customer -> {
+      CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
+      
+      customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
+      customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
+      
+      return customerDto;
+     })
+    .toList();
 
-          return customerDto;
-        })
-        .toList();
+    PageDto resultPageDto = PageableUtil.createPageDto(customerList);
+    logger.info("resultPageDto: {}", resultPageDto);
 
-    logger.info("customerDtoList: {}", customerDtoList);
-
-    return new ResponseDto<>(customerDtoList, "고객센터 데이터 반환");
+    return new ResponseDto<>(customerDtoList, "success", resultPageDto, searchField, searchTerm);
   }
 
   public ResponseDto<CustomerDto> getCustomerById(String customerId) {
