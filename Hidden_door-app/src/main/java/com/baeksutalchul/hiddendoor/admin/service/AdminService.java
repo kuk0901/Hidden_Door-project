@@ -5,8 +5,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -35,8 +33,6 @@ public class AdminService {
   private final PasswordEncoder passwordEncoder;
   private final TokenService tokenService;
   private final ModelMapper modelMapper;
-
-  private final Logger logger = LoggerFactory.getLogger(AdminService.class);
 
   public AdminService(AdminRepository adminRepository, PasswordEncoder passwordEncoder,
       TokenService tokenService, ModelMapper modelMapper) {
@@ -146,26 +142,31 @@ public class AdminService {
   }
 
   public AdminDto getUserInfoByToken(String token) {
-    // 사용자 ID 추출
-    String email = tokenService.extractEmail(token);
+    try {
+      String email = tokenService.extractEmail(token);
 
-    // JWT 검증
-    if (!tokenService.validateToken(token, email)) {
-      throw new CustomException(ErrorCode.ACCESS_TOKEN_EXPIRED);
-    }
+      boolean isValid = tokenService.validateToken(token, email);
 
-    // 데이터베이스에서 사용자 정보 조회
-    Optional<Admin> adminOptional = adminRepository.findByEmail(email);
-    if (adminOptional.isPresent()) {
-      Admin admin = adminOptional.get();
-      AdminDto adminDto = new AdminDto();
-      adminDto.setEmail(admin.getEmail());
-      adminDto.setUserName(admin.getUserName());
-      adminDto.setRoles(admin.getRoles());
+      if (!isValid) {
+        throw new CustomException(ErrorCode.ACCESS_TOKEN_EXPIRED);
+      }
 
-      return adminDto; // 사용자 정보 반환
-    } else {
-      throw new CustomException(ErrorCode.USER_NOT_FOUND);
+      Optional<Admin> adminOptional = adminRepository.findByEmail(email);
+      if (adminOptional.isPresent()) {
+        Admin admin = adminOptional.get();
+        AdminDto adminDto = new AdminDto();
+        adminDto.setEmail(admin.getEmail());
+        adminDto.setUserName(admin.getUserName());
+        adminDto.setRoles(admin.getRoles());
+        return adminDto;
+      } else {
+        throw new CustomException(ErrorCode.USER_NOT_FOUND);
+      }
+    } catch (CustomException e) {
+      throw new CustomException(ErrorCode.INVALID_TOKEN);
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
     }
   }
 

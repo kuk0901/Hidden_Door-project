@@ -18,7 +18,6 @@ const HomePage = () => {
   const getEscapeRoomInfo = async () => {
     try {
       const res = await Api.get("/escape-rooms/info");
-
       setEscapeRoom({ ...res.data.data });
     } catch (error) {
       toast.error(error.message || "이미지를 불러오는데 실패했습니다.");

@@ -311,103 +311,6 @@
     }
   }
 
-  .theme-slide-section {
-    padding: 10px;
-    @include mixins.flex-layout-column();
-    max-height: 750px;
-
-    .slick-slider {
-      height: 700px;
-
-      .slick-list {
-        overflow: hidden;
-        height: 700px;
-
-        .slick-track {
-          height: 700px;
-        }
-      }
-
-      .slick-slide {
-        margin: 0 10px;
-      }
-
-      .theme--slide {
-        margin-top: 40px;
-        @include mixins.flex-layout-column(center, center);
-        @include mixins.border(1px, solid, black);
-
-        .theme--slide__image {
-          @include mixins.size(100%, 500px);
-        }
-
-        .theme--slide__btn {
-          text-align: center;
-          @include mixins.size(100%, 35px);
-          line-height: 35px;
-          display: block;
-          font-size: 18px;
-          @include mixins.color-scheme(#000, #fff);
-          border-top: 1px solid;
-
-          &:hover {
-            background-color: rgb(40, 39, 39);
-            transform: none;
-          }
-        }
-      }
-
-      .slick-dots {
-        bottom: 70px;
-      }
-
-      .slick-prev:before,
-      .slick-next:before {
-        font-size: 35px;
-        opacity: 1;
-        color: variables.$slide-btn-color;
-      }
-
-      .slick-prev {
-        left: 5px;
-      }
-
-      .slick-next {
-        right: 25px;
-      }
-    }
-
-    @media (max-width: variables.$breakpoint-md) {
-      & {
-        max-height: none;
-
-        .slick-slider {
-          height: auto;
-
-          .slick-list {
-            height: 400px;
-
-            .slick-track {
-              height: 400px;
-            }
-          }
-
-          .theme--slide {
-            margin-top: 30px;
-
-            .theme--slide__image {
-              @include mixins.size(100%, 300px);
-            }
-          }
-
-          .slick-dots {
-            bottom: 5px;
-          }
-        }
-      }
-    }
-  }
-
   @mixin light-mode {
     .theme-section {
       .theme-page--theme-section {
@@ -563,6 +466,104 @@
           .input--checkbox {
             width: 60px;
           }
+        }
+      }
+    }
+  }
+}
+
+// home theme slide
+.theme-slide-section {
+  padding: 10px;
+  @include mixins.flex-layout-column();
+  max-height: 750px;
+
+  .slick-slider {
+    height: 700px;
+
+    .slick-list {
+      overflow: hidden;
+      height: 700px;
+
+      .slick-track {
+        height: 700px;
+      }
+    }
+
+    .slick-slide {
+      margin: 0 10px;
+    }
+
+    .theme--slide {
+      margin-top: 40px;
+      @include mixins.flex-layout-column(center, center);
+      @include mixins.border(1px, solid, black);
+
+      .theme--slide__image {
+        @include mixins.size(100%, 500px);
+      }
+
+      .theme--slide__btn {
+        text-align: center;
+        @include mixins.size(100%, 35px);
+        line-height: 35px;
+        display: block;
+        font-size: 18px;
+        @include mixins.color-scheme(#000, #fff);
+        border-top: 1px solid;
+
+        &:hover {
+          background-color: rgb(40, 39, 39);
+          transform: none;
+        }
+      }
+    }
+
+    .slick-dots {
+      bottom: 70px;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+      font-size: 35px;
+      opacity: 1;
+      color: variables.$slide-btn-color;
+    }
+
+    .slick-prev {
+      left: 5px;
+    }
+
+    .slick-next {
+      right: 25px;
+    }
+  }
+
+  @media (max-width: variables.$breakpoint-md) {
+    & {
+      max-height: none;
+
+      .slick-slider {
+        height: auto;
+
+        .slick-list {
+          height: 400px;
+
+          .slick-track {
+            height: 400px;
+          }
+        }
+
+        .theme--slide {
+          margin-top: 30px;
+
+          .theme--slide__image {
+            @include mixins.size(100%, 300px);
+          }
+        }
+
+        .slick-dots {
+          bottom: 5px;
         }
       }
     }

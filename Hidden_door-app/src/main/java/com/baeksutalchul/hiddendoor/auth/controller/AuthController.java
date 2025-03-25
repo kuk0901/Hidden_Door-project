@@ -63,14 +63,14 @@ public class AuthController {
 
   @PostMapping("/renew")
   public ResponseEntity<ResponseDto<String>> refresh(@CookieValue("refreshToken") String refreshToken) {
-    logger.info("refreshToken: {}", refreshToken);
+    logger.info("refreshToken: " + refreshToken);
 
     if (!tokenService.validateRefreshToken(refreshToken)) {
       throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
     }
 
     String newAccessToken = adminService.refreshAccessToken(refreshToken); // 리프레시 토큰으로 액세스 토큰 갱신
-    return ResponseEntity.ok(new ResponseDto<>(newAccessToken, "액세스 토큰이 갱신되었습니다."));
+    return ResponseEntity.ok(new ResponseDto<>(newAccessToken, "", "액세스 토큰이 갱신되었습니다."));
   }
 
   @GetMapping("/verify")
