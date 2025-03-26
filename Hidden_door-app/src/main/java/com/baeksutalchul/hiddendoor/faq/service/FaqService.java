@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.baeksutalchul.hiddendoor.admin.domain.Admin;
 import com.baeksutalchul.hiddendoor.dto.FaqDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
@@ -65,8 +64,15 @@ public class FaqService {
     }
 
     List<FaqDto> faqDtoList = faqList.getContent().stream()
-        .map(faq -> modelMapper.map(faq, FaqDto.class))
-        .toList();
+    .map(faq -> {
+      FaqDto faqDto = modelMapper.map(faq, FaqDto.class);
+      
+      faqDto.setKstCreDate(DateTimeUtil.convertToKoreanDate(faq.getCreDate()));
+      faqDto.setKstModDate(DateTimeUtil.convertToKoreanDate(faq.getModDate()));
+      
+      return faqDto;
+   })
+  .toList();
 
         PageDto resultPageDto = PageableUtil.createPageDto(faqList);
         logger.info("resultPageDto: {}", resultPageDto);

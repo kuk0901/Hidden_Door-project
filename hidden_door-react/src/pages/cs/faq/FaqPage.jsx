@@ -101,7 +101,7 @@ const FaqPage = () => {
             </div>
           </div>
 
-          <div className="search-section">
+          <div className="cs-search-section">
             <SearchForm
               onSearch={handleSearch}
               fields={searchFields}
