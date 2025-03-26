@@ -63,7 +63,6 @@ public class AuthController {
 
   @PostMapping("/renew")
   public ResponseEntity<ResponseDto<String>> refresh(@CookieValue("refreshToken") String refreshToken) {
-    logger.info("refreshToken: " + refreshToken);
 
     if (!tokenService.validateRefreshToken(refreshToken)) {
       throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);

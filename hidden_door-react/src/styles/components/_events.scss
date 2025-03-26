@@ -196,7 +196,7 @@
             color: variables.$confirm-text-color;
             margin-bottom: -5px;
 
-            @include dark-mode {
+            @include mixins.dark-mode {
               color: black;
             }
           }
@@ -209,7 +209,7 @@
           padding: 15px !important;
           background: variables.$background-color !important;
 
-          @include dark-mode {
+          @include mixins.dark-mode {
             background: color.adjust(
               variables.$light-background-color,
               $lightness: -10%
@@ -226,7 +226,7 @@
           .react-calendar__navigation button {
             color: variables.$confirm-text-color;
 
-            @include dark-mode {
+            @include mixins.dark-mode {
               color: black;
             }
           }
@@ -234,7 +234,7 @@
           .react-calendar__tile {
             color: variables.$confirm-text-color;
 
-            @include dark-mode {
+            @include mixins.dark-mode {
               color: black;
             }
 
@@ -242,7 +242,7 @@
               background: variables.$light-blue-color !important;
               color: white !important;
 
-              @include dark-mode {
+              @include mixins.dark-mode {
                 background: variables.$dark-blue-color !important;
               }
             }
@@ -252,7 +252,7 @@
               opacity: 0.3;
               color: #ccc;
 
-              @include dark-mode {
+              @include mixins.dark-mode {
                 color: #555;
               }
             }
@@ -263,7 +263,7 @@
               opacity: 0.5; // 투명도를 조절하여 연하게 표시
               color: #999; // 더 밝은 회색으로 설정
 
-              @include dark-mode {
+              @include mixins.dark-mode {
                 color: #777; // 다크 모드에서는 조금 더 어두운 회색
               }
             }
@@ -272,7 +272,7 @@
             &--now {
               background-color: #ffff76;
 
-              @include dark-mode {
+              @include mixins.dark-mode {
                 background-color: #5f5f00;
               }
             }
@@ -357,7 +357,6 @@
   }
 }
 
-
 .section--event {
   .event--list {
     padding: 10px;
@@ -417,7 +416,6 @@
 
     .event-calendar-wrapper {
       width: 100%;
-
     }
   }
 }

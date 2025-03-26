@@ -84,7 +84,6 @@ public class TokenService {
 
   // 토큰 유효성 검사 (리프레시 토큰용)
   public boolean validateRefreshToken(String token) {
-    logger.info("리프레시 토큰 유효성 검사: {}", token);
 
     try {
       Claims claims = extractAllClaims(token);
@@ -142,7 +141,6 @@ public class TokenService {
 
   // 토큰 만료 5분 전인지 확인
   public boolean isTokenNearExpiration(String token) {
-    logger.info("토큰 만료 5분 전인지 확인: {}", token);
     Date expiration = extractAllClaims(token).getExpiration();
     Date now = new Date();
 

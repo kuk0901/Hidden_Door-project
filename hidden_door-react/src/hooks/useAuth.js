@@ -9,10 +9,8 @@ export function useAuth() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const checkAdminStatus = async () => {
-    console.log("checkAdminStatus");
     try {
       const token = tokenManager.getToken();
-      console.log("checkAdminStatus token:", token);
 
       if (!token) {
         setIsAuthenticated(false);
