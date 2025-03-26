@@ -1,4 +1,5 @@
 @use "../abstracts/variables";
+@use "../abstracts/mixins";
 @use "sass:color";
 
 .confirm-modal-overlay {
@@ -8,13 +9,11 @@
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include mixins.flex-layout-row(center, center);
   z-index: 9998;
 
   .confirm-modal {
-    border: 1px solid variables.$confirm-border-color;
+    @include mixins.border(1px, solid, variables.$confirm-border-color);
     border-radius: 12px;
     padding: 10px;
     margin: auto;
@@ -55,16 +54,14 @@
       }
 
       .confirm-modal__btn--confirm {
-        background-color: variables.$confirm-button-color;
-        color: white;
+        @include mixins.color-scheme(variables.$confirm-button-color, white);
         transition: background-color 0.3s ease;
 
         &:hover {
-          background-color: color.adjust(
-            variables.$confirm-button-color,
-            $lightness: -15%
+          @include mixins.color-scheme(
+            color.adjust(variables.$confirm-button-color, $lightness: -15%),
+            white
           );
-          color: white;
         }
       }
     }

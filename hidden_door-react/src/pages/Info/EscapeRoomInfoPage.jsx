@@ -51,6 +51,16 @@ const EscapeRoomInfoPage = () => {
         }
       );
 
+      console.log(res);
+
+      if (res.status !== 200) {
+        setEscapeRoom(escapeRoom);
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
+
       setEscapeRoom(res.data.data);
 
       toast.success("제목이 성공적으로 수정되었습니다.");
@@ -82,6 +92,13 @@ const EscapeRoomInfoPage = () => {
           explanation: newExplanation
         }
       );
+
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
 
       setEscapeRoom(res.data.data);
 

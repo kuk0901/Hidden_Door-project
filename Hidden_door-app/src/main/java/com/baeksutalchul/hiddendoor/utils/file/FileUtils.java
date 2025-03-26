@@ -18,6 +18,10 @@ import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 파일 처리 유틸리티 클래스
+ * 파일 저장, 삭제 및 관련 작업 처리
+ */
 @Component("fileUtils")
 public class FileUtils {
 
@@ -46,6 +50,13 @@ public class FileUtils {
     }
   }
 
+  /**
+   * 파일을 저장하고 저장된 파일명을 반환
+   * 
+   * @param file 저장할 MultipartFile 객체
+   * @return 저장된 파일명, 파일이 없거나 비어있으면 null
+   * @throws IOException 파일 저장 중 오류 발생 시
+   */
   public String saveFile(MultipartFile file) throws IOException {
     Map<String, String> fileInfo = new HashMap<>();
 
@@ -66,12 +77,24 @@ public class FileUtils {
     return null; // 파일 없거나 비어있는 경우
   }
 
+  /**
+   * 고유한 파일명을 생성
+   * 
+   * @param originalFileName 원본 파일명
+   * @return 생성된 고유 파일명
+   */
   private String generateUniqueFileName(String originalFileName) {
     String baseName = RandomString.getRandomString();
     String extension = getFileExtension(originalFileName);
     return baseName + extension; // 고유한 파일 이름 생성
   }
 
+  /**
+   * 파일 확장자를 추출
+   * 
+   * @param fileName 파일명
+   * @return 파일 확장자, 확장자가 없으면 기본 확장자 반환
+   */
   private String getFileExtension(String fileName) {
     if (fileName == null || fileName.isEmpty()) {
       return defaultExtension; // 기본 확장자 반환
@@ -85,6 +108,12 @@ public class FileUtils {
     return fileName.substring(lastIndexOfDot).toLowerCase(); // 확장자 반환
   }
 
+  /**
+   * 저장된 파일을 삭제
+   * 
+   * @param storedFileName 삭제할 파일명
+   * @return 삭제 성공 여부
+   */
   public boolean deleteFile(String storedFileName) {
     Path pathToDelete = Paths.get(filePath, storedFileName);
     try {

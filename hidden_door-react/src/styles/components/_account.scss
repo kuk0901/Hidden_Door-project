@@ -25,19 +25,19 @@
           text-align: center;
 
           &.content--xs {
-            width: 130px;
+            @include mixins.size(130px, auto);
           }
 
           &.content--sm {
-            width: 150px;
+            @include mixins.size(150px, auto);
           }
 
           &.content--md {
-            width: 250px;
+            @include mixins.size(250px, auto);
           }
 
           &.content--lg {
-            width: 330px;
+            @include mixins.size(330px, auto);
           }
         }
       }
@@ -55,117 +55,90 @@
 
       .account--item-content {
         @include mixins.flex-layout-row(space-around, center);
-        width: 100%;
+        @include mixins.size(100%, 37px);
         border: none;
         background-color: transparent;
-        height: 37px;
 
         .content {
           font-size: 16px;
           text-align: center;
 
           &.content--xs {
-            width: 130px;
+            @include mixins.size(130px, auto);
           }
 
           &.content--sm {
-            width: 150px;
+            @include mixins.size(150px, auto);
           }
 
           &.content--md {
-            width: 250px;
+            @include mixins.size(250px, auto);
           }
 
           &.content--lg {
-            width: 330px;
+            @include mixins.size(330px, auto);
           }
 
           &.roles-container {
-            @include mixins.flex-layout-row(center, center);
-            gap: 10px;
+            @include mixins.flex-layout-row-with-gap(center, center, 10px);
           }
         }
       }
     }
   }
 
-  @media (max-width: variables.$breakpoint-lg) {
-    & {
-      .account--list {
-        .account--item {
-          padding: 10px 0;
-
-          &.account--header {
-            .content {
-              font-size: 18px;
-
-              &.content--xs {
-                width: 90px;
-              }
-
-              &.content--sm {
-                width: 130px;
-              }
-
-              &.content--md {
-                width: 210px;
-              }
-
-              &.content--lg {
-                width: 260px;
-              }
-            }
-          }
-
-          .account--item-content {
-            .content {
-              font-size: 16px;
-
-              &.content--xs {
-                width: 90px;
-              }
-
-              &.content--sm {
-                width: 130px;
-
-                .btn.delete {
-                  padding: 8px 13px;
-                }
-              }
-
-              &.content--md {
-                width: 210px;
-              }
-
-              &.content--lg {
-                width: 260px;
-              }
-
-              &.roles-container {
-                gap: 8px;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  @media (max-width: variables.$breakpoint-md) {
+  @include mixins.lg-mode {
     .account--list {
       .account--item {
+        padding: 10px 0;
+
         &.account--header {
           .content {
-            &.content--email {
-              display: none;
+            font-size: 18px;
+
+            &.content--xs {
+              @include mixins.size(90px, auto);
+            }
+
+            &.content--sm {
+              @include mixins.size(130px, auto);
+            }
+
+            &.content--md {
+              @include mixins.size(210px, auto);
+            }
+
+            &.content--lg {
+              @include mixins.size(260px, auto);
             }
           }
         }
 
         .account--item-content {
           .content {
-            &.content--email {
-              display: none;
+            font-size: 16px;
+
+            &.content--xs {
+              @include mixins.size(90px, auto);
+            }
+
+            &.content--sm {
+              @include mixins.size(130px, auto);
+              .btn.delete {
+                padding: 8px 13px;
+              }
+            }
+
+            &.content--md {
+              @include mixins.size(210px, auto);
+            }
+
+            &.content--lg {
+              @include mixins.size(260px, auto);
+            }
+
+            &.roles-container {
+              @include mixins.flex-layout-row-with-gap(center, center, 8px);
             }
           }
         }
@@ -173,22 +146,26 @@
     }
   }
 
-  @media (max-width: variables.$breakpoint-sm) {
+  @include mixins.md-mode {
     .account--list {
       .account--item {
-        &.account--header {
-          .content {
-            &.content--phone {
-              display: none;
-            }
+        &.account--header,
+        .account--item-content {
+          .content.content--email {
+            display: none;
           }
         }
+      }
+    }
+  }
 
+  @include mixins.sm-mode {
+    .account--list {
+      .account--item {
+        &.account--header,
         .account--item-content {
-          .content {
-            &.content--phone {
-              display: none;
-            }
+          .content.content--phone {
+            display: none;
           }
         }
       }
@@ -212,8 +189,7 @@
     border-radius: 4px;
 
     .admin--detail--content {
-      @include mixins.flex-layout-column(flex-start, baseline);
-      gap: 20px;
+      @include mixins.flex-layout-column-with-gap(flex-start, baseline, 20px);
 
       .admin-edit--form {
         width: 100%;
@@ -248,8 +224,11 @@
             margin: 10px 5px 15px;
 
             .role-checkbox {
-              @include mixins.flex-layout-row(flex-start, baseline);
-              gap: 20px;
+              @include mixins.flex-layout-row-with-gap(
+                flex-start,
+                baseline,
+                20px
+              );
               margin: 10px;
 
               .checkbox--role {
@@ -264,51 +243,47 @@
           }
         }
 
-        @media (max-width: variables.$breakpoint-sm) {
-          & {
-            .form-container {
-              .container {
-                flex-direction: column;
-                align-items: flex-start;
+        @include mixins.sm-mode {
+          .form-container {
+            .container {
+              flex-direction: column;
+              align-items: flex-start;
 
-                .label-container {
-                  text-align: left;
-                  margin: 5px 5px 0;
-                }
+              .label-container {
+                text-align: left;
+                margin: 5px 5px 0;
               }
             }
+          }
 
-            .roles-checkbox-group {
-              flex-direction: column;
+          .roles-checkbox-group {
+            flex-direction: column;
 
-              .role-label-container {
-                text-align: left;
-              }
+            .role-label-container {
+              text-align: left;
             }
           }
         }
 
-        @media (max-width: variables.$breakpoint-xs) {
-          & {
-            .form-container {
-              .container {
-                .label-container {
-                  margin: 0 0 5px;
+        @include mixins.xs-mode {
+          .form-container {
+            .container {
+              .label-container {
+                margin: 0 0 5px;
 
-                  label,
-                  .role--label {
-                    &::after {
-                      content: ":";
-                    }
+                label,
+                .role--label {
+                  &::after {
+                    content: ":";
                   }
                 }
+              }
 
-                .input-container {
-                  margin: 0;
+              .input-container {
+                margin: 0;
 
-                  &.input-container__m {
-                    width: 322px;
-                  }
+                &.input-container__m {
+                  width: 322px;
                 }
               }
             }
@@ -318,8 +293,7 @@
 
       .admin--detail--item {
         padding: 10px;
-        @include mixins.flex-layout-row(flex-start, center);
-        gap: 10px;
+        @include mixins.flex-layout-row-with-gap(flex-start, center, 10px);
 
         .admin--detail--label {
           font-weight: 700;
@@ -327,14 +301,12 @@
           min-width: 70px;
           text-align: center;
 
-          @media (max-width: variables.$breakpoint-sm) {
-            & {
-              font-size: 16px;
-              text-align: left;
+          @include mixins.sm-mode {
+            font-size: 16px;
+            text-align: left;
 
-              &::after {
-                content: ":";
-              }
+            &::after {
+              content: ":";
             }
           }
         }
@@ -348,24 +320,19 @@
           @include mixins.flex-layout-row(flex-start, center);
           flex-wrap: wrap;
 
-          @media (max-width: variables.$breakpoint-sm) {
-            & {
-              font-size: 16px;
-              min-width: 300px;
-            }
+          @include mixins.sm-mode {
+            font-size: 16px;
+            min-width: 300px;
           }
 
-          @media (max-width: 414px) {
-            & {
-              min-width: 260px;
-            }
+          @include mixins.xs-mode {
+            min-width: 260px;
           }
         }
 
         .roles-checkbox-group {
           .role-checkbox {
-            @include mixins.flex-layout-row(flex-start, center);
-            gap: 20px;
+            @include mixins.flex-layout-row-with-gap(flex-start, center, 20px);
             margin: 10px;
 
             .checkbox--role {
@@ -378,13 +345,11 @@
           }
         }
 
-        @media (max-width: variables.$breakpoint-sm) {
-          & {
-            padding: 5px;
-            gap: 10px;
-            flex-direction: column;
-            align-items: flex-start;
-          }
+        @include mixins.sm-mode {
+          padding: 5px;
+          gap: 10px;
+          flex-direction: column;
+          align-items: flex-start;
         }
       }
 
@@ -394,15 +359,13 @@
       }
     }
 
-    @media (max-width: variables.$breakpoint-sm) {
-      & {
-        padding: 10px 5px;
-      }
+    @include mixins.sm-mode {
+      padding: 10px 5px;
     }
   }
 }
 
-@media (prefers-color-scheme: light) {
+@include mixins.light-mode {
   .account--section {
     .account--list {
       .account--item {

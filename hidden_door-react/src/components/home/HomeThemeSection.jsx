@@ -36,7 +36,7 @@ const HomeThemeSection = () => {
 
   return (
     <section className="theme-slide-section">
-      <div className="section--title text-center bold">테마</div>
+      <div className="section--title text-center bold">THEME</div>
 
       <Slider {...settings}>
         {themeList.map((item) => (

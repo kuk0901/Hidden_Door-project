@@ -42,6 +42,13 @@ const AccountItem = ({
         }
       );
 
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
+
       setAdminList(res.data.data);
       setPage({ ...page, ...res.data.pageDto });
       setSearch({
@@ -61,8 +68,12 @@ const AccountItem = ({
     <li className="account--item">
       <button onClick={handleDetail} className="account--item-content">
         <div className="content content--sm">{adminData.userName}</div>
-        <div className="content content--md content--email">{adminData.email}</div>
-        <div className="content content--sm content--phone">{adminData.phone}</div>
+        <div className="content content--md content--email">
+          {adminData.email}
+        </div>
+        <div className="content content--sm content--phone">
+          {adminData.phone}
+        </div>
 
         {/* FIXME: 컴포넌트 분리 고려 */}
         <div className="content content--lg roles-container">

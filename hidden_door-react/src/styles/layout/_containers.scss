@@ -6,19 +6,26 @@
   @include mixins.flex-layout-row(space-around, center);
 }
 
+// flex
 .column {
   @include mixins.flex-layout-column(space-between, center);
 }
 
+// btn
 .btn-container {
   @include mixins.flex-layout-row(space-around, center);
   margin: 10px;
+}
+
+.btn-container__right {
+  justify-content: end;
 }
 
 .btn-link-container {
   @include mixins.flex-layout-row(right, center);
 }
 
+// list
 .list-container {
   @include mixins.flex-layout-row(space-around, center);
 }
@@ -36,6 +43,8 @@
   @include mixins.flex-layout-column(flex-start, flex-start);
 }
 
+// login-form
+// FIXME: 반응형 코드 수정
 .login-form-container {
   border: 1px solid;
   @media (max-width: variables.$breakpoint-lg) {
@@ -43,6 +52,7 @@
   }
 }
 
+// theme-form
 .themeForm-container {
   .form-container {
     margin: 0;
@@ -55,8 +65,4 @@
       text-align: left;
     }
   }
-}
-
-.btn-container__right {
-  justify-content: end;
 }

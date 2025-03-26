@@ -1,12 +1,6 @@
-@use '../abstracts/variables';
-@use 'sass:color';
-
-// 다크 모드 미디어 쿼리
-@mixin dark-mode {
-  @media (prefers-color-scheme: dark) {
-    @content;
-  }
-}
+@use "../abstracts/variables";
+@use "sass:color";
+@use "../abstracts/mixins";
 
 .event-page {
   display: flex;
@@ -17,7 +11,7 @@
   color: variables.$light-text-color;
   min-height: calc(100vh - 136px - 70px);
 
-  @include dark-mode {
+  @include mixins.dark-mode {
     background-color: variables.$dark-background-color;
     color: variables.$dark-text-color;
   }
@@ -32,7 +26,7 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
 
-    @include dark-mode {
+    @include mixins.dark-mode {
       background-color: variables.$dark-blue-color;
       color: variables.$dark-text-color;
     }
@@ -43,7 +37,7 @@
         $lightness: -15%
       );
 
-      @include dark-mode {
+      @include mixins.dark-mode {
         background-color: color.adjust(
           variables.$dark-blue-color,
           $lightness: 15%
@@ -76,7 +70,7 @@
         cursor: pointer;
         transition: background-color 0.3s ease;
 
-        @include dark-mode {
+        @include mixins.dark-mode {
           background-color: color.adjust(
             variables.$light-background-color,
             $lightness: -10%
@@ -87,7 +81,7 @@
         &:hover {
           background-color: #e0e0e0;
 
-          @include dark-mode {
+          @include mixins.dark-mode {
             background-color: color.adjust(
               variables.$light-background-color,
               $lightness: -15%
@@ -120,7 +114,7 @@
     z-index: 9999;
     width: 800px;
 
-    @include dark-mode {
+    @include mixins.dark-mode {
       background-color: color.adjust(
         variables.$light-background-color,
         $lightness: -10%
@@ -133,7 +127,7 @@
       margin-bottom: 20px;
       font-weight: 700;
 
-      @include dark-mode {
+      @include mixins.dark-mode {
         color: black;
       }
     }
@@ -160,7 +154,7 @@
         font-weight: 600;
         margin-bottom: 5px;
 
-        @include dark-mode {
+        @include mixins.dark-mode {
           color: black;
         }
       }
@@ -174,7 +168,7 @@
         background-color: variables.$background-color;
         color: variables.$light-text-color;
 
-        @include dark-mode {
+        @include mixins.dark-mode {
           background-color: white;
           color: black;
         }
@@ -303,7 +297,7 @@
           background-color: variables.$delete-btn-color;
           color: variables.$confirm-bg-color;
 
-          @include dark-mode {
+          @include mixins.dark-mode {
             color: variables.$dark-text-color;
           }
 
@@ -319,7 +313,7 @@
           background-color: variables.$confirm-bg-color;
           color: variables.$confirm-text-color;
 
-          @include dark-mode {
+          @include mixins.dark-mode {
             background-color: color.adjust(
               variables.$dark-background-color,
               $lightness: 10%
@@ -333,7 +327,7 @@
               $lightness: -5%
             );
 
-            @include dark-mode {
+            @include mixins.dark-mode {
               background-color: color.adjust(
                 variables.$dark-background-color,
                 $lightness: 15%
@@ -347,7 +341,7 @@
           background-color: variables.$confirm-button-color;
           color: white;
 
-          @include dark-mode {
+          @include mixins.dark-mode {
             color: variables.$dark-text-color;
           }
 
@@ -358,6 +352,51 @@
             );
           }
         }
+      }
+    }
+  }
+}
+
+
+.section--event {
+  .event--list {
+    padding: 10px;
+    min-height: 70px;
+
+    .event--item {
+      justify-content: center;
+      gap: 10px;
+      padding: 10px;
+      margin: 10px;
+      background-color: variables.$light-background-color;
+      color: variables.$light-text-color;
+      border-radius: 7px;
+
+      @include mixins.light-mode {
+        background-color: color.adjust(
+          variables.$dark-background-color,
+          $lightness: -10%
+        );
+        color: variables.$dark-text-color;
+      }
+
+      &:hover {
+        transform: none;
+        background-color: color.adjust(
+          variables.$light-background-color,
+          $lightness: 5%
+        );
+
+        @include mixins.light-mode {
+          background-color: color.adjust(
+            variables.$dark-background-color,
+            $lightness: -15%
+          );
+        }
+      }
+
+      .event--item--title {
+        font-weight: 700;
       }
     }
   }
@@ -378,6 +417,7 @@
 
     .event-calendar-wrapper {
       width: 100%;
+
     }
   }
 }
