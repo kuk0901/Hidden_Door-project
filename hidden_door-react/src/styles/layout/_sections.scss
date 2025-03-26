@@ -1,9 +1,10 @@
+@use "sass:color";
 @use "../abstracts/variables";
 @use "../abstracts/mixins";
 
-// 로그인
+// login
 .login-section {
-  height: 550px;
+  @include mixins.size(auto, 550px);
   max-width: 1100px;
   margin: 40px auto;
 
@@ -11,21 +12,37 @@
     justify-content: center;
   }
 
-  @media (max-width: variables.$breakpoint-xl) {
-    height: 400px;
+  @include mixins.xl-mode {
+    @include mixins.size(auto, 400px);
   }
 
-  @media (max-width: variables.$breakpoint-lg) {
-    height: 350px;
+  @include mixins.lg-mode {
+    @include mixins.size(auto, 350px);
   }
 }
 
-// 이미지
+.section--home {
+  @include mixins.flex-layout-column-with-gap($gap: 50px);
+
+  @include mixins.lg-mode {
+    gap: 30px;
+  }
+
+  @include mixins.md-mode {
+    gap: 20px;
+  }
+
+  @include mixins.sm-mode {
+    gap: 10px;
+  }
+}
+
+// main img
 .main-section__img {
   margin-top: 25px;
   margin-bottom: 50px;
 
-  @media (max-width: variables.$breakpoint-md) {
+  @include mixins.md-mode {
     margin-bottom: 30px;
   }
 
@@ -42,10 +59,8 @@
     }
 
     .img-container {
-      display: flex;
-      flex-direction: column;
-      height: 600px; /* 전체 이미지 높이 */
-      width: 500px;
+      @include mixins.size(500px, 600px);
+      @include mixins.flex-layout-column();
       box-shadow: 10px 0 40px rgba(0, 0, 0, 0.5);
       margin: 10px;
 
@@ -72,12 +87,12 @@
   }
 }
 
-@media (max-width: variables.$breakpoint-lg) {
+@include mixins.lg-mode {
   .main-section__img {
     .guide-container {
       .img-container {
-        width: 400px;
-        height: 400px; /* 높이 조정 */
+        @include mixins.size(400px, 400px);
+
         .image-part {
           &.top {
             animation: move-left-mobile 4s infinite;
@@ -91,15 +106,13 @@
     }
   }
 }
-
-@media (max-width: variables.$breakpoint-sm) {
+@include mixins.sm-mode {
   .main-section__img {
     .guide-container {
       flex-direction: column;
 
       .img-container {
-        width: 300px;
-        height: 300px; /* 높이 조정 */
+        @include mixins.size(300px, 300px);
       }
 
       .guide--text {
@@ -109,7 +122,7 @@
   }
 }
 
-/* 애니메이션 효과 */
+/* animation */
 @keyframes move-left {
   0% {
     transform: translateX(0);
@@ -158,6 +171,7 @@
   }
 }
 
+// description
 .section--description {
   padding: 10px;
 
@@ -167,17 +181,27 @@
   }
 }
 
-// 주의사항, 가격, 테마 슬라이드
+// common caution, price, event
+.section--caution,
+.section--event {
+  .section--title {
+    color: white;
+  }
+}
+
 .section--caution,
 .section--price,
-.theme-slide-section {
-  @include mixins.border(1px, solid, white);
+.theme-slide-section,
+.section--event {
   padding: 10px;
   border-radius: 6px;
+  margin: 40px 20px;
 
   .section--title {
-    font-size: 25px;
-    margin-bottom: 10px;
+    font-size: 30px;
+    border: 3px solid;
+    border-radius: 5px;
+    padding: 5px 0;
   }
 
   .section--content {
@@ -185,7 +209,7 @@
   }
 }
 
-// 가격
+// price
 .section--price {
   .price--line {
     @include mixins.flex-layout-row(center, center);
@@ -235,12 +259,12 @@
     }
   }
 
-  @media (max-width: variables.$breakpoint-lg) {
+  @include mixins.lg-mode {
     .price--line {
       .price--list,
       .price--guide {
         .price {
-          width: 110px;
+          @include mixins.size(110px, auto);
 
           .price--themeName {
             height: 135px;
@@ -258,25 +282,25 @@
     }
   }
 
-  @media (max-width: variables.$breakpoint-md) {
+  @include mixins.md-mode {
     .price--line {
       .price--list,
       .price--guide {
         .price {
-          width: 100px;
+          @include mixins.size(100px, auto);
         }
       }
 
       .price--guide {
         .price {
-          width: 85px;
+          @include mixins.size(85px, auto);
         }
       }
     }
   }
 }
 
-// 단일 가격
+// price one
 .section--price--one {
   padding: 40px 10px;
 
@@ -286,6 +310,7 @@
     .price--list,
     .price--guide {
       flex-direction: row;
+
       .price {
         border-bottom: none;
         border-right: 1px solid;
@@ -324,7 +349,7 @@
     }
   }
 
-  @media (max-width: variables.$breakpoint-sm) {
+  @include mixins.sm-mode {
     .price--line {
       flex-direction: row;
 
@@ -370,6 +395,7 @@
   }
 }
 
+// price mini
 .section--price--mini {
   border: 1px solid;
   border-radius: 6px;
@@ -392,8 +418,10 @@
       @include mixins.flex-layout-column(center, center);
       border-bottom: 1px solid;
       font-size: 18px;
-      background-color: variables.$light-background-color;
-      color: variables.$dark-background-color;
+      @include mixins.color-scheme(
+        variables.$light-background-color,
+        variables.$dark-background-color
+      );
     }
 
     .price--content {
@@ -401,6 +429,7 @@
 
       .price--guide--list {
         border-right: 1px solid;
+
         .price--guide {
           padding: 10px;
           border-bottom: 1px solid;
@@ -425,14 +454,38 @@
   }
 }
 
+// caution
+.section--caution {
+  background-color: #000;
+  box-shadow: 0px 3px 4px 4px rgba(0, 0, 0, 0.5);
+}
+
+// event
+.section--event {
+  background-color: color.scale(
+    variables.$dark-background-color,
+    $lightness: 10%
+  );
+  box-shadow: 0px 3px 3px 4px rgba(0, 0, 0, 0.1);
+
+  .section--title {
+    border: none;
+    text-decoration: underline;
+    text-underline-offset: 6px;
+  }
+
+  @include mixins.light-mode {
+    box-shadow: 0px 3px 3px 4px rgba(0, 0, 0, 0.3);
+  }
+}
+
+// img update
 .img-update--section {
-  @include mixins.flex-layout-column(center, center);
-  gap: 10px;
+  @include mixins.flex-layout-column-with-gap(center, center, 10px);
   margin-top: 20px;
 
   .presentImg-container {
-    @include mixins.flex-layout-column(center, center);
-    gap: 30px;
+    @include mixins.flex-layout-column-with-gap(center, center, 30px);
   }
 
   .btn-container {
@@ -441,9 +494,9 @@
   }
 }
 
+// btn contain
 .btn--contain--section {
-  @include mixins.flex-layout-row(space-between, center);
-  gap: 20px;
+  @include mixins.flex-layout-row-with-gap(space-between, center, 20px);
   margin-top: 10px;
   flex-wrap: wrap;
 
@@ -451,7 +504,7 @@
     margin: 0;
   }
 
-  @media (max-width: variables.$breakpoint-lg) {
+  @include mixins.lg-mode {
     & {
       gap: 10px;
 
@@ -462,13 +515,14 @@
     }
   }
 
-  @media (max-width: variables.$breakpoint-sm) {
+  @include mixins.sm-mode {
     & {
       gap: 0;
     }
   }
 }
 
+// admin form
 .admin--form--section {
   position: absolute;
   top: 400px;
@@ -489,11 +543,11 @@
   }
 }
 
-// 라이트 모드
-@media (prefers-color-scheme: light) {
+@mixin light-mode {
   .section--caution,
   .section--price,
-  .theme-slide-section {
+  .theme-slide-section,
+  .section--event {
     @include mixins.border(1px, solid, variables.$light-text-color);
   }
 
@@ -509,8 +563,10 @@
   .section--price--mini {
     .price--line {
       .price--title {
-        background-color: variables.$dark-background-color;
-        color: variables.$light-background-color;
+        @include mixins.color-scheme(
+          variables.$dark-background-color,
+          variables.$light-background-color
+        );
       }
     }
   }

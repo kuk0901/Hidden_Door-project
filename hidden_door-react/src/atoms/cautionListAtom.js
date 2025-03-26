@@ -1,6 +1,10 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
+/**
+ * @description: Caution state atom
+ * @use persistAtom
+ */
 const { persistAtom } = recoilPersist({
   key: "caution-list-persist",
   storage: sessionStorage

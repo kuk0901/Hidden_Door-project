@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.token;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
@@ -8,6 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+
+import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
+import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 
 import java.security.Key;
 import java.util.Date;
@@ -29,6 +33,7 @@ public class TokenService {
     return Jwts.builder()
         .setSubject(id)
         .setIssuedAt(new Date(System.currentTimeMillis()))
+        // FIXME: 테스트 중
         .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 45))) // 45분 유효
         .claim("roles", roles)
         .claim("tokenType", "ACCESS")
@@ -54,8 +59,12 @@ public class TokenService {
       return claims.getSubject().equals(userEmail)
           && !isTokenExpired(token)
           && "ACCESS".equals(claims.get("tokenType"));
+    } catch (ExpiredJwtException e) {
+      logger.error("Token is expired", e);
+      throw new CustomException(ErrorCode.ACCESS_TOKEN_EXPIRED);
     } catch (Exception e) {
-      return false;
+      logger.error("Error validating token", e);
+      throw new CustomException(ErrorCode.INVALID_TOKEN);
     }
   }
 
@@ -75,6 +84,7 @@ public class TokenService {
 
   // 토큰 유효성 검사 (리프레시 토큰용)
   public boolean validateRefreshToken(String token) {
+
     try {
       Claims claims = extractAllClaims(token);
       boolean isExpired = isTokenExpired(token);
@@ -127,5 +137,14 @@ public class TokenService {
   // 유효기간 확인
   private boolean isTokenExpired(String token) {
     return extractAllClaims(token).getExpiration().before(new Date());
+  }
+
+  // 토큰 만료 5분 전인지 확인
+  public boolean isTokenNearExpiration(String token) {
+    Date expiration = extractAllClaims(token).getExpiration();
+    Date now = new Date();
+
+    // 만료 5분 전부터 갱신 시도
+    return (expiration.getTime() - now.getTime()) <= 5 * 60 * 1000;
   }
 }

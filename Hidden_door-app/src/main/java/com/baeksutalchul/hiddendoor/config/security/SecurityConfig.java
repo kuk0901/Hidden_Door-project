@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -41,37 +42,19 @@ public class SecurityConfig {
         .csrf(csrf -> csrf.disable())
         .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/v1/auth/authenticate",
-                "/api/v1/auth/terminate", "/images/**")
+            .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
+            .requestMatchers("/images/**", "/api/v1/auth/authenticate", "/api/v1/customers/customer/add",
+                "/api/v1/customers/customer/delete/*", "/api/v1/reservations/create")
             .permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
-                "/api/v1/customers/**")
-            .permitAll()
-            .requestMatchers(HttpMethod.POST, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
-                "/api/v1/customers/**")
-            .authenticated()
-            .requestMatchers(HttpMethod.PATCH, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
-                "/api/v1/customers/**")
-            .authenticated()
-            .requestMatchers(HttpMethod.PUT, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
-                "/api/v1/customers/**")
-            .authenticated()
-            .requestMatchers(HttpMethod.DELETE, "/api/v1/escape-rooms/**", "/api/v1/cautions/**", "/api/v1/themes/**",
-                "/api/v1/faqs/**", "/api/v1/reservations/**", "/api/v1/notices/**", "/api/v1/events/**",
-                "/api/v1/customers/**")
-            .authenticated()
-            .requestMatchers("/api/v1/auth/renew", "/api/v1/auth/verify").authenticated()
             .requestMatchers("/api/v1/admins/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
             .requestMatchers("/api/v1/auth/register", "/api/v1/admins/account/delete/one", "/api/v1/super-admin/**")
             .hasAuthority("ROLE_SUPER_ADMIN")
             .anyRequest().authenticated())
         .exceptionHandling(exceptions -> exceptions
             .authenticationEntryPoint(customAuthenticationEntryPoint())
-            .accessDeniedHandler(customAccessDeniedHandler()));
+            .accessDeniedHandler(customAccessDeniedHandler()))
+        .sessionManagement(session -> session
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
     return http.build();
   }

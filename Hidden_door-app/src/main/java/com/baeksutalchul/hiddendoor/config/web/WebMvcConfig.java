@@ -4,7 +4,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.resource.PathResourceResolver;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
+
 import java.io.File;
+import java.io.IOException;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
@@ -13,21 +18,30 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
   @Override
   public void addResourceHandlers(ResourceHandlerRegistry registry) {
-    String os = System.getProperty("os.name").toLowerCase();
-    String userHome = System.getProperty("user.home");
-    String fullPath;
+    // 1. OS 종속적 경로 생성 (조건문 제거)
+    String osSpecificPath = "file:" + System.getProperty("user.home")
+        + File.separator + uploadDir + File.separator;
 
-    // 운영체제에 따라 경로 설정
-    if (os.contains("win")) {
-      fullPath = "file:C:" + File.separator + uploadDir + "/";
-    } else if (os.contains("mac") || os.contains("nix") || os.contains("nux")) {
-      fullPath = "file:" + userHome + File.separator + uploadDir + "/";
-    } else {
-      fullPath = "file:" + userHome + File.separator + uploadDir + "/";
-    }
+    // 2. 디렉토리 생성 로직 추가
+    File uploadFolder = new File(System.getProperty("user.home"), uploadDir);
+    uploadFolder.mkdirs();
 
-    // 이미지 리소스 핸들러
+    // 3. 리소스 핸들러 설정
     registry.addResourceHandler("/images/**")
-        .addResourceLocations(fullPath);
+        .addResourceLocations(osSpecificPath);
+
+    // 4. 기타 정적 리소스 설정
+    registry.addResourceHandler("/**")
+        .addResourceLocations("classpath:/static/")
+        .resourceChain(true)
+        .addResolver(new PathResourceResolver() {
+          @Override
+          protected Resource getResource(String resourcePath, Resource location) throws IOException {
+            Resource requestedResource = location.createRelative(resourcePath);
+            return requestedResource.exists() && requestedResource.isReadable()
+                ? requestedResource
+                : new ClassPathResource("/static/index.html");
+          }
+        });
   }
 }

@@ -21,6 +21,7 @@ import CustomerAddPage from "@pages/cs/customer/CustomerAddPage";
 import CustomerDetailPage from "@pages/cs/customer/CustomerDetailPage";
 import ReservationMainPage from "@pages/reservation/ReservationMainPage";
 import ReservationConfirmPage from "@pages/reservation/ReservationConfirmPage";
+import ReservationSummaryPage from "@pages/reservation/ReservationSummaryPage";
 import EventPage from "@pages/event/EventPage";
 import NoticePage from "@pages/notice/NoticePage";
 import NoticeDetailPage from "@pages/notice/NoticeDetailPage";
@@ -48,7 +49,6 @@ export function AppRoutes() {
           {/* 테마 페이지 */}
           <Route path="theme">
             <Route index element={<ThemePage />} />
-            {/* <Route path=":themeId" element={<ThemeDetailPage />} /> */}
             {themeList.length > 0 &&
               themeList.map((theme) => (
                 <Route
@@ -89,6 +89,10 @@ export function AppRoutes() {
           <Route path="reservation">
             <Route index element={<ReservationMainPage />} />
             <Route path="confirm" element={<ReservationConfirmPage />} />
+            <Route
+              path="summary/:reservationNumber"
+              element={<ReservationSummaryPage />}
+            />
           </Route>
 
           <Route path="location" element={<LocationPage />} />

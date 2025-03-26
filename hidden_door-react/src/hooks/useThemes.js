@@ -3,6 +3,10 @@ import { useThemeList } from "@hooks/useThemeList";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 
+/**
+ * @description 모든 테마 데이터를 가져옴
+ * @returns {Object} themeList - 테마 리스트 데이터
+ */
 export function useThemes() {
   const { themeList, setThemeList } = useThemeList();
 

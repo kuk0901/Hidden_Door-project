@@ -1,11 +1,10 @@
+import React, { Suspense } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Suspense } from "react";
 import Confirm from "@components/common/dialogs/Confirm";
 import Loading from "@components/common/loading/Loading";
 import { AppRoutes } from "@routes/AppRoutes";
 import { useAuth } from "@hooks/useAuth";
-
 import { useScrollRestoration } from "@hooks/useScrollRestoration";
 
 function App() {
@@ -35,4 +34,4 @@ function App() {
   );
 }
 
-export default App;
+export default React.memo(App); // React.memo를 사용하여 불필요한 리렌더링 방지

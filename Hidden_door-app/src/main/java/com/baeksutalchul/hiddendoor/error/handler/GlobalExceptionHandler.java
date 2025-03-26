@@ -2,10 +2,11 @@ package com.baeksutalchul.hiddendoor.error.handler;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
@@ -16,7 +17,7 @@ import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-@ControllerAdvice
+@RestControllerAdvice
 public class GlobalExceptionHandler {
 
   private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
@@ -32,9 +33,10 @@ public class GlobalExceptionHandler {
         e.getDetail(),
         page);
 
-    logger.info("ErrorResponse: {}", response);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
 
-    return ResponseEntity.status(errorCode.getHttpStatus()).body(response);
+    return ResponseEntity.status(errorCode.getHttpStatus()).headers(headers).body(response);
   }
 
   @ExceptionHandler(NoHandlerFoundException.class)
@@ -48,7 +50,10 @@ public class GlobalExceptionHandler {
         "요청한 리소스를 찾을 수 없습니다.",
         page);
 
-    return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).headers(headers).body(response);
   }
 
   @ExceptionHandler(Exception.class)
@@ -61,10 +66,13 @@ public class GlobalExceptionHandler {
         "서버 오류가 발생했습니다.",
         page);
 
-    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    HttpHeaders headers = new HttpHeaders();
+    headers.add(HttpHeaders.CONTENT_TYPE, "application/json");
+
+    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).headers(headers).body(response);
   }
 
-  private PageDto extractPageable(HttpServletRequest request) {
+  public static PageDto extractPageable(HttpServletRequest request) {
     try {
       int page = Integer.parseInt(request.getParameter("page"));
       int size = Integer.parseInt(request.getParameter("size"));

@@ -5,6 +5,19 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+/**
+ * MongoDB 페이징 및 정렬 관련 유틸리티 클래스
+ * 
+ * 페이징 기능을 간편하게 사용할 수 있도록 돕는 메서드들을 제공
+ * - `Pageable` 객체 생성 (MongoDB의 skip()과 limit() 연산에 사용)
+ * - 기본 페이징 요청 생성
+ * - MongoDB의 `Page` 객체를 기반으로 `PageDto` 생성
+ *
+ * 주요 기능:
+ * 1. 사용자 정의 또는 기본값을 사용한 MongoDB용 `Pageable` 생성
+ * 2. MongoDB의 쿼리 결과를 클라이언트에 전달할 DTO로 변환
+ */
+
 public class PageableUtil {
   // 기본 페이지 번호 (0-based)
   public static final int DEFAULT_PAGE = 0;

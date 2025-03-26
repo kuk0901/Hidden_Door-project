@@ -43,6 +43,11 @@ export const validationRules = {
   }
 };
 
+/**
+ * @description 테마 필드에 대한 유효성 검사 규칙을 정의하는 함수
+ * @param {Object|null} theme - 현재 테마 객체 (없으면 null)
+ * @returns {Object} 각 필드별 유효성 검사 규칙
+ */
 export const themeValidationRules = (theme = null) => {
   const rules = {
     originalFileName: {
@@ -92,6 +97,13 @@ export const themeValidationRules = (theme = null) => {
   return rules;
 };
 
+/**
+ * @description 특정 테마 필드의 값을 검증하는 함수
+ * @param {string} name - 필드 이름
+ * @param {*} value - 필드 값
+ * @param {Object|null} theme - 현재 테마 객체 (없으면 null)
+ * @returns {string} 유효성 검사 결과 메시지 (오류가 없으면 빈 문자열)
+ */
 export const validateThemeField = (name, value, theme = null) => {
   const rules = themeValidationRules(theme)[name];
   if (!rules) return "";

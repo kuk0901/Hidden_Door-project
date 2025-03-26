@@ -1,15 +1,19 @@
 import axios from "axios";
+import { tokenManager } from "@token/tokenManager";
 
 const Api = axios.create({
   baseURL: "/api"
 });
 
-// * 요청 인터셉터
+/**
+ * @description 요청 인터셉터를 설정하여 모든 요청에 Authorization 헤더를 추가
+ */
+// FIXME: accessToken 만료 후의 refreshToken 자동 업데이트 동작 확인 필요
 Api.interceptors.request.use(
-  async (config) => {
-    const token = localStorage.getItem("token"); // Access Token 가져옴
+  (config) => {
+    const token = tokenManager.getToken();
     if (token) {
-      config.headers["Authorization"] = `Bearer ${token}`; // 헤더에 Access Token 추가
+      config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
   },
@@ -18,66 +22,31 @@ Api.interceptors.request.use(
   }
 );
 
-// * 응답 인터셉터
+/**
+ * @description 응답 인터셉터를 설정하여 401 상태 코드 처리 및 Access Token 갱신
+ */
 Api.interceptors.response.use(
   (response) => {
+    const newToken = response.headers["New-Access"];
+    if (newToken) {
+      tokenManager.setToken(newToken);
+    }
     return response;
   },
   async (error) => {
     const originalRequest = error.config;
-
-    // error.response가 정의되어 있는지 확인
-    if (error.response) {
-      const errorRes = error.response;
-
-      // 401 상태 코드와 ACCESS_DENIED 코드 확인
-      const accessDeniedResult =
-        errorRes.status === 401 && errorRes.data.code === "ACCESS_DENIED";
-
-      if (accessDeniedResult && !originalRequest._retry) {
-        originalRequest._retry = true; // 재시도 방지 플래그 설정
-
-        try {
-          // Refresh Token 요청
-          const refreshResponse = await Api.post(
-            "/api/auth/renew",
-            {},
-            { withCredentials: true }
-          );
-
-          const newAccessToken = refreshResponse.data.token; // 새로운 Access Token
-
-          localStorage.setItem("token", newAccessToken); // 새로운 Access Token 저장
-          originalRequest.headers["Authorization"] = `Bearer ${newAccessToken}`; // 재요청 시 새로운 Access Token 추가
-
-          return Api(originalRequest); // 원래 요청 다시 전송
-        } catch (refreshError) {
-          if (
-            refreshError.response &&
-            refreshError.response.data.code === "REFRESH_TOKEN_EXPIRED"
-          ) {
-            localStorage.removeItem("token");
-            window.location.href = import.meta.env.VITE_APP_ADMIN_LOGIN_PATH;
-          } else {
-            return Promise.reject(
-              new Error("리프레시 토큰 요청 중 오류가 발생했습니다.")
-            );
-          }
-        }
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      try {
+        const newToken = await tokenManager.refreshToken();
+        Api.defaults.headers.common["Authorization"] = "Bearer " + newToken;
+        return Api(originalRequest);
+      } catch (error) {
+        console.error(error);
+        console.error(error.message);
       }
-
-      return Promise.reject(
-        new Error(errorRes.data.msg || "알 수 없는 오류가 발생했습니다.")
-      );
-    } else if (error.request) {
-      // 요청은 했지만 응답이 없는 경우
-      return Promise.reject(new Error("서버와의 연결에 문제가 발생했습니다."));
-    } else {
-      // 다른 오류
-      return Promise.reject(
-        new Error(error.message || "알 수 없는 오류가 발생했습니다.")
-      );
     }
+    return Promise.reject(new Error(error.message || "response failed"));
   }
 );
 

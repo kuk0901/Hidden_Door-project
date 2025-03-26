@@ -1,7 +1,7 @@
 @use "../abstracts/variables";
 
 .login-icon {
-  @media (max-width: variables.$breakpoint-lg) {
+  @mixin lg-mode {
     display: none;
   }
 }

@@ -17,11 +17,9 @@
     white-space: pre-wrap;
   }
 
-  @media (max-width: variables.$breakpoint-sm) {
-    & {
-      height: 400px;
-      @include mixins.flex-layout-column(center, center);
-    }
+  @mixin sm-mode {
+    height: 400px;
+    @include mixins.flex-layout-column(center, center);
 
     .theme--title {
       font-size: 18px;
@@ -39,20 +37,18 @@
 
   .theme-page--theme-section {
     .theme--list {
-      @include mixins.flex-layout-row(space-around, center);
-      gap: 10px;
+      @include mixins.flex-layout-row-with-gap(space-around, center, 10px);
       flex-wrap: wrap;
+
       .theme--item {
         margin: 30px auto;
 
         .img-container {
-          width: 400px;
-          height: 400px;
+          @include mixins.size(400px, 400px);
           margin-bottom: 20px;
 
           .img {
-            width: 100%;
-            height: 100%;
+            @include mixins.size(100%, 100%);
             border-radius: 4px;
             transition: 0.2s;
 
@@ -61,13 +57,8 @@
             }
           }
 
-          @media (max-width: variables.$breakpoint-sm) {
-            // 576px 미만의 화면에 적용될 스타일
-
-            & {
-              width: 300px;
-              height: 300px;
-            }
+          @mixin sm-mode {
+            @include mixins.size(300px, 300px);
           }
         }
 
@@ -83,271 +74,424 @@
   &:has(.theme-title--line) {
     margin: 30px auto;
     padding: 5px 10px;
-
-    color: variables.$light-text-color;
-    background-color: variables.$light-background-color;
-  }
-
-  .theme-title--line {
-    justify-content: space-between;
-
-    .theme-title {
-      width: 400px;
-      text-align: center;
-      @include mixins.border(1px, solid, variables.$dark-blue-color);
-      padding: 10px;
-      font-size: 24px;
-      color: variables.$dark-text-color;
-      background-color: variables.$dark-blue-color;
-      border-radius: 5px;
-    }
-
-    .btn-container {
-      gap: 20px;
-    }
-  }
-
-  .info-line {
-    @include mixins.flex-layout-row(space-between, flex-start);
-    gap: 10px;
-
-    .img-container {
-      width: 40%;
-      height: 600px;
-      margin-bottom: 20px;
-
-      .img {
-        width: 100%;
-        height: 100%;
-        border-radius: 4px;
-      }
-    }
-
-    .info--section {
-      margin-top: 35px;
-      width: 60%;
-      .theme-info--list {
-        @include mixins.flex-layout-row(space-between, center);
-        flex-wrap: wrap;
-
-        .theme-info--item {
-          @include mixins.flex-layout-row(flex-start, center);
-          margin-bottom: 50px;
-          font-size: 18px;
-          min-width: 220px;
-          font-weight: 700;
-
-          &.theme--description {
-            flex-direction: column;
-            align-items: baseline;
-            min-width: 500px;
-
-            .theme-info--item--title {
-              margin-bottom: 10px;
-            }
-
-            .theme-info--item--content {
-              display: inline-block;
-              padding: 5px;
-              word-break: break-word;
-            }
-
-            @media (max-width: variables.$breakpoint-sm) {
-              & {
-                min-width: 400px;
-              }
-            }
-
-            @media (max-width: variables.$breakpoint-xs) {
-              & {
-                min-width: 320px;
-              }
-            }
-          }
-
-          .theme-info--item--title {
-            margin-right: 10px;
-            padding: 5px;
-            @include mixins.border(
-              1px,
-              solid,
-              variables.$dark-background-color
-            );
-            background-color: variables.$dark-background-color;
-            color: variables.$light-background-color;
-            border-radius: 4px;
-          }
-
-          .theme-info--item--content {
-            .level-icon {
-              @include mixins.flex-layout-row(flex-start, center);
-              .level {
-                width: 17px;
-                height: 17px;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  @media (max-width: variables.$breakpoint-lg) {
-    // 992px 미만의 화면에 적용될 스타일
+    @include mixins.color-scheme(
+      variables.$light-background-color,
+      variables.$light-text-color
+    );
 
     .theme-title--line {
-      flex-direction: column;
-      align-items: baseline;
-
-      .btn-container {
-        width: 100%;
-        justify-content: end;
-
-        .btn {
-          &.delete {
-            margin-right: 10px;
-          }
-        }
-      }
-    }
-
-    .info-line {
-      .img-container {
-        width: 50%;
-      }
-    }
-  }
-
-  @media (max-width: variables.$breakpoint-sm) {
-    // 576px 미만의 화면에 적용될 스타일
-    .theme-title--line {
-      margin-bottom: 20px;
+      justify-content: space-between;
 
       .theme-title {
-        width: 270px;
-        font-size: 22px;
+        width: 400px;
+        text-align: center;
+        @include mixins.border(1px, solid, variables.$dark-blue-color);
+        padding: 10px;
+        font-size: 24px;
+        @include mixins.color-scheme(
+          variables.$dark-blue-color,
+          variables.$dark-text-color
+        );
+        border-radius: 5px;
+      }
+
+      .btn-container {
+        gap: 20px;
       }
     }
 
     .info-line {
-      flex-direction: column;
+      @include mixins.flex-layout-row-with-gap(space-between, flex-start, 10px);
 
       .img-container {
-        width: 100%;
+        @include mixins.size(40%, 600px);
+        margin-bottom: 20px;
+
+        .img {
+          @include mixins.size(100%, 100%);
+          border-radius: 4px;
+        }
       }
 
       .info--section {
-        margin-top: 0;
-        width: 100%;
+        margin-top: 35px;
+        width: 60%;
 
         .theme-info--list {
+          @include mixins.flex-layout-row(space-between, center);
+          flex-wrap: wrap;
+
           .theme-info--item {
-            min-width: 155px;
+            @include mixins.flex-layout-row(flex-start, center);
+            margin-bottom: 50px;
+            font-size: 18px;
+            min-width: 220px;
+            font-weight: 700;
+
+            &.theme--description {
+              flex-direction: column;
+              align-items: baseline;
+              min-width: 500px;
+
+              .theme-info--item--title {
+                margin-bottom: 10px;
+              }
+
+              .theme-info--item--content {
+                display: inline-block;
+                padding: 5px;
+                word-break: break-word;
+              }
+
+              @mixin sm-mode {
+                min-width: 400px;
+              }
+
+              @mixin xs-mode {
+                min-width: 320px;
+              }
+            }
+
+            .theme-info--item--title {
+              margin-right: 10px;
+              padding: 5px;
+              @include mixins.border(
+                1px,
+                solid,
+                variables.$dark-background-color
+              );
+              @include mixins.color-scheme(
+                variables.$dark-background-color,
+                variables.$light-background-color
+              );
+              border-radius: 4px;
+            }
+
+            .theme-info--item--content {
+              .level-icon {
+                @include mixins.flex-layout-row(flex-start, center);
+
+                .level {
+                  width: 17px;
+                  height: 17px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    @mixin lg-mode {
+      .theme-title--line {
+        flex-direction: column;
+        align-items: baseline;
+
+        .btn-container {
+          width: 100%;
+          justify-content: end;
+
+          .btn {
+            &.delete {
+              margin-right: 10px;
+            }
+          }
+        }
+      }
+
+      .info-line {
+        .img-container {
+          width: 50%;
+        }
+      }
+    }
+
+    @mixin sm-mode {
+      .theme-title--line {
+        margin-bottom: 20px;
+
+        .theme-title {
+          width: 270px;
+          font-size: 22px;
+        }
+      }
+
+      .info-line {
+        flex-direction: column;
+
+        .img-container {
+          width: 100%;
+        }
+
+        .info--section {
+          margin-top: 0;
+          width: 100%;
+
+          .theme-info--list {
+            .theme-info--item {
+              min-width: 155px;
+            }
           }
         }
       }
     }
   }
-}
 
-.themeForm-container {
-  margin: 10px 10px 50px;
-  padding-bottom: 20px;
-  border: 1px solid;
-  border-radius: 4px;
+  .themeForm-container {
+    margin: 10px 10px 50px;
+    padding-bottom: 20px;
+    border: 1px solid;
+    border-radius: 4px;
 
-  .container {
-    gap: 10px;
-  }
-
-  .theme-input-container {
-    .label-container {
-      min-width: 100px;
-    }
-  }
-
-  .theme-textarea {
-    .label-container {
-      min-width: 100px;
+    .container {
+      gap: 10px;
     }
 
-    .textarea-container {
-      max-width: 600px;
-      margin: 10px 5px 15px;
-
-      textarea {
-        width: 550px;
-        height: 100%;
-        text-align: start;
-      }
-    }
-  }
-
-  .genre-section {
-    padding: 10px;
-    @include mixins.flex-layout-row(flex-start, center);
-    gap: 10px;
-
-    .input-container {
-      margin: 10px 5px 15px;
-
-      .input--checkbox {
-        margin: 0 10px;
-      }
-    }
-  }
-
-  &.edit-form-container {
     .theme-input-container {
-      .input-container {
-        border-color: variables.$light-text-color;
-
-        input {
-          color: variables.$light-text-color;
-        }
+      .label-container {
+        min-width: 100px;
       }
     }
 
     .theme-textarea {
+      .label-container {
+        min-width: 100px;
+      }
+
       .textarea-container {
-        border-color: variables.$light-text-color;
+        max-width: 600px;
+        margin: 10px 5px 15px;
 
         textarea {
-          color: variables.$light-text-color;
+          @include mixins.size(550px, 100%);
+          text-align: start;
         }
       }
     }
 
     .genre-section {
+      padding: 10px;
+      @include mixins.flex-layout-row-with-gap(flex-start, center, 10px);
+
       .input-container {
-        border-color: variables.$light-text-color;
+        margin: 10px 5px 15px;
+
+        .input--checkbox {
+          margin: 0 10px;
+        }
+      }
+    }
+
+    &.edit-form-container {
+      .theme-input-container {
+        .input-container {
+          border-color: variables.$light-text-color;
+
+          input {
+            color: variables.$light-text-color;
+          }
+        }
+      }
+
+      .theme-textarea {
+        .textarea-container {
+          border-color: variables.$light-text-color;
+
+          textarea {
+            color: variables.$light-text-color;
+          }
+        }
+      }
+
+      .genre-section {
+        .input-container {
+          border-color: variables.$light-text-color;
+        }
+      }
+    }
+  }
+
+  @mixin light-mode {
+    .theme-section {
+      .theme-page--theme-section {
+        .theme--list {
+          .theme--item {
+            .btn-container {
+              .btn {
+                @include mixins.color-scheme(
+                  transparent,
+                  variables.$light-text-color
+                );
+
+                &:hover {
+                  color: #747bff;
+                }
+              }
+            }
+          }
+        }
+      }
+
+      .theme-title--line {
+        .theme-title {
+          @include mixins.color-scheme(
+            variables.$dark-blue-color,
+            variables.$dark-text-color
+          );
+        }
+      }
+
+      &:has(.theme-title--line) {
+        margin: 30px auto;
+        padding: 5px 10px;
+
+        @include mixins.color-scheme(
+          variables.$dark-background-color,
+          variables.$light-background-color
+        );
+
+        .info-line {
+          .info--section {
+            .theme-info--list {
+              .theme-info--item {
+                .theme-info--item--title {
+                  @include mixins.color-scheme(
+                    variables.$light-background-color,
+                    variables.$dark-background-color
+                  );
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    .themeForm-container {
+      .theme-input-container {
+        .input-container {
+          border-color: variables.$light-text-color;
+        }
+      }
+
+      .theme-textarea {
+        .textarea-container {
+          border-color: variables.$light-text-color;
+        }
+      }
+
+      .genre-section {
+        .input-container {
+          border-color: variables.$light-text-color;
+        }
+      }
+
+      &.edit-form-container {
+        padding-top: 15px;
+
+        .theme-input-container {
+          .input-container {
+            border-color: variables.$dark-text-color;
+
+            input {
+              color: variables.$dark-text-color;
+            }
+          }
+        }
+
+        .theme-textarea {
+          .textarea-container {
+            border-color: variables.$dark-text-color;
+
+            textarea {
+              color: variables.$dark-text-color;
+            }
+          }
+        }
+
+        .genre-section {
+          .input-container {
+            border-color: variables.$dark-text-color;
+          }
+        }
+      }
+    }
+  }
+
+  @mixin sm-mode {
+    .themeForm-container {
+      .theme-input-container,
+      .theme-textarea,
+      .genre-section {
+        flex-direction: column;
+      }
+
+      .theme-input-container {
+        .label-container {
+          width: 100%;
+        }
+
+        .input-container {
+          &:has(#originalFileName) {
+            width: 322px;
+
+            #originalFileName {
+              width: 300px;
+            }
+          }
+        }
+      }
+
+      .theme-textarea {
+        width: 100%;
+        .label-container,
+        .textarea-container {
+          width: 100%;
+        }
+
+        .textarea-container {
+          textarea {
+            width: 100%;
+          }
+        }
+      }
+
+      .genre-section {
+        padding-top: 5px;
+
+        .input-container {
+          flex-wrap: wrap;
+          gap: 10px;
+
+          .input--checkbox {
+            width: 60px;
+          }
+        }
       }
     }
   }
 }
 
+// home theme slide
 .theme-slide-section {
   padding: 10px;
-  border: 1px solid;
-  display: flex; /* 부모 요소에 flexbox 레이아웃 적용 */
-  flex-direction: column; /* 세로 방향으로 나열 */
-  gap: 20px;
-  max-height: 800px;
+  @include mixins.flex-layout-column();
+  max-height: 750px;
 
   .slick-slider {
-    height: 800px;
+    height: 700px;
 
     .slick-list {
-      overflow: hidden; /* 슬라이드가 잘리도록 설정 */
-      height: 600px;
+      overflow: hidden;
+      height: 700px;
 
       .slick-track {
-        height: 600px;
+        height: 700px;
       }
     }
 
     .slick-slide {
-      margin: 0 10px; /* 슬라이드 간격 설정 */
+      margin: 0 10px;
     }
 
     .theme--slide {
@@ -356,19 +500,16 @@
       @include mixins.border(1px, solid, black);
 
       .theme--slide__image {
-        width: 100%; /* 이미지 너비 설정 */
-        height: 500px;
+        @include mixins.size(100%, 500px);
       }
 
       .theme--slide__btn {
         text-align: center;
-        width: 100%;
-        height: 35px;
+        @include mixins.size(100%, 35px);
         line-height: 35px;
         display: block;
         font-size: 18px;
-        background-color: black;
-        color: white;
+        @include mixins.color-scheme(#000, #fff);
         border-top: 1px solid;
 
         &:hover {
@@ -379,7 +520,7 @@
     }
 
     .slick-dots {
-      bottom: 35px;
+      bottom: 70px;
     }
 
     .slick-prev:before,
@@ -417,165 +558,12 @@
           margin-top: 30px;
 
           .theme--slide__image {
-            width: 100%; /* 이미지 너비 설정 */
-            height: 300px;
+            @include mixins.size(100%, 300px);
           }
         }
 
         .slick-dots {
           bottom: 5px;
-        }
-      }
-    }
-  }
-}
-
-@media (prefers-color-scheme: light) {
-  .theme-section {
-    .theme-page--theme-section {
-      .theme--list {
-        .theme--item {
-          .btn-container {
-            .btn {
-              color: variables.$light-text-color;
-              background-color: transparent;
-
-              &:hover {
-                color: #747bff;
-              }
-            }
-          }
-        }
-      }
-    }
-
-    .theme-title--line {
-      .theme-title {
-        color: variables.$dark-text-color;
-        background-color: variables.$dark-blue-color;
-      }
-    }
-
-    &:has(.theme-title--line) {
-      margin: 30px auto;
-      padding: 5px 10px;
-
-      color: variables.$light-background-color;
-      background-color: variables.$dark-background-color;
-
-      .info-line {
-        .info--section {
-          .theme-info--list {
-            .theme-info--item {
-              .theme-info--item--title {
-                background-color: variables.$light-background-color;
-                color: variables.$dark-background-color;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-
-  .themeForm-container {
-    .theme-input-container {
-      .input-container {
-        border-color: variables.$light-text-color;
-      }
-    }
-
-    .theme-textarea {
-      .textarea-container {
-        border-color: variables.$light-text-color;
-      }
-    }
-
-    .genre-section {
-      .input-container {
-        border-color: variables.$light-text-color;
-      }
-    }
-
-    &.edit-form-container {
-      padding-top: 15px;
-
-      .theme-input-container {
-        .input-container {
-          border-color: variables.$dark-text-color;
-
-          input {
-            color: variables.$dark-text-color;
-          }
-        }
-      }
-
-      .theme-textarea {
-        .textarea-container {
-          border-color: variables.$dark-text-color;
-
-          textarea {
-            color: variables.$dark-text-color;
-          }
-        }
-      }
-
-      .genre-section {
-        .input-container {
-          border-color: variables.$dark-text-color;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: variables.$breakpoint-sm) {
-  .themeForm-container {
-    .theme-input-container,
-    .theme-textarea,
-    .genre-section {
-      flex-direction: column;
-    }
-
-    .theme-input-container {
-      .label-container {
-        width: 100%;
-      }
-
-      .input-container {
-        &:has(#originalFileName) {
-          width: 322px;
-
-          #originalFileName {
-            width: 300px;
-          }
-        }
-      }
-    }
-
-    .theme-textarea {
-      width: 100%;
-      .label-container,
-      .textarea-container {
-        width: 100%;
-      }
-
-      .textarea-container {
-        textarea {
-          width: 100%;
-        }
-      }
-    }
-
-    .genre-section {
-      padding-top: 5px;
-
-      .input-container {
-        flex-wrap: wrap;
-        gap: 10px;
-
-        .input--checkbox {
-          width: 60px;
         }
       }
     }

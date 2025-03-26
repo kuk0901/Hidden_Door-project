@@ -1,6 +1,10 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
+/**
+ * @description: EscapeRoom state atom
+ * @use persistAtom
+ */
 const { persistAtom } = recoilPersist({
   key: "escape-room-persist",
   storage: sessionStorage

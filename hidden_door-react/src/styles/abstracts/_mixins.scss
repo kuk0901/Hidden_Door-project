@@ -1,4 +1,5 @@
-@use 'functions';
+@use "functions";
+@use "variables";
 
 // flex
 @mixin flex {
@@ -27,11 +28,34 @@
   align-items: $align;
 }
 
+@mixin flex-layout-row-with-gap(
+  $justify: flex-start,
+  $align: stretch,
+  $gap: 10px
+) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
+}
+
 @mixin flex-layout-column($justify: flex-start, $align: stretch) {
   display: flex;
   flex-direction: column;
   justify-content: $justify;
   align-items: $align;
+}
+
+@mixin flex-layout-column-with-gap(
+  $justify: flex-start,
+  $align: stretch,
+  $gap: 10px
+) {
+  display: flex;
+  flex-direction: column;
+  justify-content: $justify;
+  align-items: $align;
+  gap: $gap;
 }
 
 // font
@@ -73,4 +97,91 @@
   &:hover {
     color: auto-hover-color($base-color, $amount);
   }
+}
+
+// system mode
+@mixin dark-mode {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+}
+
+@mixin light-mode {
+  @media (prefers-color-scheme: light) {
+    @content;
+  }
+}
+
+// responsive
+// 1200px 미만
+@mixin xl-mode {
+  @media (max-width: variables.$breakpoint-xl) {
+    @content;
+  }
+}
+
+// 992px 미만
+@mixin lg-mode {
+  @media (max-width: variables.$breakpoint-lg) {
+    @content;
+  }
+}
+
+// 768px 미만
+@mixin md-mode {
+  @media (max-width: variables.$breakpoint-md) {
+    @content;
+  }
+}
+
+// 576px 미만
+@mixin sm-mode {
+  @media (max-width: variables.$breakpoint-sm) {
+    @content;
+  }
+}
+
+// 414px 미만
+@mixin xs-mode {
+  @media (max-width: variables.$breakpoint-xs) {
+    @content;
+  }
+}
+
+// 360px 미만
+@mixin xxs-mode {
+  @media (max-width: variables.$breakpoint-xxs) {
+    @content;
+  }
+}
+
+// color
+@mixin color-scheme($bg-color, $text-color) {
+  background-color: $bg-color;
+  color: $text-color;
+}
+
+@mixin color-scheme-with-border(
+  $bg-color,
+  $text-color,
+  $border-color,
+  $border-width: 1px,
+  $border-style: solid
+) {
+  background-color: $bg-color;
+  color: $text-color;
+  border: $border-width $border-style $border-color;
+}
+
+// size
+@mixin size($width, $height) {
+  width: $width;
+  height: $height;
+}
+
+// position
+@mixin fixed-top-left {
+  position: fixed;
+  top: 0;
+  left: 0;
 }

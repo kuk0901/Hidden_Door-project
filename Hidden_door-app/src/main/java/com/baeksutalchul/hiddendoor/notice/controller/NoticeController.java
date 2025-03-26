@@ -1,9 +1,5 @@
 package com.baeksutalchul.hiddendoor.notice.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.baeksutalchul.hiddendoor.dto.AdminDto;
 import com.baeksutalchul.hiddendoor.dto.NoticeDto;
 import com.baeksutalchul.hiddendoor.notice.service.NoticeService;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
@@ -12,14 +8,14 @@ import com.baeksutalchul.hiddendoor.utils.page.PageDto; // PageDto import
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/notices")
 public class NoticeController {
 
-    private static final Logger logger = LoggerFactory.getLogger(NoticeController.class);
+   
     private final NoticeService noticeService;
 
     public NoticeController(NoticeService noticeService) {
@@ -55,8 +51,7 @@ public ResponseEntity<ResponseDto<Map<String, Object>>> getAllNotices(
             return ResponseEntity.ok().body(response);
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
-        } catch (Exception e) {
-            logger.error("공지사항 조회 중 오류 발생", e);
+        } catch (Exception e) {            
             return ResponseEntity.internalServerError()
                 .body(new ResponseDto<>(null, "서버 오류로 인해 공지사항 조회에 실패했습니다. 잠시 후 다시 시도해 주세요."));
         }
@@ -65,11 +60,11 @@ public ResponseEntity<ResponseDto<Map<String, Object>>> getAllNotices(
     @PostMapping
     public ResponseEntity<ResponseDto<NoticeDto>> createNotice(@RequestBody NoticeDto noticeDto) {
         try {
-            logger.info("NoticeDto: {}", noticeDto);
+           
             ResponseDto<NoticeDto> response = noticeService.createNotice(noticeDto);
             return ResponseEntity.ok().body(response);
         } catch (Exception e) {
-            logger.error("공지사항 추가 중 오류 발생", e);
+            
             return ResponseEntity.internalServerError()
                 .body(new ResponseDto<>(null, "서버 오류로 인해 공지사항 추가에 실패했습니다. 잠시 후 다시 시도해 주세요."));
         }
@@ -83,7 +78,7 @@ public ResponseEntity<ResponseDto<Map<String, Object>>> getAllNotices(
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
         } catch (Exception e) {
-            logger.error("공지사항 수정 중 오류 발생", e);
+           
             return ResponseEntity.internalServerError()
                 .body(new ResponseDto<>(null, "서버 오류로 인해 공지사항 수정에 실패했습니다. 잠시 후 다시 시도해 주세요."));
         }
@@ -97,7 +92,7 @@ public ResponseEntity<ResponseDto<Map<String, Object>>> getAllNotices(
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));
         } catch (Exception e) {
-            logger.error("공지사항 삭제 중 오류 발생", e);
+           
             return ResponseEntity.internalServerError()
                 .body(new ResponseDto<>("", "서버 오류로 인해 공지사항 삭제에 실패했습니다. 잠시 후 다시 시도해 주세요."));
         }

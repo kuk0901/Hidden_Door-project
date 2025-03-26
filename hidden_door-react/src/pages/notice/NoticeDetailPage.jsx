@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAdmin } from '@hooks/useAdmin';
 import Api from '@axios/api';
 import { toast } from 'react-toastify';
+import { formatKoreanDate } from '../../utils/format/date';
 
 function NoticeDetailPage() {
   const { id } = useParams();
@@ -101,7 +102,7 @@ function NoticeDetailPage() {
     <div className="notice-detail-page">
       <h1 className="notice-title">{notice.title}</h1>
       <div className="notice-info">
-        <span>작성일: {new Date(notice.createdAt).toLocaleDateString()}</span>
+        <span>작성일: {formatKoreanDate(notice.createdAt)}</span>
       </div>
       <div
         className="notice-content"
