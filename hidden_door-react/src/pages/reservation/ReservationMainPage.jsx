@@ -38,8 +38,7 @@ const ReservationMainPage = () => {
         toast.error(response.data.message || "예약을 찾을 수 없습니다.");
       }
     } catch (error) {
-      console.error("예약 확인 중 오류 발생:", error);
-      toast.error("예약 확인 중 오류가 발생했습니다.");
+      toast.error("예약 확인 중 오류가 발생했습니다.", error);
     }
   };
 
@@ -47,8 +46,6 @@ const ReservationMainPage = () => {
     setIsLoading(true);
     try {
       const res = await Api.get("/reservations/main");
-      console.log("Full server response:", res);
-      console.log(res.data.data);
       setPageData(res.data.data);
 
       if (res.data.data.timeSlots) {

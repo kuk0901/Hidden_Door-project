@@ -10,8 +10,6 @@ const ReservationSummaryPage = () => {
   const [reservation, setReservation] = useState(null);
 
   useEffect(() => {
-    console.log("현재 reservationNumber:", reservationNumber);
-    console.log("Location state:", location.state);
     if (!reservationNumber) {
       toast.error("예약 번호가 없습니다.");
     }
@@ -25,13 +23,10 @@ const ReservationSummaryPage = () => {
           `/reservations/summary/${reservationNumber}`
         );
         const res = await Api.get(`/reservations/summary/${reservationNumber}`);
-        console.log("전체 API 응답:", res);
 
         if (res.data && res.data.data) {
-          console.log("예약 데이터:", res.data.data);
           setReservation(res.data.data);
         } else {
-          console.error("예상치 못한 응답 구조:", res.data);
           toast.error("예약 정보 구조가 올바르지 않습니다.");
         }
       } catch (error) {
