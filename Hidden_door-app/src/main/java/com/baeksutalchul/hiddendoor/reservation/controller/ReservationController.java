@@ -62,9 +62,13 @@ public class ReservationController {
     return reservationService.getReservationSummary(reservationNumber);
   }
 
-  @PostMapping("/check")
-  public ResponseDto<Boolean> checkReservation(@RequestBody ReservationDto reservationDto) {
-    boolean exists = reservationService.checkReservation(reservationDto.getReservationNumber(), reservationDto.getName());
-    return new ResponseDto<>(exists, exists ? "예약이 확인되었습니다." : "예약을 찾을 수 없습니다.");
+  @GetMapping("/check")
+  public ResponseDto<Boolean> checkReservation(
+    @RequestParam String reservationNumber,  // 개별 파라미터로 분리
+    @RequestParam String name
+  ) {
+    boolean exists = reservationService.checkReservation(reservationNumber, name);
+    return new ResponseDto<>(exists, exists ? "예약 확인 성공" : "예약 없음");
   }
+
 }

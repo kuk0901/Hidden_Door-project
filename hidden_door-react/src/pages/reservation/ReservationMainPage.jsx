@@ -27,9 +27,11 @@ const ReservationMainPage = () => {
 
   const handleCheckReservation = async () => {
     try {
-      const response = await Api.post("/reservations/check", {
-        reservationNumber: checkReservationNumber,
-        name: checkName,
+      const response = await Api.get("/reservations/check", {
+        params: {
+          reservationNumber: checkReservationNumber,
+          name: checkName,
+        },
       });
       if (response.data.data) {
         // 'success' 대신 'data' 확인
