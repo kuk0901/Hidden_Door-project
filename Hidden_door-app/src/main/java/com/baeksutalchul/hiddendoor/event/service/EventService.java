@@ -1,5 +1,6 @@
 package com.baeksutalchul.hiddendoor.event.service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,8 +28,8 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public EventDto getEventById(String id) {
-        Optional<Event> eventOptional = eventRepository.findById(id);
+    public EventDto getEventById(String eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
         if (eventOptional.isPresent()) {
             return convertToDto(eventOptional.get());
         } else {
@@ -37,37 +38,65 @@ public class EventService {
     }
 
     public EventDto createEvent(EventDto eventDto) {
-        Event event = convertToEntity(eventDto);
-        Event savedEvent = eventRepository.save(event);
-        return convertToDto(savedEvent);
+    Event event = convertToEntity(eventDto);
+    if (event.getEventType().equals("상시")) {
+        event.setStartDate(null);
+        event.setEndDate(null);
+    } else if (event.getEventType().equals("종료일 미정")) {        
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(null);
+    } else {        
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(eventDto.getEndDate());
     }
 
-    public EventDto updateEvent(String id, EventDto eventDto) {
-        Optional<Event> eventOptional = eventRepository.findById(id);
-        if (eventOptional.isPresent()) {
-            Event event = eventOptional.get();
-            event.setTitle(eventDto.getTitle());
-            event.setDescription(eventDto.getDescription());
-            Event updatedEvent = eventRepository.save(event);
-            return convertToDto(updatedEvent);
-        } else {
-            throw new CustomException(ErrorCode.EVENT_NOT_FOUND);
-        }
+    Event savedEvent = eventRepository.save(event);
+    return convertToDto(savedEvent);
+}
+    
+
+public EventDto updateEvent(String eventId, EventDto eventDto) {
+    Event event = eventRepository.findById(eventId)
+        .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND));
+
+    event.setTitle(eventDto.getTitle());
+    event.setDescription(eventDto.getDescription());
+    event.setIsOngoing(eventDto.getIsOngoing());
+    event.setNoEndDate(eventDto.getNoEndDate());
+
+    // 상시 이벤트 처리
+    if ("true".equals(event.getIsOngoing())) {
+        event.setStartDate(null);
+        event.setEndDate(null);
+    }
+    // 종료 기한 없는 이벤트 처리
+    else if ("true".equals(event.getNoEndDate())) {
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(null);
+    }
+    // 일반 이벤트 처리
+    else {
+        event.setStartDate(eventDto.getStartDate());
+        event.setEndDate(eventDto.getEndDate());
     }
 
-    public void deleteEvent(String id) {
-        if (eventRepository.existsById(id)) {
-            eventRepository.deleteById(id);
+    Event updatedEvent = eventRepository.save(event);
+    return convertToDto(updatedEvent);
+}
+
+    public void deleteEvent(String eventId) {
+        if (eventRepository.existsById(eventId)) {
+            eventRepository.deleteById(eventId);
         } else {
             throw new CustomException(ErrorCode.EVENT_NOT_FOUND);
         }
     }
 
     private EventDto convertToDto(Event event) {
-        return new EventDto(event.getId(), event.getTitle(), event.getDescription());
+        return new EventDto(event.getEventId(), event.getTitle(), event.getDescription(), event.getStartDate(), event.getEndDate(), event.getIsOngoing(), event.getNoEndDate(), event.getEventType());
     }
 
     private Event convertToEntity(EventDto eventDto) {
-        return new Event(eventDto.getId(), eventDto.getTitle(), eventDto.getDescription());
+        return new Event(eventDto.getEventId(), eventDto.getTitle(), eventDto.getDescription(), eventDto.getStartDate(), eventDto.getEndDate(), eventDto.getIsOngoing(), eventDto.getNoEndDate(), eventDto.getEventType());
     }
 }

@@ -4,8 +4,6 @@ import com.baeksutalchul.hiddendoor.dto.EventDto;
 import com.baeksutalchul.hiddendoor.event.service.EventService;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +13,7 @@ import java.util.List;
 @RequestMapping("/api/v1/events")
 public class EventController {
 
-    private final EventService eventService;
-    private static final Logger logger = LoggerFactory.getLogger(EventController.class);
+    private final EventService eventService;    
 
     public EventController(EventService eventService) {
         this.eventService = eventService;
@@ -33,10 +30,10 @@ public class EventController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto<EventDto>> getEventOne(@PathVariable String id) {
+    @GetMapping("/{eventId}")
+    public ResponseEntity<ResponseDto<EventDto>> getEventOne(@PathVariable String eventId) {
         try {
-            EventDto event = eventService.getEventById(id);
+            EventDto event = eventService.getEventById(eventId);
             return ResponseEntity.ok().body(new ResponseDto<>(event, "이벤트를 성공적으로 조회했습니다."));
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
@@ -47,34 +44,48 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {
+    public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {        
         try {
-            logger.info("EventDto: {}", eventDto);
-            EventDto createdEvent = eventService.createEvent(eventDto);
-            return ResponseEntity.ok().body(new ResponseDto<>(createdEvent, "이벤트가 성공적으로 추가되었습니다."));
+            if (!"true".equals(eventDto.getIsOngoing()) && !"true".equals(eventDto.getNoEndDate()) 
+                    && eventDto.getStartDate() != null && eventDto.getEndDate() != null
+                    && eventDto.getStartDate().isAfter(eventDto.getEndDate())) {
+             return ResponseEntity.badRequest()
+                .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
+        }
+        EventDto createdEvent = eventService.createEvent(eventDto);
+        return ResponseEntity.ok().body(new ResponseDto<>(createdEvent, "이벤트가 성공적으로 추가되었습니다."));
         } catch (Exception e) {
             return ResponseEntity.internalServerError()
-                .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 추가에 실패했습니다. 잠시 후 다시 시도해 주세요."));
-        }
+            .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 추가에 실패했습니다."));
+     }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
-        try {
-            EventDto updatedEvent = eventService.updateEvent(id, eventDto);
-            return ResponseEntity.ok().body(new ResponseDto<>(updatedEvent, "이벤트가 성공적으로 수정되었습니다."));
-        } catch (CustomException e) {
-            return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.internalServerError()
-                .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요."));
-        }
-    }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable("id") String id) {
+    @PutMapping("/{eventId}")
+public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("eventId") String eventId, @RequestBody EventDto eventDto) {
+    try {
+        // 날짜 검증 로직 수정
+        if (!"true".equals(eventDto.getIsOngoing()) && !"true".equals(eventDto.getNoEndDate())
+                && eventDto.getStartDate() != null && eventDto.getEndDate() != null
+                && eventDto.getStartDate().isAfter(eventDto.getEndDate())) {
+            return ResponseEntity.badRequest()
+                .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
+        }
+
+        EventDto updatedEvent = eventService.updateEvent(eventId, eventDto);
+        return ResponseEntity.ok().body(new ResponseDto<>(updatedEvent, "이벤트가 성공적으로 수정되었습니다."));
+    } catch (CustomException e) {
+        return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
+    } catch (Exception e) {
+        return ResponseEntity.internalServerError()
+            .body(new ResponseDto<>(null, "서버 오류로 인해 이벤트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요."));
+    }
+}
+
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable("eventId") String eventId) {
         try {
-            eventService.deleteEvent(id);
+            eventService.deleteEvent(eventId);
             return ResponseEntity.ok().body(new ResponseDto<>("", "이벤트가 성공적으로 삭제되었습니다."));
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));

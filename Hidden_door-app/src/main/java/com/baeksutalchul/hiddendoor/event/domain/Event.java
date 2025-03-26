@@ -1,5 +1,7 @@
 package com.baeksutalchul.hiddendoor.event.domain;
 
+import java.time.LocalDate;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -13,13 +15,12 @@ import lombok.NoArgsConstructor;
 @Document(collection = "event")
 public class Event {
     @Id
-    private String id;
+    private String eventId;
     private String title;
     private String description;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private String isOngoing;
+    private String noEndDate;
+    private String eventType; // "상시", "종료일 미정", "기간 지정" 중 하나
 }
-
-
-
-
-
-

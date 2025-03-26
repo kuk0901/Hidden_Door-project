@@ -1,5 +1,5 @@
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 const ReservationDateSection = ({
   selectedDate,
@@ -15,7 +15,7 @@ const ReservationDateSection = ({
         value={selectedDate}
         minDate={new Date()}
         tileDisabled={({ date }) =>
-          !availableDates.includes(date.toISOString().split("T")[0])
+          !availableDates.includes(date.toISOString().split('T')[0])
         }
       />
     </div>
