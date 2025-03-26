@@ -20,6 +20,7 @@ import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.token.TokenService;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -42,9 +43,7 @@ public class AuthController {
 
   @PostMapping("/authenticate")
   public ResponseEntity<ResponseDto<AdminDto>> login(@RequestBody AdminDto adminDto, HttpServletResponse response) {
-    ResponseDto<AdminDto> responseDto = adminService.login(adminDto.getEmail(), adminDto.getPwd(), response);
-    return ResponseEntity.ok(responseDto);
-
+    return ResponseEntity.ok(adminService.login(adminDto.getEmail(), adminDto.getPwd(), response));
   }
 
   @PostMapping("/terminate")

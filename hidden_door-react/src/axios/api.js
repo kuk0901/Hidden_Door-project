@@ -42,14 +42,8 @@ Api.interceptors.response.use(
         Api.defaults.headers.common["Authorization"] = "Bearer " + newToken;
         return Api(originalRequest);
       } catch (error) {
-        console.log(error);
-
-        // 리프레시 토큰도 만료되었거나 갱신에 실패한 경우
-        tokenManager.removeToken();
-
-        if (originalRequest.url !== "/auth/terminate") {
-          window.location.href = import.meta.env.VITE_APP_ADMIN_LOGIN_PATH;
-        }
+        console.error(error);
+        console.error(error.message);
       }
     }
     return Promise.reject(new Error(error.message || "response failed"));

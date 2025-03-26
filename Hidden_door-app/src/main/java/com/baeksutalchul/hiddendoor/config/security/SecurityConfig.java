@@ -43,7 +43,8 @@ public class SecurityConfig {
         .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(auth -> auth
             .requestMatchers(HttpMethod.GET, "/api/v1/**").permitAll()
-            .requestMatchers("/api/v1/auth/authenticate", "/api/v1/auth/terminate", "/api/v1/auth/renew", "/images/**")
+            .requestMatchers("/images/**", "/api/v1/auth/authenticate", "/api/v1/customers/customer/add",
+                "/api/v1/customers/customer/delete/*", "/api/v1/reservations/create")
             .permitAll()
             .requestMatchers("/api/v1/admins/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
             .requestMatchers("/api/v1/auth/register", "/api/v1/admins/account/delete/one", "/api/v1/super-admin/**")

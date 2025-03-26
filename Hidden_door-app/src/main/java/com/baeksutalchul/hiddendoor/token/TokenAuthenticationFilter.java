@@ -72,7 +72,7 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     if (tokenService.isTokenNearExpiration(token)) {
       String refreshToken = getRefreshTokenFromCookie(req);
       if (refreshToken != null && tokenService.validateRefreshToken(refreshToken)) {
-      String newToken = adminService.refreshAccessToken(refreshToken);
+        String newToken = adminService.refreshAccessToken(refreshToken);
         res.setHeader("New-Access", newToken);
         return newToken;
       }
@@ -82,10 +82,8 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
 
   private boolean requiresAuthentication(HttpServletRequest request) {
     String path = request.getRequestURI();
-    return !(path.equals("/api/v1/auth/authenticate") ||
-        path.equals("/api/v1/auth/terminate") ||
-        path.equals("/api/v1/auth/renew") ||
-        path.startsWith("/images/"));
+    return (path.equals("/api/v1/auth/renew") ||
+        path.equals("/api/v1/auth/terminate"));
   }
 
   private void handleAccessToken(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain, String token)

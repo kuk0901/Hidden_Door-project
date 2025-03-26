@@ -49,7 +49,6 @@ export function AppRoutes() {
           {/* 테마 페이지 */}
           <Route path="theme">
             <Route index element={<ThemePage />} />
-            {/* <Route path=":themeId" element={<ThemeDetailPage />} /> */}
             {themeList.length > 0 &&
               themeList.map((theme) => (
                 <Route
