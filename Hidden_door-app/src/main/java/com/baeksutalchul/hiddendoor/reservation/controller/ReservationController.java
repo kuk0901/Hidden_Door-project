@@ -71,4 +71,5 @@ public class ReservationController {
     return new ResponseDto<>(exists, exists ? "예약 확인 성공" : "예약 없음");
   }
 
+  
 }
