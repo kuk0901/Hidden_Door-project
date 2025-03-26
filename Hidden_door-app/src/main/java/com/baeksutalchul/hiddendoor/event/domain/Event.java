@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Document(collection = "event")
 public class Event {
     @Id
-    private String id;
+    private String eventId;
     private String title;
     private String description;
     private LocalDate startDate;

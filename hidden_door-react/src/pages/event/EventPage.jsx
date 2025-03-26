@@ -64,17 +64,17 @@ function EventPage() {
     setEvents([...events, newEvent]);
   };
 
-  const deleteEvent = (id) => {
+  const deleteEvent = (eventId) => {
     if (!admin) return;
 
-    Api.delete(`/events/${id}`)
+    Api.delete(`/events/${eventId}`)
       .then((response) => {
         if (
           response.data &&
           (response.data.message || response.data.data !== undefined)
         ) {
-          setEvents(events.filter((event) => event.id !== id));
-          if (selectedEvent && selectedEvent.id === id) {
+          setEvents(events.filter((event) => event.id !== eventId));
+          if (selectedEvent && selectedEvent.id === eventId) {
             closeModal();
           }
           toast.success(
@@ -102,16 +102,16 @@ function EventPage() {
   };
 
   const handleEventEdited = (editedEvent) => {
-    Api.put(`/events/${editedEvent.id}`, editedEvent)
+    Api.put(`/events/${editedEvent.eventId}`, editedEvent)
       .then((response) => {
         if (response.data && response.data.data) {
           setEvents(
             events.map((event) =>
-              event.id === editedEvent.id ? response.data.data : event
+              event.id === editedEvent.eventId ? response.data.data : event
             )
           );
           closeEditModal();
-          if (selectedEvent && selectedEvent.id === editedEvent.id) {
+          if (selectedEvent && selectedEvent.eventId === editedEvent.eventId) {
             setSelectedEvent(response.data.data);
           }
           toast.success(response.data.message || '이벤트가 수정되었습니다.');
@@ -156,7 +156,7 @@ function EventPage() {
       )}
       <div className="event-container">
         {events.map((event) => (
-          <div key={event.id} className="event-item">
+          <div key={event.eventId} className="event-item">
             <div
               className="event-circle"
               onClick={() => handleEventClick(event)}
@@ -191,7 +191,7 @@ function EventPage() {
                   </button>
                   <button
                     className="em-modal-btn em-modal-btn--delete"
-                    onClick={() => deleteEvent(selectedEvent.id)}
+                    onClick={() => deleteEvent(selectedEvent.eventId)}
                   >
                     삭제
                   </button>

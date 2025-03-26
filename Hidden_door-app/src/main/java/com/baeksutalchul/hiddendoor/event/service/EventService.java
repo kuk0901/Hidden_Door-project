@@ -28,8 +28,8 @@ public class EventService {
                 .collect(Collectors.toList());
     }
 
-    public EventDto getEventById(String id) {
-        Optional<Event> eventOptional = eventRepository.findById(id);
+    public EventDto getEventById(String eventId) {
+        Optional<Event> eventOptional = eventRepository.findById(eventId);
         if (eventOptional.isPresent()) {
             return convertToDto(eventOptional.get());
         } else {
@@ -55,8 +55,8 @@ public class EventService {
 }
     
 
-public EventDto updateEvent(String id, EventDto eventDto) {
-    Event event = eventRepository.findById(id)
+public EventDto updateEvent(String eventId, EventDto eventDto) {
+    Event event = eventRepository.findById(eventId)
         .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND));
 
     event.setTitle(eventDto.getTitle());
@@ -84,19 +84,19 @@ public EventDto updateEvent(String id, EventDto eventDto) {
     return convertToDto(updatedEvent);
 }
 
-    public void deleteEvent(String id) {
-        if (eventRepository.existsById(id)) {
-            eventRepository.deleteById(id);
+    public void deleteEvent(String eventId) {
+        if (eventRepository.existsById(eventId)) {
+            eventRepository.deleteById(eventId);
         } else {
             throw new CustomException(ErrorCode.EVENT_NOT_FOUND);
         }
     }
 
     private EventDto convertToDto(Event event) {
-        return new EventDto(event.getId(), event.getTitle(), event.getDescription(), event.getStartDate(), event.getEndDate(), event.getIsOngoing(), event.getNoEndDate(), event.getEventType());
+        return new EventDto(event.getEventId(), event.getTitle(), event.getDescription(), event.getStartDate(), event.getEndDate(), event.getIsOngoing(), event.getNoEndDate(), event.getEventType());
     }
 
     private Event convertToEntity(EventDto eventDto) {
-        return new Event(eventDto.getId(), eventDto.getTitle(), eventDto.getDescription(), eventDto.getStartDate(), eventDto.getEndDate(), eventDto.getIsOngoing(), eventDto.getNoEndDate(), eventDto.getEventType());
+        return new Event(eventDto.getEventId(), eventDto.getTitle(), eventDto.getDescription(), eventDto.getStartDate(), eventDto.getEndDate(), eventDto.getIsOngoing(), eventDto.getNoEndDate(), eventDto.getEventType());
     }
 }

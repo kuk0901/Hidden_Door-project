@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EventDto {
-    private String id;
+    private String eventId;
     private String title;
     private String description;
     private LocalDate startDate;

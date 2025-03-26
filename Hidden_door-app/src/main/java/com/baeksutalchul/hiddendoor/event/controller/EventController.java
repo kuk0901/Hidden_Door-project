@@ -7,7 +7,6 @@ import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -31,10 +30,10 @@ public class EventController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto<EventDto>> getEventOne(@PathVariable String id) {
+    @GetMapping("/{eventId}")
+    public ResponseEntity<ResponseDto<EventDto>> getEventOne(@PathVariable String eventId) {
         try {
-            EventDto event = eventService.getEventById(id);
+            EventDto event = eventService.getEventById(eventId);
             return ResponseEntity.ok().body(new ResponseDto<>(event, "이벤트를 성공적으로 조회했습니다."));
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
@@ -62,8 +61,8 @@ public class EventController {
     }
 
 
-    @PutMapping("/{id}")
-public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") String id, @RequestBody EventDto eventDto) {
+    @PutMapping("/{eventId}")
+public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("eventId") String eventId, @RequestBody EventDto eventDto) {
     try {
         // 날짜 검증 로직 수정
         if (!"true".equals(eventDto.getIsOngoing()) && !"true".equals(eventDto.getNoEndDate())
@@ -73,7 +72,7 @@ public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") 
                 .body(new ResponseDto<>(null, "시작일은 종료일보다 이후일 수 없습니다."));
         }
 
-        EventDto updatedEvent = eventService.updateEvent(id, eventDto);
+        EventDto updatedEvent = eventService.updateEvent(eventId, eventDto);
         return ResponseEntity.ok().body(new ResponseDto<>(updatedEvent, "이벤트가 성공적으로 수정되었습니다."));
     } catch (CustomException e) {
         return ResponseEntity.badRequest().body(new ResponseDto<>(null, e.getMessage()));
@@ -83,10 +82,10 @@ public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("id") 
     }
 }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable("id") String id) {
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable("eventId") String eventId) {
         try {
-            eventService.deleteEvent(id);
+            eventService.deleteEvent(eventId);
             return ResponseEntity.ok().body(new ResponseDto<>("", "이벤트가 성공적으로 삭제되었습니다."));
         } catch (CustomException e) {
             return ResponseEntity.badRequest().body(new ResponseDto<>("", e.getMessage()));

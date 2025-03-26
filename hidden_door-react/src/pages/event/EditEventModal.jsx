@@ -45,7 +45,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
     }
 
     const updatedEvent = {
-      id: event.id,
+      id: event.eventId,
       title,
       description,
       startDate:
@@ -58,7 +58,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       noEndDate,
     };
 
-    Api.put(`/events/${event.id}`, updatedEvent)
+    Api.put(`/events/${event.eventId}`, updatedEvent)
       .then((response) => {
         if (response.data && response.data.data) {
           onEventEdited(response.data.data);
