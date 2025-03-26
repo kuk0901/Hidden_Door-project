@@ -113,36 +113,42 @@
 }
 
 // responsive
+// 1200px 미만
 @mixin xl-mode {
   @media (max-width: variables.$breakpoint-xl) {
     @content;
   }
 }
 
+// 992px 미만
 @mixin lg-mode {
   @media (max-width: variables.$breakpoint-lg) {
     @content;
   }
 }
 
+// 768px 미만
 @mixin md-mode {
   @media (max-width: variables.$breakpoint-md) {
     @content;
   }
 }
 
+// 576px 미만
 @mixin sm-mode {
   @media (max-width: variables.$breakpoint-sm) {
     @content;
   }
 }
 
+// 414px 미만
 @mixin xs-mode {
   @media (max-width: variables.$breakpoint-xs) {
     @content;
   }
 }
 
+// 360px 미만
 @mixin xxs-mode {
   @media (max-width: variables.$breakpoint-xxs) {
     @content;
