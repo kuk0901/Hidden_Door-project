@@ -1,31 +1,90 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
+import SearchForm from "@components/common/form/SearchForm";
+import Pagination from "@components/common/navigation/pagination/Pagination";
 import CustomerList from "../../../components/cs/customer/CustomerList";
 
 const CustomerPage = () => {
+  const location = useLocation();
   const { admin } = useAdmin();
   const [customerList, setCustomerList] = useState([]);
   const navigate = useNavigate();
+  const [page, setPage] = useState(
+    location.state?.page || {
+      page: 1,
+      size: 10,
+      totalElements: 0,
+      totalPages: 0,
+      isFirst: true,
+      isLast: true,
+      sortField: "id",
+      sortDirection: "ASC",
+    }
+  );
 
-  const getAllCustomer = async () => {
+  const [search, setSearch] = useState(
+    location.state?.search || {
+      searchField: "",
+      searchTerm: "",
+    }
+  );
+
+  const getAllCustomer = async (
+    newPage = 1,
+    searchField = "",
+    searchTerm = ""
+  ) => {
     try {
-      const res = await Api.get("/customers/list");
+      const { size, sortField, sortDirection } = page;
+      const res = await Api.get("/customers/list", {
+        params: {
+          page: newPage,
+          size,
+          sortField,
+          sortDirection,
+          searchField,
+          searchTerm,
+        },
+      });
 
-      console.log(res.data.data);
       console.log(res.data.msg);
 
       setCustomerList(res.data.data);
+      setPage(res.data.pageDto);
+      setSearch({
+        searchField: res.data.searchField,
+        searchTerm: res.data.searchTerm,
+      });
     } catch (error) {
       toast.error(error.message || "오류입니다");
     }
   };
 
+  const handleSearch = (searchField, searchTerm) => {
+    getAllCustomer(1, searchField, searchTerm);
+  };
+
+  const handlePageChange = (newPage) => {
+    getAllCustomer(newPage, search.searchField, search.searchTerm);
+  };
+
   useEffect(() => {
     getAllCustomer();
   }, []);
+
+  const handleReset = () => {
+    setSearch({ searchField: "", searchTerm: "" });
+    getAllCustomer();
+  };
+
+  const searchFields = [
+    { value: "", label: "검색 필드 선택" },
+    { value: "customerTitle", label: "제목" },
+    { value: "customerContent", label: "질문내용" },
+  ];
 
   const handleAddCustomer = () => {
     navigate("/hidden_door/cs/customer/add");
@@ -46,6 +105,15 @@ const CustomerPage = () => {
             </div>
           </div>
 
+          <div className="cs-search-section">
+            <SearchForm
+              onSearch={handleSearch}
+              fields={searchFields}
+              initialValues={search}
+              onReset={handleReset}
+            />
+          </div>
+
           <div className="btn-container">
             {admin && (
               <button className="btn" onClick={handleAddCustomer}>
@@ -57,6 +125,8 @@ const CustomerPage = () => {
           <div className="cs-main-container">
             <CustomerList customerList={customerList} />
           </div>
+
+          <Pagination page={page} onPageChange={handlePageChange} />
         </div>
       </section>
 

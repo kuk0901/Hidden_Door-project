@@ -4,9 +4,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.HashMap;
@@ -19,32 +17,33 @@ import java.util.stream.IntStream;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.baeksutalchul.hiddendoor.dto.ReservationDto;
+import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
+import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.reservation.domain.Reservation;
 import com.baeksutalchul.hiddendoor.reservation.repository.ReservationRepository;
 import com.baeksutalchul.hiddendoor.theme.domain.Theme;
 import com.baeksutalchul.hiddendoor.theme.repository.ThemeRepository;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
+import com.baeksutalchul.hiddendoor.utils.random.RandomString;
 
 @Service
 public class ReservationService {
   private ReservationRepository reservationRepository;
-  private MongoTemplate mongoTemplate;
   private final ModelMapper modelMapper;
   private final ThemeRepository themeRepository;
   private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
   private final Instant defaultInstant = Instant.parse("1970-01-01T00:00:00Z");
 
-  public ReservationService(ReservationRepository reservationRepository, ModelMapper modelMapper,
-      MongoTemplate mongoTemplate, ThemeRepository themeRepository) {
+  public ReservationService(ReservationRepository reservationRepository, ModelMapper modelMapper, ThemeRepository themeRepository) {
     this.reservationRepository = reservationRepository;
     this.modelMapper = modelMapper;
-    this.mongoTemplate = mongoTemplate;
     this.themeRepository = themeRepository;
   }
 
@@ -172,13 +171,12 @@ public class ReservationService {
     reservation.setPaymentState(dto.getPaymentState());
     reservation.setPaymentMethod(dto.getPaymentMethod());
     reservation.setRefundState(dto.getRefundState());
-
-    // 서버에서 관리하는 값 설정
     reservation.setReservationCreDate(Instant.now());
     reservation.setPaymentDate(defaultInstant);
+    reservation.setReservationNumber(RandomString.getRandomShortString());
 
     Reservation saved = reservationRepository.save(reservation);
-
+    // 예약 완료된 후에 이메일로 예약번호 전송
     ReservationDto responseDto = modelMapper.map(saved, ReservationDto.class);
 
     return new ResponseDto<>(responseDto, "예약이 성공적으로 생성되었습니다.");
@@ -201,5 +199,25 @@ public class ReservationService {
     } catch (DateTimeParseException e) {
         throw new IllegalArgumentException("Invalid date or time format", e);
     }
+  }
+
+  public ResponseDto<ReservationDto> getReservationSummary(String reservationNumber) {
+    Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber)
+      .orElseThrow(() -> new CustomException(ErrorCode.RESERVATION_NOT_FOUND, "예약을 찾을 수 없습니다."));
+
+    ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
+
+    // Instant를 String으로 변환
+    reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
+    reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationCreDate()));
+    if (reservation.getPaymentDate() != null) {
+        reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDateTime(reservation.getPaymentDate()));
+    }
+
+    return new ResponseDto<>(reservationDto, "예약 요약 정보 조회 성공");
+  }
+
+  public boolean checkReservation(String reservationNumber, String name) {
+    return reservationRepository.existsByReservationNumberAndName(reservationNumber, name);
 }
 }
