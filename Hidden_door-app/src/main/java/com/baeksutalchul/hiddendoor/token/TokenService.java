@@ -33,7 +33,7 @@ public class TokenService {
     return Jwts.builder()
         .setSubject(id)
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        // FIXME: 테스트 중
+        // FIXME: 테스트 중 -> 5분, 1분으로 변경해 테스트 진행
         .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 45))) // 45분 유효
         .claim("roles", roles)
         .claim("tokenType", "ACCESS")
