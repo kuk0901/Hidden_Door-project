@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.config.Customizer;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -20,6 +21,8 @@ import com.baeksutalchul.hiddendoor.security.CustomAuthenticationEntryPoint;
 import com.baeksutalchul.hiddendoor.token.TokenAuthenticationFilter;
 import com.baeksutalchul.hiddendoor.token.TokenService;
 
+import org.springframework.web.cors.CorsConfigurationSource;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -27,18 +30,21 @@ public class SecurityConfig {
   private final TokenService tokenService;
   private final AdminRepository adminRepository;
   private final AdminService adminService;
+  private final CorsConfigurationSource corsConfigurationSource;
 
   public SecurityConfig(TokenService tokenService, AdminRepository adminRepository,
-      @Lazy AdminService adminService) {
+      @Lazy AdminService adminService, CorsConfigurationSource corsConfigurationSource) {
     this.tokenService = tokenService;
     this.adminRepository = adminRepository;
     this.adminService = adminService;
+    this.corsConfigurationSource = corsConfigurationSource;
+
   }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
-        .cors(Customizer.withDefaults())
+        .cors(cors -> cors.configurationSource(corsConfigurationSource))
         .csrf(csrf -> csrf.disable())
         .addFilterBefore(tokenAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(auth -> auth

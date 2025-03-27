@@ -1,6 +1,7 @@
 import PriceItem from "@components/price/PriceItem";
 import { useThemeList } from "@hooks/useThemeList";
 
+// FIXME: useThemeList 삭제 예정
 const PriceSection = () => {
   const { themeList } = useThemeList();
 

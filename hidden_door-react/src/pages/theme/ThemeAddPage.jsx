@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { themeFields, initialGenreList } from "@utils/fields/themeFields";
 import useConfirm from "@hooks/useConfirm";
 
-// * FIXME: update, create, delete 영역 확인하면서 useConfirm 사용
+// FIXME: useThemeList 삭제 예정
 const ThemeAddPage = () => {
   const [genreList, setGenreList] = useState(initialGenreList);
   const [formData, setFormData] = useState({

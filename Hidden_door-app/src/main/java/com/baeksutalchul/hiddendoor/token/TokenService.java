@@ -34,7 +34,7 @@ public class TokenService {
         .setSubject(id)
         .setIssuedAt(new Date(System.currentTimeMillis()))
         // FIXME: 테스트 중 -> 5분, 1분으로 변경해 테스트 진행
-        .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 45))) // 45분 유효
+        .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 1))) // 45분 유효
         .claim("roles", roles)
         .claim("tokenType", "ACCESS")
         .signWith(getSigningKey())
@@ -145,6 +145,9 @@ public class TokenService {
     Date now = new Date();
 
     // 만료 5분 전부터 갱신 시도
-    return (expiration.getTime() - now.getTime()) <= 5 * 60 * 1000;
+    // return (expiration.getTime() - now.getTime()) <= 5 * 60 * 1000;
+
+    // 만료 20초 전부터 갱신 시도
+    return (expiration.getTime() - now.getTime()) <= 20 * 1000;
   }
 }

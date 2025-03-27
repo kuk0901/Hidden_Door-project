@@ -5,12 +5,15 @@ import Header from "@components/common/layout/Header";
 import InfoEditForm from "@components/common/form/infoEditForm";
 import Api from "@axios/api";
 import ThemeDetail from "@components/theme/ThemeDetail";
-import { useSearchParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import OneThemePriceSection from "@components/price/OneThemePriceSection";
 import useConfirm from "@hooks/useConfirm";
+import Loading from "@components/common/loading/Loading";
 
-// price 영역 확인 필요
-const ThemeDetailPage = ({ theme }) => {
+// FIXME: 개별 API 호출
+const ThemeDetailPage = () => {
+  const { themeId } = useParams();
+  const [theme, setTheme] = useState(null);
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
   const [themeDetailHeaderTitleVisible, setThemeDetailHeaderTitleVisible] =
     useState(false);
@@ -18,6 +21,25 @@ const ThemeDetailPage = ({ theme }) => {
   const subtitleRef = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const confirm = useConfirm();
+
+  const getThemeInfo = async () => {
+    try {
+      const res = await Api.get(`/themes/theme/${themeId}`);
+
+      if (res.status !== 200) {
+        toast.error();
+      }
+
+      console.log(res.data.data);
+
+      setTheme(res.data.data);
+    } catch (error) {
+      toast.error(
+        error.message ??
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
+    }
+  };
 
   const handleThemeDetailTitleLineUpdate = async () => {
     const isConfirmed = await confirm(
@@ -61,6 +83,8 @@ const ThemeDetailPage = ({ theme }) => {
   };
 
   useEffect(() => {
+    getThemeInfo();
+
     if (searchParams.get("register") === "true") {
       toast.success("작성하신 테마 정보가 추가되었습니다.");
     } else if (searchParams.get("update") === "true") {
@@ -69,6 +93,11 @@ const ThemeDetailPage = ({ theme }) => {
 
     setSearchParams({});
   }, []);
+
+  if (!theme) {
+    return <Loading />;
+  }
+
   return (
     <>
       <Header
@@ -101,7 +130,7 @@ const ThemeDetailPage = ({ theme }) => {
         </>
       )}
 
-      <ThemeDetail theme={theme} />
+      {theme && <ThemeDetail theme={theme} setTheme={setTheme} />}
 
       {/* 테마 가격표 영역 */}
       <OneThemePriceSection theme={theme} />

@@ -8,10 +8,11 @@ const Api = axios.create({
 /**
  * @description 요청 인터셉터를 설정하여 모든 요청에 Authorization 헤더를 추가
  */
-// FIXME: accessToken 만료 후의 refreshToken 자동 업데이트 동작 확인 필요
+
 Api.interceptors.request.use(
   (config) => {
     const token = tokenManager.getToken();
+
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -27,9 +28,14 @@ Api.interceptors.request.use(
  */
 Api.interceptors.response.use(
   (response) => {
-    const newToken = response.headers["New-Access"];
-    if (newToken) {
-      tokenManager.setToken(newToken);
+    if (response.headers["token-refreshed"] === "true") {
+      const newToken = response.headers["authorization"];
+      if (newToken?.startsWith("Bearer ")) {
+        const token = newToken.slice(7);
+        tokenManager.setToken(token);
+
+        delete response.headers["Token-Refreshed"];
+      }
     }
     return response;
   },
@@ -39,11 +45,10 @@ Api.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const newToken = await tokenManager.refreshToken();
-        Api.defaults.headers.common["Authorization"] = "Bearer " + newToken;
+        Api.defaults.headers.common["authorization"] = "Bearer " + newToken;
         return Api(originalRequest);
       } catch (error) {
-        console.error(error);
-        console.error(error.message);
+        console.error("Token refresh failed:", error);
       }
     }
     return Promise.reject(new Error(error.message || "response failed"));

@@ -1,6 +1,7 @@
 import { useThemeList } from "@hooks/useThemeList";
 import MiniPriceItem from "@components/price/MiniPriceItem";
 
+// FIXME: useThemeList 삭제 예정
 const MiniPriceSection = () => {
   const { themeList } = useThemeList();
 
