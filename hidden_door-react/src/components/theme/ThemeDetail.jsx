@@ -13,7 +13,6 @@ import { useAdmin } from "@hooks/useAdmin";
 
 // FIXME: 수정 등의 상황에서는 개별 Theme update로 변경
 const ThemeDetail = ({ theme, setTheme }) => {
-  console.log("theme: ", theme);
   const [themeEditVisible, setThemeEditVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
   const [genreList, setGenreList] = useState(

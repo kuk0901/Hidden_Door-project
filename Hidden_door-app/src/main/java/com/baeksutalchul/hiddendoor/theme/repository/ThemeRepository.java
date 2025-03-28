@@ -25,4 +25,7 @@ public interface ThemeRepository extends MongoRepository<Theme, String> {
 
   @Query(value = "{}", fields = "{ 'themeId': 1, 'storedFileName': 1, 'themeName': 1 }")
   List<Theme> findAllThemesSummary();
+
+  @Query(value = "{}", fields = "{ 'themeId': 1, 'themeName': 1, 'minParticipants': 1, 'maxParticipants': 1, 'price': 1 }")
+  List<Theme> findAllThemesWithPriceInfo();
 }

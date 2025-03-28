@@ -10,7 +10,6 @@ import OneThemePriceSection from "@components/price/OneThemePriceSection";
 import useConfirm from "@hooks/useConfirm";
 import Loading from "@components/common/loading/Loading";
 
-// FIXME: 개별 API 호출
 const ThemeDetailPage = () => {
   const { themeId } = useParams();
   const [theme, setTheme] = useState(null);
@@ -27,10 +26,8 @@ const ThemeDetailPage = () => {
       const res = await Api.get(`/themes/theme/${themeId}`);
 
       if (res.status !== 200) {
-        toast.error();
+        toast.error("서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
       }
-
-      console.log(res.data.data);
 
       setTheme(res.data.data);
     } catch (error) {

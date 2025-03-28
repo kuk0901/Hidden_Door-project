@@ -64,4 +64,9 @@ public class ThemeController {
     return ResponseEntity.ok().body(themeService.deleteThemeOne(id));
   }
 
+  @GetMapping("/summary-price")
+  public ResponseEntity<ResponseDto<List<ThemeDto>>> findAllThemesWithPriceInfo() {
+    return ResponseEntity.ok().body(themeService.findAllThemesWithPriceInfo());
+  }
+
 }

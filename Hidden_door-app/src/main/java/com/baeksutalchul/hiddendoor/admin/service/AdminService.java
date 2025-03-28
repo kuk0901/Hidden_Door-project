@@ -1,8 +1,10 @@
 package com.baeksutalchul.hiddendoor.admin.service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.modelmapper.ModelMapper;
 
@@ -21,6 +23,7 @@ import com.baeksutalchul.hiddendoor.token.TokenService;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Cookie;
 
@@ -126,15 +129,34 @@ public class AdminService {
   }
 
   // 리프레시 토큰을 이용해 액세스 토큰 생성
-  public String refreshAccessToken(String refreshToken) {
+  public String refreshAccessToken(String refreshToken, HttpServletResponse response) {
+
     if (!tokenService.validateRefreshToken(refreshToken)) {
       throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
     }
+
+    Claims claims = tokenService.extractAllClaims(refreshToken);
+    Date expirationDate = claims.getExpiration();
+    long remainingTime = expirationDate.getTime() - System.currentTimeMillis();
+    long days = TimeUnit.MILLISECONDS.toDays(remainingTime);
 
     String email = tokenService.extractEmail(refreshToken);
     Optional<Admin> adminOptional = adminRepository.findByEmail(email);
     if (adminOptional.isPresent()) {
       Admin admin = adminOptional.get();
+
+      // 남은 만료 시간이 70일 이하인 경우 리프레시 토큰 갱신
+      if (days <= 70) {
+        String newRefreshToken = tokenService.generateRefreshToken(admin.getEmail());
+
+        Cookie cookie = new Cookie("refreshToken", newRefreshToken);
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // 개발 단계에서는 false, HTTPS에서는 true
+        cookie.setPath("/");
+        cookie.setMaxAge(60 * 60 * 24 * 100);
+        response.addCookie(cookie);
+      }
+
       return tokenService.generateToken(admin.getEmail(), admin.getRoles());
     } else {
       throw new CustomException(ErrorCode.USER_NOT_FOUND);

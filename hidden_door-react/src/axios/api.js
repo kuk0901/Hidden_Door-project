@@ -19,6 +19,7 @@ Api.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.log("요청 인터셉터 에러 발생");
     return Promise.reject(new Error(error.message || "Request failed"));
   }
 );
@@ -41,16 +42,24 @@ Api.interceptors.response.use(
   },
   async (error) => {
     const originalRequest = error.config;
-    if (error.response.status === 401 && !originalRequest._retry) {
+
+    if (
+      error.response.headers["token-expired"] === "true" &&
+      !originalRequest._retry
+    ) {
       originalRequest._retry = true;
       try {
         const newToken = await tokenManager.refreshToken();
         Api.defaults.headers.common["authorization"] = "Bearer " + newToken;
+        delete error.response.headers["Token-Expired"];
         return Api(originalRequest);
       } catch (error) {
         console.error("Token refresh failed:", error);
+        tokenManager.removeToken();
+        window.location.href = import.meta.env.VITE_APP_ADMIN_LOGIN_PATH;
       }
     }
+
     return Promise.reject(new Error(error.message || "response failed"));
   }
 );

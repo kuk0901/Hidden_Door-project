@@ -201,4 +201,15 @@ public class ThemeService {
     return new ResponseDto<>("", "해당 테마가 삭제되었습니다.");
   }
 
+  public ResponseDto<List<ThemeDto>> findAllThemesWithPriceInfo() {
+    List<Theme> themeList = themeRepository.findAllThemesWithPriceInfo();
+
+    if (themeList.isEmpty()) {
+      throw new CustomException(ErrorCode.THEME_NOT_FOUND);
+    }
+
+    List<ThemeDto> themeDtoList = themeList.stream().map(theme -> modelMapper.map(theme, ThemeDto.class)).toList();
+
+    return new ResponseDto<>(themeDtoList, "success");
+  }
 }
