@@ -58,7 +58,7 @@ public class ReservationController {
   }
 
   @GetMapping("/summary/{reservationNumber}")
-  public ResponseDto<ReservationDto> getReservationSummary(@PathVariable String reservationNumber) {
+  public ResponseDto<ReservationDto> getReservationSummary(@PathVariable("reservationNumber") String reservationNumber) {
     return reservationService.getReservationSummary(reservationNumber);
   }
 
