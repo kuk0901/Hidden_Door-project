@@ -1,5 +1,6 @@
 package com.baeksutalchul.hiddendoor.config.security;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
@@ -7,7 +8,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.config.Customizer;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -33,7 +33,8 @@ public class SecurityConfig {
   private final CorsConfigurationSource corsConfigurationSource;
 
   public SecurityConfig(TokenService tokenService, AdminRepository adminRepository,
-      @Lazy AdminService adminService, CorsConfigurationSource corsConfigurationSource) {
+      @Lazy AdminService adminService,
+      @Qualifier("corsConfigurationSource") CorsConfigurationSource corsConfigurationSource) {
     this.tokenService = tokenService;
     this.adminRepository = adminRepository;
     this.adminService = adminService;
