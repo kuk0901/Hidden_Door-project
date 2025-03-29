@@ -7,6 +7,9 @@ import java.io.IOException;
 
 import java.util.List;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -52,7 +55,17 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     if (token != null) {
       try {
         // 토큰 만료 임박인 경우
-        checkAndRefreshToken(req, res, token);
+        token = checkAndRefreshToken(req, res, token);
+
+        String adminId = tokenService.extractEmail(token);
+
+        // 토큰 검증 및 인증 정보 설정
+        if (tokenService.validateToken(token, adminId)) {
+          List<String> roles = tokenService.extractRoles(token);
+
+          setAuthentication(adminId, roles); // 인증 정보 설정
+        }
+
       } catch (ExpiredJwtException e) {
         // 토큰이 만료된 경우
         res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -69,6 +82,15 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     }
 
     filterChain.doFilter(req, res);
+  }
+
+  private void setAuthentication(String adminId, List<String> roles) {
+    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminId, null,
+        roles.stream()
+            .map(role -> new SimpleGrantedAuthority(role))
+            .toList());
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
   }
 
   /**
@@ -95,14 +117,14 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
    * @throws Exception 토큰 갱신 중 발생할 수 있는 예외
    */
 
-  private void checkAndRefreshToken(HttpServletRequest req, HttpServletResponse res, String token) throws Exception {
+  private String checkAndRefreshToken(HttpServletRequest req, HttpServletResponse res, String token) throws Exception {
     if (tokenService.isTokenNearExpiration(token)) {
       synchronized (refreshLock) {
         if (isRefreshing) {
           while (isRefreshing) {
             refreshLock.wait(100);
           }
-          return; // 이미 갱신 중인 경우 처리 종료
+          return latestToken.isEmpty() ? token : latestToken; // 이미 갱신 중이면 최신 토큰 반환
         }
         isRefreshing = true;
       }
@@ -117,16 +139,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
           res.setHeader("Authorization", "Bearer " + newToken);
           res.setHeader("Token-Refreshed", "true");
 
-          latestToken = newToken;
+          latestToken = newToken; // 최신 토큰 저장
+          return newToken; // 갱신된 토큰 반환
         }
       } finally {
         synchronized (refreshLock) {
-          isRefreshing = false;
+          isRefreshing = false; // 갱신 완료 후 플래그 초기화
           latestToken = ""; // 사용 후 초기화
-          refreshLock.notifyAll();
+          refreshLock.notifyAll(); // 대기 중인 스레드 깨우기
         }
       }
     }
+    return token; // 기존 토큰 반환
   }
 
   /**
