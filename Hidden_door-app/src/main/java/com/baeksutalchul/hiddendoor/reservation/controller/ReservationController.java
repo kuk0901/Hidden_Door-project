@@ -39,7 +39,7 @@ public class ReservationController {
       @PathVariable("id") String reservationId) {
     return ResponseEntity.ok().body(reservationService.getReservationById(reservationId));
   }
-  
+
   @GetMapping("/main")
   public ResponseEntity<ResponseDto<Map<String, Object>>> getReservationMainPage() {
     return ResponseEntity.ok(reservationService.getReservationMainPage());
@@ -47,8 +47,8 @@ public class ReservationController {
 
   @GetMapping("/availability")
   public ResponseEntity<ResponseDto<Map<String, Object>>> getAvailability(
-    @RequestParam String date,
-    @RequestParam String themeId) {
+      @RequestParam String date,
+      @RequestParam String themeId) {
     return ResponseEntity.ok(reservationService.checkAvailability(date, themeId));
   }
 
@@ -58,18 +58,17 @@ public class ReservationController {
   }
 
   @GetMapping("/summary/{reservationNumber}")
-  public ResponseDto<ReservationDto> getReservationSummary(@PathVariable("reservationNumber") String reservationNumber) {
+  public ResponseDto<ReservationDto> getReservationSummary(
+      @PathVariable("reservationNumber") String reservationNumber) {
     return reservationService.getReservationSummary(reservationNumber);
   }
 
   @GetMapping("/check")
   public ResponseDto<Boolean> checkReservation(
-    @RequestParam String reservationNumber,  // 개별 파라미터로 분리
-    @RequestParam String name
-  ) {
+      @RequestParam("reservationNumber") String reservationNumber, // 개별 파라미터로 분리
+      @RequestParam("name") String name) {
     boolean exists = reservationService.checkReservation(reservationNumber, name);
     return new ResponseDto<>(exists, exists ? "예약 확인 성공" : "예약 없음");
   }
 
-  
 }
