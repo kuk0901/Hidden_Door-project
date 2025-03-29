@@ -33,7 +33,6 @@ public class TokenService {
     return Jwts.builder()
         .setSubject(id)
         .setIssuedAt(new Date(System.currentTimeMillis()))
-        // FIXME: 테스트 중
         .setExpiration(new Date(System.currentTimeMillis() + (1000L * 60 * 45))) // 45분 유효
         .claim("roles", roles)
         .claim("tokenType", "ACCESS")
@@ -126,7 +125,7 @@ public class TokenService {
   }
 
   // JWT의 페이로드에 포함된 클레임(claims)을 가져옴
-  private Claims extractAllClaims(String token) {
+  public Claims extractAllClaims(String token) {
     return Jwts.parserBuilder()
         .setSigningKey(getSigningKey())
         .build()
@@ -146,5 +145,8 @@ public class TokenService {
 
     // 만료 5분 전부터 갱신 시도
     return (expiration.getTime() - now.getTime()) <= 5 * 60 * 1000;
+
+    // 만료 20초 전부터 갱신 시도
+    // return (expiration.getTime() - now.getTime()) <= 20 * 1000;
   }
 }

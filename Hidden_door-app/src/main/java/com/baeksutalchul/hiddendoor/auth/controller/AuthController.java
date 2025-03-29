@@ -16,23 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baeksutalchul.hiddendoor.admin.service.AdminService;
 import com.baeksutalchul.hiddendoor.dto.AdminDto;
-import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
-import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
-import com.baeksutalchul.hiddendoor.token.TokenService;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
   private final AdminService adminService;
-  private final TokenService tokenService;
 
   private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
-  public AuthController(AdminService adminService, TokenService tokenService) {
+  public AuthController(AdminService adminService) {
     this.adminService = adminService;
-    this.tokenService = tokenService;
+
   }
 
   @PostMapping("/register")
@@ -48,7 +43,6 @@ public class AuthController {
 
   @PostMapping("/terminate")
   public ResponseEntity<Void> signout(HttpServletResponse response) {
-
     // 쿠키에서 리프레시 토큰 삭제
     Cookie cookie = new Cookie("refreshToken", null);
     cookie.setHttpOnly(true);
@@ -61,13 +55,10 @@ public class AuthController {
   }
 
   @PostMapping("/renew")
-  public ResponseEntity<ResponseDto<String>> refresh(@CookieValue("refreshToken") String refreshToken) {
+  public ResponseEntity<ResponseDto<String>> refresh(@CookieValue("refreshToken") String refreshToken,
+      HttpServletResponse response) {
 
-    if (!tokenService.validateRefreshToken(refreshToken)) {
-      throw new CustomException(ErrorCode.REFRESH_TOKEN_EXPIRED);
-    }
-
-    String newAccessToken = adminService.refreshAccessToken(refreshToken); // 리프레시 토큰으로 액세스 토큰 갱신
+    String newAccessToken = adminService.refreshAccessToken(refreshToken, response);
     return ResponseEntity.ok(new ResponseDto<>(newAccessToken, "", "액세스 토큰이 갱신되었습니다."));
   }
 

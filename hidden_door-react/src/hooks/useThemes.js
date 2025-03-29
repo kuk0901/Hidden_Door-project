@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 /**
  * @description 모든 테마 데이터를 가져옴
  * @returns {Object} themeList - 테마 리스트 데이터
+ * @deprecated 동적 라우팅 처리 변경
  */
 export function useThemes() {
   const { themeList, setThemeList } = useThemeList();
@@ -25,7 +26,7 @@ export function useThemes() {
 
   useEffect(() => {
     getAllThemes();
-  }, [setThemeList]);
+  }, []);
 
   return { themeList };
 }

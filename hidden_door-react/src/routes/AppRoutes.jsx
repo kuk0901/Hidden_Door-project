@@ -1,6 +1,5 @@
 import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "@components/common/layout/Layout";
-import { useThemes } from "@hooks/useThemes";
 
 import ProtectedAdminRoute from "@routes/ProtectedAdminRoute";
 
@@ -34,8 +33,6 @@ import AdminAccountPage from "@pages/admin/AdminAccountPage";
 import AdminAccountDetailPage from "@pages/admin/AdminAccountDetailPage";
 
 export function AppRoutes() {
-  const { themeList } = useThemes();
-
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
@@ -49,14 +46,7 @@ export function AppRoutes() {
           {/* 테마 페이지 */}
           <Route path="theme">
             <Route index element={<ThemePage />} />
-            {themeList.length > 0 &&
-              themeList.map((theme) => (
-                <Route
-                  key={theme.themeId}
-                  path={theme.themeId}
-                  element={<ThemeDetailPage theme={theme} />}
-                />
-              ))}
+            <Route path=":themeId" element={<ThemeDetailPage />} />
             <Route path="add" element={<ThemeAddPage />} />
           </Route>
 

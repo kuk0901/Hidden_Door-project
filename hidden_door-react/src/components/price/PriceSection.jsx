@@ -1,8 +1,31 @@
 import PriceItem from "@components/price/PriceItem";
-import { useThemeList } from "@hooks/useThemeList";
+import { toast } from "react-toastify";
+import Api from "@axios/api";
+import { useEffect, useState } from "react";
 
 const PriceSection = () => {
-  const { themeList } = useThemeList();
+  const [themePriceList, setThemePriceList] = useState([]);
+
+  const findAllThemesWithPriceInfo = async () => {
+    try {
+      const res = await Api.get("/themes/summary-price");
+
+      if (res.status !== 200) {
+        toast.error("서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+      }
+
+      setThemePriceList(res.data.data);
+    } catch (error) {
+      toast.error(
+        error.message ??
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
+    }
+  };
+
+  useEffect(() => {
+    findAllThemesWithPriceInfo();
+  }, []);
 
   return (
     <section className="section section--price">
@@ -20,7 +43,7 @@ const PriceSection = () => {
 
         <ul className="price--list">
           <li className="price--item">
-            {themeList.map((theme) => (
+            {themePriceList.map((theme) => (
               <PriceItem key={theme.themeId} theme={theme} participants={0} />
             ))}
           </li>
@@ -29,7 +52,7 @@ const PriceSection = () => {
             <ul>
               {[1, 2, 3, 4, 5, 6].map((participants) => (
                 <li key={participants} className="price--item">
-                  {themeList.map((theme) => (
+                  {themePriceList.map((theme) => (
                     <PriceItem
                       key={theme.themeId}
                       theme={theme}

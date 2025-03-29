@@ -1,11 +1,36 @@
-import { useThemeList } from "@hooks/useThemeList";
 import Theme from "@components/theme/Theme";
 import { Link } from "react-router-dom";
 import { useAdmin } from "@hooks/useAdmin";
+import { toast } from "react-toastify";
+import Api from "@axios/api";
+import { useEffect, useState } from "react";
 
 const ThemeSection = () => {
-  const { themeList } = useThemeList();
+  const [themeList, setThemeList] = useState([]);
+
+  const getSummeryThemeList = async () => {
+    try {
+      const res = await Api.get("/themes/summary");
+
+      if (res.status !== 200) {
+        toast.error(
+          "테마 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+        );
+      }
+
+      setThemeList(res.data.data);
+    } catch (error) {
+      toast.error(
+        error.message ??
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
+    }
+  };
   const { admin } = useAdmin();
+
+  useEffect(() => {
+    getSummeryThemeList();
+  }, []);
 
   return (
     <section className="theme-section">

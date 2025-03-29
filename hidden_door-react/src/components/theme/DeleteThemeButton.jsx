@@ -1,12 +1,10 @@
 import useConfirm from "@hooks/useConfirm";
-import { useThemeList } from "@hooks/useThemeList";
 import { toast } from "react-toastify";
 import Api from "@axios/api";
 import { useNavigate } from "react-router-dom";
 
 const DeleteThemeButton = ({ themeId, themeName }) => {
   const confirm = useConfirm();
-  const { setThemeList } = useThemeList();
   const navigate = useNavigate();
 
   const handleDelete = async () => {
@@ -21,20 +19,19 @@ const DeleteThemeButton = ({ themeId, themeName }) => {
 
   const themeDeleteFnc = async () => {
     try {
-      const res = await Api.delete(`/api/v1/themes/theme/delete/${themeId}`);
+      const res = await Api.delete(`/themes/theme/${themeId}`);
 
       if (res.status !== 200) {
         toast.error(
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          `${themeName} 테마를 삭제하지 못했습니다. 잠시 후 다시 시도해 주세요.`
         );
         return;
       }
 
-      setThemeList(res.data.data);
       navigate(`/hidden_door/theme?delete=true&tn=${themeName}`);
     } catch (error) {
       toast.error(
-        error.message ||
+        error.message ??
           "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
       );
     }
