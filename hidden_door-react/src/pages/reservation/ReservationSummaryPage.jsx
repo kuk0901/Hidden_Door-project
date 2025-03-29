@@ -18,10 +18,6 @@ const ReservationSummaryPage = () => {
   useEffect(() => {
     const fetchReservationSummary = async () => {
       try {
-        console.log(
-          "API 호출 시작:",
-          `/reservations/summary/${reservationNumber}`
-        );
         const res = await Api.get(`/reservations/summary/${reservationNumber}`);
 
         if (res.data && res.data.data) {
