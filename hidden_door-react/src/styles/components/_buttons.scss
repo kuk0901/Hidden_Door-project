@@ -63,6 +63,10 @@
       @include mixins.size(30px, 30px);
     }
   }
+
+  &__theme {
+    border: 1px solid;
+  }
 }
 
 @mixin lg-mode {

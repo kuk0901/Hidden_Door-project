@@ -209,6 +209,16 @@
   }
 }
 
+// common price, price--one
+.section--price,
+.section--price--one {
+  border: 1px solid;
+
+  .section--title {
+    border: none;
+  }
+}
+
 // price
 .section--price {
   .price--line {

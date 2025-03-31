@@ -101,6 +101,7 @@ const Nav = () => {
         </>
       )}
 
+      {/* FIXME: 사용자 icon 사용 */}
       {admin && (
         <Button
           text="로그아웃"

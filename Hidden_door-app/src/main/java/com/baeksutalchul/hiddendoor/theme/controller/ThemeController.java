@@ -43,7 +43,7 @@ public class ThemeController {
   }
 
   @PostMapping("/theme/add")
-  public ResponseEntity<ResponseDto<List<ThemeDto>>> addThemeOne(@RequestPart("themeDto") ThemeDto themeDto,
+  public ResponseEntity<ResponseDto<String>> addThemeOne(@RequestPart("themeDto") ThemeDto themeDto,
       @RequestPart("file") MultipartFile file) {
 
     return ResponseEntity.ok().body(themeService.addThemeWithFile(themeDto,

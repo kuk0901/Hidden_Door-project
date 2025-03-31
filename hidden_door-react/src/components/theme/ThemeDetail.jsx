@@ -11,7 +11,6 @@ import DeleteThemeButton from "@components/theme/DeleteThemeButton";
 import useConfirm from "@hooks/useConfirm";
 import { useAdmin } from "@hooks/useAdmin";
 
-// FIXME: 수정 등의 상황에서는 개별 Theme update로 변경
 const ThemeDetail = ({ theme, setTheme }) => {
   const [themeEditVisible, setThemeEditVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
@@ -77,7 +76,6 @@ const ThemeDetail = ({ theme, setTheme }) => {
     return field;
   });
 
-  // FIXME: 단일 themeData만 전달하도록 처리
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -143,7 +141,6 @@ const ThemeDetail = ({ theme, setTheme }) => {
     }
 
     try {
-      // API 호출 로직
       const res = await Api.put(`/themes/theme/${theme.themeId}`, submitData, {
         headers: {
           "Content-Type": "multipart/form-data"

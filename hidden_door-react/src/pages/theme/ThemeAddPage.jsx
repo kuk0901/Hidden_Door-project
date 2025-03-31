@@ -3,12 +3,10 @@ import FileForm from "@components/common/form/file/FileForm";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { validateThemeField } from "@validation/validationRules";
-import { useThemeList } from "@hooks/useThemeList";
 import { useNavigate } from "react-router-dom";
 import { themeFields, initialGenreList } from "@utils/fields/themeFields";
 import useConfirm from "@hooks/useConfirm";
 
-// FIXME: useThemeList 삭제 예정
 const ThemeAddPage = () => {
   const [genreList, setGenreList] = useState(initialGenreList);
   const [formData, setFormData] = useState({
@@ -26,7 +24,6 @@ const ThemeAddPage = () => {
   const [genreError, setGenreError] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
 
-  const { setThemeList } = useThemeList();
   const navigate = useNavigate();
   const confirm = useConfirm();
 
@@ -130,17 +127,7 @@ const ThemeAddPage = () => {
         return;
       }
 
-      setThemeList(res.data.data);
-
-      const newTheme = res.data.data.find(
-        (theme) => theme.themeName === formData.themeName
-      );
-
-      if (newTheme) {
-        navigate(`/hidden_door/theme/${newTheme.themeId}?register=true`);
-      } else {
-        navigate("/hidden_door/theme?register=false");
-      }
+      navigate(`/hidden_door/theme/${res.data.data}?register=true`);
     } catch (error) {
       toast.error(
         error.message ||
