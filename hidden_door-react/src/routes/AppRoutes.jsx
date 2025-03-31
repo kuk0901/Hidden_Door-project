@@ -1,8 +1,9 @@
-import { lazy } from "react";
+import { lazy, Suspense } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "@components/common/layout/Layout";
 
 import ProtectedAdminRoute from "@routes/ProtectedAdminRoute";
+import HomeSkeleton from "@components/common/loading/skeletonUI/HomeSkeleton";
 
 const HomePage = lazy(() => import("@pages/home/HomePage"));
 const LoginPage = lazy(() => import("@pages/admin/LoginPage"));
@@ -58,7 +59,14 @@ export function AppRoutes() {
         <Route index element={<Navigate to="/hidden_door/main" replace />} />
 
         <Route path="/hidden_door">
-          <Route path="main" element={<HomePage />} />
+          <Route
+            path="main"
+            element={
+              <Suspense fallback={<HomeSkeleton />}>
+                <HomePage />
+              </Suspense>
+            }
+          />
 
           <Route path="info" element={<EscapeRoomInfoPage />} />
 

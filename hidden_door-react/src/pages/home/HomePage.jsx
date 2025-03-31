@@ -6,27 +6,41 @@ import { useEscapeRoom } from "@hooks/useEscapeRoom";
 import { useAdmin } from "@hooks/useAdmin";
 import PresentImageUploader from "@components/common/form/file/PresentImageUploader";
 import DefaultSection from "@components/common/sections/DefaultSection";
-import CautionList from "@components/caution/CautionList";
 import HomeThemeSection from "@components/home/HomeThemeSection";
 import EventList from "@components/home/EventList";
+import CautionSection from "@components/caution/CautionSection";
+import HomeSkeleton from "@components/common/loading/skeletonUI/HomeSkeleton";
 
 const HomePage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
+  const [loading, setLoading] = useState(true);
   const { admin } = useAdmin();
   const [imgUpdateView, setImgUpdateView] = useState(false);
+  const imageUrl = useImgUrl(escapeRoom?.storedFileName);
 
   const getEscapeRoomInfo = async () => {
     try {
       const res = await Api.get("/escape-rooms/info");
+
+      if (res.status !== 200) {
+        toast.error(
+          "방탈출 카페 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
+
       setEscapeRoom({ ...res.data.data });
+      setLoading(false);
     } catch (error) {
-      toast.error(error.message || "이미지를 불러오는데 실패했습니다.");
+      toast.error(error.message ?? "이미지를 불러오는데 실패했습니다.");
     }
   };
 
   useEffect(() => {
     getEscapeRoomInfo();
   }, []);
+
+  if (loading) return <HomeSkeleton />;
 
   return (
     <div className="section--home">
@@ -40,7 +54,7 @@ const HomePage = () => {
           <div className="img-container">
             <div
               style={{
-                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundImage: `url(${imageUrl})`,
                 backgroundPosition: "top",
                 backgroundSize: "100% 300%"
               }}
@@ -48,7 +62,7 @@ const HomePage = () => {
             />
             <div
               style={{
-                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundImage: `url(${imageUrl})`,
                 backgroundPosition: "center",
                 backgroundSize: "100% 300%"
               }}
@@ -56,7 +70,7 @@ const HomePage = () => {
             />
             <div
               style={{
-                backgroundImage: `url(${useImgUrl(escapeRoom.storedFileName)})`,
+                backgroundImage: `url(${imageUrl})`,
                 backgroundPosition: "bottom",
                 backgroundSize: "100% 300%"
               }}
@@ -100,12 +114,7 @@ const HomePage = () => {
       />
 
       {/* caution */}
-      <DefaultSection
-        api="/cautions/list"
-        className="section section--caution"
-        title="주의사항"
-        ChildComponent={CautionList}
-      />
+      <CautionSection />
     </div>
   );
 };

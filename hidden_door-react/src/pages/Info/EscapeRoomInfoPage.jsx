@@ -3,17 +3,16 @@ import Api from "@axios/api";
 import { useState, useRef, useEffect } from "react";
 import { debounce } from "lodash";
 import Header from "@components/common/layout/Header";
-import DefaultSection from "@components/common/sections/DefaultSection";
 import Loading from "@components/common/loading/Loading";
 import InfoEditForm from "@components/common/form/InfoEditForm";
 import LockAnimation from "@components/animation/LockAnimation";
 import Button from "@components/common/buttons/Button";
-import CautionList from "@components/caution/CautionList";
 import { useEscapeRoom } from "@hooks/useEscapeRoom";
 import PriceSection from "@components/price/PriceSection";
 import useConfirm from "@hooks/useConfirm";
 import MiniPriceSection from "@components/price/MiniPriceSection";
 import { useAdmin } from "@hooks/useAdmin";
+import CautionSection from "../../components/caution/CautionSection";
 
 const EscapeRoomInfoPage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
@@ -189,12 +188,7 @@ const EscapeRoomInfoPage = () => {
       {windowWidth > 768 ? <PriceSection /> : <MiniPriceSection />}
 
       {/* caution */}
-      <DefaultSection
-        api="/cautions/list"
-        className="section section--caution"
-        title="주의사항"
-        ChildComponent={CautionList}
-      />
+      <CautionSection />
     </>
   );
 };

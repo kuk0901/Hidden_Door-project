@@ -1,0 +1,126 @@
+@use "../abstracts//mixins";
+
+.section--home {
+  .guide-container--skeleton {
+    margin: 25px auto 50px;
+
+    .home--img--skeleton {
+      width: 500px;
+      height: 600px;
+    }
+  }
+
+  .theme-slide-section--skeleton {
+    gap: 20px;
+
+    .theme--section--skeleton {
+      @include mixins.flex-layout-row(space-between, center);
+      gap: 10px;
+
+      .theme--slide--skeleton {
+        width: 400px;
+        height: 500px;
+      }
+    }
+  }
+
+  @include mixins.lg-mode {
+    .theme-slide-section--skeleton {
+      .theme--section--skeleton {
+        .theme--slide--skeleton {
+          width: 350px;
+          height: 450px;
+        }
+      }
+    }
+  }
+
+  @include mixins.md-mode {
+    .guide-container--skeleton {
+      .home--img--skeleton {
+        width: 300px;
+        height: 400px;
+      }
+    }
+
+    .theme-slide-section--skeleton {
+      .theme--section--skeleton {
+        .theme--slide--skeleton {
+          width: 250px;
+          height: 350px;
+        }
+      }
+    }
+  }
+
+  @include mixins.sm-mode {
+    .guide-container--skeleton {
+      .home--img--skeleton {
+        width: 300px;
+        height: 400px;
+      }
+    }
+
+    .theme-slide-section--skeleton {
+      .theme--section--skeleton {
+        .theme--slide--skeleton {
+          width: 200px;
+          height: 300px;
+        }
+      }
+    }
+  }
+
+  @media (max-width: 474px) {
+    .theme-slide-section--skeleton {
+      .theme--section--skeleton {
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.section--caution--skeleton {
+  .caution--list {
+    margin-top: 20px;
+  }
+
+  .caution--item--skeleton {
+    padding: 10px;
+    border: 1px solid;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+    .icon-container {
+      margin-right: 20px;
+    }
+
+    .content-container {
+      .caution--content--title {
+        width: 200px;
+        height: 20px;
+      }
+
+      .caution--content--text {
+        width: 200px;
+        height: 15px;
+      }
+    }
+
+    @include mixins.xs-mode {
+      .content-container {
+        .caution--content--title {
+          width: 170px;
+          height: 20px;
+        }
+
+        .caution--content--text {
+          width: 170px;
+          height: 15px;
+        }
+      }
+    }
+  }
+}
