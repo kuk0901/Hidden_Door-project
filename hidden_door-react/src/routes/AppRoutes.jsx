@@ -31,10 +31,12 @@ import AdminReservationPage from "@pages/admin/AdminReservationPage";
 import AdminReservationDetailPage from "@pages/admin/AdminReservationDetailPage";
 import AdminAccountPage from "@pages/admin/AdminAccountPage";
 import AdminAccountDetailPage from "@pages/admin/AdminAccountDetailPage";
+import NotFound from "@error/NotFound";
 
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="*" element={<NotFound />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Navigate to="/hidden_door/main" replace />} />
 

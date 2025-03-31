@@ -33,7 +33,8 @@ export default defineConfig(({ mode }) => {
         "@data": path.resolve(__dirname, "./src/data"),
         "@utils": path.resolve(__dirname, "./src/utils"),
         "@validation": path.resolve(__dirname, "./src/validation"),
-        "@token": path.resolve(__dirname, "./src/token")
+        "@token": path.resolve(__dirname, "./src/token"),
+        "@error": path.resolve(__dirname, "./src/error")
       }
     },
     server: {
