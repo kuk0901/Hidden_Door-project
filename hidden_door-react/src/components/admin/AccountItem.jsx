@@ -75,7 +75,6 @@ const AccountItem = ({
           {adminData.phone}
         </div>
 
-        {/* FIXME: 컴포넌트 분리 고려 */}
         <div className="content content--lg roles-container">
           {filteredRoles.slice(0, 3).map((r, i, arr) => (
             <span key={i} className="role">

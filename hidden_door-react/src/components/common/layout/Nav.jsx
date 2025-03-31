@@ -1,5 +1,4 @@
 import { useAdmin } from "@hooks/useAdmin";
-import Button from "@components/common/buttons/Button";
 import { useNavigate } from "react-router-dom";
 import Logo from "@components/common/branding/Logo";
 import Api from "@/axios/api";
@@ -9,12 +8,16 @@ import { useState, useEffect, useRef } from "react";
 import { navLinkList } from "@routes/linkList";
 import MobileNavMenu from "@components/common/navigation/MobileNavMenu";
 import AdminMenu from "@components/common/navigation/AdminMenu";
+import { FaUserCircle } from "react-icons/fa";
+import AdminInfo from "@components/admin/AdminInfo";
 
 const Nav = () => {
   const { admin, setAdmin } = useAdmin();
   const navigate = useNavigate();
   const [showAdminMenu, setShowAdminMenu] = useState(false);
   const adminMenuRef = useRef(null);
+  const [showAdminInfo, setShowAdminInfo] = useState(false);
+  const adminInfoRef = useRef(null);
 
   const handleLogout = async () => {
     try {
@@ -30,7 +33,11 @@ const Nav = () => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
 
   const toggleAdminMenu = () => {
-    setShowAdminMenu(!showAdminMenu);
+    setShowAdminMenu((prev) => !prev);
+  };
+
+  const toggleAdminInfo = () => {
+    setShowAdminInfo((prev) => !prev);
   };
 
   useEffect(() => {
@@ -40,7 +47,6 @@ const Nav = () => {
 
     window.addEventListener("resize", handleResize);
 
-    // 컴포넌트 언마운트 시 이벤트 리스너 제거
     return () => {
       window.removeEventListener("resize", handleResize);
       handleResize.cancel(); // debounce 취소
@@ -54,6 +60,13 @@ const Nav = () => {
         !adminMenuRef.current.contains(event.target)
       ) {
         setShowAdminMenu(false);
+      }
+
+      if (
+        adminInfoRef.current &&
+        !adminInfoRef.current.contains(event.target)
+      ) {
+        setShowAdminInfo(false);
       }
     };
 
@@ -77,7 +90,10 @@ const Nav = () => {
             {admin && (
               <li className="link-item--last" ref={adminMenuRef}>
                 <button
-                  onClick={toggleAdminMenu}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleAdminMenu();
+                  }}
                   className="link-item btn--no btn--admin-menu"
                 >
                   관리자
@@ -101,13 +117,26 @@ const Nav = () => {
         </>
       )}
 
-      {/* FIXME: 사용자 icon 사용 */}
       {admin && (
-        <Button
-          text="로그아웃"
-          onClick={handleLogout}
-          className="btn--signout"
-        />
+        <div className="admin--info" ref={adminInfoRef}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleAdminInfo();
+            }}
+            className="admin--info--container"
+          >
+            <FaUserCircle size={36} className="admin--info__icon" />
+          </button>
+
+          {showAdminInfo && (
+            <AdminInfo
+              adminId={admin.adminId}
+              adminName={admin.userName}
+              handleLogout={handleLogout}
+            />
+          )}
+        </div>
       )}
     </nav>
   );

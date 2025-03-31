@@ -42,7 +42,7 @@
         top: 30px;
         left: 0;
         z-index: 10;
-        @include mixins.flex-layout-column(space-between, center);
+        @include mixins.flex-layout-column(center, flex-start);
         background-color: variables.$dark-background-color;
         padding: 3px 10px 10px;
         min-width: 100%;
@@ -54,6 +54,7 @@
           border-bottom: 1px solid black;
           padding: 3px;
           width: 100%;
+          text-align: left;
 
           .link--item {
             @include mixins.color-scheme(
@@ -117,22 +118,56 @@
     }
   }
 
-  .btn--signout {
-    padding: 10px 5px;
-    margin-right: 5px;
-    border-radius: 3px;
-    border: none;
-    @include mixins.color-scheme(
-      variables.$dark-background-color,
-      variables.$light-background-color
-    );
-    @include mixins.font-weight(700);
+  .admin--info {
+    position: relative;
 
-    &:hover {
-      background-color: color.scale(
-        variables.$dark-background-color,
-        $lightness: 5%
-      );
+    .admin--info--container {
+      background-color: transparent;
+      border: none;
+
+      .admin--info__icon {
+        color: variables.$page-bg-color;
+        transition: 0.2s;
+
+        &:hover {
+          color: color.scale(variables.$page-bg-color, $lightness: 20%);
+        }
+      }
+    }
+
+    .admin--info__list {
+      @include mixins.border(1px, solid, #fff);
+      border-radius: 4px;
+      position: absolute;
+      top: 40px;
+      right: 0;
+      @include mixins.flex-layout-column(space-between, center);
+      background-color: variables.$dark-background-color;
+      padding: 3px 10px 10px;
+      min-width: 100%;
+      width: auto;
+      white-space: nowrap;
+
+      .admin--info__item {
+        @include mixins.border(0, none, transparent);
+        border-bottom: 1px solid black;
+        padding: 3px;
+        width: 100%;
+
+        .link--item {
+          @include mixins.color-scheme(
+            transparent,
+            variables.$light-link-color
+          );
+          border: none;
+          @include mixins.font-size(16px);
+          min-width: auto;
+
+          &:hover {
+            @include mixins.text-color(variables.$dark-link-color);
+          }
+        }
+      }
     }
   }
 }
@@ -161,17 +196,15 @@
       }
     }
 
-    .btn--signout {
-      @include mixins.color-scheme(
-        variables.$light-background-color,
-        variables.$dark-background-color
-      );
+    .admin--info {
+      .admin--info--container {
+        .admin--info__icon {
+          color: variables.$page-text-color;
 
-      &:hover {
-        background-color: color.scale(
-          variables.$light-background-color,
-          $lightness: -3%
-        );
+          &:hover {
+            color: color.scale(variables.$page-text-color, $lightness: -10%);
+          }
+        }
       }
     }
   }

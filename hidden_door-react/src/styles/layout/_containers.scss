@@ -71,3 +71,7 @@
     }
   }
 }
+
+.admin--info--container {
+  @include mixins.flex-layout-row(center, center);
+}
