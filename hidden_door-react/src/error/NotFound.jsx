@@ -1,7 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "@components/common/layout/Nav";
 
-// FIXME: css 추가
 const NotFound = () => {
   const navigate = useNavigate();
 
