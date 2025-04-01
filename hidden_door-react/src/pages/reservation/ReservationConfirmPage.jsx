@@ -115,20 +115,34 @@ const ReservationConfirmPage = () => {
   return (
     <div className="reservation-confirm-page">
       <h1>예약 확인</h1>
+
+      {/* 날짜, 시간, 테마명 */}
       <div className="reservation-details">
-        <p>
-          날짜: {new Date(reservation.reservationDate).toLocaleDateString()}
-        </p>
-        <p>시간: {reservation.reservationTime}</p>
-        <p>테마: {selectedThemeDetails?.themeName}</p>
+        <div className="form-group">
+          <label htmlFor="reservationDate">날짜:</label>
+          <div id="reservationDate">
+            {new Date(reservation.reservationDate).toLocaleDateString()}
+          </div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="reservationTime">시간:</label>
+          <div id="reservationTime">{reservation.reservationTime}</div>
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="themeName">테마명:</label>
+          <div id="themeName">{selectedThemeDetails?.themeName}</div>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* 입력 필드들 - CustomerAddPage 스타일 */}
+        {/* 성함 */}
         <div className="form-group">
-          <label>성함:</label>
+          <label htmlFor="name">성함:</label>
           <input
             type="text"
+            id="name"
             name="name"
             value={reservation.name}
             onChange={handleInputChange}
@@ -137,10 +151,12 @@ const ReservationConfirmPage = () => {
           />
         </div>
 
+        {/* 이메일 */}
         <div className="form-group">
-          <label>이메일:</label>
+          <label htmlFor="email">이메일:</label>
           <input
             type="email"
+            id="email"
             name="email"
             value={reservation.email}
             onChange={handleInputChange}
@@ -149,10 +165,12 @@ const ReservationConfirmPage = () => {
           />
         </div>
 
+        {/* 휴대폰 */}
         <div className="form-group">
-          <label>휴대폰:</label>
+          <label htmlFor="phone">휴대폰:</label>
           <input
             type="tel"
+            id="phone"
             name="phone"
             value={reservation.phone}
             onChange={handleInputChange}
@@ -161,11 +179,12 @@ const ReservationConfirmPage = () => {
           />
         </div>
 
-        {/* 인원 수 선택 */}
+        {/* 인원 수 */}
         {selectedThemeDetails && (
           <div className="form-group">
-            <label>인원 수:</label>
+            <label htmlFor="partySize">인원 수:</label>
             <select
+              id="partySize"
               name="partySize"
               value={reservation.partySize}
               onChange={handleInputChange}
@@ -187,33 +206,16 @@ const ReservationConfirmPage = () => {
           </div>
         )}
 
+        {/* 총 가격 */}
         <div className="form-group">
-          <p>총 가격: {reservation.paymentAmount.toLocaleString()}원</p>
+          <p>총 가격 : {reservation.paymentAmount.toLocaleString()}원</p>
         </div>
 
-        {/* 숨겨진 필드들 */}
-        <input
-          type="hidden"
-          name="availability"
-          value={reservation.availability}
-        />
-        <input
-          type="hidden"
-          name="paymentState"
-          value={reservation.paymentState}
-        />
-        <input
-          type="hidden"
-          name="paymentMethod"
-          value={reservation.paymentMethod}
-        />
-        <input
-          type="hidden"
-          name="refundState"
-          value={reservation.refundState}
-        />
+        {/* 예약 완료 버튼 */}
 
-        <button type="submit">예약 완료</button>
+        <button type="submit" className="submit-button">
+          예약 완료
+        </button>
       </form>
     </div>
   );
