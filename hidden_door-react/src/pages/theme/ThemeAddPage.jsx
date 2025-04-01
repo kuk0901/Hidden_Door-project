@@ -147,12 +147,13 @@ const ThemeAddPage = () => {
     <div className="themeForm-container">
       {/* 미리보기 컨테이너 */}
       <div className="preview-container text-center">
-        {previewImage && (
-          <img
-            src={previewImage}
-            alt="미리보기"
-            style={{ maxWidth: "400px", maxHeight: "450px" }}
-          />
+        <div className="label-container">
+          <label htmlFor="">이미지 미리보기</label>
+        </div>
+        {previewImage ? (
+          <img src={previewImage} alt="미리보기" className="preview-img" />
+        ) : (
+          <div className="preview-img">선택한 이미지를 볼 수 있습니다.</div>
         )}
       </div>
 
