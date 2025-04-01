@@ -49,12 +49,8 @@
 }
 
 // login-form
-// FIXME: 반응형 코드 수정
 .login-form-container {
   border: 1px solid;
-  @media (max-width: variables.$breakpoint-lg) {
-    margin-top: 30px;
-  }
 }
 
 // theme-form

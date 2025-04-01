@@ -1,0 +1,40 @@
+@use "../abstracts//mixins";
+
+.login {
+  margin-top: 50px;
+
+  .login-section {
+    .login-img-container {
+      @include mixins.lg-mode {
+        display: none;
+      }
+    }
+
+    .login-form-container {
+      .form-container {
+        .container {
+          @include mixins.sm-mode {
+            .input-container {
+              width: 250px;
+              .input {
+                width: 220px;
+              }
+            }
+          }
+        }
+
+        @include mixins.xs-mode {
+          .container {
+            flex-direction: column;
+            align-items: baseline;
+
+            .label-container {
+              text-align: left;
+              font-weight: 700;
+            }
+          }
+        }
+      }
+    }
+  }
+}
