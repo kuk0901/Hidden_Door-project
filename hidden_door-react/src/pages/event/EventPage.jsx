@@ -1,10 +1,10 @@
-import { useState, useEffect } from "react";
-import { useAdmin } from "@hooks/useAdmin";
-import Api from "@axios/api";
-import { toast } from "react-toastify";
-import AddEventModal from "./AddEventModal";
-import EditEventModal from "./EditEventModal";
-import { formatKoreanDate } from "../../utils/format/date";
+import { useState, useEffect } from 'react';
+import { useAdmin } from '@hooks/useAdmin';
+import Api from '@axios/api';
+import { toast } from 'react-toastify';
+import AddEventModal from './AddEventModal';
+import EditEventModal from './EditEventModal';
+import { formatKoreanDate } from '../../utils/format/date';
 
 function EventPage() {
   const { admin } = useAdmin();
@@ -21,21 +21,21 @@ function EventPage() {
 
   const fetchEvents = () => {
     setLoading(true);
-    Api.get("/events")
+    Api.get('/events')
       .then((response) => {
         if (response.data && response.data.data) {
           if (response.data.data.length === 0) {
-            toast.info("등록된 이벤트가 없습니다.");
+            toast.info('등록된 이벤트가 없습니다.');
           }
           setEvents(response.data.data);
         } else {
           setEvents([]);
-          toast.info("등록된 이벤트가 없습니다.");
+          toast.info('등록된 이벤트가 없습니다.');
         }
       })
       .catch((error) => {
-        console.error("Error fetching events:", error);
-        toast.error("이벤트를 불러오는 데 실패했습니다.");
+        console.error('Error fetching events:', error);
+        toast.error('이벤트를 불러오는 데 실패했습니다.');
         setEvents([]);
       })
       .finally(() => {
@@ -64,34 +64,33 @@ function EventPage() {
     setEvents([...events, newEvent]);
   };
 
-  // XXX: 메서드 체이닝 형식 말고 async-await 문법으로 변경해 주세요.
-  const deleteEvent = (eventId) => {
+  const deleteEvent = async (eventId) => {
     if (!admin) return;
 
-    Api.delete(`/events/${eventId}`)
-      .then((response) => {
-        if (
-          response.data &&
-          (response.data.message || response.data.data !== undefined)
-        ) {
-          setEvents(events.filter((event) => event.id !== eventId));
-          if (selectedEvent && selectedEvent.id === eventId) {
-            closeModal();
-          }
-          toast.success(
-            response.data.message || "이벤트가 성공적으로 삭제되었습니다."
-          );
+    try {
+      const response = await Api.delete(`/events/${eventId}`);
+
+      if (
+        response.data &&
+        (response.data.message || response.data.data !== undefined)
+      ) {
+        setEvents(events.filter((event) => event.id !== eventId));
+        if (selectedEvent && selectedEvent.id === eventId) {
           closeModal();
-          fetchEvents();
-        } else {
-          toast.error("삭제 응답이 올바르지 않습니다.");
         }
-      })
-      .catch((error) => {
-        toast.error(
-          error.response?.data?.message || "이벤트 삭제에 실패했습니다."
+        toast.success(
+          response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
         );
-      });
+        closeModal();
+        fetchEvents();
+      } else {
+        toast.error('삭제 응답이 올바르지 않습니다.');
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
+      );
+    }
   };
 
   const openEditModal = (event) => {
@@ -104,41 +103,46 @@ function EventPage() {
     setEditingEvent(null);
   };
 
-  const handleEventEdited = (editedEvent) => {
-    Api.put(`/events/${editedEvent.eventId}`, editedEvent)
-      .then((response) => {
-        if (response.data && response.data.data) {
-          setEvents(
-            events.map((event) =>
-              event.id === editedEvent.eventId ? response.data.data : event
-            )
-          );
-          closeEditModal();
-          if (selectedEvent && selectedEvent.eventId === editedEvent.eventId) {
-            setSelectedEvent(response.data.data);
-          }
-          toast.success(response.data.message || "이벤트가 수정되었습니다.");
-        } else {
-          toast.error("수정 응답이 올바르지 않습니다.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error editing event:", error);
-        toast.error(
-          error.response?.data?.message || "이벤트 수정에 실패했습니다."
+  const handleEventEdited = async (editedEvent) => {
+    try {
+      const response = await Api.put(
+        `/events/${editedEvent.eventId}`,
+        editedEvent
+      );
+
+      if (response.data && response.data.data) {
+        setEvents(
+          events.map((event) =>
+            event.id === editedEvent.eventId ? response.data.data : event
+          )
         );
-      });
+        closeEditModal();
+
+        if (selectedEvent && selectedEvent.eventId === editedEvent.eventId) {
+          setSelectedEvent(response.data.data);
+        }
+
+        toast.success(response.data.message || '이벤트가 수정되었습니다.');
+      } else {
+        toast.error('수정 응답이 올바르지 않습니다.');
+      }
+    } catch (error) {
+      console.error('Error editing event:', error);
+      toast.error(
+        error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+      );
+    }
   };
 
   const formatEventDate = (date) => {
-    if (!date) return "";
+    if (!date) return '';
     return formatKoreanDate(date);
   };
 
   const renderEventPeriod = (event) => {
-    if (event.isOngoing === "true") {
-      return "상시";
-    } else if (event.noEndDate === "true") {
+    if (event.isOngoing === 'true') {
+      return '상시';
+    } else if (event.noEndDate === 'true') {
       return `${formatEventDate(event.startDate)} ~`;
     } else {
       return `${formatEventDate(event.startDate)} ~ ${formatEventDate(
