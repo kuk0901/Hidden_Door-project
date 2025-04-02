@@ -116,7 +116,6 @@ const ReservationConfirmPage = () => {
     <div className="reservation-confirm-page">
       <h1>예약 확인</h1>
 
-      {/* 날짜, 시간, 테마명 */}
       <div className="reservation-details">
         <div className="form-group">
           <label htmlFor="reservationDate">날짜:</label>
@@ -137,85 +136,80 @@ const ReservationConfirmPage = () => {
       </div>
 
       <form onSubmit={handleSubmit}>
-        {/* 성함 */}
-        <div className="form-group">
-          <label htmlFor="name">성함:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={reservation.name}
-            onChange={handleInputChange}
-            placeholder="성함을 입력해주세요"
-            required
-          />
-        </div>
-
-        {/* 이메일 */}
-        <div className="form-group">
-          <label htmlFor="email">이메일:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={reservation.email}
-            onChange={handleInputChange}
-            placeholder="이메일을 입력해주세요"
-            required
-          />
-        </div>
-
-        {/* 휴대폰 */}
-        <div className="form-group">
-          <label htmlFor="phone">휴대폰:</label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={reservation.phone}
-            onChange={handleInputChange}
-            placeholder="휴대폰 번호를 입력해주세요"
-            required
-          />
-        </div>
-
-        {/* 인원 수 */}
-        {selectedThemeDetails && (
+        <div className="reservation-details">
           <div className="form-group">
-            <label htmlFor="partySize">인원 수:</label>
-            <select
-              id="partySize"
-              name="partySize"
-              value={reservation.partySize}
+            <label htmlFor="name">성함:</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={reservation.name}
               onChange={handleInputChange}
-            >
-              {Array.from(
-                {
-                  length:
-                    selectedThemeDetails.maxParticipants -
-                    selectedThemeDetails.minParticipants +
-                    1,
-                },
-                (_, i) => i + selectedThemeDetails.minParticipants
-              ).map((num) => (
-                <option key={num} value={num}>
-                  {num}명
-                </option>
-              ))}
-            </select>
+              placeholder="성함을 입력해주세요"
+              required
+            />
           </div>
-        )}
 
-        {/* 총 가격 */}
-        <div className="form-group">
-          <p>총 가격 : {reservation.paymentAmount.toLocaleString()}원</p>
+          <div className="form-group">
+            <label htmlFor="email">이메일:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={reservation.email}
+              onChange={handleInputChange}
+              placeholder="이메일을 입력해주세요"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="phone">휴대폰:</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={reservation.phone}
+              onChange={handleInputChange}
+              placeholder="휴대폰 번호를 입력해주세요"
+              required
+            />
+          </div>
+
+          {selectedThemeDetails && (
+            <div className="form-group">
+              <label htmlFor="partySize">인원 수:</label>
+              <select
+                id="partySize"
+                name="partySize"
+                value={reservation.partySize}
+                onChange={handleInputChange}
+              >
+                {Array.from(
+                  {
+                    length:
+                      selectedThemeDetails.maxParticipants -
+                      selectedThemeDetails.minParticipants +
+                      1,
+                  },
+                  (_, i) => i + selectedThemeDetails.minParticipants
+                ).map((num) => (
+                  <option key={num} value={num}>
+                    {num}명
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="form-group">
+            <p>총 가격 : {reservation.paymentAmount.toLocaleString()}원</p>
+          </div>
+
+          <button type="submit" className="submit-button">
+            예약 완료
+          </button>
         </div>
-
-        {/* 예약 완료 버튼 */}
-
-        <button type="submit" className="submit-button">
-          예약 완료
-        </button>
       </form>
     </div>
   );
