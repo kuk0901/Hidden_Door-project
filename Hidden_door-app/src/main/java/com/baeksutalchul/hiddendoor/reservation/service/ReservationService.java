@@ -66,9 +66,8 @@ public class ReservationService {
           reservationDto.setRefundState(reservation.getRefundState());
           reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
           reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
-          logger.info("getPaymentDate: {}", reservation.getPaymentDate());
           reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
-          logger.info("kstPayDate: {}", reservationDto.getKstPayDate());
+          reservationDto.setReservationNumber(reservation.getReservationNumber());
 
           return reservationDto;
         })
@@ -176,25 +175,21 @@ public class ReservationService {
     reservation.setReservationNumber(RandomString.getRandomShortString());
 
     Reservation saved = reservationRepository.save(reservation);
-    // 예약 완료된 후에 이메일로 예약번호 전송
+
     ReservationDto responseDto = modelMapper.map(saved, ReservationDto.class);
 
     return new ResponseDto<>(responseDto, "예약이 성공적으로 생성되었습니다.");
   }
 
-  // 날짜와 시간을 결합하는 헬퍼 메서드
   private Instant combineDateTime(String dateStr, String timeStr) {
     try {
-        // 날짜 파싱 (yyyy-MM-dd 형식 가정)
+
         LocalDate date = LocalDate.parse(dateStr.split("T")[0]);
 
-        // 시간 파싱 (HH:mm 형식 가정)
         LocalTime time = LocalTime.parse(timeStr, DateTimeFormatter.ofPattern("HH:mm"));
 
-        // 날짜와 시간 결합
         LocalDateTime dateTime = LocalDateTime.of(date, time);
 
-        // UTC 기준으로 Instant 변환 (시간대 정보 없음)
         return dateTime.toInstant(ZoneOffset.UTC);
     } catch (DateTimeParseException e) {
         throw new IllegalArgumentException("Invalid date or time format", e);
@@ -207,7 +202,6 @@ public class ReservationService {
 
     ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
 
-    // Instant를 String으로 변환
     reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
     reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationCreDate()));
     if (reservation.getPaymentDate() != null) {

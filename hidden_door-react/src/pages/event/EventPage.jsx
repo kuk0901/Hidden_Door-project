@@ -80,6 +80,8 @@ function EventPage() {
           toast.success(
             response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
           );
+          closeModal();
+          fetchEvents();
         } else {
           toast.error('삭제 응답이 올바르지 않습니다.');
         }

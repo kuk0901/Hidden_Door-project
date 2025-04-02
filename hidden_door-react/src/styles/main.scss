@@ -26,6 +26,7 @@
 @use "components/location";
 @use "components/account";
 @use "components/pagination";
+@use "components/login";
 
 // layout
 @use "layout/containers";
@@ -36,6 +37,8 @@
 @use "layout/header";
 @use "layout/slide";
 @use "layout/page";
+@use "layout/error";
+@use "layout/skeleton";
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -43,7 +46,10 @@
   @include mixins.font-weight(400);
 
   color-scheme: light dark;
-  @include mixins.color-scheme(variables.$light-background-color, variables.$light-text-color);
+  @include mixins.color-scheme(
+    variables.$light-background-color,
+    variables.$light-text-color
+  );
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -90,7 +96,10 @@ a {
   }
 
   header {
-    @include mixins.color-scheme(variables.$dark-background-color, variables.$dark-text-color);
+    @include mixins.color-scheme(
+      variables.$dark-background-color,
+      variables.$dark-text-color
+    );
   }
 
   .footer {
@@ -101,14 +110,20 @@ a {
     }
 
     .link-item {
-      @include mixins.text-color-hover(variables.$light-link-color, variables.$dark-link-color);
+      @include mixins.text-color-hover(
+        variables.$light-link-color,
+        variables.$dark-link-color
+      );
     }
   }
 }
 
 @include mixins.dark-mode {
   :root {
-    @include mixins.color-scheme(variables.$dark-background-color, variables.$dark-text-color);
+    @include mixins.color-scheme(
+      variables.$dark-background-color,
+      variables.$dark-text-color
+    );
   }
 
   a:hover {
@@ -134,7 +149,10 @@ a {
     }
 
     .link-item {
-      @include mixins.text-color-hover(variables.$dark-link-color, variables.$light-link-color);
+      @include mixins.text-color-hover(
+        variables.$dark-link-color,
+        variables.$light-link-color
+      );
     }
   }
 }

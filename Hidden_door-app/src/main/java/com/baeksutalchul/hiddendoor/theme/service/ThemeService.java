@@ -34,7 +34,7 @@ public class ThemeService {
     this.modelMapper = modelMapper;
   }
 
-  public ResponseDto<List<ThemeDto>> getAllTheme() {
+  public ResponseDto<List<ThemeDto>> findAllTheme() {
     List<Theme> themeList = themeRepository.findAll();
 
     if (themeList.isEmpty()) {
@@ -48,13 +48,27 @@ public class ThemeService {
     return new ResponseDto<>(themeDtoList, "success");
   }
 
-  public ResponseDto<Theme> getThemeById(String id) {
+  public ResponseDto<ThemeDto> getThemeById(String id) {
     Theme theme = themeRepository.findById(id).orElseThrow(() -> new CustomException(ErrorCode.THEME_NOT_FOUND));
-    return new ResponseDto<>(theme, "success");
+    ThemeDto themeDto = modelMapper.map(theme, ThemeDto.class);
+    return new ResponseDto<>(themeDto, "success");
   }
 
+  public ResponseDto<List<ThemeDto>> findAllThemesSummary() {
+    List<Theme> themeList = themeRepository.findAllThemesSummary();
+
+    if (themeList.isEmpty()) {
+      throw new CustomException(ErrorCode.THEME_NOT_FOUND);
+    }
+
+    List<ThemeDto> themeDtoList = themeList.stream().map(theme -> modelMapper.map(theme, ThemeDto.class)).toList();
+
+    return new ResponseDto<>(themeDtoList, "요약된 테마 정보입니다.");
+  }
+
+  // FIXME: themeId 반환
   @Transactional
-  public ResponseDto<List<ThemeDto>> addThemeWithFile(ThemeDto themeDto, MultipartFile file) {
+  public ResponseDto<String> addThemeWithFile(ThemeDto themeDto, MultipartFile file) {
 
     if (file != null && !file.isEmpty()) {
       themeDto.setOriginalFileName(file.getOriginalFilename());
@@ -79,23 +93,21 @@ public class ThemeService {
     }
 
     try {
-      String storedFileName = fileUtils.saveFile(file);
-      themeDto.setStoredFileName(storedFileName);
+      String storeFileName = fileUtils.saveFile(file);
+      themeDto.setStoredFileName(storeFileName);
     } catch (IOException e) {
       throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
     }
 
-    Theme savedTheme = modelMapper.map(themeDto, Theme.class);
-    themeRepository.save(savedTheme);
+    Theme saveTheme = modelMapper.map(themeDto, Theme.class);
 
-    ResponseDto<List<ThemeDto>> themeList = getAllTheme();
-    themeList.setMsg("작성하신 테마 정보가 추가되었습니다.");
+    Theme savedTheme = themeRepository.save(saveTheme);
 
-    return themeList;
+    return new ResponseDto<>(savedTheme.getThemeId(), savedTheme.getThemeName() + " 테마가 추가되었습니다.");
   }
 
   @Transactional
-  public ResponseDto<List<ThemeDto>> updateThemeWithFile(String id, ThemeDto themeDto, MultipartFile file) {
+  public ResponseDto<ThemeDto> updateThemeWithFile(String id, ThemeDto themeDto, MultipartFile file) {
     Theme theme = themeRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.THEME_NOT_FOUND));
 
@@ -107,12 +119,11 @@ public class ThemeService {
     checkDuplicateThemeNameAndDescription(theme, themeDto);
 
     modelMapper.map(themeDto, theme);
-    themeRepository.save(theme);
 
-    ResponseDto<List<ThemeDto>> themeList = getAllTheme();
-    themeList.setMsg("작성하신 테마 정보가 업데이트되었습니다.");
+    Theme updateTheme = themeRepository.save(theme);
+    ThemeDto updateThemeDto = modelMapper.map(updateTheme, ThemeDto.class);
 
-    return themeList;
+    return new ResponseDto<>(updateThemeDto, "작성하신 테마 정보가 업데이트되었습니다.");
   }
 
   private void handleFileUpload(Theme theme, ThemeDto themeDto, MultipartFile file, String existingStoredFileName) {
@@ -166,7 +177,7 @@ public class ThemeService {
   }
 
   @Transactional
-  public ResponseDto<List<ThemeDto>> deleteThemeOne(String themeId) {
+  public ResponseDto<String> deleteThemeOne(String themeId) {
     Theme theme = themeRepository.findById(themeId)
         .orElseThrow(() -> new CustomException(ErrorCode.THEME_NOT_FOUND));
 
@@ -185,10 +196,18 @@ public class ThemeService {
       throw new CustomException(ErrorCode.DELETE_FAILED);
     }
 
-    ResponseDto<List<ThemeDto>> responseDto = getAllTheme();
-    responseDto.setMsg("해당 테마가 삭제되었습니다.");
-
-    return responseDto;
+    return new ResponseDto<>("", "해당 테마가 삭제되었습니다.");
   }
 
+  public ResponseDto<List<ThemeDto>> findAllThemesWithPriceInfo() {
+    List<Theme> themeList = themeRepository.findAllThemesWithPriceInfo();
+
+    if (themeList.isEmpty()) {
+      throw new CustomException(ErrorCode.THEME_NOT_FOUND);
+    }
+
+    List<ThemeDto> themeDtoList = themeList.stream().map(theme -> modelMapper.map(theme, ThemeDto.class)).toList();
+
+    return new ResponseDto<>(themeDtoList, "success");
+  }
 }

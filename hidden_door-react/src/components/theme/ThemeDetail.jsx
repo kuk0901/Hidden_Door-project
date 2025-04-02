@@ -7,12 +7,11 @@ import { toast } from "react-toastify";
 import { validateThemeField } from "@validation/validationRules";
 import { themeFields, initialGenreList } from "@utils/fields/themeFields";
 import { formatNumberToPrice } from "@utils/format/number";
-import { useThemeList } from "@hooks/useThemeList";
 import DeleteThemeButton from "@components/theme/DeleteThemeButton";
 import useConfirm from "@hooks/useConfirm";
 import { useAdmin } from "@hooks/useAdmin";
 
-const ThemeDetail = ({ theme }) => {
+const ThemeDetail = ({ theme, setTheme }) => {
   const [themeEditVisible, setThemeEditVisible] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
   const [genreList, setGenreList] = useState(
@@ -23,7 +22,6 @@ const ThemeDetail = ({ theme }) => {
   );
   const [errors, setErrors] = useState({});
   const [genreError, setGenreError] = useState("");
-  const { setThemeList } = useThemeList();
 
   const [formData, setFormData] = useState({
     file: null,
@@ -143,16 +141,11 @@ const ThemeDetail = ({ theme }) => {
     }
 
     try {
-      // API 호출 로직
-      const res = await Api.put(
-        `/themes/theme/update/${theme.themeId}`,
-        submitData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data"
-          }
+      const res = await Api.put(`/themes/theme/${theme.themeId}`, submitData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
         }
-      );
+      });
 
       if (res.status !== 200) {
         toast.error(
@@ -161,7 +154,7 @@ const ThemeDetail = ({ theme }) => {
         return;
       }
 
-      setThemeList(res.data.data);
+      setTheme(res.data.data);
       setThemeEditVisible(false);
       toast.success(res.data.msg);
     } catch (error) {

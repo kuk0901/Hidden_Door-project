@@ -2,10 +2,31 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ThemeSlide from "@components/home/ThemeSlide";
-import { useThemeList } from "@hooks/useThemeList";
+import { toast } from "react-toastify";
+import { useEffect, useState } from "react";
+import Api from "@axios/api";
 
 const HomeThemeSection = () => {
-  const { themeList } = useThemeList();
+  const [themeList, setThemeList] = useState([]);
+
+  const getSummeryThemeList = async () => {
+    try {
+      const res = await Api.get("/themes/summary");
+
+      if (res.status !== 200) {
+        toast.error(
+          "테마 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
+        );
+      }
+
+      setThemeList(res.data.data);
+    } catch (error) {
+      toast.error(
+        error.message ??
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
+    }
+  };
 
   const settings = {
     dots: true,
@@ -33,6 +54,10 @@ const HomeThemeSection = () => {
       }
     ]
   };
+
+  useEffect(() => {
+    getSummeryThemeList();
+  }, []);
 
   return (
     <section className="theme-slide-section">

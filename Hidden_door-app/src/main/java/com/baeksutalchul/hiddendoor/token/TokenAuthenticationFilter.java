@@ -4,14 +4,12 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 
 import java.io.IOException;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -32,123 +30,135 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
   private final TokenService tokenService;
   private final AdminService adminService;
 
+  private volatile boolean isRefreshing = false;
+  private final Object refreshLock = new Object();
+  private volatile String latestToken = "";
+
   public TokenAuthenticationFilter(TokenService tokenService, AdminRepository adminRepository,
       AdminService adminService) {
     this.tokenService = tokenService;
     this.adminRepository = adminRepository;
     this.adminService = adminService;
-
   }
 
   @Override
   protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
       throws ServletException, IOException {
-    String token = req.getHeader("Authorization");
+    String token = extractToken(req);
 
-    if (token != null && token.startsWith("Bearer ")) {
-      token = token.substring(7);
-      try {
-        token = checkAndRefreshToken(req, res, token);
-        if (requiresAuthentication(req)) {
-          handleAccessToken(req, res, filterChain, token);
-        } else {
-          filterChain.doFilter(req, res);
-        }
-      } catch (ExpiredJwtException e) {
-        handleExpiredAccessToken(req, res, filterChain);
-      } catch (JwtException e) {
-        sendErrorResponse(res, ErrorCode.UNAUTHORIZED_ACCESS);
-      } catch (Exception e) {
-        sendErrorResponse(res, ErrorCode.INTERNAL_SERVER_ERROR);
-      }
-    } else if (requiresAuthentication(req)) {
-      sendErrorResponse(res, ErrorCode.UNAUTHORIZED_ACCESS);
-    } else {
+    // ExpiredJwtException 에러 이후 요청
+    if ("true".equals(req.getHeader("X-Refresh-Token"))) {
       filterChain.doFilter(req, res);
-    }
-  }
-
-  private String checkAndRefreshToken(HttpServletRequest req, HttpServletResponse res, String token) throws Exception {
-    if (tokenService.isTokenNearExpiration(token)) {
-      String refreshToken = getRefreshTokenFromCookie(req);
-      if (refreshToken != null && tokenService.validateRefreshToken(refreshToken)) {
-        String newToken = adminService.refreshAccessToken(refreshToken);
-        res.setHeader("New-Access", newToken);
-        return newToken;
-      }
-    }
-    return token;
-  }
-
-  private boolean requiresAuthentication(HttpServletRequest request) {
-    String path = request.getRequestURI();
-    return (path.equals("/api/v1/auth/renew") ||
-        path.equals("/api/v1/auth/terminate"));
-  }
-
-  private void handleAccessToken(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain, String token)
-      throws IOException, ServletException {
-    String adminId = tokenService.extractEmail(token);
-
-    if (adminId != null && SecurityContextHolder.getContext().getAuthentication() == null
-        && tokenService.validateToken(token, adminId)) {
-      List<String> roles = tokenService.extractRoles(token);
-      if (hasRequiredAuthority(req, roles)) {
-        setAuthentication(req, token);
-        filterChain.doFilter(req, res);
-      } else {
-        sendErrorResponse(res, ErrorCode.ACCESS_DENIED);
-      }
-    } else {
-      sendErrorResponse(res, ErrorCode.UNAUTHORIZED_ACCESS);
-    }
-  }
-
-  private boolean hasRequiredAuthority(HttpServletRequest request, List<String> userRoles) {
-    String path = request.getRequestURI();
-
-    if (path.startsWith("/api/v1/admins/")) {
-      return userRoles.contains("ROLE_ADMIN") || userRoles.contains("ROLE_SUPER_ADMIN");
-    }
-
-    if (path.equals("/api/v1/auth/register") || path.startsWith("/api/v1/admins/account/delete/one") ||
-        path.startsWith("/api/v1/super-admin/")) {
-      return userRoles.contains("ROLE_SUPER_ADMIN");
-    }
-
-    return true;
-  }
-
-  private void handleExpiredAccessToken(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain)
-      throws IOException, ServletException {
-    String refreshToken = getRefreshTokenFromCookie(req);
-
-    if (refreshToken == null || !tokenService.validateRefreshToken(refreshToken)) {
-      sendErrorResponse(res, ErrorCode.REFRESH_TOKEN_EXPIRED);
       return;
     }
 
-    String newAccessToken = adminService.refreshAccessToken(refreshToken);
-    res.setHeader("New-Access", newAccessToken);
+    if (token != null) {
+      try {
+        // 토큰 만료 임박인 경우
+        token = checkAndRefreshToken(req, res, token);
 
-    setAuthentication(req, newAccessToken);
+        String adminId = tokenService.extractEmail(token);
+
+        // 토큰 검증 및 인증 정보 설정
+        if (tokenService.validateToken(token, adminId)) {
+          List<String> roles = tokenService.extractRoles(token);
+
+          setAuthentication(adminId, roles); // 인증 정보 설정
+        }
+
+      } catch (ExpiredJwtException e) {
+        // 토큰이 만료된 경우
+        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        res.setHeader("Token-Expired", "true");
+        sendErrorResponse(res, ErrorCode.ACCESS_TOKEN_EXPIRED);
+        return;
+      } catch (JwtException e) {
+        sendErrorResponse(res, ErrorCode.UNAUTHORIZED_ACCESS);
+        return;
+      } catch (Exception e) {
+        sendErrorResponse(res, ErrorCode.INTERNAL_SERVER_ERROR);
+        return;
+      }
+    }
+
     filterChain.doFilter(req, res);
   }
 
-  private void setAuthentication(HttpServletRequest req, String token) {
-    String adminId = tokenService.extractEmail(token);
-    List<String> roles = tokenService.extractRoles(token);
+  private void setAuthentication(String adminId, List<String> roles) {
+    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(adminId, null,
+        roles.stream()
+            .map(role -> new SimpleGrantedAuthority(role))
+            .toList());
 
-    List<GrantedAuthority> authorities = roles.stream()
-        .map(SimpleGrantedAuthority::new)
-        .collect(Collectors.toList());
-
-    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-        adminId, null, authorities);
-    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
     SecurityContextHolder.getContext().setAuthentication(authentication);
   }
 
+  /**
+   * HTTP 요청의 Authorization 헤더에서 Bearer 토큰 추출
+   *
+   * @param request HTTP 요청 객체
+   * @return 추출된 토큰 문자열, 없으면 null
+   */
+  private String extractToken(HttpServletRequest request) {
+    String bearerToken = request.getHeader("Authorization");
+    if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+      return bearerToken.substring(7);
+    }
+    return null;
+  }
+
+  /**
+   * 토큰의 만료가 임박했는지 확인하고, 필요시 갱신
+   *
+   * @param req   HTTP 요청 객체
+   * @param res   HTTP 응답 객체
+   * @param token 현재 토큰
+   * @return 갱신된 토큰 또는 기존 토큰
+   * @throws Exception 토큰 갱신 중 발생할 수 있는 예외
+   */
+
+  private String checkAndRefreshToken(HttpServletRequest req, HttpServletResponse res, String token) throws Exception {
+    if (tokenService.isTokenNearExpiration(token)) {
+      synchronized (refreshLock) {
+        if (isRefreshing) {
+          while (isRefreshing) {
+            refreshLock.wait(100);
+          }
+          return latestToken.isEmpty() ? token : latestToken; // 이미 갱신 중이면 최신 토큰 반환
+        }
+        isRefreshing = true;
+      }
+
+      try {
+        String refreshToken = getRefreshTokenFromCookie(req);
+        if (refreshToken != null && tokenService.validateRefreshToken(refreshToken)) {
+          String adminId = tokenService.extractEmail(token);
+          List<String> roles = tokenService.extractRoles(token);
+          String newToken = tokenService.generateToken(adminId, roles);
+
+          res.setHeader("Authorization", "Bearer " + newToken);
+          res.setHeader("Token-Refreshed", "true");
+
+          latestToken = newToken; // 최신 토큰 저장
+          return newToken; // 갱신된 토큰 반환
+        }
+      } finally {
+        synchronized (refreshLock) {
+          isRefreshing = false; // 갱신 완료 후 플래그 초기화
+          latestToken = ""; // 사용 후 초기화
+          refreshLock.notifyAll(); // 대기 중인 스레드 깨우기
+        }
+      }
+    }
+    return token; // 기존 토큰 반환
+  }
+
+  /**
+   * HTTP 요청의 쿠키에서 리프레시 토큰을 추출
+   *
+   * @param request HTTP 요청 객체
+   * @return 추출된 리프레시 토큰, 없으면 null
+   */
   private String getRefreshTokenFromCookie(HttpServletRequest request) {
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
@@ -161,17 +171,18 @@ public class TokenAuthenticationFilter extends OncePerRequestFilter {
     return null;
   }
 
+  /**
+   * 에러 응답을 클라이언트에게 전송
+   *
+   * @param res       HTTP 응답 객체
+   * @param errorCode 에러 코드 enum
+   * @throws IOException 입출력 예외
+   */
   private void sendErrorResponse(HttpServletResponse res, ErrorCode errorCode) throws IOException {
     res.setStatus(errorCode.getHttpStatus().value());
     res.setCharacterEncoding("UTF-8");
-
-    String jsonResponse = String.format(
+    res.getWriter().write(String.format(
         "{\"error\":\"%s\",\"code\":\"%s\",\"message\":\"%s\",\"status\":%d}",
-        errorCode.name(),
-        errorCode.getCode(),
-        errorCode.getMsg(),
-        errorCode.getHttpStatus().value());
-
-    res.getWriter().write(jsonResponse);
+        errorCode.name(), errorCode.getCode(), errorCode.getMsg(), errorCode.getHttpStatus().value()));
   }
 }

@@ -1,0 +1,36 @@
+@use "../abstracts/mixins";
+
+.error-page {
+  margin: 10px;
+  padding: 10px;
+
+  .status-code {
+    font-size: 40px;
+  }
+
+  .error-msg {
+    font-size: 25px;
+  }
+
+  .btn-container {
+    justify-content: flex-start;
+    margin: 0;
+  }
+
+  @include mixins.sm-mode {
+    .status-code {
+      font-size: 30px;
+    }
+
+    .error-msg {
+      font-size: 18px;
+    }
+
+    .btn-container {
+      .btn {
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+    }
+  }
+}

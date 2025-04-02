@@ -3,14 +3,18 @@ import * as FaIcons from "react-icons/fa";
 import Button from "@components/common/buttons/Button";
 import Api from "@axios/api";
 import useConfirm from "@hooks/useConfirm";
+import { useCautionList } from "@hooks/useCautionList";
 
-const CautionItem = ({ isAdmin, item, handleVisible, setSectionData }) => {
+const CautionItem = ({ isAdmin, item, handleVisible }) => {
+  const { setCautionList } = useCautionList();
   const confirm = useConfirm();
 
   const IconComponent = FaIcons[item.icon];
 
   const formatContent = (content) => {
-    const parts = content.split(/(?=※)/);
+    const regex = /(※.*?\.)/g;
+
+    const parts = content.split(regex);
 
     return parts.map((part, index) => {
       if (part.startsWith("※")) {
@@ -39,7 +43,7 @@ const CautionItem = ({ isAdmin, item, handleVisible, setSectionData }) => {
           return;
         }
 
-        setSectionData(res.data.data);
+        setCautionList(res.data.data);
         toast.success("해당 주의사항이 삭제되었습니다.");
       }
     } catch (error) {

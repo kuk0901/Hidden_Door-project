@@ -22,7 +22,7 @@ const Header = ({ title, subtitle, text, handleUpdate, reservation }) => {
             />
           ) : null}
           {reservation ? (
-            <Link to="hidden_door/reservation" className="btn header--btn">
+            <Link to="/hidden_door/reservation" className="btn header--btn">
               예약하기
             </Link>
           ) : null}

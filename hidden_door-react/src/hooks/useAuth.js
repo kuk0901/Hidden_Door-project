@@ -23,9 +23,27 @@ export function useAuth() {
       setIsAuthenticated(true);
     } catch (error) {
       console.error("Authentication error:", error);
+      if (error.response && error.response.status === 401) {
+        console.error("Authentication error 1:", error);
+        try {
+          // 토큰 갱신 시도
+          const newToken = await tokenManager.refreshToken();
+          if (newToken) {
+            // 갱신된 토큰으로 다시 인증 시도
+            const verifyRes = await Api.get("/auth/verify");
+            setAdmin(verifyRes.data.data);
+            setIsAuthenticated(true);
+            return;
+          }
+        } catch (refreshError) {
+          console.error("Authentication error 2:", error);
+          console.error("Token refresh failed:", refreshError);
+        }
+      }
       setIsAuthenticated(false);
       setAdmin(null);
       tokenManager.removeToken();
+      window.location.href = import.meta.env.VITE_APP_ADMIN_LOGIN_PATH;
     } finally {
       setLoading(false);
     }

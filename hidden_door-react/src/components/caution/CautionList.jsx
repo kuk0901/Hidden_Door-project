@@ -8,8 +8,10 @@ import IconSelector from "@components/common/form/select/IconSelector";
 import Form from "@components/common/form/Form";
 import useConfirm from "@hooks/useConfirm";
 import { validationRules } from "@validation/validationRules";
+import { useCautionList } from "@hooks/useCautionList";
 
-const CautionList = ({ data, setSectionData }) => {
+const CautionList = () => {
+  const { cautionList, setCautionList } = useCautionList();
   const [editingItem, setEditingItem] = useState(null);
   const [selectedIcon, setSelectedIcon] = useState(null);
   const [title, setTitle] = useState("");
@@ -48,7 +50,7 @@ const CautionList = ({ data, setSectionData }) => {
         return;
       }
 
-      setSectionData(res.data.data);
+      setCautionList(res.data.data);
       setIsAdding(false);
       reset();
       setSelectedIcon(null);
@@ -137,7 +139,7 @@ const CautionList = ({ data, setSectionData }) => {
         return;
       }
 
-      setSectionData(res.data.data);
+      setCautionList(res.data.data);
       handleEditCancel();
 
       toast.success("해당 주의사항이 수정되었습니다.");
@@ -166,13 +168,12 @@ const CautionList = ({ data, setSectionData }) => {
       )}
 
       <ul className="caution--list">
-        {data.map((caution) => (
+        {cautionList.map((caution) => (
           <CautionItem
             isAdmin={isAdmin}
             key={caution.cautionId}
             item={caution}
             handleVisible={() => handleEditStart(caution)}
-            setSectionData={setSectionData}
           />
         ))}
       </ul>

@@ -65,6 +65,10 @@ dependencies {
 
 	// OkHttp
 	implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+
+	// google email
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
 }
 
 tasks.named('test') {
@@ -72,5 +76,5 @@ tasks.named('test') {
 }
 
 tasks.withType(JavaCompile) {
-    options.compilerArgs << "-parameters"
+    options.compilerArgs.add("-parameters")
 }
