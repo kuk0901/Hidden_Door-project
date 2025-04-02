@@ -14,6 +14,7 @@ import MiniPriceSection from "@components/price/MiniPriceSection";
 import { useAdmin } from "@hooks/useAdmin";
 import CautionSection from "../../components/caution/CautionSection";
 
+// FIXME: skeleton UI 생성
 const EscapeRoomInfoPage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
 
