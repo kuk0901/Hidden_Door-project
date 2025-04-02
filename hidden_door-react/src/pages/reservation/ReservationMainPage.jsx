@@ -75,7 +75,6 @@ const ReservationMainPage = () => {
     <div className="reservation-page">
       <h1 className="reservation-title">예약하기</h1>
       <form className="reservation-form" onSubmit={(e) => e.preventDefault()}>
-        {/* 예약하기 섹션 */}
         <div className="form-section">
           <ReservationDateSection
             selectedDate={selectedDate}
@@ -94,7 +93,6 @@ const ReservationMainPage = () => {
           />
         </div>
 
-        {/* 예약하기 버튼 */}
         <button
           className="submit-button"
           type="submit"
@@ -112,12 +110,10 @@ const ReservationMainPage = () => {
           예약하기
         </button>
 
-        {/* 예약 확인 버튼 */}
         <button type="button" onClick={() => setIsModalOpen(true)}>
           예약 확인
         </button>
 
-        {/* 모달 */}
         <Modal
           isOpen={isModalOpen}
           onRequestClose={() => setIsModalOpen(false)}
@@ -136,6 +132,7 @@ const ReservationMainPage = () => {
                 value={checkReservationNumber}
                 onChange={(e) => setCheckReservationNumber(e.target.value)}
                 required
+                autoFocus
               />
             </div>
             <div>
@@ -150,12 +147,9 @@ const ReservationMainPage = () => {
               />
             </div>
             <div>
-              {/* 예약 확인 버튼 */}
               <button type="button" onClick={handleCheckReservation}>
                 확인
               </button>
-
-              {/* 닫기 버튼 */}
               <button type="button" onClick={() => setIsModalOpen(false)}>
                 닫기
               </button>
