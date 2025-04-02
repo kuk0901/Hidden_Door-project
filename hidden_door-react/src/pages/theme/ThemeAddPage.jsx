@@ -3,12 +3,10 @@ import FileForm from "@components/common/form/file/FileForm";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { validateThemeField } from "@validation/validationRules";
-import { useThemeList } from "@hooks/useThemeList";
 import { useNavigate } from "react-router-dom";
 import { themeFields, initialGenreList } from "@utils/fields/themeFields";
 import useConfirm from "@hooks/useConfirm";
 
-// FIXME: useThemeList 삭제 예정
 const ThemeAddPage = () => {
   const [genreList, setGenreList] = useState(initialGenreList);
   const [formData, setFormData] = useState({
@@ -26,7 +24,6 @@ const ThemeAddPage = () => {
   const [genreError, setGenreError] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
 
-  const { setThemeList } = useThemeList();
   const navigate = useNavigate();
   const confirm = useConfirm();
 
@@ -130,17 +127,7 @@ const ThemeAddPage = () => {
         return;
       }
 
-      setThemeList(res.data.data);
-
-      const newTheme = res.data.data.find(
-        (theme) => theme.themeName === formData.themeName
-      );
-
-      if (newTheme) {
-        navigate(`/hidden_door/theme/${newTheme.themeId}?register=true`);
-      } else {
-        navigate("/hidden_door/theme?register=false");
-      }
+      navigate(`/hidden_door/theme/${res.data.data}?register=true`);
     } catch (error) {
       toast.error(
         error.message ||
@@ -160,12 +147,13 @@ const ThemeAddPage = () => {
     <div className="themeForm-container">
       {/* 미리보기 컨테이너 */}
       <div className="preview-container text-center">
-        {previewImage && (
-          <img
-            src={previewImage}
-            alt="미리보기"
-            style={{ maxWidth: "400px", maxHeight: "450px" }}
-          />
+        <div className="label-container">
+          <label htmlFor="">이미지 미리보기</label>
+        </div>
+        {previewImage ? (
+          <img src={previewImage} alt="미리보기" className="preview-img" />
+        ) : (
+          <div className="preview-img">선택한 이미지를 볼 수 있습니다.</div>
         )}
       </div>
 

@@ -16,7 +16,7 @@ const LoginPage = () => {
   }, []);
 
   return (
-    <div>
+    <main className="login">
       <h1 className="title italic bold text-center">Hidden_Door 관리자</h1>
       <div className="container login-section">
         <section className="login-img-container">
@@ -27,7 +27,7 @@ const LoginPage = () => {
           <SigninForm />
         </section>
       </div>
-    </div>
+    </main>
   );
 };
 

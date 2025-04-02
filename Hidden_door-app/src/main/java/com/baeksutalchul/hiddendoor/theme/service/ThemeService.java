@@ -66,9 +66,9 @@ public class ThemeService {
     return new ResponseDto<>(themeDtoList, "요약된 테마 정보입니다.");
   }
 
-  // FIXME: client 코드 확인 후 수정 필요한 경우 수정
+  // FIXME: themeId 반환
   @Transactional
-  public ResponseDto<List<ThemeDto>> addThemeWithFile(ThemeDto themeDto, MultipartFile file) {
+  public ResponseDto<String> addThemeWithFile(ThemeDto themeDto, MultipartFile file) {
 
     if (file != null && !file.isEmpty()) {
       themeDto.setOriginalFileName(file.getOriginalFilename());
@@ -93,19 +93,17 @@ public class ThemeService {
     }
 
     try {
-      String storedFileName = fileUtils.saveFile(file);
-      themeDto.setStoredFileName(storedFileName);
+      String storeFileName = fileUtils.saveFile(file);
+      themeDto.setStoredFileName(storeFileName);
     } catch (IOException e) {
       throw new CustomException(ErrorCode.FILE_UPLOAD_FAILED);
     }
 
-    Theme savedTheme = modelMapper.map(themeDto, Theme.class);
-    themeRepository.save(savedTheme);
+    Theme saveTheme = modelMapper.map(themeDto, Theme.class);
 
-    ResponseDto<List<ThemeDto>> themeList = findAllTheme();
-    themeList.setMsg("작성하신 테마 정보가 추가되었습니다.");
+    Theme savedTheme = themeRepository.save(saveTheme);
 
-    return themeList;
+    return new ResponseDto<>(savedTheme.getThemeId(), savedTheme.getThemeName() + " 테마가 추가되었습니다.");
   }
 
   @Transactional

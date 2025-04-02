@@ -22,6 +22,8 @@ public class HiddenDoorAppApplication {
 		System.setProperty("ADMIN_PASSWORD", dotenv.get("ADMIN_PASSWORD"));
 		System.setProperty("TEST_ADMIN_EMAIL", dotenv.get("TEST_ADMIN_EMAIL"));
 		System.setProperty("TEST_ADMIN_PASSWORD", dotenv.get("TEST_ADMIN_PASSWORD"));
+		System.setProperty("GMAIL_USERNAME", dotenv.get("GMAIL_USERNAME"));
+		System.setProperty("GMAIL_PASSWORD", dotenv.get("GMAIL_PASSWORD"));
 
 		SpringApplication.run(HiddenDoorAppApplication.class, args);
 		logger.info("Hidden_door-app project SpringBoot start...");

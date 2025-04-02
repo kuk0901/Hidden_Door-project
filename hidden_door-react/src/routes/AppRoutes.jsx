@@ -1,45 +1,72 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 import Layout from "@components/common/layout/Layout";
 
 import ProtectedAdminRoute from "@routes/ProtectedAdminRoute";
+import HomeSkeleton from "@components/common/loading/skeletonUI/HomeSkeleton";
 
-import HomePage from "@pages/home/HomePage";
-import LoginPage from "@pages/admin/LoginPage";
-import PrivacyPolicy from "@pages/policy/PrivacyPolicy";
-import TermsOfService from "@pages/policy/TermsOfService";
-import EscapeRoomInfoPage from "@pages/Info/EscapeRoomInfoPage";
-import ThemePage from "@pages/theme/ThemePage";
-import ThemeDetailPage from "@pages/theme/ThemeDetailPage";
-import ThemeAddPage from "@pages/theme/ThemeAddPage";
-import FaqPage from "@pages/cs/faq/FaqPage";
-import FaqAddPage from "@pages/cs/faq/FaqAddPage";
-import FaqDetailPage from "@pages/cs/faq/FaqDetailPage";
-import FaqUpdatePage from "@pages/cs/faq/FaqUpdatePage";
-import CustomerPage from "@pages/cs/customer/CustomerPage";
-import CustomerAddPage from "@pages/cs/customer/CustomerAddPage";
-import CustomerDetailPage from "@pages/cs/customer/CustomerDetailPage";
-import ReservationMainPage from "@pages/reservation/ReservationMainPage";
-import ReservationConfirmPage from "@pages/reservation/ReservationConfirmPage";
-import ReservationSummaryPage from "@pages/reservation/ReservationSummaryPage";
-import EventPage from "@pages/event/EventPage";
-import NoticePage from "@pages/notice/NoticePage";
-import NoticeDetailPage from "@pages/notice/NoticeDetailPage";
-import AddNoticePage from "@pages/notice/AddNoticePage";
-import LocationPage from "@pages/location/LocationPage";
-import DashBoardPage from "@pages/admin/DashBoardPage";
-import AdminReservationPage from "@pages/admin/AdminReservationPage";
-import AdminReservationDetailPage from "@pages/admin/AdminReservationDetailPage";
-import AdminAccountPage from "@pages/admin/AdminAccountPage";
-import AdminAccountDetailPage from "@pages/admin/AdminAccountDetailPage";
+const HomePage = lazy(() => import("@pages/home/HomePage"));
+const LoginPage = lazy(() => import("@pages/admin/LoginPage"));
+const PrivacyPolicy = lazy(() => import("@pages/policy/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("@pages/policy/TermsOfService"));
+const EscapeRoomInfoPage = lazy(() => import("@pages/Info/EscapeRoomInfoPage"));
+const ThemePage = lazy(() => import("@pages/theme/ThemePage"));
+const ThemeDetailPage = lazy(() => import("@pages/theme/ThemeDetailPage"));
+const ThemeAddPage = lazy(() => import("@pages/theme/ThemeAddPage"));
+const FaqPage = lazy(() => import("@pages/cs/faq/FaqPage"));
+const FaqAddPage = lazy(() => import("@pages/cs/faq/FaqAddPage"));
+const FaqDetailPage = lazy(() => import("@pages/cs/faq/FaqDetailPage"));
+const FaqUpdatePage = lazy(() => import("@pages/cs/faq/FaqUpdatePage"));
+const CustomerPage = lazy(() => import("@pages/cs/customer/CustomerPage"));
+const CustomerAddPage = lazy(() =>
+  import("@pages/cs/customer/CustomerAddPage")
+);
+const CustomerDetailPage = lazy(() =>
+  import("@pages/cs/customer/CustomerDetailPage")
+);
+const ReservationMainPage = lazy(() =>
+  import("@pages/reservation/ReservationMainPage")
+);
+const ReservationConfirmPage = lazy(() =>
+  import("@pages/reservation/ReservationConfirmPage")
+);
+const ReservationSummaryPage = lazy(() =>
+  import("@pages/reservation/ReservationSummaryPage")
+);
+const EventPage = lazy(() => import("@pages/event/EventPage"));
+const NoticePage = lazy(() => import("@pages/notice/NoticePage"));
+const NoticeDetailPage = lazy(() => import("@pages/notice/NoticeDetailPage"));
+const AddNoticePage = lazy(() => import("@pages/notice/AddNoticePage"));
+const LocationPage = lazy(() => import("@pages/location/LocationPage"));
+const DashBoardPage = lazy(() => import("@pages/admin/DashBoardPage"));
+const AdminReservationPage = lazy(() =>
+  import("@pages/admin/AdminReservationPage")
+);
+const AdminReservationDetailPage = lazy(() =>
+  import("@pages/admin/AdminReservationDetailPage")
+);
+const AdminAccountPage = lazy(() => import("@pages/admin/AdminAccountPage"));
+const AdminAccountDetailPage = lazy(() =>
+  import("@pages/admin/AdminAccountDetailPage")
+);
+const NotFound = lazy(() => import("@error/NotFound"));
 
 export function AppRoutes() {
   return (
     <Routes>
+      <Route path="*" element={<NotFound />} />
       <Route path="/" element={<Layout />}>
         <Route index element={<Navigate to="/hidden_door/main" replace />} />
 
         <Route path="/hidden_door">
-          <Route path="main" element={<HomePage />} />
+          <Route
+            path="main"
+            element={
+              <Suspense fallback={<HomeSkeleton />}>
+                <HomePage />
+              </Suspense>
+            }
+          />
 
           <Route path="info" element={<EscapeRoomInfoPage />} />
 

@@ -9,6 +9,7 @@
 
   .caution--item {
     padding: 10px;
+
     .caution-content {
       padding: 10px 20px;
       @include mixins.flex-layout-row(center, center);

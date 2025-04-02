@@ -5,7 +5,7 @@ import Header from "@components/common/layout/Header";
 import InfoEditForm from "@components/common/form/infoEditForm";
 import Api from "@axios/api";
 import ThemeDetail from "@components/theme/ThemeDetail";
-import { useParams, useSearchParams } from "react-router-dom";
+import { Link, useParams, useSearchParams } from "react-router-dom";
 import OneThemePriceSection from "@components/price/OneThemePriceSection";
 import useConfirm from "@hooks/useConfirm";
 import Loading from "@components/common/loading/Loading";
@@ -131,6 +131,12 @@ const ThemeDetailPage = () => {
 
       {/* 테마 가격표 영역 */}
       <OneThemePriceSection theme={theme} />
+
+      <div className="link-container link-container__theme">
+        <Link to="" className="btn btn__theme">
+          돌아가기
+        </Link>
+      </div>
     </>
   );
 };
