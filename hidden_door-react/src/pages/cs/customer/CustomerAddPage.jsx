@@ -10,7 +10,7 @@ const CustomerAddPage = () => {
     customerCheck: "X",
     customerTitle: "",
     customerPwd: "",
-    customerContent: "",
+    customerContent: ""
   });
 
   const handleInputChange = (e) => {
@@ -35,6 +35,9 @@ const CustomerAddPage = () => {
       }
 
       const res = await Api.post("/customers/customer/add", newCustomer);
+
+      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+      // 또한, 추가되었을 경우 페이지가 이동되고 있으니 쿼리스트링을 사용해 성공 정보를 넘겨주는 형태로 수정해 주세요.
 
       toast.success(res.data.msg || "Customer 추가 완료");
       navigate("/hidden_door/cs/customer");

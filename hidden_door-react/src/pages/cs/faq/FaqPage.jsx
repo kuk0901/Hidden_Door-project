@@ -21,14 +21,14 @@ const FaqPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "id",
-      sortDirection: "ASC",
+      sortDirection: "ASC"
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: "",
+      searchTerm: ""
     }
   );
 
@@ -42,17 +42,17 @@ const FaqPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm,
-        },
+          searchTerm
+        }
       });
 
-      console.log(res.data.msg);
+      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
 
       setFaqList(res.data.data);
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm,
+        searchTerm: res.data.searchTerm
       });
     } catch (error) {
       toast.error(error.message || "오류입니다");
@@ -79,7 +79,7 @@ const FaqPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "title", label: "제목" },
-    { value: "question", label: "질문내용" },
+    { value: "question", label: "질문내용" }
   ];
 
   const handleAddFaq = () => {

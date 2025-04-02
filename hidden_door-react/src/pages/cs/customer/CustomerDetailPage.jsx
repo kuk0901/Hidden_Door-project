@@ -32,6 +32,8 @@ const CustomerDetailPage = () => {
 
     try {
       const res = await Api.delete(`/customers/customer/delete/${customerId}`);
+      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+
       toast.success(res.data.msg);
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
@@ -52,7 +54,7 @@ const CustomerDetailPage = () => {
       const res = await Api.post(`/customers/customer/update/${customerId}`, {
         customerAnswer: customerAnswer,
         adminName: admin.email,
-        customerCheck: "O",
+        customerCheck: "O"
       });
       toast.success(res.data.msg);
       setIsAnswering(false);

@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import { useAdmin } from '@hooks/useAdmin';
-import Api from '@axios/api';
-import { toast } from 'react-toastify';
-import { formatKoreanDate } from '../../utils/format/date';
+import { useState, useEffect } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { useAdmin } from "@hooks/useAdmin";
+import Api from "@axios/api";
+import { toast } from "react-toastify";
+import { formatKoreanDate } from "../../utils/format/date";
 
 function NoticeDetailPage() {
   const { id } = useParams();
@@ -12,31 +12,32 @@ function NoticeDetailPage() {
   const [notice, setNotice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [editTitle, setEditTitle] = useState('');
-  const [editContent, setEditContent] = useState('');
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
 
   useEffect(() => {
     fetchNotice();
   }, [id]);
 
+  // XXX: 메서드 체이닝 형식 말고 async-await 문법으로 변경해 주세요.
   const fetchNotice = () => {
     setLoading(true);
     Api.get(`/notices/${id}`)
       .then((response) => {
-        if (response.data && response.data.data) {
+        // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+        if (response.data.data) {
           setNotice(response.data.data);
         } else {
-          toast.info('해당 공지사항을 찾을 수 없습니다.');
-          navigate('/hidden_door/notice');
+          toast.info("해당 공지사항을 찾을 수 없습니다.");
         }
       })
       .catch((error) => {
-        console.error('Error fetching notice:', error);
+        console.error("Error fetching notice:", error);
         toast.error(
           error.response?.data?.message ||
-            '공지사항을 불러오는 데 실패했습니다.'
+            "공지사항을 불러오는 데 실패했습니다."
         );
-        navigate('/hidden_door/notice');
+        navigate("/hidden_door/notice");
       })
       .finally(() => {
         setLoading(false);
@@ -48,12 +49,12 @@ function NoticeDetailPage() {
 
     Api.delete(`/notices/${id}`)
       .then((response) => {
-        toast.success(response.data?.message || '공지사항이 삭제되었습니다.');
-        navigate('/hidden_door/notice');
+        toast.success(response.data?.message || "공지사항이 삭제되었습니다.");
+        navigate("/hidden_door/notice");
       })
       .catch((error) => {
         toast.error(
-          error.response?.data?.message || '공지사항 삭제에 실패했습니다.'
+          error.response?.data?.message || "공지사항 삭제에 실패했습니다."
         );
       });
   };
@@ -72,7 +73,7 @@ function NoticeDetailPage() {
     e.preventDefault();
 
     if (!editTitle.trim() || !editContent.trim()) {
-      toast.error('제목과 내용을 모두 입력해주세요.');
+      toast.error("제목과 내용을 모두 입력해주세요.");
       return;
     }
 
@@ -80,17 +81,17 @@ function NoticeDetailPage() {
     Api.put(`/notices/${id}`, updatedNotice)
       .then((response) => {
         if (response.data && response.data.data) {
-          toast.success(response.data.message || '공지사항이 수정되었습니다.');
+          toast.success(response.data.message || "공지사항이 수정되었습니다.");
           setNotice(response.data.data);
           setIsEditing(false);
         } else {
-          toast.error('서버 응답 형식이 올바르지 않습니다.');
+          toast.error("서버 응답 형식이 올바르지 않습니다.");
         }
       })
       .catch((error) => {
-        console.error('Error updating notice:', error);
+        console.error("Error updating notice:", error);
         toast.error(
-          error.response?.data?.message || '공지사항 수정에 실패했습니다.'
+          error.response?.data?.message || "공지사항 수정에 실패했습니다."
         );
       });
   };

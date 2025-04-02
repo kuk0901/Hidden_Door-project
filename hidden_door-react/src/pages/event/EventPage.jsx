@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
-import { useAdmin } from '@hooks/useAdmin';
-import Api from '@axios/api';
-import { toast } from 'react-toastify';
-import AddEventModal from './AddEventModal';
-import EditEventModal from './EditEventModal';
-import { formatKoreanDate } from '../../utils/format/date';
+import { useState, useEffect } from "react";
+import { useAdmin } from "@hooks/useAdmin";
+import Api from "@axios/api";
+import { toast } from "react-toastify";
+import AddEventModal from "./AddEventModal";
+import EditEventModal from "./EditEventModal";
+import { formatKoreanDate } from "../../utils/format/date";
 
 function EventPage() {
   const { admin } = useAdmin();
@@ -21,21 +21,21 @@ function EventPage() {
 
   const fetchEvents = () => {
     setLoading(true);
-    Api.get('/events')
+    Api.get("/events")
       .then((response) => {
         if (response.data && response.data.data) {
           if (response.data.data.length === 0) {
-            toast.info('등록된 이벤트가 없습니다.');
+            toast.info("등록된 이벤트가 없습니다.");
           }
           setEvents(response.data.data);
         } else {
           setEvents([]);
-          toast.info('등록된 이벤트가 없습니다.');
+          toast.info("등록된 이벤트가 없습니다.");
         }
       })
       .catch((error) => {
-        console.error('Error fetching events:', error);
-        toast.error('이벤트를 불러오는 데 실패했습니다.');
+        console.error("Error fetching events:", error);
+        toast.error("이벤트를 불러오는 데 실패했습니다.");
         setEvents([]);
       })
       .finally(() => {
@@ -64,6 +64,7 @@ function EventPage() {
     setEvents([...events, newEvent]);
   };
 
+  // XXX: 메서드 체이닝 형식 말고 async-await 문법으로 변경해 주세요.
   const deleteEvent = (eventId) => {
     if (!admin) return;
 
@@ -78,17 +79,17 @@ function EventPage() {
             closeModal();
           }
           toast.success(
-            response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
+            response.data.message || "이벤트가 성공적으로 삭제되었습니다."
           );
           closeModal();
           fetchEvents();
         } else {
-          toast.error('삭제 응답이 올바르지 않습니다.');
+          toast.error("삭제 응답이 올바르지 않습니다.");
         }
       })
       .catch((error) => {
         toast.error(
-          error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
+          error.response?.data?.message || "이벤트 삭제에 실패했습니다."
         );
       });
   };
@@ -116,28 +117,28 @@ function EventPage() {
           if (selectedEvent && selectedEvent.eventId === editedEvent.eventId) {
             setSelectedEvent(response.data.data);
           }
-          toast.success(response.data.message || '이벤트가 수정되었습니다.');
+          toast.success(response.data.message || "이벤트가 수정되었습니다.");
         } else {
-          toast.error('수정 응답이 올바르지 않습니다.');
+          toast.error("수정 응답이 올바르지 않습니다.");
         }
       })
       .catch((error) => {
-        console.error('Error editing event:', error);
+        console.error("Error editing event:", error);
         toast.error(
-          error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+          error.response?.data?.message || "이벤트 수정에 실패했습니다."
         );
       });
   };
 
   const formatEventDate = (date) => {
-    if (!date) return '';
+    if (!date) return "";
     return formatKoreanDate(date);
   };
 
   const renderEventPeriod = (event) => {
-    if (event.isOngoing === 'true') {
-      return '상시';
-    } else if (event.noEndDate === 'true') {
+    if (event.isOngoing === "true") {
+      return "상시";
+    } else if (event.noEndDate === "true") {
       return `${formatEventDate(event.startDate)} ~`;
     } else {
       return `${formatEventDate(event.startDate)} ~ ${formatEventDate(

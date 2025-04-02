@@ -176,6 +176,8 @@ public class ReservationService {
 
     Reservation saved = reservationRepository.save(reservation);
 
+    // TODO: MailService, MailDto 사용해서 이메일 전송 시스템 도입 
+
     ReservationDto responseDto = modelMapper.map(saved, ReservationDto.class);
 
     return new ResponseDto<>(responseDto, "예약이 성공적으로 생성되었습니다.");

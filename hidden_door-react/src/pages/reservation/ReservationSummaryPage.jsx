@@ -20,7 +20,8 @@ const ReservationSummaryPage = () => {
       try {
         const res = await Api.get(`/reservations/summary/${reservationNumber}`);
 
-        if (res.data && res.data.data) {
+        // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+        if (res.data.data) {
           setReservation(res.data.data);
         } else {
           toast.error("예약 정보 구조가 올바르지 않습니다.");

@@ -14,7 +14,7 @@ const ReservationMainPage = () => {
   const [pageData, setPageData] = useState({
     availableDates: [],
     timeSlots: [],
-    themes: [],
+    themes: []
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -30,8 +30,8 @@ const ReservationMainPage = () => {
       const response = await Api.get("/reservations/check", {
         params: {
           reservationNumber: checkReservationNumber,
-          name: checkName,
-        },
+          name: checkName
+        }
       });
       if (response.data.data) {
         // 'success' 대신 'data' 확인
@@ -50,11 +50,12 @@ const ReservationMainPage = () => {
       const res = await Api.get("/reservations/main");
       setPageData(res.data.data);
 
+      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
       if (res.data.data.timeSlots) {
         setAvailableTimeSlots(
           res.data.data.timeSlots.map((time) => ({
             time,
-            isAvailable: true,
+            isAvailable: true
           }))
         );
       }
@@ -102,8 +103,8 @@ const ReservationMainPage = () => {
                 selectedDate,
                 selectedTime,
                 selectedTheme,
-                themes: pageData.themes,
-              },
+                themes: pageData.themes
+              }
             })
           }
         >

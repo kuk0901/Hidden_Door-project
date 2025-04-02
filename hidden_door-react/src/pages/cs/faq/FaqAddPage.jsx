@@ -13,7 +13,7 @@ const FaqAddPage = () => {
     title: "",
     category: "",
     question: "",
-    answer: "",
+    answer: ""
   });
 
   const handleCategoryChange = (e) => {
@@ -39,6 +39,8 @@ const FaqAddPage = () => {
       }
 
       const res = await Api.post("/faqs/faq/add", newFaq);
+
+      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
 
       toast.success(res.data.msg || "FAQ 추가 완료");
       navigate("/hidden_door/cs/faq");

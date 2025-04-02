@@ -21,7 +21,7 @@ const ReservationConfirmPage = () => {
     themeId: selectedTheme,
     reservationDate: selectedDate.toISOString(),
     reservationTime: selectedTime,
-    paymentAmount: 0,
+    paymentAmount: 0
   });
 
   // 테마 정보 로드
@@ -34,7 +34,7 @@ const ReservationConfirmPage = () => {
       setReservation((prev) => ({
         ...prev,
         partySize: theme.minParticipants,
-        paymentAmount: theme.price * theme.minParticipants,
+        paymentAmount: theme.price * theme.minParticipants
       }));
     }
   }, [selectedTheme, themes]);
@@ -44,7 +44,7 @@ const ReservationConfirmPage = () => {
     if (selectedThemeDetails) {
       setReservation((prev) => ({
         ...prev,
-        paymentAmount: selectedThemeDetails.price * prev.partySize,
+        paymentAmount: selectedThemeDetails.price * prev.partySize
       }));
     }
   }, [reservation.partySize, selectedThemeDetails]);
@@ -54,7 +54,7 @@ const ReservationConfirmPage = () => {
     const { name, value } = e.target;
     setReservation((prev) => ({
       ...prev,
-      [name]: name === "partySize" ? Number(value) : value,
+      [name]: name === "partySize" ? Number(value) : value
     }));
   };
 
@@ -78,14 +78,14 @@ const ReservationConfirmPage = () => {
         availability: reservation.availability,
         paymentState: reservation.paymentState,
         paymentMethod: reservation.paymentMethod,
-        refundState: reservation.refundState,
+        refundState: reservation.refundState
       };
 
       console.log("요청 데이터:", reservationDto);
 
       const res = await Api.post("/reservations/create", reservationDto);
 
-      if (res.data && res.data.msg.includes("성공")) {
+      if (res.data?.msg.includes("성공")) {
         toast.success(res.data.msg);
         console.log("예약 성공. 응답 데이터:", res.data);
 
@@ -194,7 +194,7 @@ const ReservationConfirmPage = () => {
                   length:
                     selectedThemeDetails.maxParticipants -
                     selectedThemeDetails.minParticipants +
-                    1,
+                    1
                 },
                 (_, i) => i + selectedThemeDetails.minParticipants
               ).map((num) => (

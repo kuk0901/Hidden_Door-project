@@ -15,7 +15,7 @@ const FaqUpdatePage = () => {
     title: "",
     category: "",
     question: "",
-    answer: "",
+    answer: ""
   });
 
   const getFaqDetail = async () => {
@@ -42,7 +42,10 @@ const FaqUpdatePage = () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await Api.delete(`/faqs/faq/delete/${faqId}`);
+      await Api.delete(`/faqs/faq/delete/${faqId}`);
+
+      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+      // 또한, 삭제에 대한 메시지는 쿼리 스트링으로 처리해 주세요.
       toast.success("FAQ가 삭제되었습니다.");
       navigate("/hidden_door/cs/faq"); // 삭제 후 목록으로 이동
     } catch (error) {
@@ -62,7 +65,7 @@ const FaqUpdatePage = () => {
         writer: admin.email,
         title: faqDetail.title || "",
         question: faqDetail.question || "",
-        answer: faqDetail.answer || "",
+        answer: faqDetail.answer || ""
       });
     }
   }, [faqDetail, admin.email]);
@@ -70,6 +73,9 @@ const FaqUpdatePage = () => {
   const updateFaq = async () => {
     try {
       const response = await Api.post(`/faqs/faq/update/${faqId}`, newFaq); // POST로 요청
+
+      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+
       toast.success("FAQ가 업데이트되었습니다.");
       navigate("/hidden_door/cs/faq");
     } catch (error) {

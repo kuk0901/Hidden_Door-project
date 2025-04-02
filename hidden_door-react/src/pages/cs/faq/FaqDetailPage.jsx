@@ -33,7 +33,10 @@ const FaqDetailPage = () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await Api.delete(`/faqs/faq/delete/${faqId}`);
+      await Api.delete(`/faqs/faq/delete/${faqId}`);
+      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+      // 또한, 삭제에 대한 메시지는 쿼리 스트링 처리 후 List 페이지로 이동시키는 코드를 추가하는 게 좋을 것 같습니다.
+
       toast.success("FAQ가 삭제되었습니다.");
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
