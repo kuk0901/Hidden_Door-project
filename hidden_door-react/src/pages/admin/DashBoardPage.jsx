@@ -15,7 +15,7 @@ const DATA_KEYS = {
 
 const DashboardPage = () => {
   const [chartData, setChartData] = useState({}); // { key: [], key: [], key: [] } 형태
-  const [loading, setLoading] = useState(false); // FIXME: true로 변경해야 함
+  const [loading, setLoading] = useState(true); // FIXME: true로 변경해야 함
 
   // FIXME: 임시 api 요청 형태
   const getChartData = async () => {
@@ -41,7 +41,7 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    getChartData();
+    // getChartData();
   }, []);
 
   const renderChartOrPlaceholder = (Component, dataKey) => {
