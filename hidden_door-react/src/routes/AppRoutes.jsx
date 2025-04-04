@@ -38,7 +38,7 @@ const NoticePage = lazy(() => import("@pages/notice/NoticePage"));
 const NoticeDetailPage = lazy(() => import("@pages/notice/NoticeDetailPage"));
 const AddNoticePage = lazy(() => import("@pages/notice/AddNoticePage"));
 const LocationPage = lazy(() => import("@pages/location/LocationPage"));
-const DashBoardPage = lazy(() => import("@pages/admin/DashBoardPage"));
+const DashboardPage = lazy(() => import("@pages/admin/DashboardPage"));
 const AdminReservationPage = lazy(() =>
   import("@pages/admin/AdminReservationPage")
 );
@@ -117,7 +117,7 @@ export function AppRoutes() {
           {/* 관리자 전용 페이지 그룹화 */}
           <Route path="admin" element={<ProtectedAdminRoute />}>
             <Route index element={<Navigate to="dashboard" replace />} />
-            <Route path="dashboard" element={<DashBoardPage />} />
+            <Route path="dashboard" element={<DashboardPage />} />
             <Route path="account">
               <Route index element={<AdminAccountPage />} />
               <Route path=":accountId" element={<AdminAccountDetailPage />} />

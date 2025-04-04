@@ -51,7 +51,7 @@ Hidden_Door는 NoSQL, JWT, RESTful API, React 학습을 통한 실제 애플리�
 
 - 서버: 로컬 호스팅
 
-- 데이터베이스: 로컬 MongoDB
+- 데이터베이스: 로컬 MongoDB || docker(MongoDB)
 
 #### 구현 세부사항:
 
