@@ -8,7 +8,6 @@ const ReservationConfirmPage = () => {
   const navigate = useNavigate();
   const { selectedDate, selectedTime, selectedTheme, themes } = location.state;
 
-  // CustomerAddPage 스타일 상태 관리
   const [reservation, setReservation] = useState({
     name: "",
     email: "",
@@ -24,7 +23,6 @@ const ReservationConfirmPage = () => {
     paymentAmount: 0,
   });
 
-  // 테마 정보 로드
   const [selectedThemeDetails, setSelectedThemeDetails] = useState(null);
 
   useEffect(() => {
@@ -39,7 +37,6 @@ const ReservationConfirmPage = () => {
     }
   }, [selectedTheme, themes]);
 
-  // 실시간 가격 계산
   useEffect(() => {
     if (selectedThemeDetails) {
       setReservation((prev) => ({
@@ -49,7 +46,6 @@ const ReservationConfirmPage = () => {
     }
   }, [reservation.partySize, selectedThemeDetails]);
 
-  // CustomerAddPage 방식의 입력 처리
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setReservation((prev) => ({
@@ -65,7 +61,6 @@ const ReservationConfirmPage = () => {
         toast.error("이름, 이메일, 전화번호는 필수 입력 항목입니다");
         return;
       }
-      // ReservationDto 구조에 맞게 데이터 변환
       const reservationDto = {
         themeId: reservation.themeId,
         name: reservation.name,
@@ -89,7 +84,6 @@ const ReservationConfirmPage = () => {
         toast.success(res.data.msg);
         console.log("예약 성공. 응답 데이터:", res.data);
 
-        // 예약 번호 확인
         const reservationNumber = res.data.data.reservationNumber;
         if (!reservationNumber) {
           console.error("예약 번호가 없습니다.");

@@ -14,7 +14,7 @@ const ReservationMainPage = () => {
   const [pageData, setPageData] = useState({
     availableDates: [],
     timeSlots: [],
-    themes: []
+    themes: [],
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -30,11 +30,10 @@ const ReservationMainPage = () => {
       const response = await Api.get("/reservations/check", {
         params: {
           reservationNumber: checkReservationNumber,
-          name: checkName
-        }
+          name: checkName,
+        },
       });
       if (response.data.data) {
-        // 'success' 대신 'data' 확인
         navigate(`/hidden_door/reservation/summary/${checkReservationNumber}`);
       } else {
         toast.error(response.data.message || "예약을 찾을 수 없습니다.");
@@ -51,11 +50,18 @@ const ReservationMainPage = () => {
       setPageData(res.data.data);
 
       // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
+
       if (res.data.data.timeSlots) {
         setAvailableTimeSlots(
           res.data.data.timeSlots.map((time) => ({
             time,
-            isAvailable: true
+            isAvailable: true,
           }))
         );
       }
@@ -103,8 +109,8 @@ const ReservationMainPage = () => {
                 selectedDate,
                 selectedTime,
                 selectedTheme,
-                themes: pageData.themes
-              }
+                themes: pageData.themes,
+              },
             })
           }
         >

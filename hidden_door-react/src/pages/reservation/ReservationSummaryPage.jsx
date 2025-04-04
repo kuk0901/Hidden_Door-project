@@ -21,17 +21,17 @@ const ReservationSummaryPage = () => {
         const res = await Api.get(`/reservations/summary/${reservationNumber}`);
 
         // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+        if (res.status !== 200) {
+          toast.error(
+            "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          );
+          return;
+        }
+
         if (res.data.data) {
           setReservation(res.data.data);
-        } else {
-          toast.error("예약 정보 구조가 올바르지 않습니다.");
         }
       } catch (error) {
-        console.error("API 호출 에러:", error);
-        if (error.response) {
-          console.error("에러 응답:", error.response.data);
-          console.error("에러 상태:", error.response.status);
-        }
         toast.error(
           "예약 조회 실패: " + (error.response?.data?.message || error.message)
         );
