@@ -4,9 +4,11 @@ import { useAdmin } from "@hooks/useAdmin";
 import { toast } from "react-toastify";
 import Api from "@axios/api";
 import { useEffect, useState } from "react";
+import ThemeSectionSkeleton from "@components/common/loading/skeletonUI/ThemeSectionSkeleton";
 
 const ThemeSection = () => {
   const [themeList, setThemeList] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const getSummeryThemeList = async () => {
     try {
@@ -19,6 +21,7 @@ const ThemeSection = () => {
       }
 
       setThemeList(res.data.data);
+      setLoading(false);
     } catch (error) {
       toast.error(
         error.message ??
@@ -32,7 +35,9 @@ const ThemeSection = () => {
     getSummeryThemeList();
   }, []);
 
-  return (
+  return loading ? (
+    <ThemeSectionSkeleton />
+  ) : (
     <section className="theme-section">
       {admin && (
         <div className="btn-link-container">

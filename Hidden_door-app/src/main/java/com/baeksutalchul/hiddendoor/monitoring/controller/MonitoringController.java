@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("/api/v1/monitoring")
 public class MonitoringController {
-  private final MonitoringService monitoringService;
+  // private final MonitoringService monitoringService;
 
   @GetMapping("/dashboard")
   public ResponseEntity<ResponseDto<DashboardDto>> getDashboardData() {
