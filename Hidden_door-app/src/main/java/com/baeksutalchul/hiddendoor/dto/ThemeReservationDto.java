@@ -8,7 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ThemeReservationDto {
-  private String date; // 2023-10-01
+  private String date; // 2025-04-05
   private String themeName;
   private int reservations;
+  private int total;
 }
