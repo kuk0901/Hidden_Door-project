@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
@@ -8,6 +8,7 @@ import Pagination from "@components/common/navigation/pagination/Pagination";
 import FaqList from "../../../components/cs/faq/FaqList";
 
 const FaqPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const { isSuperAdmin } = useAdmin();
   const [faqList, setFaqList] = useState([]);
@@ -21,14 +22,14 @@ const FaqPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "id",
-      sortDirection: "ASC"
+      sortDirection: "ASC",
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: ""
+      searchTerm: "",
     }
   );
 
@@ -42,17 +43,19 @@ const FaqPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm
-        }
+          searchTerm,
+        },
       });
 
-      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+      if (res.status !== 200) {
+        toast.error("오류입니다.");
+      }
 
       setFaqList(res.data.data);
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm
+        searchTerm: res.data.searchTerm,
       });
     } catch (error) {
       toast.error(error.message || "오류입니다");
@@ -68,6 +71,12 @@ const FaqPage = () => {
   };
 
   useEffect(() => {
+    if (searchParams.get("delete") === "true") {
+      toast.success("FAQ가 삭제되었습니다.");
+    }
+
+    setSearchParams({});
+
     getAllFaq();
   }, []);
 
@@ -79,7 +88,7 @@ const FaqPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "title", label: "제목" },
-    { value: "question", label: "질문내용" }
+    { value: "question", label: "질문내용" },
   ];
 
   const handleAddFaq = () => {

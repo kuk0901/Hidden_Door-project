@@ -15,7 +15,7 @@ const FaqUpdatePage = () => {
     title: "",
     category: "",
     question: "",
-    answer: ""
+    answer: "",
   });
 
   const getFaqDetail = async () => {
@@ -42,12 +42,13 @@ const FaqUpdatePage = () => {
     if (!confirmDelete) return;
 
     try {
-      await Api.delete(`/faqs/faq/delete/${faqId}`);
+      const response = await Api.delete(`/faqs/faq/delete/${faqId}`);
 
-      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
-      // 또한, 삭제에 대한 메시지는 쿼리 스트링으로 처리해 주세요.
-      toast.success("FAQ가 삭제되었습니다.");
-      navigate("/hidden_door/cs/faq"); // 삭제 후 목록으로 이동
+      // 서버 응답 상태 코드가 200이 아닌 경우 에러 처리
+      if (response.status !== 200) {
+        toast.error("삭제에 실패했습니다.");
+      }
+      navigate("/hidden_door/cs/faq?delete=true"); // 삭제 후 목록으로 이동
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
     }
@@ -65,19 +66,21 @@ const FaqUpdatePage = () => {
         writer: admin.email,
         title: faqDetail.title || "",
         question: faqDetail.question || "",
-        answer: faqDetail.answer || ""
+        answer: faqDetail.answer || "",
       });
     }
   }, [faqDetail, admin.email]);
 
   const updateFaq = async () => {
     try {
-      const response = await Api.post(`/faqs/faq/update/${faqId}`, newFaq); // POST로 요청
+      const res = await Api.post(`/faqs/faq/update/${faqId}`, newFaq); // POST로 요청
 
-      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+      if (res.status !== 200) {
+        toast.error("업데이트에 실패했습니다.");
+        return;
+      }
 
-      toast.success("FAQ가 업데이트되었습니다.");
-      navigate("/hidden_door/cs/faq");
+      navigate(`/hidden_door/cs/faq/${res.data.data}?update=true`);
     } catch (error) {
       toast.error("FAQ 업데이트에 실패했습니다.");
       console.error("Error updating FAQ:", error);

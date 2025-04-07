@@ -13,7 +13,7 @@ const FaqAddPage = () => {
     title: "",
     category: "",
     question: "",
-    answer: ""
+    answer: "",
   });
 
   const handleCategoryChange = (e) => {
@@ -40,10 +40,11 @@ const FaqAddPage = () => {
 
       const res = await Api.post("/faqs/faq/add", newFaq);
 
-      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+      if (res.status !== 200) {
+        toast.error("FAQ추가에 실패했습니다.");
+      }
 
-      toast.success(res.data.msg || "FAQ 추가 완료");
-      navigate("/hidden_door/cs/faq");
+      navigate(`/hidden_door/cs/faq/${res.data.data}?register=true`);
     } catch (error) {
       console.log(error);
       toast.error("서버 오류가 발생했습니다.");
