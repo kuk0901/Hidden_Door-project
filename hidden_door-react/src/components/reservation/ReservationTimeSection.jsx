@@ -22,7 +22,7 @@ const ReservationTimeSection = ({
             </button>
           ))
         ) : (
-          <p>사용 가능한 시간이 없습니다.</p>
+          <p>날짜와 테마를 선택해 주세요.</p>
         )}
       </div>
     </div>

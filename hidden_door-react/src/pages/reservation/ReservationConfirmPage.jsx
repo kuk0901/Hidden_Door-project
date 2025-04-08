@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
+import { formatKoreanDate } from "@utils/format/date";
 
 const ReservationConfirmPage = () => {
   const location = useLocation();
@@ -110,29 +111,27 @@ const ReservationConfirmPage = () => {
     <div className="reservation-confirm-page">
       <h1>예약 확인</h1>
 
-      <div className="reservation-details">
-        <div className="form-group">
-          <label htmlFor="reservationDate">날짜:</label>
-          <div id="reservationDate">
-            {new Date(reservation.reservationDate).toLocaleDateString()}
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="reservationTime">시간:</label>
-          <div id="reservationTime">{reservation.reservationTime}</div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="themeName">테마명:</label>
-          <div id="themeName">{selectedThemeDetails?.themeName}</div>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit}>
         <div className="reservation-details">
           <div className="form-group">
-            <label htmlFor="name">성함:</label>
+            <label htmlFor="reservationDate">날짜</label>
+            <div id="reservationDate">
+              {formatKoreanDate(reservation.reservationDate)}
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="reservationTime">시간</label>
+            <div id="reservationTime">{reservation.reservationTime}</div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="themeName">테마명</label>
+            <div id="themeName">{selectedThemeDetails?.themeName}</div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="name">성함</label>
             <input
               type="text"
               id="name"
@@ -145,7 +144,7 @@ const ReservationConfirmPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">이메일:</label>
+            <label htmlFor="email">이메일</label>
             <input
               type="email"
               id="email"
@@ -158,7 +157,7 @@ const ReservationConfirmPage = () => {
           </div>
 
           <div className="form-group">
-            <label htmlFor="phone">휴대폰:</label>
+            <label htmlFor="phone">휴대폰</label>
             <input
               type="tel"
               id="phone"
@@ -172,7 +171,7 @@ const ReservationConfirmPage = () => {
 
           {selectedThemeDetails && (
             <div className="form-group">
-              <label htmlFor="partySize">인원 수:</label>
+              <label htmlFor="partySize">인원 수</label>
               <select
                 id="partySize"
                 name="partySize"

@@ -1,4 +1,4 @@
-package com.baeksutalchul.mail.dto;
+package com.baeksutalchul.hiddendoor.mail.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

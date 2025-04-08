@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Api from "@axios/api";
-import ReservationDateSection from "../../components/reservation/ReservationDateSection";
-import ReservationTimeSection from "../../components/reservation/ReservationTimeSection";
-import ReservationThemeSection from "../../components/reservation/ReservationThemeSection";
+import ReservationDateSection from "@components/reservation/ReservationDateSection";
+import ReservationTimeSection from "@components/reservation/ReservationTimeSection";
+import ReservationThemeSection from "@components/reservation/ReservationThemeSection";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
@@ -13,8 +13,7 @@ const ReservationMainPage = () => {
   const navigate = useNavigate();
   const [pageData, setPageData] = useState({
     availableDates: [],
-    timeSlots: [],
-    themes: [],
+    themes: [], // timeSlots 제거
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -25,6 +24,50 @@ const ReservationMainPage = () => {
   const [checkReservationNumber, setCheckReservationNumber] = useState("");
   const [checkName, setCheckName] = useState("");
 
+  // 선택된 날짜/테마 변경 시 시간대 재조회
+  useEffect(() => {
+    if (selectedTheme && selectedDate) {
+      fetchAvailableTimeSlots();
+    }
+  }, [selectedTheme, selectedDate]);
+
+  const fetchAvailableTimeSlots = async () => {
+    try {
+      const formattedDate = selectedDate.toISOString().split("T")[0];
+      const res = await Api.get("/reservations/timeslots", {
+        params: {
+          date: formattedDate,
+          themeId: selectedTheme,
+        },
+        validateStatus: (status) => status < 500, // 500 에러 명시적 처리
+      });
+      setAvailableTimeSlots(res.data?.data?.timeSlots || []);
+    } catch (error) {
+      console.error("Error Details:", {
+        config: error.config,
+        response: error.response?.data,
+        status: error.response?.status,
+      });
+      toast.error("시간대 조회에 실패했습니다. 서버 로그를 확인해주세요.");
+    }
+  };
+
+  const fetchPageData = async () => {
+    setIsLoading(true);
+    try {
+      const res = await Api.get("/reservations/main");
+      setPageData({
+        availableDates: res.data.data.availableDates,
+        themes: res.data.data.themes,
+      });
+    } catch (error) {
+      toast.error("데이터를 불러오는데 실패했습니다.");
+      console.error("Error fetching page data:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleCheckReservation = async () => {
     try {
       const response = await Api.get("/reservations/check", {
@@ -33,42 +76,13 @@ const ReservationMainPage = () => {
           name: checkName,
         },
       });
-      if (response.data.data) {
+      if (response.data) {
         navigate(`/hidden_door/reservation/summary/${checkReservationNumber}`);
       } else {
-        toast.error(response.data.message || "예약을 찾을 수 없습니다.");
+        toast.error("예약을 찾을 수 없습니다.");
       }
     } catch (error) {
       toast.error("예약 확인 중 오류가 발생했습니다.", error);
-    }
-  };
-
-  const fetchPageData = async () => {
-    setIsLoading(true);
-    try {
-      const res = await Api.get("/reservations/main");
-      setPageData(res.data.data);
-
-      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
-      if (res.status !== 200) {
-        toast.error(
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
-        );
-        return;
-      }
-
-      if (res.data.data.timeSlots) {
-        setAvailableTimeSlots(
-          res.data.data.timeSlots.map((time) => ({
-            time,
-            isAvailable: true,
-          }))
-        );
-      }
-    } catch (error) {
-      console.error("Error fetching reservation data:", error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -97,12 +111,14 @@ const ReservationMainPage = () => {
             selectedTime={selectedTime}
             setSelectedTime={setSelectedTime}
             timeSlots={availableTimeSlots}
+            isDateAndThemeSelected={selectedDate && selectedTheme} // 추가
           />
         </div>
 
         <button
           className="submit-button"
-          type="submit"
+          type="button"
+          disabled={!selectedDate || !selectedTime || !selectedTheme}
           onClick={() =>
             navigate("/hidden_door/reservation/confirm", {
               state: {
@@ -117,10 +133,15 @@ const ReservationMainPage = () => {
           예약하기
         </button>
 
-        <button type="button" onClick={() => setIsModalOpen(true)}>
+        <button
+          type="button"
+          className="check-button"
+          onClick={() => setIsModalOpen(true)}
+        >
           예약 확인
         </button>
 
+        {/* 예약 확인 모달 */}
         <Modal
           isOpen={isModalOpen}
           onRequestClose={() => setIsModalOpen(false)}
@@ -130,7 +151,7 @@ const ReservationMainPage = () => {
         >
           <h2>예약 확인</h2>
           <form onSubmit={(e) => e.preventDefault()}>
-            <div>
+            <div className="input-group">
               <label htmlFor="reservationNumber">예약 번호</label>
               <input
                 id="reservationNumber"
@@ -139,10 +160,9 @@ const ReservationMainPage = () => {
                 value={checkReservationNumber}
                 onChange={(e) => setCheckReservationNumber(e.target.value)}
                 required
-                autoFocus
               />
             </div>
-            <div>
+            <div className="input-group">
               <label htmlFor="name">이름</label>
               <input
                 id="name"
@@ -153,8 +173,12 @@ const ReservationMainPage = () => {
                 required
               />
             </div>
-            <div>
-              <button type="button" onClick={handleCheckReservation}>
+            <div className="button-group">
+              <button
+                type="button"
+                onClick={handleCheckReservation}
+                disabled={!checkReservationNumber || !checkName}
+              >
                 확인
               </button>
               <button type="button" onClick={() => setIsModalOpen(false)}>
