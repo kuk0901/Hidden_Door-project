@@ -1,6 +1,6 @@
 package com.baeksutalchul.hiddendoor.timeSlot.domain;
 
-import java.time.LocalDate;
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
@@ -21,7 +21,7 @@ public class TimeSlot {
     @Id
     private String id; // "theme1_20240408"
     private String themeId;
-    private LocalDate date;
+    private String date;
     private List<TimeSlotDetail> slots; // 변경점: 객체 리스트로 관리
 
     // 내부 클래스로 시간대 상세 정보 관리

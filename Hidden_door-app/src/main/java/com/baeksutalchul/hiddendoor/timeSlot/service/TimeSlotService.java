@@ -2,6 +2,7 @@ package com.baeksutalchul.hiddendoor.timeSlot.service;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -49,9 +50,9 @@ public class TimeSlotService {
 
   // 공통 로직 분리
   private void generateSlotsForNext16Days() {
-    LocalDate today = LocalDate.now();
+    LocalDate kstDate = LocalDate.now(ZoneId.of("Asia/Seoul"));
     for (int i = 1; i <= 16; i++) { // 오늘부터 16일 후까지 처리
-        LocalDate targetDate = today.plusDays(i);
+        LocalDate targetDate = kstDate.plusDays(i);
         generateSlotsForDate(targetDate);
     }
   }
@@ -88,7 +89,7 @@ public class TimeSlotService {
         }
 
         try {
-          TimeSlot newSlot = new TimeSlot(slotId, theme.getThemeId(), date, slots);
+          TimeSlot newSlot = new TimeSlot(slotId, theme.getThemeId(), date.format(DateTimeFormatter.ISO_DATE), slots);
           timeSlotRepository.save(newSlot);
           logger.info("새 타임슬롯 생성 완료: {}", slotId);
         } catch (Exception e) {
