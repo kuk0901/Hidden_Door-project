@@ -64,33 +64,33 @@ function EventPage() {
     setEvents([...events, newEvent]);
   };
 
-  const deleteEvent = (eventId) => {
+  const deleteEvent = async (eventId) => {
     if (!admin) return;
 
-    Api.delete(`/events/${eventId}`)
-      .then((response) => {
-        if (
-          response.data &&
-          (response.data.message || response.data.data !== undefined)
-        ) {
-          setEvents(events.filter((event) => event.id !== eventId));
-          if (selectedEvent && selectedEvent.id === eventId) {
-            closeModal();
-          }
-          toast.success(
-            response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
-          );
+    try {
+      const response = await Api.delete(`/events/${eventId}`);
+
+      if (
+        response.data &&
+        (response.data.message || response.data.data !== undefined)
+      ) {
+        setEvents(events.filter((event) => event.id !== eventId));
+        if (selectedEvent && selectedEvent.id === eventId) {
           closeModal();
-          fetchEvents();
-        } else {
-          toast.error('삭제 응답이 올바르지 않습니다.');
         }
-      })
-      .catch((error) => {
-        toast.error(
-          error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
+        toast.success(
+          response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
         );
-      });
+        closeModal();
+        fetchEvents();
+      } else {
+        toast.error('삭제 응답이 올바르지 않습니다.');
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
+      );
+    }
   };
 
   const openEditModal = (event) => {
@@ -103,30 +103,35 @@ function EventPage() {
     setEditingEvent(null);
   };
 
-  const handleEventEdited = (editedEvent) => {
-    Api.put(`/events/${editedEvent.eventId}`, editedEvent)
-      .then((response) => {
-        if (response.data && response.data.data) {
-          setEvents(
-            events.map((event) =>
-              event.id === editedEvent.eventId ? response.data.data : event
-            )
-          );
-          closeEditModal();
-          if (selectedEvent && selectedEvent.eventId === editedEvent.eventId) {
-            setSelectedEvent(response.data.data);
-          }
-          toast.success(response.data.message || '이벤트가 수정되었습니다.');
-        } else {
-          toast.error('수정 응답이 올바르지 않습니다.');
-        }
-      })
-      .catch((error) => {
-        console.error('Error editing event:', error);
-        toast.error(
-          error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+  const handleEventEdited = async (editedEvent) => {
+    try {
+      const response = await Api.put(
+        `/events/${editedEvent.eventId}`,
+        editedEvent
+      );
+
+      if (response.data && response.data.data) {
+        setEvents(
+          events.map((event) =>
+            event.id === editedEvent.eventId ? response.data.data : event
+          )
         );
-      });
+        closeEditModal();
+
+        if (selectedEvent && selectedEvent.eventId === editedEvent.eventId) {
+          setSelectedEvent(response.data.data);
+        }
+
+        toast.success(response.data.message || '이벤트가 수정되었습니다.');
+      } else {
+        toast.error('수정 응답이 올바르지 않습니다.');
+      }
+    } catch (error) {
+      console.error('Error editing event:', error);
+      toast.error(
+        error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+      );
+    }
   };
 
   const formatEventDate = (date) => {

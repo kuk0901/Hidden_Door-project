@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
@@ -8,6 +8,7 @@ import Pagination from "@components/common/navigation/pagination/Pagination";
 import FaqList from "../../../components/cs/faq/FaqList";
 
 const FaqPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const { isSuperAdmin } = useAdmin();
   const [faqList, setFaqList] = useState([]);
@@ -46,7 +47,9 @@ const FaqPage = () => {
         },
       });
 
-      console.log(res.data.msg);
+      if (res.status !== 200) {
+        toast.error("오류입니다.");
+      }
 
       setFaqList(res.data.data);
       setPage(res.data.pageDto);
@@ -68,6 +71,12 @@ const FaqPage = () => {
   };
 
   useEffect(() => {
+    if (searchParams.get("delete") === "true") {
+      toast.success("FAQ가 삭제되었습니다.");
+    }
+
+    setSearchParams({});
+
     getAllFaq();
   }, []);
 

@@ -42,9 +42,13 @@ const FaqUpdatePage = () => {
     if (!confirmDelete) return;
 
     try {
-      const res = await Api.delete(`/faqs/faq/delete/${faqId}`);
-      toast.success("FAQ가 삭제되었습니다.");
-      navigate("/hidden_door/cs/faq"); // 삭제 후 목록으로 이동
+      const response = await Api.delete(`/faqs/faq/delete/${faqId}`);
+
+      // 서버 응답 상태 코드가 200이 아닌 경우 에러 처리
+      if (response.status !== 200) {
+        toast.error("삭제에 실패했습니다.");
+      }
+      navigate("/hidden_door/cs/faq?delete=true"); // 삭제 후 목록으로 이동
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
     }
@@ -69,9 +73,14 @@ const FaqUpdatePage = () => {
 
   const updateFaq = async () => {
     try {
-      const response = await Api.post(`/faqs/faq/update/${faqId}`, newFaq); // POST로 요청
-      toast.success("FAQ가 업데이트되었습니다.");
-      navigate("/hidden_door/cs/faq");
+      const res = await Api.post(`/faqs/faq/update/${faqId}`, newFaq); // POST로 요청
+
+      if (res.status !== 200) {
+        toast.error("업데이트에 실패했습니다.");
+        return;
+      }
+
+      navigate(`/hidden_door/cs/faq/${res.data.data}?update=true`);
     } catch (error) {
       toast.error("FAQ 업데이트에 실패했습니다.");
       console.error("Error updating FAQ:", error);

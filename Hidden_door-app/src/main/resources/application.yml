@@ -49,7 +49,7 @@ custom:
 logging:
   level:
     root: INFO
-    "[com.baeksutalchul.hiddendoor]": DEBUG
+    '[com.baeksutalchul.hiddendoor]': DEBUG
 
 file:
   upload-dir: HiddenDoor-app/images # 파일 업로드 디렉터리

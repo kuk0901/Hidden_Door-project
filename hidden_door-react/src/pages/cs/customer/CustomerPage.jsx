@@ -50,7 +50,9 @@ const CustomerPage = () => {
         },
       });
 
-      console.log(res.data.msg);
+      if (res.status !== 200) {
+        toast.error("오류입니다.");
+      }
 
       setCustomerList(res.data.data);
       setPage(res.data.pageDto);

@@ -9,6 +9,7 @@ import { useAdmin } from "@hooks/useAdmin";
 import { useSearchParams } from "react-router-dom";
 import useConfirm from "@hooks/useConfirm";
 
+// FIXME: skeleton UI 생성
 const ThemePage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
   const { isAdmin } = useAdmin();

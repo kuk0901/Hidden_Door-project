@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
 import FaqDetail from "../../../components/cs/faq/FaqDetail.jsx";
 
 const FaqDetailPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { admin } = useAdmin();
   const { faqId } = useParams();
   const [faqDetail, setFaqDetail] = useState(null);
@@ -28,21 +29,18 @@ const FaqDetailPage = () => {
     navigate(`/hidden_door/cs/faq/update/${faqId}`);
   };
 
-  const deleteFaq = async () => {
-    const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
-    if (!confirmDelete) return;
-
-    try {
-      const res = await Api.delete(`/faqs/faq/delete/${faqId}`);
-      toast.success("FAQ가 삭제되었습니다.");
-    } catch (error) {
-      toast.error(error.message || "삭제에 실패했습니다.");
-    }
-  };
-
   useEffect(() => {
+    if (searchParams.get("register") === "true") {
+      toast.success("FAQ가 등록되었습니다.");
+    }
+
+    if (searchParams.get("update") === "true") {
+      toast.success("FAQ가 수정되었습니다.");
+    }
+
+    setSearchParams({});
     getFaqDetail();
-  }, [faqId]);
+  }, []);
 
   return (
     <div className="faq-detail-container">
@@ -52,12 +50,6 @@ const FaqDetailPage = () => {
         {admin && (
           <button className="btn" onClick={handleUpdateFaq}>
             수정하기
-          </button>
-        )}
-
-        {admin && (
-          <button className="btn" onClick={deleteFaq}>
-            삭제
           </button>
         )}
 

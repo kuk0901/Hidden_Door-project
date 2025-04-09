@@ -78,9 +78,9 @@ export const themeValidationRules = (theme = null) => {
     },
     time: {
       required: true,
-      min: 30,
-      max: 180,
-      message: "플레이 시간은 30~180분 사이여야 합니다"
+      min: 60,
+      max: 100,
+      message: "플레이 시간은 60~100분 사이여야 합니다"
     },
     price: {
       required: true,

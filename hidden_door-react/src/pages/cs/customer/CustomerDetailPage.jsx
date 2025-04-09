@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
 import CustomerDetail from "../../../components/cs/customer/CustomerDetail.jsx";
 
 const CustomerDetailPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { admin } = useAdmin();
   const { customerId } = useParams();
   const [customerDetail, setCustomerDetail] = useState(null);
@@ -32,6 +33,11 @@ const CustomerDetailPage = () => {
 
     try {
       const res = await Api.delete(`/customers/customer/delete/${customerId}`);
+
+      if (res.status !== 200) {
+        toast.error("삭제에 실패했습니다.");
+      }
+
       toast.success(res.data.msg);
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
@@ -65,8 +71,13 @@ const CustomerDetailPage = () => {
   };
 
   useEffect(() => {
+    if (searchParams.get("register") === "true") {
+      toast.success("문의가 등록되었습니다.");
+    }
+
+    setSearchParams({});
     getCustomerDetail();
-  }, [customerId]);
+  }, []);
 
   return (
     <div className="customer-detail-container">

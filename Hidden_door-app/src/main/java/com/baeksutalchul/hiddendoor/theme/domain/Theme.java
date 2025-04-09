@@ -28,4 +28,6 @@ public class Theme {
   private int reservationCount;
   private int price;
   private long totalUsage;
+  private int cleaningTime = 30;
+  private List<String> availableDays = List.of("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY");
 }

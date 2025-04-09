@@ -8,7 +8,7 @@ const MiniPriceSection = () => {
 
   const getSummeryThemeList = async () => {
     try {
-      const res = await Api.get("/themes/summary");
+      const res = await Api.get("/themes/summary-price");
 
       if (res.status !== 200) {
         toast.error(

@@ -21,6 +21,15 @@
       background-color: color.scale(variables.$page-bg-color, $lightness: -40%);
       border-color: color.scale(variables.$page-bg-color, $lightness: -40%);
     }
+
+    @include mixins.xs-mode {
+      font-size: 14px;
+      padding: 5px;
+    }
+
+    @include mixins.xxs-mode {
+      font-size: 12px;
+    }
   }
 
   .page-nav {

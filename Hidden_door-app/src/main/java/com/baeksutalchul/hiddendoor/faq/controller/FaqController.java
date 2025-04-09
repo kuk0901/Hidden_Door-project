@@ -56,11 +56,11 @@ public class FaqController {
   }
 
   @PostMapping("/faq/add")
-  public ResponseEntity<ResponseDto<FaqDto>> addFaq(@RequestBody FaqDto faqDto) {
+  public ResponseEntity<ResponseDto<String>> addFaq(@RequestBody FaqDto faqDto) {
     return ResponseEntity.ok().body(faqService.addFaq(faqDto));
   }
   @PostMapping("/faq/update/{id}")
-  public ResponseEntity<ResponseDto<FaqDto>> updateFaqOne(@PathVariable("id") String faqId, @RequestBody FaqDto faqDto) {
+  public ResponseEntity<ResponseDto<String>> updateFaqOne(@PathVariable("id") String faqId, @RequestBody FaqDto faqDto) {
       return ResponseEntity.ok().body(faqService.updateFaqOne(faqId, faqDto));
   }
 

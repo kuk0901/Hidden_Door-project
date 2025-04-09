@@ -56,7 +56,7 @@ public class CustomerController {
   }
 
   @PostMapping("/customer/add")
-  public ResponseEntity<ResponseDto<CustomerDto>> addCustomer(@RequestBody CustomerDto customerDto) {
+  public ResponseEntity<ResponseDto<String>> addCustomer(@RequestBody CustomerDto customerDto) {
     return ResponseEntity.ok().body(customerService.addCustomer(customerDto));
   }
 

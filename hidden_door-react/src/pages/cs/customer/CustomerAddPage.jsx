@@ -36,8 +36,11 @@ const CustomerAddPage = () => {
 
       const res = await Api.post("/customers/customer/add", newCustomer);
 
-      toast.success(res.data.msg || "Customer 추가 완료");
-      navigate("/hidden_door/cs/customer");
+      if (res.status !== 200) {
+        toast.error("오류입니다.");
+      }
+
+      navigate(`/hidden_door/cs/customer/${res.data.data}?register=true`);
     } catch (error) {
       console.log(error);
       toast.error("서버 오류가 발생했습니다.");

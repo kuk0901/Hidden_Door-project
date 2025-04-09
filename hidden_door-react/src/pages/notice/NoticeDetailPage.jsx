@@ -19,28 +19,32 @@ function NoticeDetailPage() {
     fetchNotice();
   }, [id]);
 
-  const fetchNotice = () => {
+  const fetchNotice = async () => {
     setLoading(true);
-    Api.get(`/notices/${id}`)
-      .then((response) => {
-        if (response.data && response.data.data) {
-          setNotice(response.data.data);
-        } else {
-          toast.info('해당 공지사항을 찾을 수 없습니다.');
-          navigate('/hidden_door/notice');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching notice:', error);
-        toast.error(
-          error.response?.data?.message ||
-            '공지사항을 불러오는 데 실패했습니다.'
-        );
+
+    try {
+      const response = await Api.get(`/notices/${id}`);
+
+      if (response.status !== 200) {
+        toast.error('서버 요청에 실패했습니다.');
         navigate('/hidden_door/notice');
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+        return;
+      }
+
+      if (response.data?.data) {
+        setNotice(response.data.data);
+      } else {
+        toast.info('해당 공지사항을 찾을 수 없습니다.');
+      }
+    } catch (error) {
+      console.error('Error fetching notice:', error);
+      toast.error(
+        error.response?.data?.message || '공지사항을 불러오는 데 실패했습니다.'
+      );
+      navigate('/hidden_door/notice');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const deleteNotice = () => {

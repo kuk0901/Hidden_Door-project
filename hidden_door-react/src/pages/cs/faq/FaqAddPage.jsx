@@ -40,8 +40,11 @@ const FaqAddPage = () => {
 
       const res = await Api.post("/faqs/faq/add", newFaq);
 
-      toast.success(res.data.msg || "FAQ 추가 완료");
-      navigate("/hidden_door/cs/faq");
+      if (res.status !== 200) {
+        toast.error("FAQ추가에 실패했습니다.");
+      }
+
+      navigate(`/hidden_door/cs/faq/${res.data.data}?register=true`);
     } catch (error) {
       console.log(error);
       toast.error("서버 오류가 발생했습니다.");

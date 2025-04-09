@@ -99,7 +99,7 @@ public class CustomerService {
   }
 
   @Transactional
-  public ResponseDto<CustomerDto> addCustomer(CustomerDto customerDto) {
+  public ResponseDto<String> addCustomer(CustomerDto customerDto) {
 
     Customer customer = new Customer();
     customer.setCustomerName(customerDto.getCustomerName());
@@ -113,9 +113,7 @@ public class CustomerService {
 
     Customer saveCustomer = mongoTemplate.save(customer);
 
-    CustomerDto resCustomerDto = modelMapper.map(saveCustomer, CustomerDto.class);
-
-    return new ResponseDto<>(resCustomerDto, customer.getCustomerTitle() + "의 질문이 추가되었습니다.");
+    return new ResponseDto<>(saveCustomer.getCustomerId(),"succes");
   }
 
   public ResponseDto<CustomerDto> updateCustomerOne(String id, CustomerDto customerDto) {

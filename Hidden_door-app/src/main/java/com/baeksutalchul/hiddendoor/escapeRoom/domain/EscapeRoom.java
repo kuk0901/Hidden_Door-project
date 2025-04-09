@@ -1,5 +1,7 @@
 package com.baeksutalchul.hiddendoor.escapeRoom.domain;
 
+import java.time.LocalTime;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -27,5 +29,7 @@ public class EscapeRoom {
   private String themeExplanation;
   private String themeDetailHeaderTitle;
   private String themeDetailHeaderSubtitle;
+  private String openTime;
+  private String closeTime;
 
 }

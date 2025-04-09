@@ -12,12 +12,11 @@ function NoticePage() {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  // 페이지 정보 객체로 관리
   const [page, setPage] = useState({
     page: 1,
     size: 10,
     totalElements: 0,
-    totalPages: 1, // 최소 1페이지로 설정
+    totalPages: 1,
     isFirst: true,
     isLast: true,
   });
@@ -26,42 +25,49 @@ function NoticePage() {
     fetchNotices(page.page);
   }, [page.page]);
 
-  const fetchNotices = (currentPage) => {
+  const fetchNotices = async (currentPage) => {
     setLoading(true);
-    Api.get(`/notices?page=${currentPage - 1}&size=${page.size}`) // 여기서 currentPage - 1을 사용
-      .then((response) => {
-        if (response.data && response.data.data) {
-          const { content, page: pageInfo } = response.data.data;
 
-          if (content.length === 0 && currentPage > 1) {
-            // 데이터가 없는 페이지로 이동했을 때 이전 페이지로 돌아갑니다.
-            fetchNotices(currentPage - 1);
-            return;
-          }
+    try {
+      const response = await Api.get(
+        `/notices?page=${currentPage - 1}&size=${page.size}`
+      );
 
-          setNotices(content);
-
-          // 페이지 정보 업데이트
-          setPage((prev) => ({
-            ...prev,
-            ...pageInfo,
-            page: currentPage, // 요청한 페이지 번호를 사용
-            isFirst: currentPage === 1,
-            isLast: currentPage === pageInfo.totalPages,
-          }));
-        } else {
-          setNotices([]);
-          toast.info('등록된 공지사항이 없습니다.');
-        }
-      })
-      .catch((error) => {
-        console.error('Error fetching notices:', error);
-        toast.error('공지사항을 불러오는 데 실패했습니다.');
-        setNotices([]);
-      })
-      .finally(() => {
+      if (response.status !== 200) {
+        toast.error('서버 요청에 실패했습니다.');
         setLoading(false);
-      });
+        return;
+      }
+
+      if (response.data?.data) {
+        const { content, page: pageInfo } = response.data.data;
+
+        if (content.length === 0 && currentPage > 1) {
+          await fetchNotices(currentPage - 1);
+          return;
+        }
+
+        setNotices(content);
+
+        // 페이지 정보 업데이트
+        setPage((prev) => ({
+          ...prev,
+          ...pageInfo,
+          page: currentPage, // 요청한 페이지 번호를 사용
+          isFirst: currentPage === 1,
+          isLast: currentPage === pageInfo.totalPages,
+        }));
+      } else {
+        setNotices([]);
+        toast.info('등록된 공지사항이 없습니다.');
+      }
+    } catch (error) {
+      console.error('Error fetching notices:', error);
+      toast.error('공지사항을 불러오는 데 실패했습니다.');
+      setNotices([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleNoticeClick = (id) => {
