@@ -1,5 +1,6 @@
 package com.baeksutalchul.hiddendoor.reservation.controller;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 
@@ -10,8 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.baeksutalchul.hiddendoor.dto.ReservationDto;
+import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
+import com.baeksutalchul.hiddendoor.error.exception.CustomException;
+import com.baeksutalchul.hiddendoor.mail.dto.MailDto;
+import com.baeksutalchul.hiddendoor.mail.service.MailService;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.reservation.service.ReservationService;
+import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,10 +29,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 @RequestMapping("/api/v1/reservations")
 public class ReservationController {
   private final ReservationService reservationService;
+  private final MailService mailService;
   private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
 
-  public ReservationController(ReservationService reservationService) {
+  public ReservationController(ReservationService reservationService, MailService mailService) {
     this.reservationService = reservationService;
+    this.mailService = mailService;
   }
 
   @GetMapping("/list")
@@ -45,16 +53,45 @@ public class ReservationController {
     return ResponseEntity.ok(reservationService.getReservationMainPage());
   }
 
-  @GetMapping("/availability")
-  public ResponseEntity<ResponseDto<Map<String, Object>>> getAvailability(
-      @RequestParam String date,
-      @RequestParam String themeId) {
-    return ResponseEntity.ok(reservationService.checkAvailability(date, themeId));
-  }
+  @GetMapping("/timeslots")
+    public ResponseDto<?> getAvailableTimeSlots(
+            @RequestParam("date") String date,
+            @RequestParam("themeId") String themeId
+    ) {
+        return reservationService.getAvailableTimeSlots(date, themeId);
+    }
 
   @PostMapping("/create")
   public ResponseEntity<ResponseDto<ReservationDto>> createReservation(@RequestBody ReservationDto reservationDto) {
-    return ResponseEntity.ok(reservationService.createReservation(reservationDto));
+
+    ResponseDto<ReservationDto> res = reservationService.createReservation(reservationDto);
+
+    try {
+      String message = String.format("""
+        안녕하세요, %s님!
+        
+        예약이 성공적으로 완료되었습니다.
+        
+        예약 번호: %s
+        예약 날짜: %s
+        예약 시간: %s
+        
+        감사합니다.""",
+        reservationDto.getName(),
+        res.getData().getReservationNumber(),
+        DateTimeUtil.convertToKoreanDate(Instant.parse(reservationDto.getReservationDate())),
+        reservationDto.getReservationTime()
+      );
+       
+      MailDto mailDto = new MailDto(reservationDto.getEmail(), message);
+
+      mailService.sendMail(mailDto);
+      
+      } catch (Exception e) {
+        throw new CustomException(ErrorCode.MAIL_SEND_FAILED);
+      }
+
+    return ResponseEntity.ok(res);
   }
 
   @GetMapping("/summary/{reservationNumber}")

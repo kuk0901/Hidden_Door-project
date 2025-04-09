@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
+import { formatKoreanDate } from "@utils/format/date";
 
 const ReservationConfirmPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { selectedDate, selectedTime, selectedTheme, themes } = location.state;
 
-  // CustomerAddPage 스타일 상태 관리
   const [reservation, setReservation] = useState({
     name: "",
     email: "",
@@ -21,10 +21,9 @@ const ReservationConfirmPage = () => {
     themeId: selectedTheme,
     reservationDate: selectedDate.toISOString(),
     reservationTime: selectedTime,
-    paymentAmount: 0
+    paymentAmount: 0,
   });
 
-  // 테마 정보 로드
   const [selectedThemeDetails, setSelectedThemeDetails] = useState(null);
 
   useEffect(() => {
@@ -34,27 +33,25 @@ const ReservationConfirmPage = () => {
       setReservation((prev) => ({
         ...prev,
         partySize: theme.minParticipants,
-        paymentAmount: theme.price * theme.minParticipants
+        paymentAmount: theme.price * theme.minParticipants,
       }));
     }
   }, [selectedTheme, themes]);
 
-  // 실시간 가격 계산
   useEffect(() => {
     if (selectedThemeDetails) {
       setReservation((prev) => ({
         ...prev,
-        paymentAmount: selectedThemeDetails.price * prev.partySize
+        paymentAmount: selectedThemeDetails.price * prev.partySize,
       }));
     }
   }, [reservation.partySize, selectedThemeDetails]);
 
-  // CustomerAddPage 방식의 입력 처리
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setReservation((prev) => ({
       ...prev,
-      [name]: name === "partySize" ? Number(value) : value
+      [name]: name === "partySize" ? Number(value) : value,
     }));
   };
 
@@ -65,7 +62,6 @@ const ReservationConfirmPage = () => {
         toast.error("이름, 이메일, 전화번호는 필수 입력 항목입니다");
         return;
       }
-      // ReservationDto 구조에 맞게 데이터 변환
       const reservationDto = {
         themeId: reservation.themeId,
         name: reservation.name,
@@ -78,7 +74,7 @@ const ReservationConfirmPage = () => {
         availability: reservation.availability,
         paymentState: reservation.paymentState,
         paymentMethod: reservation.paymentMethod,
-        refundState: reservation.refundState
+        refundState: reservation.refundState,
       };
 
       console.log("요청 데이터:", reservationDto);
@@ -89,7 +85,6 @@ const ReservationConfirmPage = () => {
         toast.success(res.data.msg);
         console.log("예약 성공. 응답 데이터:", res.data);
 
-        // 예약 번호 확인
         const reservationNumber = res.data.data.reservationNumber;
         if (!reservationNumber) {
           console.error("예약 번호가 없습니다.");
@@ -116,106 +111,98 @@ const ReservationConfirmPage = () => {
     <div className="reservation-confirm-page">
       <h1>예약 확인</h1>
 
-      {/* 날짜, 시간, 테마명 */}
-      <div className="reservation-details">
-        <div className="form-group">
-          <label htmlFor="reservationDate">날짜:</label>
-          <div id="reservationDate">
-            {new Date(reservation.reservationDate).toLocaleDateString()}
-          </div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="reservationTime">시간:</label>
-          <div id="reservationTime">{reservation.reservationTime}</div>
-        </div>
-
-        <div className="form-group">
-          <label htmlFor="themeName">테마명:</label>
-          <div id="themeName">{selectedThemeDetails?.themeName}</div>
-        </div>
-      </div>
-
       <form onSubmit={handleSubmit}>
-        {/* 성함 */}
-        <div className="form-group">
-          <label htmlFor="name">성함:</label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={reservation.name}
-            onChange={handleInputChange}
-            placeholder="성함을 입력해주세요"
-            required
-          />
-        </div>
-
-        {/* 이메일 */}
-        <div className="form-group">
-          <label htmlFor="email">이메일:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={reservation.email}
-            onChange={handleInputChange}
-            placeholder="이메일을 입력해주세요"
-            required
-          />
-        </div>
-
-        {/* 휴대폰 */}
-        <div className="form-group">
-          <label htmlFor="phone">휴대폰:</label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={reservation.phone}
-            onChange={handleInputChange}
-            placeholder="휴대폰 번호를 입력해주세요"
-            required
-          />
-        </div>
-
-        {/* 인원 수 */}
-        {selectedThemeDetails && (
+        <div className="reservation-details">
           <div className="form-group">
-            <label htmlFor="partySize">인원 수:</label>
-            <select
-              id="partySize"
-              name="partySize"
-              value={reservation.partySize}
-              onChange={handleInputChange}
-            >
-              {Array.from(
-                {
-                  length:
-                    selectedThemeDetails.maxParticipants -
-                    selectedThemeDetails.minParticipants +
-                    1
-                },
-                (_, i) => i + selectedThemeDetails.minParticipants
-              ).map((num) => (
-                <option key={num} value={num}>
-                  {num}명
-                </option>
-              ))}
-            </select>
+            <label htmlFor="reservationDate">날짜</label>
+            <div id="reservationDate">
+              {formatKoreanDate(reservation.reservationDate)}
+            </div>
           </div>
-        )}
 
-        {/* 총 가격 */}
-        <div className="form-group">
-          <p>총 가격 : {reservation.paymentAmount.toLocaleString()}원</p>
+          <div className="form-group">
+            <label htmlFor="reservationTime">시간</label>
+            <div id="reservationTime">{reservation.reservationTime}</div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="themeName">테마명</label>
+            <div id="themeName">{selectedThemeDetails?.themeName}</div>
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="name">성함</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              value={reservation.name}
+              onChange={handleInputChange}
+              placeholder="성함을 입력해주세요"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="email">이메일</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={reservation.email}
+              onChange={handleInputChange}
+              placeholder="이메일을 입력해주세요"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="phone">휴대폰</label>
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              value={reservation.phone}
+              onChange={handleInputChange}
+              placeholder="휴대폰 번호를 입력해주세요"
+              required
+            />
+          </div>
+
+          {selectedThemeDetails && (
+            <div className="form-group">
+              <label htmlFor="partySize">인원 수</label>
+              <select
+                id="partySize"
+                name="partySize"
+                value={reservation.partySize}
+                onChange={handleInputChange}
+              >
+                {Array.from(
+                  {
+                    length:
+                      selectedThemeDetails.maxParticipants -
+                      selectedThemeDetails.minParticipants +
+                      1,
+                  },
+                  (_, i) => i + selectedThemeDetails.minParticipants
+                ).map((num) => (
+                  <option key={num} value={num}>
+                    {num}명
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          <div className="form-group">
+            <p>총 가격 : {reservation.paymentAmount.toLocaleString()}원</p>
+          </div>
+
+          <button type="submit" className="submit-button">
+            예약 완료
+          </button>
         </div>
-
-        {/* 예약 완료 버튼 */}
-
-        <button type="submit" className="submit-button">
-          예약 완료
-        </button>
       </form>
     </div>
   );

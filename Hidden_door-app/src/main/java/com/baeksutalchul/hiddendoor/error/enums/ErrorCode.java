@@ -38,13 +38,21 @@ public enum ErrorCode {
     ADMIN_DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "DUPLICATE_EMAIL", "이미 사용 중인 이메일입니다."),
     ADMIN_DUPLICATE_PHONE(HttpStatus.BAD_REQUEST, "DUPLICATE_PHONE", "이미 사용 중인 휴대폰번호입니다."),
 
+    // * user
+    MAIL_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "MAIL_500", "예약 확인 메일 전송에 실패했습니다. 1:1 문의 부탁드립니다."),
+
     // * page
     PAGINATION_ERROR(HttpStatus.BAD_REQUEST, "PAGINATION_400", "페이지 정보가 유효하지 않습니다."),
 
     // * img
     INVALID_INPUT_FILE(HttpStatus.BAD_REQUEST, "INPUT_FILE_400", "유효하지 않은 파일입니다."),
 
-    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER_500", "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+    // * timeSlot
+    TIME_SLOT_NOT_FOUND(HttpStatus.NOT_FOUND, "TIMESLOT_404", "해당 시간대의 예약 정보를 찾을 수 없습니다."),
+    ALREADY_RESERVED(HttpStatus.CONFLICT, "RESERVATION_409", "이미 예약된 시간대입니다."),
+
+    INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER_500", "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."),
+    INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "DATE_400", "잘못된 날짜 형식입니다.");
 
     private final HttpStatus httpStatus;
     private final String code;
