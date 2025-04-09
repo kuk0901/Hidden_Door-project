@@ -38,6 +38,7 @@ const FaqUpdatePage = () => {
   };
 
   const deleteFaq = async () => {
+    // XXX: useConfirm 사용 형태로 수정해주세요.
     const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
     if (!confirmDelete) return;
 

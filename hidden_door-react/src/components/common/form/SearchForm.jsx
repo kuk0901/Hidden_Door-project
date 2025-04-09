@@ -8,6 +8,7 @@ const SearchForm = ({ onSearch, fields, initialValues, onReset }) => {
 
   const selectedField = watch("searchField");
 
+  // FIXME: useConfirm으로 수정
   const onSubmit = (data) => {
     if (data.searchField === "") {
       alert("검색 필드를 선택해주세요.");

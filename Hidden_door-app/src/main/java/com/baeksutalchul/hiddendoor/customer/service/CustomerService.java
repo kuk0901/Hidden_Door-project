@@ -32,30 +32,31 @@ public class CustomerService {
   private final Instant defaulInstant = Instant.parse("1970-01-01T00:00:00Z");
 
   public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper, MongoTemplate mongoTemplate) {
-    this.mongoTemplate =mongoTemplate;
+    this.mongoTemplate = mongoTemplate;
     this.customerRepository = customerRepository;
     this.modelMapper = modelMapper;
   }
 
   public ResponseDto<List<CustomerDto>> getCustomerAll(PageDto pageDto, String searchField, String searchTerm) {
-      Pageable pageable = PageableUtil.createPageRequest(
-      Math.max(0, pageDto.getPage() - 1),
-      pageDto.getSize(),
-      pageDto.getSortField(),
-      pageDto.getSortDirection());
+    Pageable pageable = PageableUtil.createPageRequest(
+        Math.max(0, pageDto.getPage() - 1),
+        pageDto.getSize(),
+        pageDto.getSortField(),
+        pageDto.getSortDirection());
 
     Page<Customer> customerList;
 
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
       switch (searchField) {
         case "customerTitle":
-        customerList = customerRepository.findByCustomerTitleContaining(searchTerm, pageable);
+          customerList = customerRepository.findByCustomerTitleContaining(searchTerm, pageable);
           break;
         case "customerContent":
-        customerList = customerRepository.findByCustomerContentContaining(searchTerm, pageable);
+          customerList = customerRepository.findByCustomerContentContaining(searchTerm, pageable);
           break;
         default:
-        customerList = customerRepository.findByCustomerTitleContainingOrCustomerContentContaining(searchTerm, searchTerm, pageable);
+          customerList = customerRepository.findByCustomerTitleContainingOrCustomerContentContaining(searchTerm,
+              searchTerm, pageable);
       }
     } else {
       customerList = customerRepository.findAll(pageable);
@@ -65,15 +66,15 @@ public class CustomerService {
     }
 
     List<CustomerDto> customerDtoList = customerList.getContent().stream()
-    .map(customer -> {
-      CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
-      
-      customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
-      customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
-      
-      return customerDto;
-     })
-    .toList();
+        .map(customer -> {
+          CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
+
+          customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
+          customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
+
+          return customerDto;
+        })
+        .toList();
 
     PageDto resultPageDto = PageableUtil.createPageDto(customerList);
     logger.info("resultPageDto: {}", resultPageDto);
@@ -101,6 +102,8 @@ public class CustomerService {
   @Transactional
   public ResponseDto<String> addCustomer(CustomerDto customerDto) {
 
+    // XXX: 버튼 클릭으로 동일 문의 요청이 반복될 경우를 고려한 중복 문의에 대학 확인 코드를 추가해 주세요.
+
     Customer customer = new Customer();
     customer.setCustomerName(customerDto.getCustomerName());
     customer.setCustomerEmail(customerDto.getCustomerEmail());
@@ -113,9 +116,10 @@ public class CustomerService {
 
     Customer saveCustomer = mongoTemplate.save(customer);
 
-    return new ResponseDto<>(saveCustomer.getCustomerId(),"succes");
+    return new ResponseDto<>(saveCustomer.getCustomerId(), "succes");
   }
 
+  @Transactional
   public ResponseDto<CustomerDto> updateCustomerOne(String id, CustomerDto customerDto) {
 
     Customer customer = customerRepository.findById(id).orElseThrow();
@@ -124,7 +128,7 @@ public class CustomerService {
     customer.setCustomerAnswer(customerDto.getCustomerAnswer());
     customer.setAdminName(customerDto.getAdminName());
     customer.setAnsCreDate(Instant.now());
-    
+
     Customer updatedCustomer = customerRepository.save(customer);
     CustomerDto updatedCustomerDto = modelMapper.map(updatedCustomer, CustomerDto.class);
 

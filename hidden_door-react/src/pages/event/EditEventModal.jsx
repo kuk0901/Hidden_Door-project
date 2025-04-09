@@ -31,6 +31,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
     }
   }, [event]);
 
+  // XXX: handleSubmit 함수가 중첩으로 작성되었습니다. 확인 후 수정해 주세요.
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -77,6 +78,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
           updatedEvent
         );
 
+        // XXX: status 비교 형태로 수정해 주세요.
         if (response.data && response.data.data) {
           onEventEdited(response.data.data);
           toast.success(response.data.message || '이벤트가 수정되었습니다.');

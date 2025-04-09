@@ -28,12 +28,14 @@ const CustomerDetailPage = () => {
   };
 
   const deleteCustomer = async () => {
+    // XXX: useConfirm 사용 형태로 수정해주세요.
     const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
     if (!confirmDelete) return;
 
     try {
       const res = await Api.delete(`/customers/customer/delete/${customerId}`);
 
+      // XXX: 더 명확한 메시지로 수정해 주세요.
       if (res.status !== 200) {
         toast.error("삭제에 실패했습니다.");
       }
@@ -58,8 +60,11 @@ const CustomerDetailPage = () => {
       const res = await Api.post(`/customers/customer/update/${customerId}`, {
         customerAnswer: customerAnswer,
         adminName: admin.email,
-        customerCheck: "O",
+        customerCheck: "O"
       });
+
+      // 조건문으로 res.status 확인 코드 추가해 주세요.
+
       toast.success(res.data.msg);
       setIsAnswering(false);
       setCustomerAnswer("");

@@ -7,6 +7,7 @@ import SearchForm from "@components/common/form/SearchForm";
 import Pagination from "@components/common/navigation/pagination/Pagination";
 import FaqList from "../../../components/cs/faq/FaqList";
 
+// XXX: 데이터 업데이트 가능성이 낮은 Faq는 recoil 사용 형태로 변경 부탁드립니다.
 const FaqPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
@@ -22,14 +23,14 @@ const FaqPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "id",
-      sortDirection: "ASC",
+      sortDirection: "ASC"
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: "",
+      searchTerm: ""
     }
   );
 
@@ -43,11 +44,12 @@ const FaqPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm,
-        },
+          searchTerm
+        }
       });
 
       if (res.status !== 200) {
+        // XXX: 더 명확한 메시지로 수정해 주세요.
         toast.error("오류입니다.");
       }
 
@@ -55,7 +57,7 @@ const FaqPage = () => {
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm,
+        searchTerm: res.data.searchTerm
       });
     } catch (error) {
       toast.error(error.message || "오류입니다");
@@ -88,7 +90,7 @@ const FaqPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "title", label: "제목" },
-    { value: "question", label: "질문내용" },
+    { value: "question", label: "질문내용" }
   ];
 
   const handleAddFaq = () => {

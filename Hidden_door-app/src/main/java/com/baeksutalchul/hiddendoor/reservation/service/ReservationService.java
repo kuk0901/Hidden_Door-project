@@ -42,11 +42,10 @@ public class ReservationService {
     private final Instant defaultInstant = Instant.parse("1970-01-01T00:00:00Z");
 
     public ReservationService(
-        ReservationRepository reservationRepository,
-        ModelMapper modelMapper,
-        ThemeRepository themeRepository,
-        TimeSlotRepository timeSlotRepository
-    ) {
+            ReservationRepository reservationRepository,
+            ModelMapper modelMapper,
+            ThemeRepository themeRepository,
+            TimeSlotRepository timeSlotRepository) {
         this.reservationRepository = reservationRepository;
         this.modelMapper = modelMapper;
         this.themeRepository = themeRepository;
@@ -57,14 +56,16 @@ public class ReservationService {
         List<Reservation> reservationList = reservationRepository.findAll();
 
         List<ReservationDto> reservationDtoList = reservationList.stream()
-            .map(reservation -> {
-                ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
-                reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
-                reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
-                reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
-                return reservationDto;
-            })
-            .toList();
+                .map(reservation -> {
+                    ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
+                    reservationDto
+                            .setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
+                    reservationDto
+                            .setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
+                    reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
+                    return reservationDto;
+                })
+                .toList();
 
         return new ResponseDto<>(reservationDtoList, "예약 데이터 반환");
     }
@@ -96,9 +97,9 @@ public class ReservationService {
         LocalDate startDate = LocalDate.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return IntStream.range(0, days)
-            .mapToObj(startDate::plusDays)
-            .map(date -> date.format(formatter))
-            .toList();
+                .mapToObj(startDate::plusDays)
+                .map(date -> date.format(formatter))
+                .toList();
     }
 
     public ResponseDto<Map<String, Object>> getAvailableTimeSlots(String date, String themeId) {
@@ -109,6 +110,10 @@ public class ReservationService {
             throw new CustomException(ErrorCode.INVALID_DATE_FORMAT, "잘못된 날짜 형식입니다.");
         }
 
+        // XXX:
+        // timeSlotRepository.findByThemeIdAndDate(themeId,localDate).orElseThrow(null);
+        // 형태로 변경해 주세요.
+        // orElseThrow 메서드 안에는 CustomerException(ErrorCode.~~) 형태로 사용하시면 됩니다.
         Optional<TimeSlot> timeSlotOptional = timeSlotRepository.findByThemeIdAndDate(themeId, localDate);
         if (timeSlotOptional.isEmpty()) {
             throw new CustomException(ErrorCode.TIME_SLOT_NOT_FOUND, "해당 테마와 날짜에 예약 가능한 시간이 없습니다.");
@@ -116,13 +121,13 @@ public class ReservationService {
 
         TimeSlot timeSlot = timeSlotOptional.get();
         List<Map<String, Object>> availableTimeSlots = timeSlot.getSlots().stream()
-            .map(slot -> {
-                Map<String, Object> slotInfo = new HashMap<>();
-                slotInfo.put("time", slot.getTime());
-                slotInfo.put("isAvailable", !slot.isBooked());
-                return slotInfo;
-            })
-            .collect(Collectors.toList());
+                .map(slot -> {
+                    Map<String, Object> slotInfo = new HashMap<>();
+                    slotInfo.put("time", slot.getTime());
+                    slotInfo.put("isAvailable", !slot.isBooked());
+                    return slotInfo;
+                })
+                .toList();
 
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("timeSlots", availableTimeSlots);
@@ -141,12 +146,12 @@ public class ReservationService {
 
         String reservationTime = dto.getReservationTime();
         TimeSlot timeSlot = timeSlotRepository.findByThemeIdAndDate(themeId, reservationDate)
-            .orElseThrow(() -> new CustomException(ErrorCode.TIME_SLOT_NOT_FOUND));
+                .orElseThrow(() -> new CustomException(ErrorCode.TIME_SLOT_NOT_FOUND));
 
         TimeSlot.TimeSlotDetail selectedSlot = timeSlot.getSlots().stream()
-            .filter(slot -> slot.getTime().equals(reservationTime) && !slot.isBooked())
-            .findFirst()
-            .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_RESERVED));
+                .filter(slot -> slot.getTime().equals(reservationTime) && !slot.isBooked())
+                .findFirst()
+                .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_RESERVED));
 
         // 예약 처리
         selectedSlot.setBooked(true);
@@ -189,7 +194,7 @@ public class ReservationService {
 
     public ResponseDto<ReservationDto> getReservationSummary(String reservationNumber) {
         Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber)
-            .orElseThrow(() -> new CustomException(ErrorCode.RESERVATION_NOT_FOUND, "예약을 찾을 수 없습니다."));
+                .orElseThrow(() -> new CustomException(ErrorCode.RESERVATION_NOT_FOUND, "예약을 찾을 수 없습니다."));
 
         ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
         reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));

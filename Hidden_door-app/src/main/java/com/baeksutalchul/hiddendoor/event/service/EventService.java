@@ -24,7 +24,7 @@ public class EventService {
             List<Event> events = eventRepository.findAll();
             return events.stream()
                     .map(this::convertToDto)
-                    .collect(Collectors.toList());
+                    .toList();
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "이벤트 목록 조회 중 오류가 발생했습니다.");
         }
@@ -42,9 +42,9 @@ public class EventService {
 
     public EventDto createEvent(EventDto eventDto) {
         // 조건문을 변수로 분리하여 가독성 향상
-        boolean isInvalidDateRange = !"true".equals(eventDto.getIsOngoing()) 
+        boolean isInvalidDateRange = !"true".equals(eventDto.getIsOngoing())
                 && !"true".equals(eventDto.getNoEndDate())
-                && eventDto.getStartDate() != null 
+                && eventDto.getStartDate() != null
                 && eventDto.getEndDate() != null
                 && eventDto.getStartDate().isAfter(eventDto.getEndDate());
 
@@ -75,9 +75,9 @@ public class EventService {
 
     public EventDto updateEvent(String eventId, EventDto eventDto) {
         // 조건문을 변수로 분리하여 가독성 향상
-        boolean isInvalidDateRange = !"true".equals(eventDto.getIsOngoing()) 
+        boolean isInvalidDateRange = !"true".equals(eventDto.getIsOngoing())
                 && !"true".equals(eventDto.getNoEndDate())
-                && eventDto.getStartDate() != null 
+                && eventDto.getStartDate() != null
                 && eventDto.getEndDate() != null
                 && eventDto.getStartDate().isAfter(eventDto.getEndDate());
 
@@ -125,6 +125,7 @@ public class EventService {
         }
     }
 
+    // XXX: convert 관련 메서드는 제거 후 사용 위치에서는 modelMapper 사용하는 형태로 수정해 주세요.
     private EventDto convertToDto(Event event) {
         return new EventDto(
                 event.getEventId(),
@@ -134,10 +135,10 @@ public class EventService {
                 event.getEndDate(),
                 event.getIsOngoing(),
                 event.getNoEndDate(),
-                event.getEventType()
-        );
+                event.getEventType());
     }
 
+    // XXX: convert 관련 메서드는 제거 후 사용 위치에서는 modelMapper 사용하는 형태로 수정해 주세요.
     private Event convertToEntity(EventDto eventDto) {
         return new Event(
                 eventDto.getEventId(),
@@ -147,7 +148,6 @@ public class EventService {
                 eventDto.getEndDate(),
                 eventDto.getIsOngoing(),
                 eventDto.getNoEndDate(),
-                eventDto.getEventType()
-        );
+                eventDto.getEventType());
     }
 }

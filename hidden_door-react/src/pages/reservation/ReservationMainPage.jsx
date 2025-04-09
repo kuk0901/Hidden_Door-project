@@ -13,7 +13,7 @@ const ReservationMainPage = () => {
   const navigate = useNavigate();
   const [pageData, setPageData] = useState({
     availableDates: [],
-    themes: [], // timeSlots 제거
+    themes: [] // timeSlots 제거
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -34,19 +34,22 @@ const ReservationMainPage = () => {
   const fetchAvailableTimeSlots = async () => {
     try {
       const formattedDate = selectedDate.toISOString().split("T")[0];
+
+      // XXX: validateStatus: (status) => status < 500, // 500 에러 명시적 처리 코드는 변경해 주세요.
+      // 현재 코드는 500번대 미만의 에러를 모두 성공으로 처리합니다. -> 400번대도 정상 응답처리
       const res = await Api.get("/reservations/timeslots", {
         params: {
           date: formattedDate,
-          themeId: selectedTheme,
+          themeId: selectedTheme
         },
-        validateStatus: (status) => status < 500, // 500 에러 명시적 처리
+        validateStatus: (status) => status < 500 // 500 에러 명시적 처리
       });
       setAvailableTimeSlots(res.data?.data?.timeSlots || []);
     } catch (error) {
       console.error("Error Details:", {
         config: error.config,
         response: error.response?.data,
-        status: error.response?.status,
+        status: error.response?.status
       });
       toast.error("시간대 조회에 실패했습니다. 서버 로그를 확인해주세요.");
     }
@@ -56,11 +59,16 @@ const ReservationMainPage = () => {
     setIsLoading(true);
     try {
       const res = await Api.get("/reservations/main");
+
+      // XXX: 조건문으로 status 확인해 주세요.
+
       setPageData({
         availableDates: res.data.data.availableDates,
-        themes: res.data.data.themes,
+        themes: res.data.data.themes
       });
     } catch (error) {
+      // XXX: 더 명확한 메시지 내용으로 수정해 주세요.
+      // error.message가 있는 경우와 없는 경우
       toast.error("데이터를 불러오는데 실패했습니다.");
       console.error("Error fetching page data:", error);
     } finally {
@@ -73,9 +81,12 @@ const ReservationMainPage = () => {
       const response = await Api.get("/reservations/check", {
         params: {
           reservationNumber: checkReservationNumber,
-          name: checkName,
-        },
+          name: checkName
+        }
       });
+
+      // XXX: status 비교로 변경해 주세요.
+
       if (response.data) {
         navigate(`/hidden_door/reservation/summary/${checkReservationNumber}`);
       } else {
@@ -125,8 +136,8 @@ const ReservationMainPage = () => {
                 selectedDate,
                 selectedTime,
                 selectedTheme,
-                themes: pageData.themes,
-              },
+                themes: pageData.themes
+              }
             })
           }
         >

@@ -15,8 +15,12 @@ const FaqDetailPage = () => {
   const getFaqDetail = async () => {
     try {
       const res = await Api.get(`/faqs/faq/${faqId}`);
+
+      // 조건문으로 res.status 확인 코드 추가해 주세요.
+
       setFaqDetail(res.data.data);
     } catch (error) {
+      // XXX: 서버에서 전송되는 메시지가 있다면 해당 메시지 사용 없다면, 더 명확한 메시지 내용으로 수정해 주세요.
       toast.error(error.message || "오류입니다.");
     }
   };
