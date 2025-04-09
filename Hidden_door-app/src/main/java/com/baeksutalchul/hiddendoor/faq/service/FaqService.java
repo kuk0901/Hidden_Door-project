@@ -98,7 +98,7 @@ public class FaqService {
   }
 
   @Transactional
-  public ResponseDto<FaqDto> addFaq(FaqDto faqDto) {
+  public ResponseDto<String> addFaq(FaqDto faqDto) {
 
     Faq faq = new Faq();
     faq.setWriter(faqDto.getWriter());
@@ -111,26 +111,21 @@ public class FaqService {
 
     Faq saveFaq = mongoTemplate.save(faq);
 
-    FaqDto resFaqDto = modelMapper.map(saveFaq, FaqDto.class);
-
-    return new ResponseDto<>(resFaqDto, faq.getTitle() + "의 질문이 추가되었습니다.");
+    return new ResponseDto<>(saveFaq.getFaqId(),"succes");
   }
 
-  public ResponseDto<FaqDto> updateFaqOne(String id, FaqDto faqDto) {
-    // ID로 해당 FAQ를 조회
+  public ResponseDto<String> updateFaqOne(String id, FaqDto faqDto) {
+
     Faq faq = faqRepository.findById(id).orElseThrow();
 
-    // faqDto에서 받은 정보를 이용하여 faq 업데이트
     faq.setTitle(faqDto.getTitle());
     faq.setQuestion(faqDto.getQuestion());
     faq.setAnswer(faqDto.getAnswer());
     faq.setModDate(Instant.now());
 
-    // 저장 후 결과 반환
     Faq updatedFaq = faqRepository.save(faq);
-    FaqDto updatedFaqDto = modelMapper.map(updatedFaq, FaqDto.class);
 
-    return new ResponseDto<>(updatedFaqDto,  "질문 " + faq.getTitle() +"이(가) 수정되었습니다");
+    return new ResponseDto<>(updatedFaq.getFaqId(), "succes");
 }
 
   @Transactional

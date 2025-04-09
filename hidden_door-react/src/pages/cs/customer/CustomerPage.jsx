@@ -21,14 +21,14 @@ const CustomerPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "id",
-      sortDirection: "ASC"
+      sortDirection: "ASC",
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: ""
+      searchTerm: "",
     }
   );
 
@@ -46,17 +46,19 @@ const CustomerPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm
-        }
+          searchTerm,
+        },
       });
 
-      // XXX: response.status !== 200 조건으로 사용해 toast로 에러 메시지 띄우는 형태로 수정해 주세요.
+      if (res.status !== 200) {
+        toast.error("오류입니다.");
+      }
 
       setCustomerList(res.data.data);
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm
+        searchTerm: res.data.searchTerm,
       });
     } catch (error) {
       toast.error(error.message || "오류입니다");
@@ -83,7 +85,7 @@ const CustomerPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "customerTitle", label: "제목" },
-    { value: "customerContent", label: "질문내용" }
+    { value: "customerContent", label: "질문내용" },
   ];
 
   const handleAddCustomer = () => {
