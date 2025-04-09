@@ -55,7 +55,8 @@ public class SecurityConfig {
                 "/api/v1/customers/customer/add",
                 "/api/v1/customers/customer/delete/*", "/api/v1/reservations/create")
             .permitAll()
-            .requestMatchers("/api/v1/admins/**").hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
+            .requestMatchers("/api/v1/admins/**", "/api/v1/monitoring/**")
+            .hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")
             .requestMatchers("/api/v1/auth/register", "/api/v1/admins/account/delete/one", "/api/v1/super-admin/**")
             .hasAuthority("ROLE_SUPER_ADMIN")
             .anyRequest().authenticated())

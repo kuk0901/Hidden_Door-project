@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { themeFields, initialGenreList } from "@utils/fields/themeFields";
 import useConfirm from "@hooks/useConfirm";
 
+// FIXME: 테마별 운영 요일 selectBox 추가
 const ThemeAddPage = () => {
   const [genreList, setGenreList] = useState(initialGenreList);
   const [formData, setFormData] = useState({

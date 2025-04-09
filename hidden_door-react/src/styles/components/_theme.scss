@@ -295,6 +295,36 @@
   }
 }
 
+.theme-section-skeleton {
+  .theme-page--theme-section {
+    .theme--list {
+      .theme--item--skeleton {
+        margin: 30px auto;
+
+        .img-skeleton {
+          @include mixins.size(400px, 400px);
+          margin-bottom: 20px;
+          border-radius: 4px;
+
+          @include mixins.sm-mode {
+            @include mixins.size(300px, 300px);
+          }
+        }
+
+        .btn-container-skeleton {
+          @include mixins.flex-layout-row-with-gap(space-around, center);
+
+          .btn-skeleton {
+            display: inline-block;
+            width: 100px;
+            padding: 8px 16px;
+          }
+        }
+      }
+    }
+  }
+}
+
 // theme add
 .themeForm-container {
   margin: 10px 10px 50px;
