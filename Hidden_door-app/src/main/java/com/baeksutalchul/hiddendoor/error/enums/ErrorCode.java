@@ -37,6 +37,7 @@ public enum ErrorCode {
     ADMIN_NOT_FOUND(HttpStatus.NOT_FOUND, "ADMIN_404", "관리자 정보를 찾을 수 없습니다."),
     ADMIN_DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "DUPLICATE_EMAIL", "이미 사용 중인 이메일입니다."),
     ADMIN_DUPLICATE_PHONE(HttpStatus.BAD_REQUEST, "DUPLICATE_PHONE", "이미 사용 중인 휴대폰번호입니다."),
+    DASHBOARD_TOTAL_RESERVATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "DASHBOARD_500", "전체 예약 데이터를 불러오지 못했습니다."),
 
     // * user
     MAIL_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "MAIL_500", "예약 확인 메일 전송에 실패했습니다. 1:1 문의 부탁드립니다."),

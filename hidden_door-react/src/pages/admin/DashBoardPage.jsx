@@ -4,23 +4,22 @@ import ThemeTotalReservationChart from "@components/chart/ThemeTotalReservationC
 import { useEffect, useState } from "react";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
-// import _ from "lodash";
-// import Loading from "@components/common/loading/Loading";
+import _ from "lodash";
+import Loading from "@components/common/loading/Loading";
 
-// const DATA_KEYS = {
-//   THEME_DAY: "themeDayReservations",
-//   THEME_TOTAL: "themeTotalReservations",
-//   DAY: "dayReservations"
-// };
+const DATA_KEYS = {
+  THEME_DAY: "themeDayReservations",
+  THEME_TOTAL: "themeTotalReservations",
+  DAY: "dayReservations"
+};
 
 const DashboardPage = () => {
-  const [chartData, setChartData] = useState({}); // { key: [], key: [], key: [] } 형태
-  const [loading, setLoading] = useState(false); // FIXME: true로 변경해야 함
+  const [chartData, setChartData] = useState({});
+  const [loading, setLoading] = useState(true);
 
-  // FIXME: 임시 api 요청 형태
   const getChartData = async () => {
     try {
-      const res = await Api.get();
+      const res = await Api.get("/monitoring/dashboard");
 
       if (res.status !== 200) {
         toast.error(
@@ -41,55 +40,39 @@ const DashboardPage = () => {
   };
 
   useEffect(() => {
-    // getChartData();
+    getChartData();
   }, []);
 
-  // const renderChartOrPlaceholder = (Component, dataKey) => {
-  //   if (_.isEmpty(chartData?.[dataKey]))
-  //     return <div className="chart__none">데이터가 없습니다</div>; // FIXME: 추후 컴포넌트로 변경 가능
-  //   return <Component data={chartData[dataKey]} />;
-  // };
-
-  // return (
-  //   <>
-  //     {loading ? (
-  //       // FIXME: 스켈레톤 ui로 대체
-  //       <Loading />
-  //     ) : (
-  //       <>
-  //         <section className="theme-day-reservation--section">
-  //           {renderChartOrPlaceholder(
-  //             ThemeDayReservationChart,
-  //             DATA_KEYS.THEME_DAY
-  //           )}
-  //         </section>
-  //         <section className="theme-total-reservation--section">
-  //           {renderChartOrPlaceholder(
-  //             ThemeTotalReservationChart,
-  //             DATA_KEYS.THEME_TOTAL
-  //           )}
-  //         </section>
-  //         <section className="day-reservation--section">
-  //           {renderChartOrPlaceholder(DayReservationChart, DATA_KEYS.DAY)}
-  //         </section>
-  //       </>
-  //     )}
-  //   </>
-  // );
+  const renderChartOrPlaceholder = (Component, dataKey) => {
+    if (_.isEmpty(chartData?.[dataKey]))
+      return <div className="chart__none">데이터가 없습니다</div>; // FIXME: 추후 컴포넌트로 변경 가능
+    return <Component data={chartData[dataKey]} />;
+  };
 
   return (
     <>
-      <section>
-        <ThemeDayReservationChart />
-      </section>
-
-      {/* <section>
-        <ThemeTotalReservationChart />
-      </section>
-
-      <section>
-        <DayReservationChart />
-      </section> */}
+      {loading ? (
+        // FIXME: 스켈레톤 ui로 대체
+        <Loading />
+      ) : (
+        <>
+          <section className="theme-day-reservation--section">
+            {renderChartOrPlaceholder(
+              ThemeDayReservationChart,
+              DATA_KEYS.THEME_DAY
+            )}
+          </section>
+          <section className="theme-total-reservation--section">
+            {renderChartOrPlaceholder(
+              ThemeTotalReservationChart,
+              DATA_KEYS.THEME_TOTAL
+            )}
+          </section>
+          <section className="day-reservation--section">
+            {renderChartOrPlaceholder(DayReservationChart, DATA_KEYS.DAY)}
+          </section>
+        </>
+      )}
     </>
   );
 };

@@ -1,9 +1,14 @@
 import { ResponsivePie } from "@nivo/pie";
+import { stringToColor } from "@utils/color/stringToColor";
 
 const ThemeTotalReservationChart = ({ data }) => {
-  // 데이터 정렬 (예약 많은 순) + 총합 계산 -> 서버에서 처리 고려
-  const sortedData = [...data].sort((a, b) => b.value - a.value);
-  const total = sortedData.reduce((sum, item) => sum + item.value, 0);
+  const sortedData = [...data].sort(
+    (a, b) => b.totalReservations - a.totalReservations
+  );
+  const total = sortedData.reduce(
+    (sum, item) => sum + item.totalReservations,
+    0
+  );
 
   // 임시 UI
   return (
@@ -33,13 +38,14 @@ const ThemeTotalReservationChart = ({ data }) => {
             alignItems: "center"
           }}
         >
-          <h4 style={{ margin: 0 }}>테마별 누적 예약</h4>
+          <h4 style={{ margin: 0, color: "#000" }}>테마별 누적 예약</h4>
           <span
             style={{
               background: "#e3f2fd",
               padding: "4px 8px",
               borderRadius: "16px",
-              fontSize: "0.9em"
+              fontSize: "0.9em",
+              color: "#000"
             }}
           >
             총 {total}건
@@ -48,23 +54,24 @@ const ThemeTotalReservationChart = ({ data }) => {
 
         {sortedData.map((item) => (
           <div
-            key={item.id}
+            key={item.themeId}
             style={{
               marginBottom: "8px",
               display: "flex",
-              alignItems: "center"
+              alignItems: "center",
+              color: "#000"
             }}
           >
             <div
               style={{
                 width: "12px",
                 height: "12px",
-                background: item.color, // 파이 차트와 색상 연동
                 marginRight: "8px",
-                borderRadius: "2px"
+                borderRadius: "2px",
+                background: `${stringToColor(item.themeName)}`
               }}
             />
-            <span style={{ flex: 1 }}>{item.label}</span>
+            <span style={{ flex: 1 }}>{item.themeName}</span>
             <div
               style={{
                 display: "flex",
@@ -72,85 +79,96 @@ const ThemeTotalReservationChart = ({ data }) => {
                 alignItems: "center"
               }}
             >
-              <b>{item.value}건</b>
-              <span
-                style={{
-                  color: "#666",
-                  fontSize: "0.8em"
-                }}
-              >
-                ({Math.round((item.value / total) * 100)}%)
-              </span>
+              <b>{item.totalReservations}건</b>
+              {total != 0 && (
+                <span
+                  style={{
+                    color: "#666",
+                    fontSize: "0.8em"
+                  }}
+                >
+                  ({Math.round((item.totalReservations / total) * 100)}%)
+                </span>
+              )}
             </div>
           </div>
         ))}
       </div>
 
       {/* 2. 개선된 Pie Chart */}
-      <div
-        style={{
-          flex: 1,
-          height: "300px",
-          minWidth: "300px",
-          position: "relative"
-        }}
-      >
-        <ResponsivePie
-          data={sortedData}
-          margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-          innerRadius={0.5}
-          padAngle={1}
-          cornerRadius={3}
-          activeOuterRadiusOffset={8}
-          colors={{ datum: "data.color" }} // 아이템별 색상 적용
-          borderWidth={1}
-          borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
-          arcLinkLabelsSkipAngle={10}
-          arcLinkLabelsTextColor="#333"
-          arcLinkLabelsThickness={2}
-          arcLinkLabelsColor={{ from: "color" }}
-          arcLabelsSkipAngle={10}
-          arcLabelsTextColor={{
-            from: "color",
-            modifiers: [["darker", 2]]
+      {total != 0 && (
+        <div
+          style={{
+            flex: 1,
+            height: "300px",
+            minWidth: "300px",
+            minHeight: "250px",
+            position: "relative"
           }}
-          tooltip={({ datum }) => (
-            <div
-              style={{
-                padding: "8px 12px",
-                background: "white",
-                border: `2px solid ${datum.color}`,
-                borderRadius: "4px",
-                boxShadow: "0 3px 9px rgba(0,0,0,0.1)"
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: "4px"
-                }}
-              >
+        >
+          <ResponsivePie
+            data={sortedData.map((item) => ({
+              id: item.themeName,
+              label: item.themeName,
+              value: item.totalReservations,
+              color: stringToColor(item.themeName),
+              themeId: item.themeId,
+              originalData: item
+            }))}
+            margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+            innerRadius={0.3}
+            padAngle={1}
+            cornerRadius={8}
+            activeOuterRadiusOffset={12}
+            colors={{ datum: "data.color" }}
+            borderWidth={1}
+            borderColor={{ from: "color", modifiers: [["darker", 0.3]] }}
+            enableArcLinkLabels={false}
+            tooltip={({ datum }) => {
+              const original = datum.data.originalData;
+              return (
                 <div
                   style={{
-                    width: "12px",
-                    height: "12px",
-                    background: datum.color,
-                    marginRight: "6px"
+                    padding: "8px 12px",
+                    background: "white",
+                    border: `2px solid ${datum.color}`,
+                    borderRadius: "4px",
+                    boxShadow: "0 3px 9px rgba(0,0,0,0.1)",
+                    color: "#000"
                   }}
-                />
-                <strong>{datum.label}</strong>
-              </div>
-              <div>
-                예약: <b>{datum.value}건</b>
-              </div>
-              <div>
-                비율: <b>{Math.round((datum.value / total) * 100)}%</b>
-              </div>
-            </div>
-          )}
-        />
-      </div>
+                >
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      marginBottom: "4px"
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "12px",
+                        height: "12px",
+                        background: datum.color,
+                        marginRight: "6px"
+                      }}
+                    />
+                    <strong>{original.themeName}</strong>
+                  </div>
+                  <div>
+                    예약: <b>{original.totalReservations}건</b>
+                  </div>
+                  <div>
+                    비율:{" "}
+                    <b>
+                      {Math.round((original.totalReservations / total) * 100)}%
+                    </b>
+                  </div>
+                </div>
+              );
+            }}
+          />
+        </div>
+      )}
     </div>
   );
 };
