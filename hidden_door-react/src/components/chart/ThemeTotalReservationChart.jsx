@@ -1,5 +1,6 @@
 import { ResponsivePie } from "@nivo/pie";
 import { stringToColor } from "@utils/color/stringToColor";
+import styles from "./themeTotalReservationChart.module.scss";
 
 const ThemeTotalReservationChart = ({ data }) => {
   const sortedData = [...data].sort(
@@ -12,100 +13,41 @@ const ThemeTotalReservationChart = ({ data }) => {
 
   // 임시 UI
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: { xs: "column", md: "row" }, // 모바일에서는 세로 배치
-        gap: "20px",
-        alignItems: "center"
-      }}
-    >
+    <div className={styles.container}>
       {/* 1. 컴팩트 요약판 (카드형) */}
-      <div
-        style={{
-          flex: 1,
-          padding: "16px",
-          background: "#f8f9fa",
-          borderRadius: "12px",
-          minWidth: "250px"
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            marginBottom: "12px",
-            alignItems: "center"
-          }}
-        >
-          <h4 style={{ margin: 0, color: "#000" }}>테마별 누적 예약</h4>
-          <span
-            style={{
-              background: "#e3f2fd",
-              padding: "4px 8px",
-              borderRadius: "16px",
-              fontSize: "0.9em",
-              color: "#000"
-            }}
-          >
-            총 {total}건
-          </span>
+      <div className={styles.summary_card}>
+        <div className={styles.card_header}>
+          <h4 className={styles.content}>테마별 누적 예약</h4>
+          <span className={styles.content_span}>총 {total}건</span>
         </div>
 
-        {sortedData.map((item) => (
-          <div
-            key={item.themeId}
-            style={{
-              marginBottom: "8px",
-              display: "flex",
-              alignItems: "center",
-              color: "#000"
-            }}
-          >
-            <div
-              style={{
-                width: "12px",
-                height: "12px",
-                marginRight: "8px",
-                borderRadius: "2px",
-                background: `${stringToColor(item.themeName)}`
-              }}
-            />
-            <span style={{ flex: 1 }}>{item.themeName}</span>
-            <div
-              style={{
-                display: "flex",
-                gap: "8px",
-                alignItems: "center"
-              }}
-            >
-              <b>{item.totalReservations}건</b>
-              {total != 0 && (
-                <span
-                  style={{
-                    color: "#666",
-                    fontSize: "0.8em"
-                  }}
-                >
-                  ({Math.round((item.totalReservations / total) * 100)}%)
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
+        {/* 시맨틱 리스트 적용 */}
+        <ul className={styles.card_list}>
+          {sortedData.map((item) => (
+            <li key={item.themeId} className={styles.card_item}>
+              <span
+                className={styles.color_span}
+                style={{
+                  backgroundColor: stringToColor(item.themeName)
+                }}
+              />
+              <span className={styles.themeName}>{item.themeName}</span>
+              <div className={styles.reservation_container}>
+                <b>{item.totalReservations}건</b>
+                {total !== 0 && (
+                  <span className={styles.total_reservation}>
+                    ({Math.round((item.totalReservations / total) * 100)}%)
+                  </span>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* 2. 개선된 Pie Chart */}
+      {/* Pie Chart */}
       {total != 0 && (
-        <div
-          style={{
-            flex: 1,
-            height: "300px",
-            minWidth: "300px",
-            minHeight: "250px",
-            position: "relative"
-          }}
-        >
+        <div className={styles.pie_chart}>
           <ResponsivePie
             data={sortedData.map((item) => ({
               id: item.themeName,
@@ -128,28 +70,16 @@ const ThemeTotalReservationChart = ({ data }) => {
               const original = datum.data.originalData;
               return (
                 <div
+                  className={styles.tooltip}
                   style={{
-                    padding: "8px 12px",
-                    background: "white",
-                    border: `2px solid ${datum.color}`,
-                    borderRadius: "4px",
-                    boxShadow: "0 3px 9px rgba(0,0,0,0.1)",
-                    color: "#000"
+                    borderColor: `${datum.color}`
                   }}
                 >
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      marginBottom: "4px"
-                    }}
-                  >
+                  <div className={styles.tooltip_themeName}>
                     <div
+                      className={styles.color}
                       style={{
-                        width: "12px",
-                        height: "12px",
-                        background: datum.color,
-                        marginRight: "6px"
+                        background: datum.color
                       }}
                     />
                     <strong>{original.themeName}</strong>

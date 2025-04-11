@@ -29,7 +29,6 @@ const DashboardPage = () => {
         return;
       }
 
-      console.log("response data: ", res.data.data);
       setChartData(res.data.data);
       setLoading(false);
     } catch (error) {
