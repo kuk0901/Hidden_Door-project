@@ -117,9 +117,8 @@ public class ThemeService {
 
     checkDuplicateThemeNameAndDescription(theme, themeDto);
 
-    modelMapper.map(themeDto, theme);
-
-    Theme updateTheme = themeRepository.save(theme);
+    Theme savedTheme = modelMapper.map(themeDto, Theme.class);
+    Theme updateTheme = themeRepository.save(savedTheme);
     ThemeDto updateThemeDto = modelMapper.map(updateTheme, ThemeDto.class);
 
     return new ResponseDto<>(updateThemeDto, "작성하신 테마 정보가 업데이트되었습니다.");
