@@ -66,7 +66,6 @@ public class ThemeService {
     return new ResponseDto<>(themeDtoList, "요약된 테마 정보입니다.");
   }
 
-  // FIXME: themeId 반환
   @Transactional
   public ResponseDto<String> addThemeWithFile(ThemeDto themeDto, MultipartFile file) {
 
