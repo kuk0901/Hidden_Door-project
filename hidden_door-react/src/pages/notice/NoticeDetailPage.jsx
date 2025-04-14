@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
-import { useAdmin } from "@hooks/useAdmin";
-import Api from "@axios/api";
-import { toast } from "react-toastify";
-import { formatKoreanDate } from "../../utils/format/date";
+import { useState, useEffect } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useAdmin } from '@hooks/useAdmin';
+import Api from '@axios/api';
+import { toast } from 'react-toastify';
+import { formatKoreanDate } from '../../utils/format/date';
 
 function NoticeDetailPage() {
   const { id } = useParams();
@@ -12,8 +12,8 @@ function NoticeDetailPage() {
   const [notice, setNotice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
-  const [editTitle, setEditTitle] = useState("");
-  const [editContent, setEditContent] = useState("");
+  const [editTitle, setEditTitle] = useState('');
+  const [editContent, setEditContent] = useState('');
 
   useEffect(() => {
     fetchNotice();
@@ -28,8 +28,8 @@ function NoticeDetailPage() {
       // XXX: 더 명확한 메시지로 수정해 주세요. 페이지 이동 처리 유지하실 거면
       // CustomerAddPge, CustomerPage 컴포넌트 참고해 수정해 주세요.
       if (response.status !== 200) {
-        toast.error("서버 요청에 실패했습니다.");
-        navigate("/hidden_door/notice");
+        toast.error('서버 요청에 실패했습니다.');
+        navigate('/hidden_door/notice');
         return;
       }
 
@@ -37,74 +37,47 @@ function NoticeDetailPage() {
       if (response.data?.data) {
         setNotice(response.data.data);
       } else {
-        toast.info("해당 공지사항을 찾을 수 없습니다.");
+        toast.info('해당 공지사항을 찾을 수 없습니다.');
       }
     } catch (error) {
       // XXX: 더 명확한 메시지로 수정해 주세요. 페이지 이동 처리 유지하실 거면
       // CustomerAddPge, CustomerPage 컴포넌트 참고해 수정해 주세요.
-      console.error("Error fetching notice:", error);
+      console.error('Error fetching notice:', error);
       toast.error(
-        error.response?.data?.message || "공지사항을 불러오는 데 실패했습니다."
+        error.response?.data?.message || '공지사항을 불러오는 데 실패했습니다.'
       );
-      navigate("/hidden_door/notice");
+      navigate('/hidden_door/notice');
     } finally {
       setLoading(false);
     }
   };
 
-  // XXX: async-await 문법으로 수정해 주세요.
-  const deleteNotice = () => {
-    if (!admin) return;
-
-    Api.delete(`/notices/${id}`)
-      .then((response) => {
-        toast.success(response.data?.message || "공지사항이 삭제되었습니다.");
-        navigate("/hidden_door/notice");
-      })
-      .catch((error) => {
-        toast.error(
-          error.response?.data?.message || "공지사항 삭제에 실패했습니다."
-        );
-      });
-  };
-
-  const handleEdit = () => {
-    setIsEditing(true);
-    setEditTitle(notice.title);
-    setEditContent(notice.content);
-  };
-
-  const handleCancelEdit = () => {
-    setIsEditing(false);
-  };
-
-  // XXX: async-await 문법으로 수정해 주세요.
-  const handleSubmitEdit = (e) => {
+  const handleSubmitEdit = async (e) => {
     e.preventDefault();
 
     if (!editTitle.trim() || !editContent.trim()) {
-      toast.error("제목과 내용을 모두 입력해주세요.");
+      toast.error('제목과 내용을 모두 입력해주세요.');
       return;
     }
 
     const updatedNotice = { title: editTitle, content: editContent };
 
-    Api.put(`/notices/${id}`, updatedNotice)
-      .then((response) => {
-        if (response.data.data) {
-          toast.success(response.data.message || "공지사항이 수정되었습니다.");
-          setNotice(response.data.data);
-          setIsEditing(false);
-        } else {
-          toast.error("서버 응답 형식이 올바르지 않습니다.");
-        }
-      })
-      .catch((error) => {
-        console.error("Error updating notice:", error);
-        toast.error(
-          error.response?.data?.message || "공지사항 수정에 실패했습니다."
-        );
-      });
+    try {
+      const response = await Api.put(`/notices/${id}`, updatedNotice);
+
+      if (response.data?.data) {
+        toast.success(response.data.message || '공지사항이 수정되었습니다.');
+        setNotice(response.data.data);
+        setIsEditing(false);
+      } else {
+        toast.error('서버 응답 형식이 올바르지 않습니다.');
+      }
+    } catch (error) {
+      console.error('Error updating notice:', error);
+      toast.error(
+        error.response?.data?.message || '공지사항 수정에 실패했습니다.'
+      );
+    }
   };
 
   if (loading) return <div>로딩 중...</div>;

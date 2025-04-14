@@ -1,12 +1,12 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
-import Api from "@axios/api";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
+import { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
+import Api from '@axios/api';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 
 function AddEventModal({ isOpen, onClose, onEventAdded }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [isOngoing, setIsOngoing] = useState(false);
@@ -19,8 +19,8 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
   }, [isOpen]);
 
   const resetForm = () => {
-    setTitle("");
-    setDescription("");
+    setTitle('');
+    setDescription('');
     setStartDate(new Date());
     setEndDate(new Date());
     setIsOngoing(false);
@@ -32,12 +32,12 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
     e.preventDefault();
 
     if (!title.trim() || !description.trim()) {
-      toast.error("제목과 설명을 모두 입력해주세요.");
+      toast.error('제목과 설명을 모두 입력해주세요.');
       return;
     }
 
     if (!isOngoing && !noEndDate && startDate > endDate) {
-      toast.error("종료일은 시작일 이후로 설정해주세요.");
+      toast.error('종료일은 시작일 이후로 설정해주세요.');
       return;
     }
 
@@ -45,38 +45,38 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
       title,
       description,
       isOngoing,
-      noEndDate
+      noEndDate,
     };
 
     if (isOngoing) {
-      newEvent.eventType = "상시";
+      newEvent.eventType = '상시';
       newEvent.startDate = null;
       newEvent.endDate = null;
     } else if (noEndDate) {
-      newEvent.eventType = "종료일 미정";
-      newEvent.startDate = startDate.toISOString().split("T")[0];
+      newEvent.eventType = '종료일 미정';
+      newEvent.startDate = startDate.toISOString().split('T')[0];
       newEvent.endDate = null;
     } else {
-      newEvent.eventType = "기간 지정";
-      newEvent.startDate = startDate.toISOString().split("T")[0];
-      newEvent.endDate = endDate.toISOString().split("T")[0];
+      newEvent.eventType = '기간 지정';
+      newEvent.startDate = startDate.toISOString().split('T')[0];
+      newEvent.endDate = endDate.toISOString().split('T')[0];
     }
 
-    Api.post("/events", newEvent)
+    Api.post('/events', newEvent)
       .then((response) => {
         // XXX: status 비교로 조건문 사용해 주세요.
         if (response.data?.data) {
           onEventAdded(response.data.data);
-          toast.success(response.data.message || "이벤트가 추가되었습니다.");
+          toast.success(response.data.message || '이벤트가 추가되었습니다.');
           onClose();
           resetForm();
         } else {
-          toast.error("서버 응답 형식이 올바르지 않습니다.");
+          toast.error('서버 응답 형식이 올바르지 않습니다.');
         }
       })
       .catch((error) => {
         toast.error(
-          error.response?.data?.message || "이벤트 추가에 실패했습니다."
+          error.response?.data?.message || '이벤트 추가에 실패했습니다.'
         );
       });
   };
@@ -127,7 +127,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
                   value={startDate}
                   minDate={new Date()}
                   className={`em-form-calendar react-calendar ${
-                    isOngoing ? "disabled" : ""
+                    isOngoing ? 'disabled' : ''
                   }`}
                   disabled={isOngoing}
                 />
@@ -140,7 +140,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
                   value={endDate}
                   minDate={startDate}
                   className={`em-form-calendar react-calendar ${
-                    isOngoing || noEndDate ? "disabled" : ""
+                    isOngoing || noEndDate ? 'disabled' : ''
                   }`}
                   disabled={isOngoing || noEndDate}
                 />

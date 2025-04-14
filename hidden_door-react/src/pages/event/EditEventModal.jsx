@@ -31,8 +31,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
     }
   }, [event]);
 
-  // XXX: handleSubmit 함수가 중첩으로 작성되었습니다. 확인 후 수정해 주세요.
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title.trim() || !description.trim()) {
@@ -45,53 +44,35 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       return;
     }
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-
-      if (!title.trim() || !description.trim()) {
-        toast.error('제목과 설명을 모두 입력해주세요.');
-        return;
-      }
-
-      if (isOngoing !== 'true' && noEndDate !== 'true' && startDate > endDate) {
-        toast.error('종료일은 시작일 이후로 설정해주세요.');
-        return;
-      }
-
-      const updatedEvent = {
-        id: event.eventId,
-        title,
-        description,
-        startDate:
-          isOngoing === 'true' ? null : startDate.toISOString().split('T')[0],
-        endDate:
-          isOngoing === 'true' || noEndDate === 'true'
-            ? null
-            : endDate.toISOString().split('T')[0],
-        isOngoing,
-        noEndDate,
-      };
-
-      try {
-        const response = await Api.put(
-          `/events/${event.eventId}`,
-          updatedEvent
-        );
-
-        // XXX: status 비교 형태로 수정해 주세요.
-        if (response.data && response.data.data) {
-          onEventEdited(response.data.data);
-          toast.success(response.data.message || '이벤트가 수정되었습니다.');
-          onClose();
-        } else {
-          toast.error('서버 응답 형식이 올바르지 않습니다.');
-        }
-      } catch (error) {
-        toast.error(
-          error.response?.data?.message || '이벤트 수정에 실패했습니다.'
-        );
-      }
+    const updatedEvent = {
+      id: event.eventId,
+      title,
+      description,
+      startDate:
+        isOngoing === 'true' ? null : startDate.toISOString().split('T')[0],
+      endDate:
+        isOngoing === 'true' || noEndDate === 'true'
+          ? null
+          : endDate.toISOString().split('T')[0],
+      isOngoing,
+      noEndDate,
     };
+
+    try {
+      const response = await Api.put(`/events/${event.eventId}`, updatedEvent);
+
+      if (response.status === 200 && response.data?.data) {
+        onEventEdited(response.data.data);
+        toast.success(response.data.message || '이벤트가 수정되었습니다.');
+        onClose();
+      } else {
+        toast.error('서버 응답 형식이 올바르지 않습니다.');
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || '이벤트 수정에 실패했습니다.'
+      );
+    }
   };
 
   if (!isOpen) return null;

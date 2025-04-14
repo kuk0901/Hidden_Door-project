@@ -1,43 +1,43 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import Api from "@axios/api";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import Api from '@axios/api';
 
 function AddNoticePage() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title.trim() || !content.trim()) {
-      toast.error("제목과 내용을 모두 입력해주세요.");
+      toast.error('제목과 내용을 모두 입력해주세요.');
       return;
     }
 
     const newNotice = { title, content };
 
     try {
-      const response = await Api.post("/notices", newNotice);
+      const response = await Api.post('/notices', newNotice);
 
       if (response.status !== 200) {
         // XXX: 더 명확한 메시지 내용으로 수정해 주세요.
-        toast.error("서버 요청에 실패했습니다.");
+        toast.error('서버 요청에 실패했습니다.');
         return;
       }
 
       // XXX: CustomerAddPage, CustomerPage 컴포넌트를 참고해서 수정해 주세요.
       if (response.data?.data) {
-        toast.success(response.data.message || "공지사항이 추가되었습니다.");
-        navigate("/hidden_door/notice");
+        toast.success(response.data.message || '공지사항이 추가되었습니다.');
+        navigate('/hidden_door/notice');
       } else {
-        toast.error("서버 응답 형식이 올바르지 않습니다.");
+        toast.error('서버 응답 형식이 올바르지 않습니다.');
       }
     } catch (error) {
-      console.error("Error adding notice:", error);
+      console.error('Error adding notice:', error);
       toast.error(
-        error.response?.data?.message || "공지사항 추가에 실패했습니다."
+        error.response?.data?.message || '공지사항 추가에 실패했습니다.'
       );
     }
   };
@@ -83,7 +83,7 @@ function AddNoticePage() {
           <button
             type="button"
             className="add-notice-btn add-notice-btn-cancel"
-            onClick={() => navigate("/hidden_door/notice")}
+            onClick={() => navigate('/hidden_door/notice')}
           >
             취소
           </button>
