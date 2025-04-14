@@ -63,77 +63,85 @@ const DayReservationChart = ({ data }) => {
           <span className={styles.content_span}>총 {total}건</span>
         </div>
 
-        <ul className={styles.card_list}>
-          {sortedData.map((item) => (
-            <li key={item.themeName} className={styles.card_item}>
-              <div
-                className={styles.card_color}
-                style={{
-                  background: themeColors[item.themeName]
-                }}
-              />
-              <span className={styles.themeName}>{item.themeName}</span>
-              <div className={styles.reservation_container}>
-                <b>{item.totalReservations}건</b>
-                {item.totalReservations > 0 && (
-                  <span className={styles.total_reservation}>
-                    ({Math.round((item.totalReservations / total) * 100)}%)
-                  </span>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+        {sortedData.length > 0 ? (
+          <ul className={styles.card_list}>
+            {sortedData.map((item) => (
+              <li key={item.themeName} className={styles.card_item}>
+                <div
+                  className={styles.card_color}
+                  style={{
+                    background: themeColors[item.themeName]
+                  }}
+                />
+                <span className={styles.themeName}>{item.themeName}</span>
+                <div className={styles.reservation_container}>
+                  <b>{item.totalReservations}건</b>
+                  {item.totalReservations > 0 && (
+                    <span className={styles.total_reservation}>
+                      ({Math.round((item.totalReservations / total) * 100)}%)
+                    </span>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="none__content">
+            차트에서 사용할 테마 / 예약 데이터가 존재하지 않습니다.
+          </div>
+        )}
       </div>
 
-      <div className={styles.line_chart}>
-        <ResponsiveLine
-          data={chartData}
-          margin={{ top: 50, right: 110, bottom: 70, left: 60 }}
-          xScale={{
-            type: "time",
-            format: "%Y-%m-%dT%H:%M:%S",
-            precision: "day",
-            useUTC: false
-          }}
-          yScale={{
-            type: "linear",
-            min: 0,
-            max: Math.ceil(maxY + 2),
-            stacked: false // 누적 차트 해제
-          }}
-          axisTop={null}
-          axisRight={null}
-          axisBottom={{
-            format: "%m-%d",
-            tickValues: data.map(
-              (day) => new Date(day.localDate + "T00:00:00")
-            ),
-            tickSize: 5,
-            tickPadding: 5,
-            legend: "날짜",
-            legendOffset: 40,
-            legendPosition: "middle"
-          }}
-          axisLeft={{
-            tickValues: Array.from(
-              { length: Math.ceil(maxY) + 1 },
-              (_, i) => i
-            ),
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: "예약수",
-            legendOffset: -40,
-            legendPosition: "middle"
-          }}
-          colors={(bar) => themeColors[bar.id]}
-          pointSize={10}
-          pointBorderWidth={2}
-          useMesh={true}
-          tooltip={({ point }) => <CustomTooltip point={point} data={data} />}
-        />
-      </div>
+      {chartData.length > 0 && (
+        <div className={styles.line_chart}>
+          <ResponsiveLine
+            data={chartData}
+            margin={{ top: 50, right: 110, bottom: 70, left: 60 }}
+            xScale={{
+              type: "time",
+              format: "%Y-%m-%dT%H:%M:%S",
+              precision: "day",
+              useUTC: false
+            }}
+            yScale={{
+              type: "linear",
+              min: 0,
+              max: Math.ceil(maxY + 2),
+              stacked: false // 누적 차트 해제
+            }}
+            axisTop={null}
+            axisRight={null}
+            axisBottom={{
+              format: "%m-%d",
+              tickValues: data.map(
+                (day) => new Date(day.localDate + "T00:00:00")
+              ),
+              tickSize: 5,
+              tickPadding: 5,
+              legend: "날짜",
+              legendOffset: 40,
+              legendPosition: "middle"
+            }}
+            axisLeft={{
+              tickValues: Array.from(
+                { length: Math.ceil(maxY) + 1 },
+                (_, i) => i
+              ),
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: 0,
+              legend: "예약수",
+              legendOffset: -40,
+              legendPosition: "middle"
+            }}
+            colors={(bar) => themeColors[bar.id]}
+            pointSize={10}
+            pointBorderWidth={2}
+            useMesh={true}
+            tooltip={({ point }) => <CustomTooltip point={point} data={data} />}
+          />
+        </div>
+      )}
     </div>
   );
 };

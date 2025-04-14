@@ -10,7 +10,7 @@ import DashboardSkeleton from "@components/common/loading/skeletonUI/DashboardSk
 const DATA_KEYS = {
   THEME_DAY: "themeDayReservations",
   THEME_TOTAL: "themeTotalReservations",
-  DAY: "dayReservations"
+  DAY: "dailyThemeReservations"
 };
 
 const NONE_DATA_KEYS = {
@@ -37,6 +37,7 @@ const DashboardPage = () => {
 
       setChartData(res.data.data);
       setLoading(false);
+      console.log(res.data.data);
     } catch (error) {
       toast.error(
         error.message ?? "차트 데이터를 가져오는 중 오류가 발생했습니다."

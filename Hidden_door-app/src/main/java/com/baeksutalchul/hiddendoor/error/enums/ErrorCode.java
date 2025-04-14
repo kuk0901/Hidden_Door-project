@@ -53,7 +53,9 @@ public enum ErrorCode {
     ALREADY_RESERVED(HttpStatus.CONFLICT, "RESERVATION_409", "이미 예약된 시간대입니다."),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER_500", "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."),
-    INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "DATE_400", "잘못된 날짜 형식입니다.");
+    INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "DATE_400", "잘못된 날짜 형식입니다."),
+    DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "DB_500", "데이터베이스 작업 중 오류가 발생했습니다"),
+    INVALID_DATE_VALUE(HttpStatus.BAD_REQUEST, "DATE_400", "잘못된 날짜 값이 입력되었습니다");
 
     private final HttpStatus httpStatus;
     private final String code;

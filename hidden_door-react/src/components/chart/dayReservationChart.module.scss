@@ -2,16 +2,24 @@
 
 .container {
   display: grid;
-  grid-template-columns: minmax(250px, 300px) 1fr;
+  grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
   gap: 24px;
 
+  @include mixins.lg-mode {
+    grid-template-columns: 1fr;
+  }
+
   .summary_card {
+    width: 100%;
+    max-width: 300px;
     padding: 20px;
     background-color: #f8f9fa;
-    position: sticky;
-    top: 16px;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    @include mixins.lg-mode {
+      max-width: none;
+    }
 
     .card_header {
       @include mixins.flex-layout-row(space-between, center);
@@ -71,6 +79,12 @@
   height: 600px;
   background-color: #f8f9fa;
   border-radius: 8px;
+  min-width: 0;
+  overflow: visible;
+
+  @include mixins.md-mode {
+    display: none;
+  }
 }
 
 .tooltip {
