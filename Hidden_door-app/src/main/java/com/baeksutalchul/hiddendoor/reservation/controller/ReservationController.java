@@ -58,7 +58,9 @@ public class ReservationController {
     @RequestParam("date") String date,
     @RequestParam("themeId") String themeId
   ) {
-      return reservationService.getAvailableTimeSlots(date, themeId);
+    logger.info("조회 요청 - themeId: {}, date: {}", themeId, date);
+
+    return reservationService.getAvailableTimeSlots(date, themeId);
   }
 
   @PostMapping("/create")

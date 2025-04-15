@@ -6,6 +6,7 @@ import ReservationThemeSection from "@components/reservation/ReservationThemeSec
 import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
+import { formatReservationSelectedDate } from "@utils/format/date";
 
 Modal.setAppElement("#root");
 
@@ -33,25 +34,32 @@ const ReservationMainPage = () => {
 
   const fetchAvailableTimeSlots = async () => {
     try {
-      const formattedDate = selectedDate.toISOString().split("T")[0];
+      const formattedDate = formatReservationSelectedDate(selectedDate);
 
-      // XXX: validateStatus: (status) => status < 500, // 500 에러 명시적 처리 코드는 변경해 주세요.
-      // 현재 코드는 500번대 미만의 에러를 모두 성공으로 처리합니다. -> 400번대도 정상 응답처리
+      console.log("selectedDate1: ", selectedDate);
+
+      console.log("selectedDate2: ", selectedDate.toISOString());
+
+      console.log(formattedDate);
+
+      // 1. API 경로 수정 (서버와 일치시킴)
       const res = await Api.get("/reservations/timeslots", {
-        params: {
-          date: formattedDate,
-          themeId: selectedTheme,
-        },
-        validateStatus: (status) => status < 500, // 500 에러 명시적 처리
+        params: { date: formattedDate, themeId: selectedTheme },
+        validateStatus: (status) => status === 200, // 404는 catch로 넘김
       });
-      setAvailableTimeSlots(res.data?.data?.timeSlots || []);
+
+      // 2. 응답 데이터 검증
+      if (!res.data?.data?.timeSlots) {
+        throw new Error("시간대 데이터가 없습니다.");
+      }
+      setAvailableTimeSlots(res.data.data.timeSlots);
     } catch (error) {
-      console.error("Error Details:", {
-        config: error.config,
-        response: error.response?.data,
+      console.error("API Error:", {
+        url: error.config?.url, // 요청 URL 확인
         status: error.response?.status,
+        data: error.response?.data,
       });
-      toast.error("시간대 조회에 실패했습니다. 서버 로그를 확인해주세요.");
+      toast.error(error.response?.data?.message || "시간대 조회 실패");
     }
   };
 

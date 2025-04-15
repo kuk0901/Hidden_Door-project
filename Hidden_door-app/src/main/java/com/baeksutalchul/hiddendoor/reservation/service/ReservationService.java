@@ -6,7 +6,6 @@ import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.reservation.domain.Reservation;
 import com.baeksutalchul.hiddendoor.reservation.repository.ReservationRepository;
-import com.baeksutalchul.hiddendoor.theme.domain.Theme;
 import com.baeksutalchul.hiddendoor.theme.repository.ThemeRepository;
 import com.baeksutalchul.hiddendoor.timeSlot.domain.TimeSlot;
 import com.baeksutalchul.hiddendoor.timeSlot.repository.TimeSlotRepository;
@@ -23,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -103,18 +101,11 @@ public class ReservationService {
     }
 
     public ResponseDto<Map<String, Object>> getAvailableTimeSlots(String date, String themeId) {
-        LocalDate localDate;
-        try {
-            localDate = LocalDate.parse(date);
-        } catch (DateTimeParseException e) {
-            throw new CustomException(ErrorCode.INVALID_DATE_FORMAT, "잘못된 날짜 형식입니다.");
-        }
-
         // XXX:
         // timeSlotRepository.findByThemeIdAndDate(themeId,localDate).orElseThrow(null);
         // 형태로 변경해 주세요.
         // orElseThrow 메서드 안에는 CustomerException(ErrorCode.~~) 형태로 사용하시면 됩니다.
-        Optional<TimeSlot> timeSlotOptional = timeSlotRepository.findByThemeIdAndDate(themeId, localDate);
+        Optional<TimeSlot> timeSlotOptional = timeSlotRepository.findByThemeIdAndDate(themeId, date);
         if (timeSlotOptional.isEmpty()) {
             throw new CustomException(ErrorCode.TIME_SLOT_NOT_FOUND, "해당 테마와 날짜에 예약 가능한 시간이 없습니다.");
         }
@@ -137,9 +128,10 @@ public class ReservationService {
     @Transactional
     public ResponseDto<ReservationDto> createReservation(ReservationDto dto) {
         String themeId = dto.getThemeId();
-        LocalDate reservationDate;
+        String reservationDate = dto.getReservationDate().substring(0, 10);
+
         try {
-            reservationDate = LocalDate.parse(dto.getReservationDate().split("T")[0]);
+            LocalDate.parse(reservationDate);
         } catch (DateTimeParseException e) {
             throw new CustomException(ErrorCode.INVALID_DATE_FORMAT, "잘못된 날짜 형식입니다.");
         }
