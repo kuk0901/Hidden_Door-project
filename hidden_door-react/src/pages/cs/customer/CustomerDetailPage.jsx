@@ -10,8 +10,8 @@ const CustomerDetailPage = () => {
   const { admin } = useAdmin();
   const { customerId } = useParams();
   const [customerDetail, setCustomerDetail] = useState(null);
-  const [customerAnswer, setCustomerAnswer] = useState(""); // 답변 상태 관리
-  const [isAnswering, setIsAnswering] = useState(false); // 답변 입력 상태 관리
+  const [customerAnswer, setCustomerAnswer] = useState("");
+  const [isAnswering, setIsAnswering] = useState(false);
   const navigate = useNavigate();
 
   const getCustomerDetail = async () => {
@@ -35,9 +35,8 @@ const CustomerDetailPage = () => {
     try {
       const res = await Api.delete(`/customers/customer/delete/${customerId}`);
 
-      // XXX: 더 명확한 메시지로 수정해 주세요.
       if (res.status !== 200) {
-        toast.error("삭제에 실패했습니다.");
+        toast.error("질문 삭제에 실패했습니다.");
       }
 
       toast.success(res.data.msg);
@@ -60,15 +59,17 @@ const CustomerDetailPage = () => {
       const res = await Api.post(`/customers/customer/update/${customerId}`, {
         customerAnswer: customerAnswer,
         adminName: admin.email,
-        customerCheck: "O"
+        customerCheck: "O",
       });
 
-      // 조건문으로 res.status 확인 코드 추가해 주세요.
+      if (res.status !== 200) {
+        toast.error("답변 제출에 실패했습니다.");
+        return;
+      }
 
       toast.success(res.data.msg);
       setIsAnswering(false);
       setCustomerAnswer("");
-
       navigate(0);
     } catch (error) {
       toast.error(error.message || "답변 제출에 실패했습니다.");

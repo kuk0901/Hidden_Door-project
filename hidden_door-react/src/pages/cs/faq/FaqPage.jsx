@@ -23,14 +23,14 @@ const FaqPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "id",
-      sortDirection: "ASC"
+      sortDirection: "ASC",
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: ""
+      searchTerm: "",
     }
   );
 
@@ -44,20 +44,19 @@ const FaqPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm
-        }
+          searchTerm,
+        },
       });
 
       if (res.status !== 200) {
-        // XXX: 더 명확한 메시지로 수정해 주세요.
-        toast.error("오류입니다.");
+        toast.error("FAQ불러오기에 실패했습니다.");
       }
 
       setFaqList(res.data.data);
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm
+        searchTerm: res.data.searchTerm,
       });
     } catch (error) {
       toast.error(error.message || "오류입니다");
@@ -90,7 +89,7 @@ const FaqPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "title", label: "제목" },
-    { value: "question", label: "질문내용" }
+    { value: "question", label: "질문내용" },
   ];
 
   const handleAddFaq = () => {

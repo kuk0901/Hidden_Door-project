@@ -46,9 +46,8 @@ const FaqAddPage = () => {
 
       navigate(`/hidden_door/cs/faq/${res.data.data}?register=true`);
     } catch (error) {
-      // XXX: 서버에서 전송되는 메시지가 있다면 해당 메시지 사용 없다면, 더 명확한 메시지 내용으로 수정해 주세요.
       console.log(error);
-      toast.error("서버 오류가 발생했습니다.");
+      toast.error("FAQ추가에 실패했습니다.");
     }
   };
 
