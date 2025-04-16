@@ -12,6 +12,19 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
   const [isOngoing, setIsOngoing] = useState('false');
   const [noEndDate, setNoEndDate] = useState('false');
 
+  const handleResponseError = (status, message) => {
+    const errorMessages = {
+      400: message || '잘못된 요청입니다.',
+      401: message || '유효하지 않은 인증정보입니다. 다시 로그인해주세요.',
+      403: message || '접근 권한이 없습니다. 관리자에게 문의하세요.',
+      404: message || '요청하신 리소스를 찾을 수 없습니다.',
+      default:
+        message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+    };
+
+    return errorMessages[status] || errorMessages.default;
+  };
+
   useEffect(() => {
     if (event) {
       setTitle(event.title || '');
@@ -31,8 +44,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
     }
   }, [event]);
 
-  // XXX: handleSubmit 함수가 중첩으로 작성되었습니다. 확인 후 수정해 주세요.
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title.trim() || !description.trim()) {
@@ -45,53 +57,56 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       return;
     }
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-
-      if (!title.trim() || !description.trim()) {
-        toast.error('제목과 설명을 모두 입력해주세요.');
-        return;
-      }
-
-      if (isOngoing !== 'true' && noEndDate !== 'true' && startDate > endDate) {
-        toast.error('종료일은 시작일 이후로 설정해주세요.');
-        return;
-      }
-
-      const updatedEvent = {
-        id: event.eventId,
-        title,
-        description,
-        startDate:
-          isOngoing === 'true' ? null : startDate.toISOString().split('T')[0],
-        endDate:
-          isOngoing === 'true' || noEndDate === 'true'
-            ? null
-            : endDate.toISOString().split('T')[0],
-        isOngoing,
-        noEndDate,
-      };
-
-      try {
-        const response = await Api.put(
-          `/events/${event.eventId}`,
-          updatedEvent
-        );
-
-        // XXX: status 비교 형태로 수정해 주세요.
-        if (response.data && response.data.data) {
-          onEventEdited(response.data.data);
-          toast.success(response.data.message || '이벤트가 수정되었습니다.');
-          onClose();
-        } else {
-          toast.error('서버 응답 형식이 올바르지 않습니다.');
-        }
-      } catch (error) {
-        toast.error(
-          error.response?.data?.message || '이벤트 수정에 실패했습니다.'
-        );
-      }
+    const formatDate = (date) => {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
     };
+
+    const updatedEvent = {
+      id: event.eventId,
+      title,
+      description,
+      eventType:
+        isOngoing === 'true'
+          ? '상시'
+          : noEndDate === 'true'
+          ? '종료일 미정'
+          : '기간 지정',
+      startDate: isOngoing === 'true' ? null : formatDate(startDate),
+      endDate:
+        isOngoing === 'true' || noEndDate === 'true'
+          ? null
+          : formatDate(endDate),
+      isOngoing,
+      noEndDate,
+    };
+
+    console.log('Updated Event:', updatedEvent);
+
+    try {
+      const response = await Api.put(`/events/${event.eventId}`, updatedEvent);
+
+      if (response.status === 200) {
+        toast.success(
+          response.data.message || '이벤트가 성공적으로 수정되었습니다.'
+        );
+        onEventEdited(response.data.data);
+        onClose();
+      } else {
+        toast.error(
+          handleResponseError(response.status, response.data.message)
+        );
+      }
+    } catch (error) {
+      toast.error(
+        handleResponseError(
+          error.response?.status,
+          error.response?.data?.message
+        )
+      );
+    }
   };
 
   if (!isOpen) return null;
@@ -136,7 +151,10 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
               <div className="event-calendar-wrapper">
                 <p className="event-calendar-label">시작일</p>
                 <Calendar
-                  onChange={setStartDate}
+                  onChange={(date) => {
+                    console.log('Selected Start Date:', date); // 디버깅용 출력
+                    setStartDate(date);
+                  }}
                   value={startDate}
                   minDate={new Date()}
                   className={`em-form-calendar react-calendar ${
@@ -149,7 +167,10 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
               <div className="event-calendar-wrapper">
                 <p className="event-calendar-label">종료일</p>
                 <Calendar
-                  onChange={setEndDate}
+                  onChange={(date) => {
+                    console.log('Selected End Date:', date); // 디버깅용 출력
+                    setEndDate(date);
+                  }}
                   value={endDate}
                   minDate={startDate}
                   className={`em-form-calendar react-calendar ${

@@ -1,153 +1,147 @@
 package com.baeksutalchul.hiddendoor.event.service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import com.baeksutalchul.hiddendoor.event.domain.Event;
 import com.baeksutalchul.hiddendoor.event.repository.EventRepository;
+import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.dto.EventDto;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 
 @Service
 public class EventService {
-    private final EventRepository eventRepository;
 
-    public EventService(EventRepository eventRepository) {
+    private final EventRepository eventRepository;
+    private final ModelMapper modelMapper;
+
+    public EventService(EventRepository eventRepository, ModelMapper modelMapper) {
         this.eventRepository = eventRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<EventDto> getAllEvents() {
+    public ResponseDto<List<EventDto>> getAllEvents() {
         try {
             List<Event> events = eventRepository.findAll();
-            return events.stream()
-                    .map(this::convertToDto)
+            List<EventDto> eventDtos = events.stream()
+                    .map(event -> modelMapper.map(event, EventDto.class))
                     .toList();
+            return new ResponseDto<>(eventDtos, "이벤트 목록을 성공적으로 조회했습니다.");
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "이벤트 목록 조회 중 오류가 발생했습니다.");
         }
     }
 
-    public EventDto getEventById(String eventId) {
+    public ResponseDto<EventDto> getEventById(String eventId) {
         try {
-            return eventRepository.findById(eventId)
-                    .map(this::convertToDto)
+            Event event = eventRepository.findById(eventId)
                     .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND, "이벤트를 찾을 수 없습니다."));
+            EventDto eventDto = modelMapper.map(event, EventDto.class);
+            return new ResponseDto<>(eventDto, "이벤트를 성공적으로 조회했습니다.");
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "이벤트 조회 중 오류가 발생했습니다.");
         }
     }
 
-    public EventDto createEvent(EventDto eventDto) {
-        // 조건문을 변수로 분리하여 가독성 향상
-        boolean isInvalidDateRange = !"true".equals(eventDto.getIsOngoing())
-                && !"true".equals(eventDto.getNoEndDate())
-                && eventDto.getStartDate() != null
-                && eventDto.getEndDate() != null
-                && eventDto.getStartDate().isAfter(eventDto.getEndDate());
-
-        // 날짜 유효성 검증 실패 시 예외 던짐
-        if (isInvalidDateRange) {
-            throw new CustomException(ErrorCode.EVENT_NOT_FOUND, "시작일은 종료일보다 이후일 수 없습니다.");
-        }
-
+    public ResponseDto<EventDto> createEvent(EventDto eventDto) {
+        validateDates(eventDto);
+    
         try {
-            Event event = convertToEntity(eventDto);
-            if ("상시".equals(event.getEventType())) {
-                event.setStartDate(null);
-                event.setEndDate(null);
-            } else if ("종료일 미정".equals(event.getEventType())) {
-                event.setStartDate(eventDto.getStartDate());
-                event.setEndDate(null);
-            } else {
-                event.setStartDate(eventDto.getStartDate());
-                event.setEndDate(eventDto.getEndDate());
-            }
-
+            Event event = modelMapper.map(eventDto, Event.class);    
+            
+            adjustDates(event, eventDto);
+    
             Event savedEvent = eventRepository.save(event);
-            return convertToDto(savedEvent);
+            EventDto savedEventDto = modelMapper.map(savedEvent, EventDto.class);
+            return new ResponseDto<>(savedEventDto, "이벤트가 성공적으로 추가되었습니다.");
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "이벤트 생성 중 오류가 발생했습니다.");
         }
     }
+    
 
-    public EventDto updateEvent(String eventId, EventDto eventDto) {
-        // 조건문을 변수로 분리하여 가독성 향상
-        boolean isInvalidDateRange = !"true".equals(eventDto.getIsOngoing())
-                && !"true".equals(eventDto.getNoEndDate())
-                && eventDto.getStartDate() != null
-                && eventDto.getEndDate() != null
-                && eventDto.getStartDate().isAfter(eventDto.getEndDate());
+    // public ResponseDto<EventDto> updateEvent(String eventId, EventDto eventDto) {
+    //     validateDates(eventDto);
 
-        // 날짜 유효성 검증 실패 시 예외 던짐
-        if (isInvalidDateRange) {
-            throw new CustomException(ErrorCode.EVENT_NOT_FOUND, "시작일은 종료일보다 이후일 수 없습니다.");
-        }
+    //     try {
+    //         Event existingEvent = eventRepository.findById(eventId)
+    //                 .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND, "이벤트를 찾을 수 없습니다."));
+            
+    //         modelMapper.map(eventDto, existingEvent); 
+    //         adjustDates(existingEvent, eventDto);
 
+    //         Event updatedEvent = eventRepository.save(existingEvent);
+    //         EventDto updatedEventDto = modelMapper.map(updatedEvent, EventDto.class);
+    //         return new ResponseDto<>(updatedEventDto, "이벤트가 성공적으로 수정되었습니다.");
+    //     } catch (Exception e) {
+    //         throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "이벤트 수정 중 오류가 발생했습니다.");
+    //     }
+    // }
+
+
+    // 확인 후 수동으로 말고 모델로 변환하기
+    public ResponseDto<EventDto> updateEvent(String eventId, EventDto eventDto) {
+        validateDates(eventDto);
+    
         try {
-            Event event = eventRepository.findById(eventId)
+            Event existingEvent = eventRepository.findById(eventId)
                     .orElseThrow(() -> new CustomException(ErrorCode.EVENT_NOT_FOUND, "이벤트를 찾을 수 없습니다."));
-
-            // 업데이트 로직
-            event.setTitle(eventDto.getTitle());
-            event.setDescription(eventDto.getDescription());
-            event.setIsOngoing(eventDto.getIsOngoing());
-            event.setNoEndDate(eventDto.getNoEndDate());
-
-            if ("true".equals(event.getIsOngoing())) { // 상시 이벤트 처리
-                event.setStartDate(null);
-                event.setEndDate(null);
-            } else if ("true".equals(event.getNoEndDate())) { // 종료 기한 없는 이벤트 처리
-                event.setStartDate(eventDto.getStartDate());
-                event.setEndDate(null);
-            } else { // 일반 이벤트 처리
-                event.setStartDate(eventDto.getStartDate());
-                event.setEndDate(eventDto.getEndDate());
-            }
-
-            Event updatedEvent = eventRepository.save(event);
-            return convertToDto(updatedEvent);
+                        
+            existingEvent.setTitle(eventDto.getTitle());
+            existingEvent.setDescription(eventDto.getDescription());
+            existingEvent.setIsOngoing(eventDto.getIsOngoing());
+            existingEvent.setNoEndDate(eventDto.getNoEndDate());
+                
+            adjustDates(existingEvent, eventDto);
+    
+            Event updatedEvent = eventRepository.save(existingEvent);
+            EventDto updatedEventDto = modelMapper.map(updatedEvent, EventDto.class);
+            return new ResponseDto<>(updatedEventDto, "이벤트가 성공적으로 수정되었습니다.");
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "이벤트 수정 중 오류가 발생했습니다.");
         }
     }
+    
+    
 
-    public void deleteEvent(String eventId) {
+    public ResponseDto<String> deleteEvent(String eventId) {
         try {
             if (!eventRepository.existsById(eventId)) {
                 throw new CustomException(ErrorCode.EVENT_NOT_FOUND, "이벤트를 찾을 수 없습니다.");
             }
             eventRepository.deleteById(eventId);
+            return new ResponseDto<>("", "이벤트가 성공적으로 삭제되었습니다.");
         } catch (Exception e) {
             throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "이벤트 삭제 중 오류가 발생했습니다.");
         }
     }
 
-    // XXX: convert 관련 메서드는 제거 후 사용 위치에서는 modelMapper 사용하는 형태로 수정해 주세요.
-    private EventDto convertToDto(Event event) {
-        return new EventDto(
-                event.getEventId(),
-                event.getTitle(),
-                event.getDescription(),
-                event.getStartDate(),
-                event.getEndDate(),
-                event.getIsOngoing(),
-                event.getNoEndDate(),
-                event.getEventType());
+   private void validateDates(EventDto eventDto) { 
+       boolean isInvalidDateRange = !"true".equals(eventDto.getIsOngoing())
+                && !"true".equals(eventDto.getNoEndDate())
+                && eventDto.getStartDate() != null
+                && eventDto.getEndDate() != null
+                && eventDto.getStartDate().isAfter(eventDto.getEndDate());
+
+       if (isInvalidDateRange) { 
+           throw new CustomException(ErrorCode.EVENT_NOT_FOUND, "시작일은 종료일보다 이후일 수 없습니다."); 
+       } 
+   }
+
+   private void adjustDates(Event entity, EventDto dto) {
+        if ("상시".equals(dto.getEventType())) { 
+            entity.setStartDate(null); 
+            entity.setEndDate(null); 
+        } else if ("종료일 미정".equals(dto.getEventType())) { 
+            entity.setStartDate(dto.getStartDate()); 
+            entity.setEndDate(null); 
+        } else { 
+            entity.setStartDate(dto.getStartDate()); 
+            entity.setEndDate(dto.getEndDate()); 
+        }
     }
 
-    // XXX: convert 관련 메서드는 제거 후 사용 위치에서는 modelMapper 사용하는 형태로 수정해 주세요.
-    private Event convertToEntity(EventDto eventDto) {
-        return new Event(
-                eventDto.getEventId(),
-                eventDto.getTitle(),
-                eventDto.getDescription(),
-                eventDto.getStartDate(),
-                eventDto.getEndDate(),
-                eventDto.getIsOngoing(),
-                eventDto.getNoEndDate(),
-                eventDto.getEventType());
-    }
 }
