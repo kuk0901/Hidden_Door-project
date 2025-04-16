@@ -8,8 +8,18 @@ export function formatKoreanDate(date) {
     .toLocaleDateString("ko-KR", {
       year: "numeric",
       month: "2-digit",
-      day: "2-digit"
+      day: "2-digit",
     })
     .replace(/\. /g, ". ")
     .replace(/\.$/, "");
+}
+
+export function formatReservationSelectedDate(selectedDate) {
+  const formattedDate = new Date(selectedDate);
+
+  const year = formattedDate.getFullYear();
+  const month = String(formattedDate.getMonth() + 1).padStart(2, "0");
+  const day = String(formattedDate.getDate()).padStart(2, "0");
+
+  return `${year}-${month}-${day}`;
 }

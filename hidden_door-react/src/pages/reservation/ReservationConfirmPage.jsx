@@ -21,8 +21,10 @@ const ReservationConfirmPage = () => {
     themeId: selectedTheme,
     reservationDate: selectedDate.toISOString(),
     reservationTime: selectedTime,
-    paymentAmount: 0
+    paymentAmount: 0,
   });
+
+  console.log("reservation: ", reservation);
 
   const [selectedThemeDetails, setSelectedThemeDetails] = useState(null);
 
@@ -33,7 +35,7 @@ const ReservationConfirmPage = () => {
       setReservation((prev) => ({
         ...prev,
         partySize: theme.minParticipants,
-        paymentAmount: theme.price * theme.minParticipants
+        paymentAmount: theme.price * theme.minParticipants,
       }));
     }
   }, [selectedTheme, themes]);
@@ -42,7 +44,7 @@ const ReservationConfirmPage = () => {
     if (selectedThemeDetails) {
       setReservation((prev) => ({
         ...prev,
-        paymentAmount: selectedThemeDetails.price * prev.partySize
+        paymentAmount: selectedThemeDetails.price * prev.partySize,
       }));
     }
   }, [reservation.partySize, selectedThemeDetails]);
@@ -51,7 +53,7 @@ const ReservationConfirmPage = () => {
     const { name, value } = e.target;
     setReservation((prev) => ({
       ...prev,
-      [name]: name === "partySize" ? Number(value) : value
+      [name]: name === "partySize" ? Number(value) : value,
     }));
   };
 
@@ -74,7 +76,7 @@ const ReservationConfirmPage = () => {
         availability: reservation.availability,
         paymentState: reservation.paymentState,
         paymentMethod: reservation.paymentMethod,
-        refundState: reservation.refundState
+        refundState: reservation.refundState,
       };
 
       console.log("요청 데이터:", reservationDto);
@@ -185,7 +187,7 @@ const ReservationConfirmPage = () => {
                     length:
                       selectedThemeDetails.maxParticipants -
                       selectedThemeDetails.minParticipants +
-                      1
+                      1,
                   },
                   (_, i) => i + selectedThemeDetails.minParticipants
                 ).map((num) => (

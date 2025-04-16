@@ -10,7 +10,7 @@ import com.baeksutalchul.hiddendoor.timeSlot.domain.TimeSlot;
 
 public interface TimeSlotRepository extends MongoRepository<TimeSlot, String> {
 
-  Optional<TimeSlot> findByThemeIdAndDate(String themeId, LocalDate date);
+  Optional<TimeSlot> findByThemeIdAndDate(String themeId, String date);
 
   List<TimeSlot> findByDate(String date);
 
