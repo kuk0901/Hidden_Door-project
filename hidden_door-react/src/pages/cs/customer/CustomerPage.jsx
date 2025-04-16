@@ -21,14 +21,14 @@ const CustomerPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "id",
-      sortDirection: "ASC"
+      sortDirection: "ASC",
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: ""
+      searchTerm: "",
     }
   );
 
@@ -46,20 +46,19 @@ const CustomerPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm
-        }
+          searchTerm,
+        },
       });
 
-      // XXX: 더 명확한 메시지로 수정해 주세요.
       if (res.status !== 200) {
-        toast.error("오류입니다.");
+        toast.error("질문을 불러오는데 실패했습니다.");
       }
 
       setCustomerList(res.data.data);
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm
+        searchTerm: res.data.searchTerm,
       });
     } catch (error) {
       // XXX: 더 명확한 메시지로 수정해 주세요.
@@ -87,7 +86,7 @@ const CustomerPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "customerTitle", label: "제목" },
-    { value: "customerContent", label: "질문내용" }
+    { value: "customerContent", label: "질문내용" },
   ];
 
   const handleAddCustomer = () => {

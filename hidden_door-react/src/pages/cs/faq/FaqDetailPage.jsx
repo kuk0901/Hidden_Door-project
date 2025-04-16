@@ -16,12 +16,13 @@ const FaqDetailPage = () => {
     try {
       const res = await Api.get(`/faqs/faq/${faqId}`);
 
-      // 조건문으로 res.status 확인 코드 추가해 주세요.
+      if (res.status !== 200) {
+        toast.error("FAQ 정보를 불러오는 데 실패했습니다.");
+      }
 
       setFaqDetail(res.data.data);
     } catch (error) {
-      // XXX: 서버에서 전송되는 메시지가 있다면 해당 메시지 사용 없다면, 더 명확한 메시지 내용으로 수정해 주세요.
-      toast.error(error.message || "오류입니다.");
+      toast.error(error.message || "FAQ불러오기에 실패했습니다.");
     }
   };
 
