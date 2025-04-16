@@ -103,9 +103,10 @@ public class ThemeService {
     Theme savedTheme = themeRepository.save(saveTheme);
 
     return new ResponseDto<>(savedTheme.getThemeId(), savedTheme.getThemeName() + " 테마가 추가되었습니다.");
-    
+
   }
 
+  // FIXME: 변경 내용 확인(서버)
   @Transactional
   public ResponseDto<ThemeDto> updateThemeWithFile(String id, ThemeDto themeDto, MultipartFile file) {
     Theme theme = themeRepository.findById(id)

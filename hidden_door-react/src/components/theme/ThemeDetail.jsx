@@ -174,6 +174,7 @@ const ThemeDetail = ({ theme, setTheme }) => {
       return;
     }
 
+    // FIXME: 변경 내용 확인(서버)
     try {
       const res = await Api.put(`/themes/theme/${theme.themeId}`, submitData, {
         headers: {
