@@ -13,12 +13,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RestController
 @RequestMapping("/api/v1/monitoring")
 public class MonitoringController {
-  // private final MonitoringService monitoringService;
+  private final MonitoringService monitoringService;
+
+  public MonitoringController(MonitoringService monitoringService) {
+    this.monitoringService = monitoringService;
+  }
 
   @GetMapping("/dashboard")
   public ResponseEntity<ResponseDto<DashboardDto>> getDashboardData() {
-    // ResponseEntity.ok().body(monitoringService.getDashboardData());
-    return null;
+    return ResponseEntity.ok().body(monitoringService.getDashboardData());
   }
 
 }

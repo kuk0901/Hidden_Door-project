@@ -163,15 +163,25 @@ aside {
   }
 }
 
-.logo-container {
-  @include mixins.size(auto, 50px);
+.logo {
+  @include mixins.flex-layout-row(center, center);
+  background-color: transparent;
+  border: none;
+  overflow: hidden;
+  border-radius: 7px;
 
-  .logo {
-    background-color: transparent;
-    border: none;
+  &-img {
+    display: block;
+    width: 55px;
+    height: 50px;
+    border-radius: 6px;
+    background: url("/logo.svg") center / cover no-repeat;
 
-    .logo-img {
-      border-radius: 7px;
-    }
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    transform: translateZ(0);
   }
 }

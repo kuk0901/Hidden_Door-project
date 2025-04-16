@@ -37,6 +37,7 @@ public enum ErrorCode {
     ADMIN_NOT_FOUND(HttpStatus.NOT_FOUND, "ADMIN_404", "관리자 정보를 찾을 수 없습니다."),
     ADMIN_DUPLICATE_EMAIL(HttpStatus.BAD_REQUEST, "DUPLICATE_EMAIL", "이미 사용 중인 이메일입니다."),
     ADMIN_DUPLICATE_PHONE(HttpStatus.BAD_REQUEST, "DUPLICATE_PHONE", "이미 사용 중인 휴대폰번호입니다."),
+    DASHBOARD_TOTAL_RESERVATION_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "DASHBOARD_500", "전체 예약 데이터를 불러오지 못했습니다."),
 
     // * user
     MAIL_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "MAIL_500", "예약 확인 메일 전송에 실패했습니다. 1:1 문의 부탁드립니다."),
@@ -52,7 +53,9 @@ public enum ErrorCode {
     ALREADY_RESERVED(HttpStatus.CONFLICT, "RESERVATION_409", "이미 예약된 시간대입니다."),
 
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "SERVER_500", "서버 내부 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."),
-    INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "DATE_400", "잘못된 날짜 형식입니다.");
+    INVALID_DATE_FORMAT(HttpStatus.BAD_REQUEST, "DATE_400", "잘못된 날짜 형식입니다."),
+    DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "DB_500", "데이터베이스 작업 중 오류가 발생했습니다"),
+    INVALID_DATE_VALUE(HttpStatus.BAD_REQUEST, "DATE_400", "잘못된 날짜 값이 입력되었습니다");
 
     private final HttpStatus httpStatus;
     private final String code;

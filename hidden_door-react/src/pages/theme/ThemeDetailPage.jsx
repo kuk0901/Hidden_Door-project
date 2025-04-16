@@ -133,7 +133,7 @@ const ThemeDetailPage = () => {
       <OneThemePriceSection theme={theme} />
 
       <div className="link-container link-container__theme">
-        <Link to="" className="btn btn__theme">
+        <Link to="/hidden_door/theme" className="btn btn__theme">
           돌아가기
         </Link>
       </div>

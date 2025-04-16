@@ -376,15 +376,34 @@
     }
   }
 
-  .genre-section {
+  .genre-section,
+  .day-section {
     padding: 10px;
-    @include mixins.flex-layout-row-with-gap(flex-start, center, 10px);
+    @include mixins.flex-layout-column-with-gap(flex-start, baseline, 10px);
 
     .input-container {
       margin: 10px 5px 15px;
+      justify-content: flex-start;
+      flex-wrap: wrap;
 
       .input--checkbox {
+        @include mixins.flex-layout-row-with-gap(flex-start, center, 10px);
         margin: 0 10px;
+
+        label,
+        input {
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  .genre-section {
+    .input-container {
+      gap: 5px;
+
+      .input--checkbox {
+        min-width: 70px;
       }
     }
   }
@@ -410,7 +429,8 @@
       }
     }
 
-    .genre-section {
+    .genre-section,
+    .day-section {
       .input-container {
         border-color: variables.$light-text-color;
       }
@@ -424,7 +444,8 @@
 
     .theme-input-container,
     .theme-textarea,
-    .genre-section {
+    .genre-section,
+    .day-section {
       flex-direction: column;
       align-items: baseline;
     }
@@ -467,7 +488,6 @@
     .genre-section {
       padding-top: 5px;
       align-items: baseline;
-      margin-bottom: 30px;
 
       .input-container {
         flex-wrap: wrap;
@@ -477,6 +497,10 @@
           width: 60px;
         }
       }
+    }
+
+    .day-section {
+      margin-bottom: 30px;
     }
   }
 

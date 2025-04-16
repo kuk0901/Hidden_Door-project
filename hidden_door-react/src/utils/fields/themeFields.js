@@ -52,8 +52,8 @@ export const themeFields = (theme = null) => {
       id: "time",
       type: "number",
       field: "input",
-      placeholder: "플레이 시간 (분)",
-      label: "time",
+      placeholder: "60",
+      label: "플레이 시간(분)",
       themeForm: true
     },
     {
@@ -70,7 +70,16 @@ export const themeFields = (theme = null) => {
       id: "description",
       field: "textarea",
       placeholder: "테마 설명을 간략하게 작성해 주세요.",
-      label: "description",
+      label: "테마 설명",
+      themeForm: true
+    },
+    {
+      name: "cleaningTime",
+      id: "cleaningTime",
+      type: "number",
+      field: "input",
+      placeholder: "20",
+      label: "청소시간 (분)",
       themeForm: true
     }
   ];
@@ -85,4 +94,14 @@ export const initialGenreList = [
   { id: "asd5", name: "액션", checked: false },
   { id: "asd6", name: "SF", checked: false },
   { id: "asd7", name: "잠입", checked: false }
+];
+
+export const initialAvailableDayList = [
+  { id: "ert1", name: "월", value: "MONDAY", checked: false },
+  { id: "ert2", name: "화", value: "TUESDAY", checked: false },
+  { id: "ert3", name: "수", value: "WEDNESDAY", checked: false },
+  { id: "ert4", name: "목", value: "THURSDAY", checked: false },
+  { id: "ert5", name: "금", value: "FRIDAY", checked: false },
+  { id: "ert6", name: "토", value: "SATURDAY", checked: false },
+  { id: "ert7", name: "일", value: "SUNDAY", checked: false }
 ];

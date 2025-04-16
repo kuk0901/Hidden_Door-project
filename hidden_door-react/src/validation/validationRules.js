@@ -52,7 +52,7 @@ export const themeValidationRules = (theme = null) => {
   const rules = {
     originalFileName: {
       required: !theme, // 추가하는 경우에는 필수 입력
-      message: "이미지를 선택해주세요"
+      message: "이미지를 선택해주세요."
     },
     themeName: {
       required: true,
@@ -62,36 +62,42 @@ export const themeValidationRules = (theme = null) => {
       required: true,
       min: 2,
       max: 3,
-      message: "최소 인원은 1~3명 사이여야 합니다"
+      message: "최소 인원은 1~3명 사이여야 합니다."
     },
     maxParticipants: {
       required: true,
       min: 4,
       max: 6,
-      message: "최대 인원은 4~6명 사이여야 합니다"
+      message: "최대 인원은 4~6명 사이여야 합니다."
     },
     level: {
       required: true,
       min: 1,
       max: 5,
-      message: "난이도는 1~5 사이여야 합니다"
+      message: "난이도는 1~5 사이여야 합니다."
     },
     time: {
       required: true,
       min: 60,
       max: 100,
-      message: "플레이 시간은 60~100분 사이여야 합니다"
+      message: "플레이 시간은 60~100분 사이여야 합니다."
     },
     price: {
       required: true,
       pattern: priceRegex,
-      message: "올바른 가격 형식을 입력해주세요 (예: 20,000)"
+      message: "올바른 가격 형식을 입력해주세요. (예: 20,000)"
     },
     description: {
       required: true,
       minLength: 10,
       maxLength: 500,
-      message: "설명은 10~500자 사이여야 합니다"
+      message: "설명은 10~500자 사이여야 합니다."
+    },
+    cleaningTime: {
+      required: true,
+      min: 20,
+      max: 50,
+      message: "청소 시간은 20~40분 사이여야 합니다."
     }
   };
   return rules;

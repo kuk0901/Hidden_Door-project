@@ -124,3 +124,45 @@
     }
   }
 }
+
+.theme-day-res-skeleton,
+.total-res-skeleton,
+.day-res-skeleton {
+  margin-bottom: 50px;
+}
+
+.theme-day-res-skeleton {
+  .summary-skeleton {
+    height: 48px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+  }
+
+  .chart-skeleton {
+    height: 245px;
+    border-radius: 8px;
+  }
+}
+
+.total-res-skeleton {
+  .chart-skeleton {
+    height: 210px;
+    border-radius: 12px;
+  }
+}
+
+.day-res-skeleton {
+  display: grid;
+  grid-template-columns: minmax(250px, 300px) 1fr;
+  gap: 24px;
+
+  .summary-skeleton {
+    height: 600px;
+    border-radius: 8px;
+  }
+
+  .chart-skeleton {
+    height: 600px;
+    border-radius: 8px;
+  }
+}
