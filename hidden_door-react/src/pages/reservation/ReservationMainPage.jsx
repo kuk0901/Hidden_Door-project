@@ -42,7 +42,7 @@ const ReservationMainPage = () => {
 
       console.log(formattedDate);
 
-      // 1. API 경로 수정 (서버와 일치시킴)
+      // 1. API 경로 수정 (서버와 일치시킴).
       const res = await Api.get("/reservations/timeslots", {
         params: { date: formattedDate, themeId: selectedTheme },
         validateStatus: (status) => status === 200, // 404는 catch로 넘김
