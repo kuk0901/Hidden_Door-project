@@ -181,7 +181,7 @@ const AdminEditForm = ({ children, onSubmit, formId, ...props }) => {
         className="m"
       />
 
-      {children ? children : null}
+      {children}
 
       {/* 권한 체크박스 그룹 */}
       {isSuperAdmin && (

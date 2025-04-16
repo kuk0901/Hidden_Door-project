@@ -23,4 +23,6 @@ public class ThemeDto {
   private int reservationCount;
   private int price;
   private long totalUsage;
+  private int cleaningTime;
+  private List<String> availableDays;
 }

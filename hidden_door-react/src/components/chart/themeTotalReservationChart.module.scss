@@ -1,0 +1,98 @@
+@use "../../styles/abstracts/mixins";
+
+.container {
+  @include mixins.flex-layout-row-with-gap(flex-start, center, 20px);
+
+  @include mixins.sm-mode {
+    flex-direction: column;
+  }
+}
+
+.summary_card {
+  flex: 1;
+  padding: 16px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  min-width: 250px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  .card_header {
+    @include mixins.flex-layout-row(space-between, center);
+    margin-bottom: 12px;
+    border-bottom: 1px solid #000;
+    padding-bottom: 5px;
+
+    .content {
+      margin: 0;
+      color: #000;
+    }
+
+    .content_span {
+      background-color: #e3f2fd;
+      padding: 4px 8px;
+      font-size: 0.9em;
+      border-radius: 16px;
+      color: #000;
+    }
+  }
+
+  .card_list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    .card_item {
+      margin-bottom: 8px;
+      @include mixins.flex-layout-row(flex-start, center);
+      color: #000;
+
+      .color_span {
+        width: 12px;
+        height: 12px;
+        margin-right: 8px;
+        border-radius: 2px;
+      }
+
+      .themeName {
+        flex: 1;
+      }
+
+      .reservation_container {
+        @include mixins.flex-layout-row-with-gap(flex-start, center, 8px);
+
+        .total_reservation {
+          color: #666;
+          font-size: 0.8em;
+        }
+      }
+    }
+  }
+}
+
+.pie_chart {
+  flex: 1;
+  height: 300px;
+  min-width: 300px;
+  min-height: 250px;
+  position: relative;
+}
+
+.tooltip {
+  padding: 8px 12px;
+  background-color: #fff;
+  border: 1px solid;
+  border-radius: 4px;
+  box-shadow: 0 3px 9px rgba(0, 0, 0, 0.1);
+  color: #000;
+
+  .tooltip_themeName {
+    @include mixins.flex-layout-row(flex-start, center);
+    margin-bottom: 4px;
+
+    .color {
+      width: 12px;
+      height: 12px;
+      margin-right: 6px;
+    }
+  }
+}

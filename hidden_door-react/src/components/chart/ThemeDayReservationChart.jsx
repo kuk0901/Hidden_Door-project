@@ -1,4 +1,5 @@
 import styles from "./themeDayReservation.module.scss";
+import { stringToColor } from "@utils/color/stringToColor";
 
 const dummy = [
   { themeName: "theme1", reservations: 4, total: 8 },
@@ -42,7 +43,15 @@ const ThemeDayReservationChart = ({ data = dummy }) => {
                   isSoldOut ? styles.soldOut : ""
                 }`}
               >
-                <div className={styles.themeName}>{item.themeName}</div>
+                <div className={styles.themeName}>
+                  <span
+                    className={styles.themeColor}
+                    style={{
+                      backgroundColor: `${stringToColor(item.themeName)}`
+                    }}
+                  ></span>{" "}
+                  {item.themeName}
+                </div>
 
                 <div className={styles.reservationCount}>
                   <b>{item.reservations}</b>/{item.total}

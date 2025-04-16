@@ -1,0 +1,108 @@
+@use "../../styles/abstracts/mixins";
+
+.container {
+  display: grid;
+  grid-template-columns: minmax(250px, 300px) minmax(0, 1fr);
+  gap: 24px;
+
+  @include mixins.lg-mode {
+    grid-template-columns: 1fr;
+  }
+
+  .summary_card {
+    width: 100%;
+    max-width: 300px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+    @include mixins.lg-mode {
+      max-width: none;
+    }
+
+    .card_header {
+      @include mixins.flex-layout-row(space-between, center);
+      margin-bottom: 16px;
+      border-bottom: 1px solid #000;
+      padding-bottom: 5px;
+
+      .content {
+        margin: 0;
+        color: #000;
+      }
+
+      .content_span {
+        background-color: #e3f2fd;
+        padding: 4px 12px;
+        font-size: 0.9em;
+        border-radius: 16px;
+        color: #000;
+      }
+    }
+
+    .card_list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      .card_item {
+        margin-bottom: 12px;
+        @include mixins.flex-layout-row(flex-start, center);
+        color: #000;
+
+        .card_color {
+          width: 12px;
+          height: 12px;
+          margin-right: 12px;
+          border-radius: 2px;
+        }
+
+        .themeName {
+          flex: 1;
+        }
+
+        .reservation_container {
+          @include mixins.flex-layout-row-with-gap(flex-start, center, 8px);
+
+          .total_reservation {
+            color: #666;
+            font-size: 0.8em;
+          }
+        }
+      }
+    }
+  }
+}
+
+.line_chart {
+  height: 600px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  min-width: 0;
+  overflow: visible;
+
+  @include mixins.md-mode {
+    display: none;
+  }
+}
+
+.tooltip {
+  background-color: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-size: 14px;
+  color: #000;
+
+  .tooltip_themeName {
+    @include mixins.flex-layout-row-with-gap(flex-start, center, 8px);
+
+    .color {
+      width: 12px;
+      height: 12px;
+      border-radius: 2px;
+    }
+  }
+}
