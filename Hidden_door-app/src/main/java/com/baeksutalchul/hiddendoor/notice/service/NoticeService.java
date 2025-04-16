@@ -60,6 +60,7 @@ public class NoticeService {
         List<NoticeDto> noticeDtoList = noticePage.getContent().stream()
                 .map(notice -> {
                     NoticeDto dto = modelMapper.map(notice, NoticeDto.class);
+                    dto.setNoticeId(notice.getId()); // 수동 매핑 후 나중에 확인
                     dto.setKstCreatedAt(DateTimeUtil.convertToKoreanDate(dto.getCreatedAt()));
                     return dto;
                 })
@@ -78,6 +79,7 @@ public class NoticeService {
         Notice notice = noticeRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOTICE_NOT_FOUND));
         NoticeDto noticeDto = modelMapper.map(notice, NoticeDto.class);
+        noticeDto.setNoticeId(notice.getId());
         return new ResponseDto<>(noticeDto, "공지사항을 성공적으로 조회했습니다.");
     }
 
@@ -87,6 +89,7 @@ public class NoticeService {
         Notice savedNotice = noticeRepository.save(notice);
 
         NoticeDto noticeDtoResult = modelMapper.map(savedNotice, NoticeDto.class);
+        noticeDtoResult.setNoticeId(savedNotice.getId());
 
         return new ResponseDto<>(noticeDtoResult, "공지사항이 성공적으로 생성되었습니다.");
     }
@@ -101,6 +104,7 @@ public class NoticeService {
         Notice updatedNotice = noticeRepository.save(notice);
 
         NoticeDto noticeDtoResult = modelMapper.map(updatedNotice, NoticeDto.class);
+        noticeDtoResult.setNoticeId(updatedNotice.getId());
         noticeDtoResult.setKstCreatedAt(DateTimeUtil.convertToKoreanDateTime(notice.getCreatedAt()));
 
         return new ResponseDto<>(noticeDtoResult, "공지사항이 성공적으로 수정되었습니다.");

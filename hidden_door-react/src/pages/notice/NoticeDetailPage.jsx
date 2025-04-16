@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { formatKoreanDate } from '../../utils/format/date';
 
 function NoticeDetailPage() {
-  const { id } = useParams();
+  const { noticeId } = useParams();
   const { admin } = useAdmin();
   const navigate = useNavigate();
   const [notice, setNotice] = useState(null);
@@ -32,7 +32,7 @@ function NoticeDetailPage() {
     setLoading(true);
 
     try {
-      const response = await Api.get(`/notices/${id}`);
+      const response = await Api.get(`/notices/${noticeId}`);
 
       if (response.status === 200) {
         if (response.data?.data) {
@@ -60,7 +60,7 @@ function NoticeDetailPage() {
 
   useEffect(() => {
     fetchNotice();
-  }, [id]);
+  }, [noticeId]);
 
   const handleSubmitEdit = async (e) => {
     e.preventDefault();
@@ -73,7 +73,7 @@ function NoticeDetailPage() {
     const updatedNotice = { title: editTitle, content: editContent };
 
     try {
-      const response = await Api.put(`/notices/${id}`, updatedNotice);
+      const response = await Api.put(`/notices/${noticeId}`, updatedNotice);
 
       if (response.status === 200) {
         if (response.data?.data) {
@@ -150,7 +150,7 @@ function NoticeDetailPage() {
               </button>
             )}
             <button
-              onClick={() => deleteNotice(id)}
+              onClick={() => deleteNotice(noticeId)}
               className="notice-btn btn-delete"
             >
               삭제

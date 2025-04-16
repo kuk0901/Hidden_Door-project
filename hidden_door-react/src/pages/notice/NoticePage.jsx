@@ -1,143 +1,122 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { noticesState, pageState } from '@atoms/noticeAtom';
 import { useAdmin } from '@hooks/useAdmin';
 import Api from '@axios/api';
 import { toast } from 'react-toastify';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { formatKoreanDate } from '../../utils/format/date';
+import Pagination from '@components/common/navigation/pagination/Pagination';
 
-function NoticeDetailPage() {
-  const { id } = useParams();
+function NoticePage() {
+  const location = useLocation();
   const { admin } = useAdmin();
-  const navigate = useNavigate();
-  const [notice, setNotice] = useState(null);
+  const [notices, setNotices] = useRecoilState(noticesState);
+  const [page, setPage] = useRecoilState(pageState);
   const [loading, setLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
-  const [editTitle, setEditTitle] = useState('');
-  const [editContent, setEditContent] = useState('');
+  const navigate = useNavigate();
 
-  const fetchNotice = async () => {
+  useEffect(() => {
+    if (notices.length === 0 || location.state?.shouldRefresh) {
+      fetchNotices(page.page);
+    }
+  }, [page.page, location.state]);
+
+  const fetchNotices = async (currentPage) => {
     setLoading(true);
 
     try {
-      const response = await Api.get(`/notices/${id}`);
+      const response = await Api.get(
+        `/notices?page=${currentPage - 1}&size=${page.size}`
+      );
 
       if (response.status === 200) {
-        if (response.data?.data) {
-          setNotice(response.data.data);
-          // 수정 모드 활성화 시 기존 데이터 설정
-          setEditTitle(response.data.data.title);
-          setEditContent(response.data.data.content);
-        } else {
-          toast.info('해당 공지사항을 찾을 수 없습니다.');
-          navigate('/hidden_door/notice');
+        const { content, page: pageInfo } = response.data?.data || {};
+
+        setNotices(content || []);
+        setPage((prev) => ({
+          ...prev,
+          ...pageInfo,
+          page: currentPage,
+          isFirst: currentPage === 1,
+          isLast: currentPage === pageInfo?.totalPages,
+        }));
+
+        if (!content || content.length === 0) {
+          toast.info('등록된 공지사항이 없습니다.');
         }
       } else {
-        toast.error(response.data.message || '공지사항 조회에 실패했습니다.');
-        navigate('/hidden_door/notice');
+        toast.error(
+          response.data.message || '공지사항을 불러오는 데 실패했습니다.'
+        );
       }
     } catch (error) {
+      console.error('Error fetching notices:', error);
       toast.error(
-        error.response?.data?.message ||
-          '네트워크 문제로 공지사항 조회에 실패하였습니다.'
+        error.response?.data?.message || '공지사항을 불러오는 데 실패했습니다.'
       );
-      navigate('/hidden_door/notice');
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchNotice();
-  }, [id]);
+  const handleNoticeClick = (noticeId) => {
+    navigate(`/hidden_door/notice/${noticeId}`);
+  };
 
-  const handleSubmitEdit = async (e) => {
-    e.preventDefault();
-
-    if (!editTitle.trim() || !editContent.trim()) {
-      toast.error('제목과 내용을 모두 입력해주세요.');
-      return;
-    }
-
-    const updatedNotice = { title: editTitle, content: editContent };
-
-    try {
-      const response = await Api.put(`/notices/${id}`, updatedNotice);
-
-      if (response.status === 200) {
-        toast.success(response.data.message || '공지사항이 수정되었습니다.');
-        setNotice(response.data.data);
-        setIsEditing(false); // 수정 모드 비활성화
-      } else {
-        toast.error(response.data.message || '공지사항 수정에 실패하였습니다.');
-      }
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || '공지사항 수정에 실패하였습니다.'
-      );
-    }
+  const handlePageChange = (newPage) => {
+    setPage((prev) => ({ ...prev, page: newPage }));
   };
 
   if (loading) return <div>로딩 중...</div>;
-  if (!notice) return <div>공지사항을 찾을 수 없습니다.</div>;
+
+  if (notices.length === 0) {
+    return (
+      <div className="notice-page">
+        <h1 className="notice-page-title">공지사항</h1>
+        {admin && (
+          <button
+            onClick={() => navigate('/hidden_door/notice/add')}
+            className="add-notice-btn"
+          >
+            공지사항 추가
+          </button>
+        )}
+        <div className="no-notice-message">등록된 공지사항이 없습니다.</div>
+      </div>
+    );
+  }
 
   return (
-    <div className="notice-detail-page">
-      <h1 className="notice-title">{notice.title}</h1>
-      <div className="notice-info">
-        <span>작성일: {formatKoreanDate(notice.createdAt)}</span>
-      </div>
-      <div
-        className="notice-content"
-        dangerouslySetInnerHTML={{ __html: notice.content }}
-      />
-      <div className="notice-actions">
+    <div className="notice-page">
+      <h1 className="notice-page-title">공지사항</h1>
+      {admin && (
         <button
-          onClick={() => navigate('/hidden_door/notice')}
-          className="notice-btn btn-back"
+          onClick={() => navigate('/hidden_door/notice/add')}
+          className="add-notice-btn"
         >
-          목록으로
+          공지사항 추가
         </button>
-        {admin && (
-          <>
-            {!isEditing && (
-              <button
-                onClick={() => setIsEditing(true)} // 수정 모드 활성화
-                className="notice-btn btn-edit"
-              >
-                수정
-              </button>
-            )}
-            <button
-              onClick={() => deleteNotice(id)}
-              className="notice-btn btn-delete"
-            >
-              삭제
-            </button>
-          </>
-        )}
-      </div>
-
-      {isEditing && (
-        <form onSubmit={handleSubmitEdit} className="edit-notice-form">
-          <input
-            type="text"
-            value={editTitle}
-            onChange={(e) => setEditTitle(e.target.value)}
-            placeholder="제목"
-          />
-          <textarea
-            value={editContent}
-            onChange={(e) => setEditContent(e.target.value)}
-            placeholder="내용"
-          />
-          <button type="submit">저장</button>
-          <button type="button" onClick={() => setIsEditing(false)}>
-            취소
-          </button>
-        </form>
       )}
+      <div className="notice-list">
+        <ul>
+          {notices.map((notice) => (
+            <li
+              key={notice.noticeId}
+              className="notice-item"
+              onClick={() => handleNoticeClick(notice.noticeId)}
+            >
+              <div className="notice-title">{notice.title}</div>
+              <div className="notice-date">
+                {formatKoreanDate(notice.createdAt)}
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <Pagination page={page} onPageChange={handlePageChange} />
     </div>
   );
 }
 
-export default NoticeDetailPage;
+export default NoticePage;

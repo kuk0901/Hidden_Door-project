@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
-@RestController
+ @RestController
 @RequestMapping("/api/v1/notices")
 public class NoticeController {
 
@@ -21,44 +21,36 @@ public class NoticeController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<Map<String, Object>>> getAllNotices(
-            @RequestParam(name = "page", required = false, defaultValue = "1") int page,
-            @RequestParam(name = "size", required = false, defaultValue = "10") int size,
-            @RequestParam(name = "sortField", required = false, defaultValue = "createdAt") String sortField,
-            @RequestParam(name = "sortDirection", required = false, defaultValue = "DESC") String sortDirection,
+            @RequestParam(name = "page", defaultValue = "1") int page,
+            @RequestParam(name = "size", defaultValue = "10") int size,
+            @RequestParam(name = "sortField", defaultValue = "createdAt") String sortField,
+            @RequestParam(name = "sortDirection", defaultValue = "DESC") String sortDirection,
             @RequestParam(name = "searchField", required = false) String searchField,
             @RequestParam(name = "searchTerm", required = false) String searchTerm) {
 
-        PageDto pageDto = new PageDto(
-                page + 1,
-                size,
-                0L,
-                0,
-                page == 0,
-                false,
-                sortField,
-                sortDirection);
-
+        PageDto pageDto = new PageDto(page + 1, size, 0L, 0, page == 0, false, sortField, sortDirection);
         return ResponseEntity.ok().body(noticeService.getAllNotices(pageDto, searchField, searchTerm));
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ResponseDto<NoticeDto>> getNoticeById(@PathVariable("id") String id) {        
+    @GetMapping("/{noticeId}")
+    public ResponseEntity<ResponseDto<NoticeDto>> getNoticeById(@PathVariable("noticeId") String id) {
         return ResponseEntity.ok().body(noticeService.getNoticeById(id));
     }
 
     @PostMapping
-    public ResponseEntity<ResponseDto<NoticeDto>> createNotice(@RequestBody NoticeDto noticeDto) {        
+    public ResponseEntity<ResponseDto<NoticeDto>> createNotice(@RequestBody NoticeDto noticeDto) {
         return ResponseEntity.ok().body(noticeService.createNotice(noticeDto));
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ResponseDto<NoticeDto>> updateNotice(@PathVariable("id") String id,
-                                                               @RequestBody NoticeDto noticeDto) {        
+    @PutMapping("/{noticeId}")
+    public ResponseEntity<ResponseDto<NoticeDto>> updateNotice(
+            @PathVariable("noticeId") String id, 
+            @RequestBody NoticeDto noticeDto) {
         return ResponseEntity.ok().body(noticeService.updateNotice(id, noticeDto));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ResponseDto<Map<String, Object>>> deleteNotice(@PathVariable("id") String id) {        
-        return ResponseEntity.ok().body( noticeService.deleteNotice(id));
+    @DeleteMapping("/{noticeId}")
+    public ResponseEntity<ResponseDto<Map<String, Object>>> deleteNotice(@PathVariable("noticeId") String id) {
+        return ResponseEntity.ok().body(noticeService.deleteNotice(id));
     }
 }
