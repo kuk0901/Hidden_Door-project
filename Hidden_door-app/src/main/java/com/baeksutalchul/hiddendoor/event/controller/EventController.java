@@ -20,32 +20,28 @@ public class EventController {
 
     @GetMapping
     public ResponseEntity<ResponseDto<List<EventDto>>> getEventAll() {
-        ResponseDto<List<EventDto>> response = eventService.getAllEvents();
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(eventService.getAllEvents());
     }
 
     @GetMapping("/{eventId}")
     public ResponseEntity<ResponseDto<EventDto>> getEventOne(@PathVariable String eventId) {
-        ResponseDto<EventDto> response = eventService.getEventById(eventId);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(eventService.getEventById(eventId));
     }
 
     @PostMapping
     public ResponseEntity<ResponseDto<EventDto>> addEvent(@RequestBody EventDto eventDto) {
-        ResponseDto<EventDto> response = eventService.createEvent(eventDto);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(eventService.createEvent(eventDto));
     }
 
     @PutMapping("/{eventId}")
-    public ResponseEntity<ResponseDto<EventDto>> updateEventOne(@PathVariable("eventId") String eventId,
+    public ResponseEntity<ResponseDto<EventDto>> updateEventOne(
+            @PathVariable String eventId,
             @RequestBody EventDto eventDto) {
-        ResponseDto<EventDto> response = eventService.updateEvent(eventId, eventDto);
-        return ResponseEntity.ok().body(response);
+        return ResponseEntity.ok().body(eventService.updateEvent(eventId, eventDto));
     }
 
     @DeleteMapping("/{eventId}")
-    public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable("eventId") String eventId) {
-        ResponseDto<String> response = eventService.deleteEvent(eventId);
-        return ResponseEntity.ok().body(response);
+    public ResponseEntity<ResponseDto<String>> deleteEventOne(@PathVariable String eventId) {
+        return ResponseEntity.ok().body(eventService.deleteEvent(eventId));
     }
 }
