@@ -37,13 +37,13 @@ const CustomerAddPage = () => {
       const res = await Api.post("/customers/customer/add", newCustomer);
 
       if (res.status !== 200) {
-        toast.error("오류입니다.");
+        toast.error("질문을 추가하는데 실패했습니다.");
       }
 
       navigate(`/hidden_door/cs/customer/${res.data.data}?register=true`);
     } catch (error) {
       console.log(error);
-      toast.error("서버 오류가 발생했습니다.");
+      toast.error("질문을 추가하는데 실패했습니다.");
     }
   };
 

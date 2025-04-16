@@ -8,6 +8,19 @@ function AddNoticePage() {
   const [content, setContent] = useState('');
   const navigate = useNavigate();
 
+  const handleResponseError = (status, message) => {
+    const errorMessages = {
+      400: message || '잘못된 요청입니다.',
+      401: message || '유효하지 않은 인증정보입니다. 다시 로그인해주세요.',
+      403: message || '접근 권한이 없습니다. 관리자에게 문의하세요.',
+      404: message || '요청하신 리소스를 찾을 수 없습니다.',
+      default:
+        message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+    };
+
+    return errorMessages[status] || errorMessages.default;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -21,21 +34,30 @@ function AddNoticePage() {
     try {
       const response = await Api.post('/notices', newNotice);
 
-      if (response.status !== 200) {
-        toast.error('서버 요청에 실패했습니다.');
-        return;
-      }
+      // 성공 상태 코드 확인
+      if (response.status === 200 || response.status === 201) {
+        toast.success(
+          response.data.message || '공지사항이 성공적으로 등록되었습니다.'
+        );
 
-      if (response.data?.data) {
-        toast.success(response.data.message || '공지사항이 추가되었습니다.');
-        navigate('/hidden_door/notice');
+        // 제목과 내용 초기화
+        setTitle('');
+        setContent('');
+
+        navigate('/hidden_door/notice', {
+          state: { shouldRefresh: true },
+        });
       } else {
-        toast.error('서버 응답 형식이 올바르지 않습니다.');
+        // 성공 상태 코드가 아닌 경우 에러 처리
+        toast.error(
+          handleResponseError(response.status, response.data.message)
+        );
       }
     } catch (error) {
       console.error('Error adding notice:', error);
       toast.error(
-        error.response?.data?.message || '공지사항 추가에 실패했습니다.'
+        error.response?.data?.message ||
+          '네트워크 문제로 공지사항 추가 실패하였습니다.'
       );
     }
   };

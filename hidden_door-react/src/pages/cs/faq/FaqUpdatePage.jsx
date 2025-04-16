@@ -38,17 +38,17 @@ const FaqUpdatePage = () => {
   };
 
   const deleteFaq = async () => {
+    // XXX: useConfirm 사용 형태로 수정해주세요.
     const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
     if (!confirmDelete) return;
 
     try {
       const response = await Api.delete(`/faqs/faq/delete/${faqId}`);
 
-      // 서버 응답 상태 코드가 200이 아닌 경우 에러 처리
       if (response.status !== 200) {
         toast.error("삭제에 실패했습니다.");
       }
-      navigate("/hidden_door/cs/faq?delete=true"); // 삭제 후 목록으로 이동
+      navigate("/hidden_door/cs/faq?delete=true");
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
     }
@@ -73,7 +73,7 @@ const FaqUpdatePage = () => {
 
   const updateFaq = async () => {
     try {
-      const res = await Api.post(`/faqs/faq/update/${faqId}`, newFaq); // POST로 요청
+      const res = await Api.post(`/faqs/faq/update/${faqId}`, newFaq);
 
       if (res.status !== 200) {
         toast.error("업데이트에 실패했습니다.");

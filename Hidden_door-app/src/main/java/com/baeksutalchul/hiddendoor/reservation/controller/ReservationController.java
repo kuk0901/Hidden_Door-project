@@ -54,12 +54,14 @@ public class ReservationController {
   }
 
   @GetMapping("/timeslots")
-    public ResponseDto<?> getAvailableTimeSlots(
-            @RequestParam("date") String date,
-            @RequestParam("themeId") String themeId
-    ) {
-        return reservationService.getAvailableTimeSlots(date, themeId);
-    }
+  public ResponseDto<?> getAvailableTimeSlots(
+    @RequestParam("date") String date,
+    @RequestParam("themeId") String themeId
+  ) {
+    logger.info("조회 요청 - themeId: {}, date: {}", themeId, date);
+
+    return reservationService.getAvailableTimeSlots(date, themeId);
+  }
 
   @PostMapping("/create")
   public ResponseEntity<ResponseDto<ReservationDto>> createReservation(@RequestBody ReservationDto reservationDto) {

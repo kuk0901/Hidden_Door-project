@@ -47,7 +47,7 @@ const FaqAddPage = () => {
       navigate(`/hidden_door/cs/faq/${res.data.data}?register=true`);
     } catch (error) {
       console.log(error);
-      toast.error("서버 오류가 발생했습니다.");
+      toast.error("FAQ추가에 실패했습니다.");
     }
   };
 

@@ -1,5 +1,13 @@
 @use "../abstracts/mixins";
 @use "../abstracts/variables" as variables;
+@use "sass:color";
+
+// 다크 모드 mixin
+@mixin dark-mode {
+  @media (prefers-color-scheme: dark) {
+    @content;
+  }
+}
 
 .reservation-list-container {
   display: flex;
@@ -129,8 +137,42 @@
   }
 
   .date-section {
+    flex: 1;
     .react-calendar {
       flex-grow: 1;
+      background: white;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 10px;
+
+      @include mixins.dark-mode {
+        background: color.adjust(
+          variables.$dark-background-color,
+          $lightness: 10%
+        );
+        border-color: variables.$dark-text-color;
+        color: variables.$dark-text-color;
+
+        .react-calendar__tile {
+          color: variables.$dark-text-color;
+
+          &--active {
+            background: variables.$primary-color;
+            color: blue !important;
+          }
+
+          &--now {
+            background: color.adjust(
+              variables.$dark-background-color,
+              $lightness: 15%
+            );
+          }
+
+          &--disabled {
+            color: rgba(variables.$dark-text-color, 0.4);
+          }
+        }
+      }
     }
   }
 
@@ -153,6 +195,13 @@
 
       &:hover {
         background-color: #e0e0e0;
+
+        @include dark-mode {
+          background-color: color.adjust(
+            variables.$dark-background-color,
+            $lightness: 5%
+          );
+        }
       }
 
       &.selected {
@@ -200,6 +249,14 @@
       &.selected {
         background-color: #007bff;
         color: white;
+      }
+
+      @include mixins.dark-mode {
+        background: color.adjust(
+          variables.$dark-background-color,
+          $lightness: 10%
+        );
+        color: variables.$dark-text-color;
       }
     }
   }

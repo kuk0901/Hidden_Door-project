@@ -10,8 +10,8 @@ const CustomerDetailPage = () => {
   const { admin } = useAdmin();
   const { customerId } = useParams();
   const [customerDetail, setCustomerDetail] = useState(null);
-  const [customerAnswer, setCustomerAnswer] = useState(""); // 답변 상태 관리
-  const [isAnswering, setIsAnswering] = useState(false); // 답변 입력 상태 관리
+  const [customerAnswer, setCustomerAnswer] = useState("");
+  const [isAnswering, setIsAnswering] = useState(false);
   const navigate = useNavigate();
 
   const getCustomerDetail = async () => {
@@ -28,6 +28,7 @@ const CustomerDetailPage = () => {
   };
 
   const deleteCustomer = async () => {
+    // XXX: useConfirm 사용 형태로 수정해주세요.
     const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
     if (!confirmDelete) return;
 
@@ -35,7 +36,7 @@ const CustomerDetailPage = () => {
       const res = await Api.delete(`/customers/customer/delete/${customerId}`);
 
       if (res.status !== 200) {
-        toast.error("삭제에 실패했습니다.");
+        toast.error("질문 삭제에 실패했습니다.");
       }
 
       toast.success(res.data.msg);
@@ -60,10 +61,15 @@ const CustomerDetailPage = () => {
         adminName: admin.email,
         customerCheck: "O",
       });
+
+      if (res.status !== 200) {
+        toast.error("답변 제출에 실패했습니다.");
+        return;
+      }
+
       toast.success(res.data.msg);
       setIsAnswering(false);
       setCustomerAnswer("");
-
       navigate(0);
     } catch (error) {
       toast.error(error.message || "답변 제출에 실패했습니다.");

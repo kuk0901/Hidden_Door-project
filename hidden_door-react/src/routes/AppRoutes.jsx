@@ -1,55 +1,55 @@
-import { lazy, Suspense } from "react";
-import { Route, Routes, Navigate } from "react-router-dom";
-import Layout from "@components/common/layout/Layout";
+import { lazy, Suspense } from 'react';
+import { Route, Routes, Navigate } from 'react-router-dom';
+import Layout from '@components/common/layout/Layout';
 
-import ProtectedAdminRoute from "@routes/ProtectedAdminRoute";
-import HomeSkeleton from "@components/common/loading/skeletonUI/HomeSkeleton";
+import ProtectedAdminRoute from '@routes/ProtectedAdminRoute';
+import HomeSkeleton from '@components/common/loading/skeletonUI/HomeSkeleton';
 
-const HomePage = lazy(() => import("@pages/home/HomePage"));
-const LoginPage = lazy(() => import("@pages/admin/LoginPage"));
-const PrivacyPolicy = lazy(() => import("@pages/policy/PrivacyPolicy"));
-const TermsOfService = lazy(() => import("@pages/policy/TermsOfService"));
-const EscapeRoomInfoPage = lazy(() => import("@pages/Info/EscapeRoomInfoPage"));
-const ThemePage = lazy(() => import("@pages/theme/ThemePage"));
-const ThemeDetailPage = lazy(() => import("@pages/theme/ThemeDetailPage"));
-const ThemeAddPage = lazy(() => import("@pages/theme/ThemeAddPage"));
-const FaqPage = lazy(() => import("@pages/cs/faq/FaqPage"));
-const FaqAddPage = lazy(() => import("@pages/cs/faq/FaqAddPage"));
-const FaqDetailPage = lazy(() => import("@pages/cs/faq/FaqDetailPage"));
-const FaqUpdatePage = lazy(() => import("@pages/cs/faq/FaqUpdatePage"));
-const CustomerPage = lazy(() => import("@pages/cs/customer/CustomerPage"));
+const HomePage = lazy(() => import('@pages/home/HomePage'));
+const LoginPage = lazy(() => import('@pages/admin/LoginPage'));
+const PrivacyPolicy = lazy(() => import('@pages/policy/PrivacyPolicy'));
+const TermsOfService = lazy(() => import('@pages/policy/TermsOfService'));
+const EscapeRoomInfoPage = lazy(() => import('@pages/Info/EscapeRoomInfoPage'));
+const ThemePage = lazy(() => import('@pages/theme/ThemePage'));
+const ThemeDetailPage = lazy(() => import('@pages/theme/ThemeDetailPage'));
+const ThemeAddPage = lazy(() => import('@pages/theme/ThemeAddPage'));
+const FaqPage = lazy(() => import('@pages/cs/faq/FaqPage'));
+const FaqAddPage = lazy(() => import('@pages/cs/faq/FaqAddPage'));
+const FaqDetailPage = lazy(() => import('@pages/cs/faq/FaqDetailPage'));
+const FaqUpdatePage = lazy(() => import('@pages/cs/faq/FaqUpdatePage'));
+const CustomerPage = lazy(() => import('@pages/cs/customer/CustomerPage'));
 const CustomerAddPage = lazy(() =>
-  import("@pages/cs/customer/CustomerAddPage")
+  import('@pages/cs/customer/CustomerAddPage')
 );
 const CustomerDetailPage = lazy(() =>
-  import("@pages/cs/customer/CustomerDetailPage")
+  import('@pages/cs/customer/CustomerDetailPage')
 );
 const ReservationMainPage = lazy(() =>
-  import("@pages/reservation/ReservationMainPage")
+  import('@pages/reservation/ReservationMainPage')
 );
 const ReservationConfirmPage = lazy(() =>
-  import("@pages/reservation/ReservationConfirmPage")
+  import('@pages/reservation/ReservationConfirmPage')
 );
 const ReservationSummaryPage = lazy(() =>
-  import("@pages/reservation/ReservationSummaryPage")
+  import('@pages/reservation/ReservationSummaryPage')
 );
-const EventPage = lazy(() => import("@pages/event/EventPage"));
-const NoticePage = lazy(() => import("@pages/notice/NoticePage"));
-const NoticeDetailPage = lazy(() => import("@pages/notice/NoticeDetailPage"));
-const AddNoticePage = lazy(() => import("@pages/notice/AddNoticePage"));
-const LocationPage = lazy(() => import("@pages/location/LocationPage"));
-const DashboardPage = lazy(() => import("@pages/admin/DashboardPage"));
+const EventPage = lazy(() => import('@pages/event/EventPage'));
+const NoticePage = lazy(() => import('@pages/notice/NoticePage'));
+const NoticeDetailPage = lazy(() => import('@pages/notice/NoticeDetailPage'));
+const AddNoticePage = lazy(() => import('@pages/notice/AddNoticePage'));
+const LocationPage = lazy(() => import('@pages/location/LocationPage'));
+const DashboardPage = lazy(() => import('@pages/admin/DashboardPage'));
 const AdminReservationPage = lazy(() =>
-  import("@pages/admin/AdminReservationPage")
+  import('@pages/admin/AdminReservationPage')
 );
 const AdminReservationDetailPage = lazy(() =>
-  import("@pages/admin/AdminReservationDetailPage")
+  import('@pages/admin/AdminReservationDetailPage')
 );
-const AdminAccountPage = lazy(() => import("@pages/admin/AdminAccountPage"));
+const AdminAccountPage = lazy(() => import('@pages/admin/AdminAccountPage'));
 const AdminAccountDetailPage = lazy(() =>
-  import("@pages/admin/AdminAccountDetailPage")
+  import('@pages/admin/AdminAccountDetailPage')
 );
-const NotFound = lazy(() => import("@error/NotFound"));
+const NotFound = lazy(() => import('@error/NotFound'));
 
 export function AppRoutes() {
   return (
@@ -98,7 +98,7 @@ export function AppRoutes() {
 
           <Route path="notice">
             <Route index element={<NoticePage />} />
-            <Route path=":id" element={<NoticeDetailPage />} />
+            <Route path=":noticeId" element={<NoticeDetailPage />} />
             <Route path="add" element={<AddNoticePage />} />
           </Route>
 

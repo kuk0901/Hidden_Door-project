@@ -27,7 +27,20 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
     setNoEndDate(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleResponseError = (status, message) => {
+    const errorMessages = {
+      400: message || '잘못된 요청입니다.',
+      401: message || '유효하지 않은 인증정보입니다. 다시 로그인해주세요.',
+      403: message || '접근 권한이 없습니다. 관리자에게 문의하세요.',
+      404: message || '요청하신 리소스를 찾을 수 없습니다.',
+      default:
+        message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+    };
+
+    return errorMessages[status] || errorMessages.default;
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!title.trim() || !description.trim()) {
@@ -45,38 +58,36 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
       description,
       isOngoing,
       noEndDate,
+      eventType: isOngoing ? '상시' : noEndDate ? '종료일 미정' : '기간 지정',
+      startDate: isOngoing ? null : startDate.toISOString().split('T')[0],
+      endDate:
+        isOngoing || noEndDate ? null : endDate.toISOString().split('T')[0],
     };
 
-    if (isOngoing) {
-      newEvent.eventType = '상시';
-      newEvent.startDate = null;
-      newEvent.endDate = null;
-    } else if (noEndDate) {
-      newEvent.eventType = '종료일 미정';
-      newEvent.startDate = startDate.toISOString().split('T')[0];
-      newEvent.endDate = null;
-    } else {
-      newEvent.eventType = '기간 지정';
-      newEvent.startDate = startDate.toISOString().split('T')[0];
-      newEvent.endDate = endDate.toISOString().split('T')[0];
-    }
+    try {
+      const response = await Api.post('/events', newEvent);
 
-    Api.post('/events', newEvent)
-      .then((response) => {
-        if (response.data?.data) {
-          onEventAdded(response.data.data);
-          toast.success(response.data.message || '이벤트가 추가되었습니다.');
-          onClose();
-          resetForm();
-        } else {
-          toast.error('서버 응답 형식이 올바르지 않습니다.');
-        }
-      })
-      .catch((error) => {
-        toast.error(
-          error.response?.data?.message || '이벤트 추가에 실패했습니다.'
+      if (response.status === 200) {
+        toast.success(
+          response.data.message || '이벤트가 성공적으로 추가되었습니다.'
         );
-      });
+        onEventAdded(response.data.data);
+        onClose();
+        resetForm();
+      } else if (response.status >= 400 && response.status < 500) {
+        toast.error(
+          handleResponseError(response.status, response.data.message)
+        );
+      } else if (response.status >= 500) {
+        toast.error(handleResponseError('default'));
+      }
+    } catch (error) {
+      console.error('Error adding event:', error);
+      toast.error(
+        error.response?.data?.message ||
+          '네트워크 문제로 이벤트 추가에 실패했습니다.'
+      );
+    }
   };
 
   if (!isOpen) return null;

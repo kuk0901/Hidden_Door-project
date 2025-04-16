@@ -15,41 +15,49 @@ function EventPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
 
-  useEffect(() => {
-    fetchEvents();
-  }, []);
+  const handleResponseError = (status, message) => {
+    const errorMessages = {
+      400: message || '잘못된 요청입니다.',
+      401: message || '유효하지 않은 인증정보입니다. 다시 로그인해주세요.',
+      403: message || '접근 권한이 없습니다. 관리자에게 문의하세요.',
+      404: message || '요청하신 리소스를 찾을 수 없습니다.',
+      default:
+        message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
+    };
 
-  const fetchEvents = () => {
+    return errorMessages[status] || errorMessages.default;
+  };
+
+  const fetchEvents = async () => {
     setLoading(true);
-    Api.get('/events')
-      .then((response) => {
-        if (response.data && response.data.data) {
-          if (response.data.data.length === 0) {
-            toast.info('등록된 이벤트가 없습니다.');
-          }
-          setEvents(response.data.data);
+    try {
+      const response = await Api.get('/events');
+
+      if (response.status === 200) {
+        const eventsData = response.data?.data;
+        if (eventsData && eventsData.length > 0) {
+          setEvents(eventsData);
         } else {
           setEvents([]);
           toast.info('등록된 이벤트가 없습니다.');
         }
-      })
-      .catch((error) => {
-        console.error('Error fetching events:', error);
-        toast.error('이벤트를 불러오는 데 실패했습니다.');
-        setEvents([]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      } else {
+        toast.error(
+          handleResponseError(response.status, response.data.message)
+        );
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || '이벤트를 불러오는 데 실패했습니다.'
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const handleEventClick = (event) => {
-    setSelectedEvent(event);
-  };
-
-  const closeModal = () => {
-    setSelectedEvent(null);
-  };
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   const openAddModal = () => {
     if (!admin) return;
@@ -58,39 +66,6 @@ function EventPage() {
 
   const closeAddModal = () => {
     setIsAddModalOpen(false);
-  };
-
-  const handleEventAdded = (newEvent) => {
-    setEvents([...events, newEvent]);
-  };
-
-  const deleteEvent = async (eventId) => {
-    if (!admin) return;
-
-    try {
-      const response = await Api.delete(`/events/${eventId}`);
-
-      if (
-        response.data &&
-        (response.data.message || response.data.data !== undefined)
-      ) {
-        setEvents(events.filter((event) => event.id !== eventId));
-        if (selectedEvent && selectedEvent.id === eventId) {
-          closeModal();
-        }
-        toast.success(
-          response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
-        );
-        closeModal();
-        fetchEvents();
-      } else {
-        toast.error('삭제 응답이 올바르지 않습니다.');
-      }
-    } catch (error) {
-      toast.error(
-        error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
-      );
-    }
   };
 
   const openEditModal = (event) => {
@@ -103,51 +78,49 @@ function EventPage() {
     setEditingEvent(null);
   };
 
-  const handleEventEdited = async (editedEvent) => {
-    try {
-      const response = await Api.put(
-        `/events/${editedEvent.eventId}`,
-        editedEvent
-      );
+  const handleEventClick = (event) => {
+    setSelectedEvent(event);
+  };
 
-      if (response.data && response.data.data) {
-        setEvents(
-          events.map((event) =>
-            event.id === editedEvent.eventId ? response.data.data : event
-          )
-        );
-        closeEditModal();
+  const closeDetailModal = () => {
+    setSelectedEvent(null);
+  };
 
-        if (selectedEvent && selectedEvent.eventId === editedEvent.eventId) {
-          setSelectedEvent(response.data.data);
-        }
-
-        toast.success(response.data.message || '이벤트가 수정되었습니다.');
-      } else {
-        toast.error('수정 응답이 올바르지 않습니다.');
-      }
-    } catch (error) {
-      console.error('Error editing event:', error);
-      toast.error(
-        error.response?.data?.message || '이벤트 수정에 실패했습니다.'
-      );
+  const handleEventEdited = (editedEvent) => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) =>
+        event.eventId === editedEvent.eventId ? editedEvent : event
+      )
+    );
+    if (selectedEvent?.eventId === editedEvent.eventId) {
+      setSelectedEvent(editedEvent);
     }
   };
 
-  const formatEventDate = (date) => {
-    if (!date) return '';
-    return formatKoreanDate(date);
-  };
+  const deleteEvent = async (eventId) => {
+    if (!admin) return;
 
-  const renderEventPeriod = (event) => {
-    if (event.isOngoing === 'true') {
-      return '상시';
-    } else if (event.noEndDate === 'true') {
-      return `${formatEventDate(event.startDate)} ~`;
-    } else {
-      return `${formatEventDate(event.startDate)} ~ ${formatEventDate(
-        event.endDate
-      )}`;
+    try {
+      const response = await Api.delete(`/events/${eventId}`);
+
+      if (response.status === 200) {
+        setEvents((prevEvents) =>
+          prevEvents.filter((event) => event.eventId !== eventId)
+        );
+        toast.success(
+          response.data.message || '이벤트가 성공적으로 삭제되었습니다.'
+        );
+        closeDetailModal();
+        fetchEvents();
+      } else {
+        toast.error(
+          handleResponseError(response.status, response.data.message)
+        );
+      }
+    } catch (error) {
+      toast.error(
+        error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
+      );
     }
   };
 
@@ -162,29 +135,43 @@ function EventPage() {
         </button>
       )}
       <div className="event-container">
-        {events.map((event) => (
-          <div key={event.eventId} className="event-item">
-            <div
-              className="event-circle"
-              onClick={() => handleEventClick(event)}
-            >
-              {event.title}
+        {events.length > 0 ? (
+          events.map((event) => (
+            <div key={event.eventId} className="event-item">
+              <div
+                className="event-circle"
+                onClick={() => handleEventClick(event)}
+              >
+                {event.title}
+              </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) : (
+          <div className="no-events-message">진행중인 이벤트가 없습니다.</div>
+        )}
       </div>
+
+      {/* 상세 보기 모달 */}
       {selectedEvent && (
         <div className="em-event-modal-overlay">
           <div className="em-event-modal">
             <h2 className="em-modal-title">{selectedEvent.title}</h2>
             <p className="em-modal-description">{selectedEvent.description}</p>
             <p className="em-modal-dates">
-              기간 : {renderEventPeriod(selectedEvent)}
+              {selectedEvent.isOngoing === 'true'
+                ? '상시'
+                : selectedEvent.noEndDate === 'true'
+                ? `기간 : ${formatKoreanDate(
+                    selectedEvent.startDate
+                  )} ~ 종료일 미정`
+                : `기간 : ${formatKoreanDate(
+                    selectedEvent.startDate
+                  )} ~ ${formatKoreanDate(selectedEvent.endDate)}`}
             </p>
             <div className="em-modal-btn-container">
               <button
                 className="em-modal-btn em-modal-btn--cancel"
-                onClick={closeModal}
+                onClick={closeDetailModal}
               >
                 닫기
               </button>
@@ -208,11 +195,17 @@ function EventPage() {
           </div>
         </div>
       )}
+
+      {/* 추가 모달 */}
       <AddEventModal
         isOpen={isAddModalOpen}
         onClose={closeAddModal}
-        onEventAdded={handleEventAdded}
+        onEventAdded={(newEvent) =>
+          setEvents((prevEvents) => [...prevEvents, newEvent])
+        }
       />
+
+      {/* 수정 모달 */}
       <EditEventModal
         isOpen={isEditModalOpen}
         onClose={closeEditModal}

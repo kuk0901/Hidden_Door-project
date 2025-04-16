@@ -24,6 +24,8 @@ const ReservationConfirmPage = () => {
     paymentAmount: 0,
   });
 
+  console.log("reservation: ", reservation);
+
   const [selectedThemeDetails, setSelectedThemeDetails] = useState(null);
 
   useEffect(() => {
@@ -81,6 +83,7 @@ const ReservationConfirmPage = () => {
 
       const res = await Api.post("/reservations/create", reservationDto);
 
+      // XXX: status 사용으로 에러 처리 변경해 주세요.
       if (res.data?.msg.includes("성공")) {
         toast.success(res.data.msg);
         console.log("예약 성공. 응답 데이터:", res.data);
@@ -93,6 +96,7 @@ const ReservationConfirmPage = () => {
         }
 
         console.log("네비게이션 시작:", reservationNumber);
+        // XXX: navigate 사용하실 거면 CustomerPage, CustomerAddPage 컴포넌트 참고해 수정해 주세요.
         navigate(
           `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
         );

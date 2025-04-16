@@ -5,11 +5,16 @@ import FileForm from "@components/common/form/file/FileForm";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { validateThemeField } from "@validation/validationRules";
-import { themeFields, initialGenreList } from "@utils/fields/themeFields";
+import {
+  themeFields,
+  initialGenreList,
+  initialAvailableDayList
+} from "@utils/fields/themeFields";
 import { formatNumberToPrice } from "@utils/format/number";
 import DeleteThemeButton from "@components/theme/DeleteThemeButton";
 import useConfirm from "@hooks/useConfirm";
 import { useAdmin } from "@hooks/useAdmin";
+import CheckboxGroup from "@components/common/form/input/CheckboxGroup";
 
 const ThemeDetail = ({ theme, setTheme }) => {
   const [themeEditVisible, setThemeEditVisible] = useState(false);
@@ -20,8 +25,16 @@ const ThemeDetail = ({ theme, setTheme }) => {
       return { ...genre, checked: isChecked };
     })
   );
+
+  const [availableDayList, setAvailableDayList] = useState(
+    initialAvailableDayList.map((day) => {
+      const isChecked = theme.availableDays.includes(day.value);
+      return { ...day, checked: isChecked };
+    })
+  );
   const [errors, setErrors] = useState({});
   const [genreError, setGenreError] = useState("");
+  const [availableDayError, setAvailableDayError] = useState("");
 
   const [formData, setFormData] = useState({
     file: null,
@@ -31,7 +44,9 @@ const ThemeDetail = ({ theme, setTheme }) => {
     level: theme.level,
     time: theme.time,
     price: formatNumberToPrice(theme.price),
-    description: theme.description
+    description: theme.description,
+    cleaningTime: theme.cleaningTime,
+    availableDays: theme.availableDays
   });
   const confirm = useConfirm();
   const { isAdmin } = useAdmin();
@@ -44,6 +59,14 @@ const ThemeDetail = ({ theme, setTheme }) => {
     setGenreList(
       genreList.map((genre) =>
         genre.id === id ? { ...genre, checked: !genre.checked } : genre
+      )
+    );
+  };
+
+  const handleAvailableDayChange = (id) => {
+    setAvailableDayList(
+      availableDayList.map((day) =>
+        day.id === id ? { ...day, checked: !day.checked } : day
       )
     );
   };
@@ -96,6 +119,14 @@ const ThemeDetail = ({ theme, setTheme }) => {
       setGenreError("");
     }
 
+    // 요일 선택 검사
+    const selectedAvailableDays = availableDayList.filter((day) => day.checked);
+    if (selectedAvailableDays.length === 0) {
+      setAvailableDayError("최소 하나의 요일을 선택해주세요.");
+    } else {
+      setAvailableDayError("");
+    }
+
     // 에러가 있으면 제출을 중단
     if (Object.keys(newErrors).length > 0 || selectedGenres.length === 0) {
       toast.error("입력 정보를 확인해주세요.");
@@ -106,6 +137,9 @@ const ThemeDetail = ({ theme, setTheme }) => {
 
     // 선택된 장르 이름을 추출하여 추가
     const selectedGenreNames = selectedGenres.map((genre) => genre.name);
+    const selectedAvailableDayNames = selectedAvailableDays.map(
+      (day) => day.value
+    );
 
     const themeDto = {
       themeId: theme.themeId,
@@ -118,9 +152,9 @@ const ThemeDetail = ({ theme, setTheme }) => {
       time: formData.time,
       price: formData.price.replaceAll(",", "").trim(),
       description: formData.description,
+      cleaningTime: formData.cleaningTime,
       genre: selectedGenreNames,
-      reservationCount: theme.reservationCount,
-      totalUsage: theme.totalUsage
+      availableDays: selectedAvailableDayNames
     };
 
     submitData.append(
@@ -234,30 +268,21 @@ const ThemeDetail = ({ theme, setTheme }) => {
             theme={theme}
           />
 
-          {/* 장르 체크박스 섹션 */}
-          <div className="genre-section">
-            <div className="label-container">
-              <label htmlFor="genre">
-                <span className="text--red">*</span>장르 (중복 선택 가능)
-              </label>
-            </div>
-            <div className="input-container">
-              {genreList.map((genre) => (
-                <div key={genre.id} className="input--checkbox">
-                  <input
-                    type="checkbox"
-                    id={`genre-${genre.id}`}
-                    name="genre"
-                    value={genre.name}
-                    checked={genre.checked}
-                    onChange={() => handleGenreChange(genre.id)}
-                  />
-                  <label htmlFor={`genre-${genre.id}`}>{genre.name}</label>
-                </div>
-              ))}
-            </div>
-            {genreError && <span className="text--red">{genreError}</span>}
-          </div>
+          <CheckboxGroup
+            title="장르 (중복 선택 가능)"
+            name="genre"
+            items={genreList}
+            onChange={handleGenreChange}
+            error={genreError}
+          />
+
+          <CheckboxGroup
+            title="운영 요일 (중복 선택 가능)"
+            name="day"
+            items={availableDayList}
+            onChange={handleAvailableDayChange}
+            error={availableDayError}
+          />
 
           <div className="btn-container">
             <button className="btn" type="submit" form="themeEditForm">

@@ -7,6 +7,7 @@ import SearchForm from "@components/common/form/SearchForm";
 import Pagination from "@components/common/navigation/pagination/Pagination";
 import FaqList from "../../../components/cs/faq/FaqList";
 
+// XXX: 데이터 업데이트 가능성이 낮은 Faq는 recoil 사용 형태로 변경 부탁드립니다.
 const FaqPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
@@ -48,7 +49,7 @@ const FaqPage = () => {
       });
 
       if (res.status !== 200) {
-        toast.error("오류입니다.");
+        toast.error("FAQ불러오기에 실패했습니다.");
       }
 
       setFaqList(res.data.data);

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
 
 const SearchForm = ({ onSearch, fields, initialValues, onReset }) => {
   const { register, handleSubmit, watch, reset } = useForm({
@@ -9,11 +10,19 @@ const SearchForm = ({ onSearch, fields, initialValues, onReset }) => {
   const selectedField = watch("searchField");
 
   const onSubmit = (data) => {
+    const trimmedSearchTerm = data.searchTerm.trim();
+
     if (data.searchField === "") {
-      alert("검색 필드를 선택해주세요.");
+      toast.warn("검색 필드를 선택해 주세요.");
       return;
     }
-    onSearch(data.searchField, data.searchTerm);
+
+    if (trimmedSearchTerm === "") {
+      toast.warn("검색어를 입력해 주세요.");
+      return;
+    }
+
+    onSearch(data.searchField, trimmedSearchTerm);
   };
 
   useEffect(() => {

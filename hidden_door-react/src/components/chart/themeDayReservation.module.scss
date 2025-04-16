@@ -5,29 +5,20 @@ $color-accent: #ff8a65; // 강조색 (주황계열)
 $color-soldout: #ff6d6d; // 매진 표시
 $color-progress: #66bb6a; // 진행률 바
 
-// FIXME: 전체적으로 색상 변경해야 함
-
 .container {
   @include mixins.flex-layout-column-with-gap(space-around, center, 20px);
-  color: variables.$light-text-color;
+  color: #000;
   width: 100%;
-
-  @include mixins.light-mode {
-    color: #f0f0f0;
-  }
 }
 
 .header {
   width: 100%;
   padding: 12px;
-  background-color: variables.$light-background-color;
-  border-bottom: 1px solid #3e240a;
+  background-color: #fff;
+  color: #000;
+  border-bottom: 1px solid;
   border-radius: 8px;
   font-weight: 700;
-
-  @include mixins.light-mode {
-    background-color: #7a4410;
-  }
 }
 
 .listWrapper {
@@ -35,112 +26,98 @@ $color-progress: #66bb6a; // 진행률 바
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
   border-radius: 8px;
   width: 100%;
-}
 
-.listHeader,
-.listContent {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-}
-
-.listHeader {
-  font-weight: 600;
-  padding: 12px;
-  background-color: scale-color(
-    variables.$light-background-color,
-    $lightness: -5%
-  );
-  border-bottom: 1px solid #3e240a;
-
-  @include mixins.light-mode {
-    background-color: #5a3410;
+  .listHeader,
+  .listContent {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
   }
-}
 
-.listHeaderItem {
-  padding: 0 8px;
-  text-align: center;
-}
-
-.listContent {
-  background-color: scale-color(
-    variables.$light-background-color,
-    $lightness: -5%
-  );
-
-  @include mixins.light-mode {
-    background-color: #7a4410;
-  }
-}
-
-.listItem {
-  display: contents;
-  text-align: center;
-
-  & > * {
+  .listHeader {
+    font-weight: 600;
     padding: 12px;
-    border-bottom: 1px solid #3e240a;
-  }
+    background-color: #fff;
+    color: #000;
+    border-bottom: 1px solid;
 
-  &.soldOut > * {
-    background-color: scale-color(
-      variables.$light-background-color,
-      $lightness: -15%
-    );
-  }
-
-  @include mixins.light-mode {
-    &.soldOut > * {
-      background-color: scale-color(#7a4410, $lightness: 10%);
-    }
-  }
-}
-
-.themeName {
-  grid-column: 1;
-}
-
-.reservationCount {
-  grid-column: 2;
-  text-align: center;
-}
-
-.remaining {
-  grid-column: 3;
-  text-align: center;
-
-  &.soldOutText {
-    color: $color-soldout;
-  }
-}
-
-.progressWrapper {
-  grid-column: 4;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-
-  .progressBar {
-    flex: 1;
-    height: 8px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 4px;
-  }
-
-  .progressFill {
-    height: 100%;
-    border-radius: 4px;
-    background: $color-progress;
-
-    &.soldOutProgress {
-      background: $color-accent;
+    .listHeaderItem {
+      padding: 0 8px;
+      text-align: center;
     }
   }
 
-  .progressText {
-    font-size: 0.8em;
+  .listContent {
+    background-color: #fff;
+
+    .listItem {
+      display: contents;
+      text-align: center;
+
+      .themeColor {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        margin-right: 8px;
+        border-radius: 2px;
+      }
+
+      .themeName {
+        grid-column: 1;
+      }
+
+      .reservationCount {
+        grid-column: 2;
+        text-align: center;
+      }
+
+      .remaining {
+        grid-column: 3;
+        text-align: center;
+
+        &.soldOutText {
+          color: $color-soldout;
+        }
+      }
+
+      & > * {
+        padding: 12px;
+        border-bottom: 1px solid;
+      }
+
+      &.soldOut > * {
+        background-color: gray;
+      }
+
+      .progressWrapper {
+        grid-column: 4;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        .progressBar {
+          flex: 1;
+          height: 8px;
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 4px;
+        }
+
+        .progressFill {
+          height: 100%;
+          border-radius: 4px;
+          background: $color-progress;
+
+          &.soldOutProgress {
+            background: $color-accent;
+          }
+        }
+
+        .progressText {
+          font-size: 0.8em;
+        }
+      }
+    }
   }
 }

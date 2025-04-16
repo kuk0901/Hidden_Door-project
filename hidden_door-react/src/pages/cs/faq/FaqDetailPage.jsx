@@ -15,9 +15,14 @@ const FaqDetailPage = () => {
   const getFaqDetail = async () => {
     try {
       const res = await Api.get(`/faqs/faq/${faqId}`);
+
+      if (res.status !== 200) {
+        toast.error("FAQ 정보를 불러오는 데 실패했습니다.");
+      }
+
       setFaqDetail(res.data.data);
     } catch (error) {
-      toast.error(error.message || "오류입니다.");
+      toast.error(error.message || "FAQ불러오기에 실패했습니다.");
     }
   };
 

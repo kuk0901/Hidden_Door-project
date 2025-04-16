@@ -4,12 +4,19 @@ import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { validateThemeField } from "@validation/validationRules";
 import { useNavigate } from "react-router-dom";
-import { themeFields, initialGenreList } from "@utils/fields/themeFields";
+import {
+  themeFields,
+  initialGenreList,
+  initialAvailableDayList
+} from "@utils/fields/themeFields";
 import useConfirm from "@hooks/useConfirm";
+import CheckboxGroup from "@components/common/form/input/CheckboxGroup";
 
-// FIXME: 테마별 운영 요일 selectBox 추가
 const ThemeAddPage = () => {
   const [genreList, setGenreList] = useState(initialGenreList);
+  const [availableDayList, setAvailableDayList] = useState(
+    initialAvailableDayList
+  );
   const [formData, setFormData] = useState({
     file: null,
     themeName: "",
@@ -18,11 +25,13 @@ const ThemeAddPage = () => {
     level: 0,
     time: 0,
     price: "",
-    description: ""
+    description: "",
+    cleaningTime: 0
   });
 
   const [errors, setErrors] = useState({});
   const [genreError, setGenreError] = useState("");
+  const [availableDayError, setAvailableDayError] = useState("");
   const [previewImage, setPreviewImage] = useState(null);
 
   const navigate = useNavigate();
@@ -44,6 +53,14 @@ const ThemeAddPage = () => {
     } else {
       setPreviewImage(null);
     }
+  };
+
+  const handleAvailableDayChange = (id) => {
+    setAvailableDayList(
+      availableDayList.map((day) =>
+        day.id === id ? { ...day, checked: !day.checked } : day
+      )
+    );
   };
 
   const handleInputChange = (e) => {
@@ -79,17 +96,31 @@ const ThemeAddPage = () => {
       setGenreError("");
     }
 
+    // 요일 선택 검사
+    const selectedAvailableDays = availableDayList.filter((day) => day.checked);
+    if (selectedAvailableDays.length === 0) {
+      setAvailableDayError("최소 하나의 요일을 선택해주세요.");
+    } else {
+      setAvailableDayError("");
+    }
+
     // 에러가 있으면 제출을 중단
-    if (Object.keys(newErrors).length > 0 || selectedGenres.length === 0) {
+    if (
+      Object.keys(newErrors).length > 0 ||
+      selectedGenres.length === 0 ||
+      selectedAvailableDays.length === 0
+    ) {
       toast.error("입력 정보를 확인해주세요.");
       return;
     }
 
     const submitData = new FormData();
 
-    // 선택된 장르 이름을 추출하여 추가
+    // 선택된 장르, 요일 추출
     const selectedGenreNames = selectedGenres.map((genre) => genre.name);
-
+    const selectedAvailableDayNames = selectedAvailableDays.map(
+      (day) => day.value
+    );
     const themeDto = {
       themeName: formData.themeName,
       minParticipants: formData.minParticipants,
@@ -98,7 +129,9 @@ const ThemeAddPage = () => {
       time: formData.time,
       price: formData.price.replaceAll(",", "").trim(),
       description: formData.description,
-      genre: selectedGenreNames
+      cleaningTime: formData.cleaningTime,
+      genre: selectedGenreNames,
+      availableDays: selectedAvailableDayNames
     };
 
     submitData.append(
@@ -114,7 +147,6 @@ const ThemeAddPage = () => {
     }
 
     try {
-      // API 호출 로직
       const res = await Api.post("/themes/theme/add", submitData, {
         headers: {
           "Content-Type": "multipart/form-data"
@@ -149,10 +181,15 @@ const ThemeAddPage = () => {
       {/* 미리보기 컨테이너 */}
       <div className="preview-container text-center">
         <div className="label-container">
-          <label htmlFor="">이미지 미리보기</label>
+          <label htmlFor="preview-img">이미지 미리보기</label>
         </div>
         {previewImage ? (
-          <img src={previewImage} alt="미리보기" className="preview-img" />
+          <img
+            src={previewImage}
+            alt="미리보기"
+            className="preview-img"
+            id="preview-img"
+          />
         ) : (
           <div className="preview-img">선택한 이미지를 볼 수 있습니다.</div>
         )}
@@ -168,30 +205,21 @@ const ThemeAddPage = () => {
         id="themeForm"
       />
 
-      {/* 장르 체크박스 섹션 */}
-      <div className="genre-section">
-        <div className="label-container">
-          <label htmlFor="genre">
-            <span className="text--red">*</span>장르 (중복 선택 가능)
-          </label>
-        </div>
-        <div className="input-container">
-          {genreList.map((genre) => (
-            <div key={genre.id} className="input--checkbox">
-              <input
-                type="checkbox"
-                id={`genre-${genre.id}`}
-                name="genre"
-                value={genre.name}
-                checked={genre.checked}
-                onChange={() => handleGenreChange(genre.id)}
-              />
-              <label htmlFor={`genre-${genre.id}`}>{genre.name}</label>
-            </div>
-          ))}
-        </div>
-        {genreError && <span className="text--red">{genreError}</span>}
-      </div>
+      <CheckboxGroup
+        title="장르 (중복 선택 가능)"
+        name="genre"
+        items={genreList}
+        onChange={handleGenreChange}
+        error={genreError}
+      />
+
+      <CheckboxGroup
+        title="운영 요일 (중복 선택 가능)"
+        name="day"
+        items={availableDayList}
+        onChange={handleAvailableDayChange}
+        error={availableDayError}
+      />
 
       <div className="btn-container">
         <button className="btn" type="submit" form="themeForm">

@@ -1,6 +1,5 @@
 package com.baeksutalchul.hiddendoor.timeSlot.domain;
 
-import java.time.Instant;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;

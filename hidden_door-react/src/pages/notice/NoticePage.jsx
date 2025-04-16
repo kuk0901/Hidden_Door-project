@@ -1,29 +1,26 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useRecoilState } from 'recoil';
+import { noticesState, pageState } from '@atoms/noticeAtom';
 import { useAdmin } from '@hooks/useAdmin';
 import Api from '@axios/api';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { formatKoreanDate } from '../../utils/format/date';
 import Pagination from '@components/common/navigation/pagination/Pagination';
 
 function NoticePage() {
+  const location = useLocation();
   const { admin } = useAdmin();
-  const [notices, setNotices] = useState([]);
+  const [notices, setNotices] = useRecoilState(noticesState);
+  const [page, setPage] = useRecoilState(pageState);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
-  const [page, setPage] = useState({
-    page: 1,
-    size: 10,
-    totalElements: 0,
-    totalPages: 1,
-    isFirst: true,
-    isLast: true,
-  });
-
   useEffect(() => {
-    fetchNotices(page.page);
-  }, [page.page]);
+    if (notices.length === 0 || location.state?.shouldRefresh) {
+      fetchNotices(page.page);
+    }
+  }, [page.page, location.state]);
 
   const fetchNotices = async (currentPage) => {
     setLoading(true);
@@ -33,45 +30,38 @@ function NoticePage() {
         `/notices?page=${currentPage - 1}&size=${page.size}`
       );
 
-      if (response.status !== 200) {
-        toast.error('서버 요청에 실패했습니다.');
-        setLoading(false);
-        return;
-      }
+      if (response.status === 200) {
+        const { content, page: pageInfo } = response.data?.data || {};
 
-      if (response.data?.data) {
-        const { content, page: pageInfo } = response.data.data;
-
-        if (content.length === 0 && currentPage > 1) {
-          await fetchNotices(currentPage - 1);
-          return;
-        }
-
-        setNotices(content);
-
-        // 페이지 정보 업데이트
+        setNotices(content || []);
         setPage((prev) => ({
           ...prev,
           ...pageInfo,
-          page: currentPage, // 요청한 페이지 번호를 사용
+          page: currentPage,
           isFirst: currentPage === 1,
-          isLast: currentPage === pageInfo.totalPages,
+          isLast: currentPage === pageInfo?.totalPages,
         }));
+
+        if (!content || content.length === 0) {
+          toast.info('등록된 공지사항이 없습니다.');
+        }
       } else {
-        setNotices([]);
-        toast.info('등록된 공지사항이 없습니다.');
+        toast.error(
+          response.data.message || '공지사항을 불러오는 데 실패했습니다.'
+        );
       }
     } catch (error) {
       console.error('Error fetching notices:', error);
-      toast.error('공지사항을 불러오는 데 실패했습니다.');
-      setNotices([]);
+      toast.error(
+        error.response?.data?.message || '공지사항을 불러오는 데 실패했습니다.'
+      );
     } finally {
       setLoading(false);
     }
   };
 
-  const handleNoticeClick = (id) => {
-    navigate(`/hidden_door/notice/${id}`);
+  const handleNoticeClick = (noticeId) => {
+    navigate(`/hidden_door/notice/${noticeId}`);
   };
 
   const handlePageChange = (newPage) => {
@@ -79,6 +69,23 @@ function NoticePage() {
   };
 
   if (loading) return <div>로딩 중...</div>;
+
+  if (notices.length === 0) {
+    return (
+      <div className="notice-page">
+        <h1 className="notice-page-title">공지사항</h1>
+        {admin && (
+          <button
+            onClick={() => navigate('/hidden_door/notice/add')}
+            className="add-notice-btn"
+          >
+            공지사항 추가
+          </button>
+        )}
+        <div className="no-notice-message">등록된 공지사항이 없습니다.</div>
+      </div>
+    );
+  }
 
   return (
     <div className="notice-page">
@@ -95,9 +102,9 @@ function NoticePage() {
         <ul>
           {notices.map((notice) => (
             <li
-              key={notice.id}
+              key={notice.noticeId}
               className="notice-item"
-              onClick={() => handleNoticeClick(notice.id)}
+              onClick={() => handleNoticeClick(notice.noticeId)}
             >
               <div className="notice-title">{notice.title}</div>
               <div className="notice-date">
@@ -107,8 +114,6 @@ function NoticePage() {
           ))}
         </ul>
       </div>
-
-      {/* Pagination 컴포넌트 사용 */}
       <Pagination page={page} onPageChange={handlePageChange} />
     </div>
   );
