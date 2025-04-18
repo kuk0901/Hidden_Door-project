@@ -95,9 +95,7 @@ const AdminAccountPage = () => {
       });
 
       if (res.status !== 200) {
-        toast.error(
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
-        );
+        toast.error("관리자 추가에 실패했습니다.");
         return;
       }
 
@@ -111,8 +109,10 @@ const AdminAccountPage = () => {
         state: { page, search }
       });
     } catch (error) {
-      toast.error("관리자 추가에 실패했습니다.");
-      console.error("Error adding admin:", error);
+      toast.error(
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
     }
   };
 

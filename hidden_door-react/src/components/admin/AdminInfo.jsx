@@ -5,7 +5,10 @@ const AdminInfo = ({ adminId, adminName, handleLogout }) => {
   return (
     <ul className="admin--info__list">
       <li className="admin--info__item">
-        <Link to={`admin/account/${adminId}`} className="link--item">
+        <Link
+          to={`hidden_door/admin/account/${adminId}`}
+          className="link--item"
+        >
           {adminName}님
         </Link>
       </li>

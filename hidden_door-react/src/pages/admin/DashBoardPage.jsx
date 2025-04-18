@@ -28,9 +28,7 @@ const DashboardPage = () => {
       const res = await Api.get("/monitoring/dashboard");
 
       if (res.status !== 200) {
-        toast.error(
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
-        );
+        toast.error("차트 데이터를 가져오는 중 오류가 발생했습니다.");
         setLoading(false);
         return;
       }
@@ -39,7 +37,8 @@ const DashboardPage = () => {
       setLoading(false);
     } catch (error) {
       toast.error(
-        error.message ?? "차트 데이터를 가져오는 중 오류가 발생했습니다."
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
       );
     }
   };

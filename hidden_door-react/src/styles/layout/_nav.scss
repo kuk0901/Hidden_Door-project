@@ -143,7 +143,7 @@
       right: 0;
       @include mixins.flex-layout-column(space-between, center);
       background-color: variables.$dark-background-color;
-      padding: 3px 10px 10px;
+      padding: 5px 10px 10px;
       min-width: 100%;
       width: auto;
       white-space: nowrap;
@@ -162,6 +162,7 @@
           border: none;
           @include mixins.font-size(16px);
           min-width: auto;
+          padding: 0;
 
           &:hover {
             @include mixins.text-color(variables.$dark-link-color);

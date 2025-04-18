@@ -59,8 +59,10 @@ Api.interceptors.response.use(
         window.location.href = import.meta.env.VITE_APP_ADMIN_LOGIN_PATH;
       }
     }
+    const { msg } = error.response?.data ?? {};
+    const message = (msg || error.message || "response failed").trim();
 
-    return Promise.reject(new Error(error.message || "response failed"));
+    return Promise.reject(new Error(message));
   }
 );
 

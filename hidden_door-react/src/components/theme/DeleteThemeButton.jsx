@@ -31,7 +31,7 @@ const DeleteThemeButton = ({ themeId, themeName }) => {
       navigate(`/hidden_door/theme?delete=true&tn=${themeName}`);
     } catch (error) {
       toast.error(
-        error.message ??
+        error.message ||
           "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
       );
     }

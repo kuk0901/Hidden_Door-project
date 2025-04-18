@@ -25,9 +25,7 @@ public class Theme {
   private String description;
   private String storedFileName;
   private String originalFileName;
-  private int reservationCount;
   private int price;
-  private long totalUsage;
   private int cleaningTime;
   private List<String> availableDays;
 }

@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 import org.modelmapper.ModelMapper;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -79,19 +78,10 @@ public class AdminService {
 
     admin.setRolesCount(admin.getRoles().size());
 
-    // 사용자 정보를 데이터베이스에 저장
-    try {
-      adminRepository.save(admin);
+    Admin adminRes = adminRepository.save(admin);
+    AdminDto adminDtoRes = modelMapper.map(adminRes, AdminDto.class);
 
-      Admin adminRes = adminRepository.findByEmail(admin.getEmail())
-          .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
-      AdminDto adminDtoRes = modelMapper.map(adminRes, AdminDto.class);
-
-      return new ResponseDto<>(adminDtoRes, "success");
-
-    } catch (Exception e) {
-      throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-    }
+    return new ResponseDto<>(adminDtoRes, "success");
   }
 
   public ResponseDto<AdminDto> login(String email, String pwd, HttpServletResponse response) {
@@ -114,6 +104,7 @@ public class AdminService {
 
         // 사용자 정보를 DTO로 변환
         AdminDto adminDto = new AdminDto();
+        adminDto.setAdminId(admin.getAdminId());
         adminDto.setEmail(admin.getEmail());
         adminDto.setUserName(admin.getUserName());
         adminDto.setRoles(admin.getRoles());
@@ -177,6 +168,7 @@ public class AdminService {
       if (adminOptional.isPresent()) {
         Admin admin = adminOptional.get();
         AdminDto adminDto = new AdminDto();
+        adminDto.setAdminId(admin.getAdminId());
         adminDto.setEmail(admin.getEmail());
         adminDto.setUserName(admin.getUserName());
         adminDto.setRoles(admin.getRoles());
@@ -196,7 +188,7 @@ public class AdminService {
     Pageable pageable = PageableUtil.createPageRequest(
         Math.max(0, pageDto.getPage() - 1),
         pageDto.getSize(),
-        "rolesCount", // Always sort by rolesCount
+        "rolesCount",
         "ASC");
 
     Page<Admin> adminPage;
@@ -266,7 +258,6 @@ public class AdminService {
 
   @Transactional
   public ResponseDto<AdminDto> updateAdminOne(AdminDto adminDto) {
-    // admin이 존재하는지 확인
     Admin admin = adminRepository.findById(adminDto.getAdminId())
         .orElseThrow(() -> new CustomException(ErrorCode.ADMIN_NOT_FOUND));
 
@@ -280,43 +271,8 @@ public class AdminService {
       throw new CustomException(ErrorCode.ADMIN_DUPLICATE_PHONE);
     }
 
-    // 비밀번호가 존재하는 경우 인코딩
-    if (adminDto.getPwd() != null) {
-      String encodedPassword = passwordEncoder.encode(adminDto.getPwd());
-      adminDto.setPwd(encodedPassword);
-    }
-
-    // 변경사항 확인
-    boolean hasChanges = false;
-
-    if (!Objects.equals(admin.getUserName(), adminDto.getUserName())) {
-      admin.setUserName(adminDto.getUserName());
-      hasChanges = true;
-    }
-
-    if (!Objects.equals(admin.getEmail(), adminDto.getEmail())) {
-      admin.setEmail(adminDto.getEmail());
-      hasChanges = true;
-    }
-
-    if (!Objects.equals(admin.getPhone(), adminDto.getPhone())) {
-      admin.setPhone(adminDto.getPhone());
-      hasChanges = true;
-    }
-
-    if (adminDto.getPwd() != null) {
-      admin.setPwd(adminDto.getPwd());
-      hasChanges = true;
-    }
-
-    if (!Objects.equals(admin.getRoles(), adminDto.getRoles())) {
-      admin.setRoles(adminDto.getRoles());
-      admin.setRolesCount(adminDto.getRoles().size());
-      hasChanges = true;
-    }
-
     // 변경사항이 없는 경우 에러 반환
-    if (!hasChanges) {
+    if (!applyChanges(admin, adminDto)) {
       throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
     }
 
@@ -325,6 +281,38 @@ public class AdminService {
     AdminDto updatedAdminDto = modelMapper.map(updatedAdmin, AdminDto.class);
 
     return new ResponseDto<>(updatedAdminDto, updatedAdminDto.getUserName() + "님의 정보가 수정되었습니다.");
+  }
+
+  private boolean applyChanges(Admin admin, AdminDto dto) {
+    boolean hasChanges = false;
+
+    if (!Objects.equals(admin.getUserName(), dto.getUserName())) {
+      admin.setUserName(dto.getUserName());
+      hasChanges = true;
+    }
+
+    if (!Objects.equals(admin.getEmail(), dto.getEmail())) {
+      admin.setEmail(dto.getEmail());
+      hasChanges = true;
+    }
+
+    if (!Objects.equals(admin.getPhone(), dto.getPhone())) {
+      admin.setPhone(dto.getPhone());
+      hasChanges = true;
+    }
+
+    if (dto.getPwd() != null && !passwordEncoder.matches(dto.getPwd(), admin.getPwd())) {
+      admin.setPwd(passwordEncoder.encode(dto.getPwd()));
+      hasChanges = true;
+    }
+
+    if (!Objects.equals(admin.getRoles(), dto.getRoles())) {
+      admin.setRoles(dto.getRoles());
+      admin.setRolesCount(dto.getRoles().size());
+      hasChanges = true;
+    }
+
+    return hasChanges;
   }
 
 }

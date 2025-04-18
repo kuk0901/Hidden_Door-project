@@ -13,6 +13,7 @@ import useConfirm from "@hooks/useConfirm";
 import MiniPriceSection from "@components/price/MiniPriceSection";
 import { useAdmin } from "@hooks/useAdmin";
 import CautionSection from "../../components/caution/CautionSection";
+import { isTextUnchanged } from "@utils/comparison/stringComparator";
 
 const EscapeRoomInfoPage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
@@ -40,8 +41,12 @@ const EscapeRoomInfoPage = () => {
 
     try {
       const newTitle = titleRef.current.value;
+      const isUnchanged = isTextUnchanged(escapeRoom.title, newTitle);
 
-      console.log(newTitle);
+      if (isUnchanged) {
+        toast.warn("변경된 내용이 없습니다.");
+        return;
+      }
 
       const res = await Api.patch(
         `/escape-rooms/info/title/${escapeRoom.roomId}`,
@@ -55,7 +60,7 @@ const EscapeRoomInfoPage = () => {
       if (res.status !== 200) {
         setEscapeRoom(escapeRoom);
         toast.error(
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          "방탈출 카페 제목 변경에 실패했습니다. 잠시 후 다시 시도해 주세요."
         );
         return;
       }
@@ -94,7 +99,7 @@ const EscapeRoomInfoPage = () => {
 
       if (res.status !== 200) {
         toast.error(
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          "상세 설명 수정에 실패했습니다. 잠시 후 다시 시도해 주세요."
         );
         return;
       }

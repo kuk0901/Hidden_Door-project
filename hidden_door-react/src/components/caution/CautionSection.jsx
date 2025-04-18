@@ -24,7 +24,7 @@ const CautionSection = () => {
       setLoading(false);
     } catch (error) {
       toast.error(
-        error.message ??
+        error.message ||
           "주의사항 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
       );
     }
