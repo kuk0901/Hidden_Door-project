@@ -2,6 +2,7 @@ package com.baeksutalchul.hiddendoor.theme.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -106,11 +107,15 @@ public class ThemeService {
 
   }
 
-  // FIXME: 변경 내용 확인(서버)
   @Transactional
   public ResponseDto<ThemeDto> updateThemeWithFile(String id, ThemeDto themeDto, MultipartFile file) {
+
     Theme theme = themeRepository.findById(id)
         .orElseThrow(() -> new CustomException(ErrorCode.THEME_NOT_FOUND));
+
+    if (isAllFieldsIdentical(themeDto, theme)) {
+      throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+    }
 
     String existingStoredFileName = theme.getStoredFileName();
     themeDto.setOriginalFileName(themeDto.getOriginalFileName());
@@ -174,6 +179,22 @@ public class ThemeService {
         throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 테마 설명이 이미 존재합니다.");
       }
     }
+  }
+
+  private boolean isAllFieldsIdentical(ThemeDto themeDto, Theme theme) {
+    return Objects.equals(theme.getThemeId(), themeDto.getThemeId()) &&
+        Objects.equals(theme.getThemeName(), themeDto.getThemeName()) &&
+        Objects.equals(theme.getGenre(), themeDto.getGenre()) &&
+        theme.getMinParticipants() == themeDto.getMinParticipants() &&
+        theme.getMaxParticipants() == themeDto.getMaxParticipants() &&
+        Float.compare(theme.getLevel(), themeDto.getLevel()) == 0 &&
+        theme.getTime() == themeDto.getTime() &&
+        Objects.equals(theme.getDescription(), themeDto.getDescription()) &&
+        Objects.equals(theme.getStoredFileName(), themeDto.getStoredFileName()) &&
+        Objects.equals(theme.getOriginalFileName(), themeDto.getOriginalFileName()) &&
+        theme.getPrice() == themeDto.getPrice() &&
+        theme.getCleaningTime() == themeDto.getCleaningTime() &&
+        Objects.equals(theme.getAvailableDays(), themeDto.getAvailableDays());
   }
 
   @Transactional

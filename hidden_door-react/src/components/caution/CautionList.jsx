@@ -21,6 +21,7 @@ const CautionList = () => {
 
   const { isAdmin } = useAdmin();
 
+  // FIXME: 중복 검사
   const handleAddCaution = async (formData, reset) => {
     if (!selectedIcon) {
       toast.error("아이콘은 필수입력란입니다.");
@@ -57,7 +58,10 @@ const CautionList = () => {
 
       toast.success(res.data.msg);
     } catch (error) {
-      toast.error(error.message || "알 수 없는 오류가 발생했습니다.");
+      toast.error(
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
     }
   };
 
