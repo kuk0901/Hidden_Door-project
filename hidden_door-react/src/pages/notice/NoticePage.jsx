@@ -51,10 +51,7 @@ function NoticePage() {
         );
       }
     } catch (error) {
-      console.error('Error fetching notices:', error);
-      toast.error(
-        error.response?.data?.message || '공지사항을 불러오는 데 실패했습니다.'
-      );
+      toast.error(error.message || '공지사항을 불러오는 데 실패했습니다.');
     } finally {
       setLoading(false);
     }

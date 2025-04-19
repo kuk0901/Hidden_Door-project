@@ -100,12 +100,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
         );
       }
     } catch (error) {
-      toast.error(
-        handleResponseError(
-          error.response?.status,
-          error.response?.data?.message
-        )
-      );
+      toast.error(handleResponseError(error.response?.status, error.message));
     }
   };
 

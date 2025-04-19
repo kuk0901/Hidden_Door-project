@@ -47,9 +47,7 @@ function EventPage() {
         );
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || '이벤트를 불러오는 데 실패했습니다.'
-      );
+      toast.error(error.message || '이벤트를 불러오는 데 실패했습니다.');
     } finally {
       setLoading(false);
     }
@@ -118,9 +116,7 @@ function EventPage() {
         );
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || '이벤트 삭제에 실패했습니다.'
-      );
+      toast.error(error.message || '이벤트 삭제에 실패했습니다.');
     }
   };
 
