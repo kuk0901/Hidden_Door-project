@@ -49,8 +49,7 @@ function NoticeDetailPage() {
       }
     } catch (error) {
       toast.error(
-        error.response?.data?.message ||
-          '네트워크 문제로 공지사항 조회에 실패하였습니다.'
+        error.message || '네트워크 문제로 공지사항 조회에 실패하였습니다.'
       );
       navigate('/hidden_door/notice');
     } finally {
@@ -89,9 +88,7 @@ function NoticeDetailPage() {
         );
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || '공지사항 수정에 실패하였습니다.'
-      );
+      toast.error(error.message || '공지사항 수정에 실패하였습니다.');
     }
   };
 
@@ -110,9 +107,7 @@ function NoticeDetailPage() {
         );
       }
     } catch (error) {
-      toast.error(
-        error.response?.data?.message || '공지사항 삭제에 실패하였습니다.'
-      );
+      toast.error(error.message || '공지사항 삭제에 실패하였습니다.');
     }
   };
 
