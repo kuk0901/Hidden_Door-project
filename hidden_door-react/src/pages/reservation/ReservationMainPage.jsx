@@ -25,19 +25,6 @@ const ReservationMainPage = () => {
   const [checkReservationNumber, setCheckReservationNumber] = useState("");
   const [checkName, setCheckName] = useState("");
 
-  const handleResponseError = (status, message) => {
-    const errorMessages = {
-      400: message || "잘못된 요청입니다.",
-      401: message || "유효하지 않은 인증정보입니다. 다시 로그인해주세요.",
-      403: message || "접근 권한이 없습니다. 관리자에게 문의하세요.",
-      404: message || "요청하신 리소스를 찾을 수 없습니다.",
-      default:
-        message || "서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.",
-    };
-
-    return errorMessages[status] || errorMessages.default;
-  };
-
   useEffect(() => {
     if (selectedTheme && selectedDate) {
       fetchAvailableTimeSlots();
@@ -48,15 +35,8 @@ const ReservationMainPage = () => {
     try {
       const formattedDate = formatReservationSelectedDate(selectedDate);
 
-      console.log("selectedDate1: ", selectedDate);
-
-      console.log("selectedDate2: ", selectedDate.toISOString());
-
-      console.log(formattedDate);
-
       const res = await Api.get("/reservations/timeslots", {
         params: { date: formattedDate, themeId: selectedTheme },
-        validateStatus: (status) => status === 200,
       });
 
       if (!res.data?.data?.timeSlots) {
@@ -79,14 +59,17 @@ const ReservationMainPage = () => {
       const res = await Api.get("/reservations/main");
 
       // XXX: 조건문으로 status 확인해 주세요.
-      if (res.status === 200) {
-        setPageData({
-          availableDates: res.data.data.availableDates,
-          themes: res.data.data.themes,
-        });
-      } else {
-        throw new Error(handleResponseError(res.status, res.data.message));
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
       }
+
+      setPageData({
+        availableDates: res.data.data.availableDates,
+        themes: res.data.data.themes,
+      });
     } catch (error) {
       // XXX: 더 명확한 메시지 내용으로 수정해 주세요.
       // error.message가 있는 경우와 없는 경우

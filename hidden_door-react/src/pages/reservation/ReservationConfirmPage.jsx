@@ -91,16 +91,17 @@ const ReservationConfirmPage = () => {
         return;
       }
 
-      // XXX: navigate 사용하실 거면 CustomerPage, CustomerAddPage 컴포넌트 참고해 수정해 주세요.
-      navigate(
-        `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
-      );
-
       const reservationNumber = res.data.data.reservationNumber;
+
       if (!reservationNumber) {
         toast.error("예약 번호를 받지 못했습니다.");
         return;
       }
+
+      // XXX: navigate 사용하실 거면 CustomerPage, CustomerAddPage 컴포넌트 참고해 수정해 주세요.
+      navigate(
+        `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
+      );
     } catch (error) {
       toast.error(error.message || "예약 처리 중 오류가 발생했습니다.");
     }
