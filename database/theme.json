@@ -10,8 +10,8 @@
     "price": 30000,
     "storedFileName": "sernium'sTreasure.jpeg",
     "originalFileName": "sernium'sTreasure.jpeg",
-    "totalReservationCount": 247,
-    "totalRevenue": 7410000
+    "cleaningTime": 30,
+    "availableDays": ["월", "화", "수", "목", "금", "토", "일"]
   },
   {
     "themeName": "Silent Home",
@@ -24,8 +24,8 @@
     "price": 25000,
     "storedFileName": "slientHome.jpeg",
     "originalFileName": "slientHome.jpeg",
-    "totalReservationCount": 289,
-    "totalRevenue": 7225000
+    "cleaningTime": 30,
+    "availableDays": ["월", "화", "수", "목", "금", "토", "일"]
   },
   {
     "themeName": "T 1 M E",
@@ -38,8 +38,8 @@
     "price": 27000,
     "storedFileName": "time.jpg",
     "originalFileName": "time.jpg",
-    "totalReservationCount": 256,
-    "totalRevenue": 6912000
+    "cleaningTime": 30,
+    "availableDays": ["월", "화", "수", "목", "금", "토", "일"]
   },
   {
     "themeName": "TO PAST",
@@ -52,7 +52,7 @@
     "price": 27000,
     "storedFileName": "toPast.jpg",
     "originalFileName": "toPast.jpg",
-    "totalReservationCount": 223,
-    "totalRevenue": 6021000
+    "cleaningTime": 30,
+    "availableDays": ["월", "화", "수", "목", "금", "토", "일"]
   }
 ]

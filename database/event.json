@@ -1,10 +1,36 @@
 [
   {
     "title": "EVENT 01",
-    "description": "모든 테마 첫 번째 시간은 10% 할인적용"
+    "description": "모든 테마 첫 번째 시간은 10% 할인적용",
+    "isOngoing": "true",
+    "noEndDate": "false"
   },
   {
     "title": "EVENT 02",
-    "description": "연방 시 연방진행하는 모든 테마 10% 할인 적용"
+    "description": "연방 시 연방진행하는 모든 테마 10% 할인 적용",
+    "startDate": {
+      "$date": "2025-03-25T15:00:00.000Z"
+    },
+    "isOngoing": "false",
+    "noEndDate": "true"
+  },
+  {
+    "title": "EVENT 03",
+    "description": "테마 클리어 시 테마 관련 굿즈 20% 할인 판매",
+    "isOngoing": "true",
+    "noEndDate": "false"
+  },
+  {
+    "title": "test1",
+    "description": "test1",
+    "startDate": {
+      "$date": "2025-03-25T15:00:00.000Z"
+    },
+    "endDate": {
+      "$date": "2025-04-04T15:00:00.000Z"
+    },
+    "isOngoing": "false",
+    "noEndDate": "false",
+    "eventType": "기간 지정"
   }
 ]

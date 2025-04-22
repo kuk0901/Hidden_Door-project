@@ -11,5 +11,7 @@
   "themeTitle": "당신의 모험이 시작됩니다!",
   "themeExplanation": "숨겨진 문을 찾는 여정에 오신 것을 환영합니다!\n\n다양한 테마와 도전이 기다리고 있는 이곳에서, 친구들과 함께 미스터리를 풀고 비밀을 밝혀보세요.\n각 방은 독특한 스토리와 퍼즐로 가득 차 있습니다.\n\n준비되셨나요?",
   "themeDetailHeaderTitle": "열리지 않는 문, 그 너머의 비밀",
-  "themeDetailHeaderSubtitle": "Open the Hidden Door…"
+  "themeDetailHeaderSubtitle": "Open the Hidden Door…",
+  "openTime": "10:00",
+  "closeTime": "21:00"
 }

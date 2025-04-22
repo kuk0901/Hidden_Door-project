@@ -17,7 +17,9 @@
     "paymentDate": {
       "$date": "1970-01-01T00:00:00.000Z"
     },
-    "refundState": "N"
+    "refundState": "N",
+    "partySize": 2,
+    "reservationNumber": "744271bc2ba"
   },
   {
     "themeId": "2",
@@ -37,6 +39,8 @@
     "paymentDate": {
       "$date": "1970-01-01T00:00:00.000Z"
     },
-    "refundState": "N"
+    "refundState": "N",
+    "partySize": 3,
+    "reservationNumber": "f3a9d8e4c12"
   }
 ]
