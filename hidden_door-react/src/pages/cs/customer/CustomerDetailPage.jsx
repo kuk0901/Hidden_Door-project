@@ -102,26 +102,28 @@ const CustomerDetailPage = () => {
             >
               답변하기
             </button>
-
-            {/* 답변 입력 상태가 true일 때 인풋 칸과 제출 버튼을 보여줌 */}
-            {isAnswering && (
-              <div className="answer-section">
-                <textarea
-                  value={customerAnswer}
-                  onChange={handleAnswerChange}
-                  placeholder="답변을 작성하세요."
-                />
-                <button className="btn" onClick={handleSubmitAnswer}>
-                  답변 제출
-                </button>
-              </div>
-            )}
           </>
         )}
 
         <button className="btn" onClick={handleListCustomer}>
           목록으로
         </button>
+      </div>
+
+      <div>
+        {/* 답변 입력 상태가 true일 때 인풋 칸과 제출 버튼을 보여줌 */}
+        {isAnswering && (
+          <div className="answer-section">
+            <textarea
+              value={customerAnswer}
+              onChange={handleAnswerChange}
+              placeholder="답변을 작성하세요."
+            />
+            <button className="btn" onClick={handleSubmitAnswer}>
+              답변 제출
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
