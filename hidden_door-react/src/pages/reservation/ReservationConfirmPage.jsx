@@ -83,7 +83,6 @@ const ReservationConfirmPage = () => {
 
       const res = await Api.post("/reservations/create", reservationDto);
 
-      // XXX: status 사용으로 에러 처리 변경해 주세요.
       if (res.status !== 200) {
         toast.error(
           "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
@@ -98,7 +97,6 @@ const ReservationConfirmPage = () => {
         return;
       }
 
-      // XXX: navigate 사용하실 거면 CustomerPage, CustomerAddPage 컴포넌트 참고해 수정해 주세요.
       navigate(
         `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
       );

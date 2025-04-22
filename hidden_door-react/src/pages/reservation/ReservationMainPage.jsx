@@ -58,7 +58,6 @@ const ReservationMainPage = () => {
     try {
       const res = await Api.get("/reservations/main");
 
-      // XXX: 조건문으로 status 확인해 주세요.
       if (res.status !== 200) {
         toast.error(
           "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
@@ -71,8 +70,6 @@ const ReservationMainPage = () => {
         themes: res.data.data.themes,
       });
     } catch (error) {
-      // XXX: 더 명확한 메시지 내용으로 수정해 주세요.
-      // error.message가 있는 경우와 없는 경우
       toast.error(error.message || "예약 페이지를 불러오는데 실패했습니다.");
     } finally {
       setIsLoading(false);
