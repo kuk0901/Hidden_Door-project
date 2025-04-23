@@ -83,6 +83,15 @@
   border-radius: 5px;
   padding: 15px;
 
+  .icon-select {
+    margin: 10px 0 15px;
+    max-width: 400px;
+
+    .icon-option-label {
+      @include mixins.flex-layout-row(flex-start, center);
+    }
+  }
+
   .current,
   .label,
   .preview {
@@ -118,15 +127,17 @@
   }
 }
 
-.caution--add {
-  .icon-update {
-    .select-container {
-      .label {
-        font-size: 17px;
-      }
-    }
+.caution--edit {
+  .icon-selector-label {
+    margin: 0 10px;
   }
 
+  .icon-select {
+    margin: 10px 10px 15px;
+  }
+}
+
+.caution--add {
   #cautionAddForm {
     padding: 0;
     gap: 15px;

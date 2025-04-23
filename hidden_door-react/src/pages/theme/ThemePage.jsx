@@ -8,6 +8,7 @@ import ThemeSection from "@components/theme/ThemeSection";
 import { useAdmin } from "@hooks/useAdmin";
 import { useSearchParams } from "react-router-dom";
 import useConfirm from "@hooks/useConfirm";
+import { isTextUnchanged } from "@utils/comparison/stringComparator";
 
 const ThemePage = () => {
   const { escapeRoom, setEscapeRoom } = useEscapeRoom();
@@ -37,6 +38,15 @@ const ThemePage = () => {
     try {
       const newThemeHeaderTitle = titleRef.current.value;
       const newThemeHeaderSubtitle = subtitleRef.current.value;
+
+      const isUnchanged =
+        isTextUnchanged(escapeRoom.themeHeaderTitle, newThemeHeaderTitle) &&
+        isTextUnchanged(escapeRoom.themeHeaderSubtitle, newThemeHeaderSubtitle);
+
+      if (isUnchanged) {
+        toast.warn("변경된 내용이 없습니다.");
+        return;
+      }
 
       const res = await Api.patch(
         `/escape-rooms/info/theme-title-line/${escapeRoom.roomId}`,
@@ -79,6 +89,15 @@ const ThemePage = () => {
       const newThemeTitle = titleDetailRef.current.value;
       const newThemeExplanation = explanationRef.current.value;
 
+      const isUnchanged =
+        isTextUnchanged(escapeRoom.themeTitle, newThemeTitle) &&
+        isTextUnchanged(escapeRoom.themeExplanation, newThemeExplanation);
+
+      if (isUnchanged) {
+        toast.warn("변경된 내용이 없습니다.");
+        return;
+      }
+
       const res = await Api.patch(
         `/escape-rooms/info/theme-explanation-line/${escapeRoom.roomId}`,
         {
@@ -89,7 +108,7 @@ const ThemePage = () => {
 
       if (res.status !== 200) {
         toast.error(
-          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+          "테마 정보 수정에 실패했습니다. 잠시 후 다시 시도해 주세요."
         );
         return;
       }

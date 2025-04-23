@@ -22,5 +22,5 @@ export const phonePattern = {
 
 export const userNamePattern = {
   value: userNameRegex,
-  message: "한글 2~8자로 입력해주세요."
+  message: "한글 2~8자로 입력해주세요.(공백불가)"
 };

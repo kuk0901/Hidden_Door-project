@@ -41,6 +41,18 @@ const CautionList = () => {
         icon: selectedIcon || "FaExclamationTriangle"
       };
 
+      const duplicate = cautionList.find(
+        (caution) =>
+          caution.title === newCaution.title &&
+          caution.content === newCaution.content &&
+          caution.icon === newCaution.icon
+      );
+
+      if (duplicate) {
+        toast.info("이미 존재하는 주의사항입니다.");
+        return;
+      }
+
       const res = await Api.post("/cautions/caution/add", newCaution);
 
       if (res.status !== 200) {
@@ -57,7 +69,10 @@ const CautionList = () => {
 
       toast.success(res.data.msg);
     } catch (error) {
-      toast.error(error.message || "알 수 없는 오류가 발생했습니다.");
+      toast.error(
+        error.message ||
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      );
     }
   };
 
@@ -89,6 +104,7 @@ const CautionList = () => {
     setSelectedIcon(caution.icon);
     setTitle(caution.title);
     setContent(caution.content);
+    setIsAdding(false);
   };
 
   const handleEditCancel = () => {
@@ -110,6 +126,16 @@ const CautionList = () => {
   const handleUpdateCaution = async () => {
     if (!editingItem) return;
 
+    const isUnchanged =
+      title === editingItem.title &&
+      content === editingItem.content &&
+      selectedIcon === editingItem.icon;
+
+    if (isUnchanged) {
+      toast.info("변경된 내용이 없습니다.");
+      return;
+    }
+
     const isConfirmed = await confirm(
       `해당 주의사항 정보를 정말로 수정하시겠습니까?`
     );
@@ -126,6 +152,18 @@ const CautionList = () => {
         content,
         icon: selectedIcon || editingItem.icon
       };
+
+      const duplicate = cautionList.find(
+        (caution) =>
+          caution.title === updatedCaution.title &&
+          caution.content === updatedCaution.content &&
+          caution.icon === updatedCaution.icon
+      );
+
+      if (duplicate) {
+        toast.info("이미 존재하는 주의사항입니다.");
+        return;
+      }
 
       const res = await Api.put(
         `/cautions/caution/${editingItem.cautionId}`,
@@ -183,6 +221,7 @@ const CautionList = () => {
           <IconSelector
             selectedIcon={selectedIcon}
             onIconChange={setSelectedIcon}
+            labelText="새 주의사항 아이콘"
           />
           <Form
             onSubmit={handleAddCaution}
