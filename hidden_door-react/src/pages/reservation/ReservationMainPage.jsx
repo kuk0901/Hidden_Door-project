@@ -14,7 +14,7 @@ const ReservationMainPage = () => {
   const navigate = useNavigate();
   const [pageData, setPageData] = useState({
     availableDates: [],
-    themes: [], // timeSlots 제거
+    themes: [],
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -25,7 +25,6 @@ const ReservationMainPage = () => {
   const [checkReservationNumber, setCheckReservationNumber] = useState("");
   const [checkName, setCheckName] = useState("");
 
-  // 선택된 날짜/테마 변경 시 시간대 재조회
   useEffect(() => {
     if (selectedTheme && selectedDate) {
       fetchAvailableTimeSlots();
@@ -36,26 +35,17 @@ const ReservationMainPage = () => {
     try {
       const formattedDate = formatReservationSelectedDate(selectedDate);
 
-      console.log("selectedDate1: ", selectedDate);
-
-      console.log("selectedDate2: ", selectedDate.toISOString());
-
-      console.log(formattedDate);
-
-      // 1. API 경로 수정 (서버와 일치시킴)
       const res = await Api.get("/reservations/timeslots", {
         params: { date: formattedDate, themeId: selectedTheme },
-        validateStatus: (status) => status === 200, // 404는 catch로 넘김
       });
 
-      // 2. 응답 데이터 검증
       if (!res.data?.data?.timeSlots) {
         throw new Error("시간대 데이터가 없습니다.");
       }
       setAvailableTimeSlots(res.data.data.timeSlots);
     } catch (error) {
       console.error("API Error:", {
-        url: error.config?.url, // 요청 URL 확인
+        url: error.config?.url,
         status: error.response?.status,
         data: error.response?.data,
       });
@@ -68,17 +58,19 @@ const ReservationMainPage = () => {
     try {
       const res = await Api.get("/reservations/main");
 
-      // XXX: 조건문으로 status 확인해 주세요.
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
 
       setPageData({
         availableDates: res.data.data.availableDates,
         themes: res.data.data.themes,
       });
     } catch (error) {
-      // XXX: 더 명확한 메시지 내용으로 수정해 주세요.
-      // error.message가 있는 경우와 없는 경우
-      toast.error("데이터를 불러오는데 실패했습니다.");
-      console.error("Error fetching page data:", error);
+      toast.error(error.message || "예약 페이지를 불러오는데 실패했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -130,7 +122,7 @@ const ReservationMainPage = () => {
             selectedTime={selectedTime}
             setSelectedTime={setSelectedTime}
             timeSlots={availableTimeSlots}
-            isDateAndThemeSelected={selectedDate && selectedTheme} // 추가
+            isDateAndThemeSelected={selectedDate && selectedTheme}
           />
         </div>
 
@@ -160,7 +152,6 @@ const ReservationMainPage = () => {
           예약 확인
         </button>
 
-        {/* 예약 확인 모달 */}
         <Modal
           isOpen={isModalOpen}
           onRequestClose={() => setIsModalOpen(false)}

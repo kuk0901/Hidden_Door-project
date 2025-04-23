@@ -83,31 +83,25 @@ const ReservationConfirmPage = () => {
 
       const res = await Api.post("/reservations/create", reservationDto);
 
-      // XXX: status 사용으로 에러 처리 변경해 주세요.
-      if (res.data?.msg.includes("성공")) {
-        toast.success(res.data.msg);
-        console.log("예약 성공. 응답 데이터:", res.data);
-
-        const reservationNumber = res.data.data.reservationNumber;
-        if (!reservationNumber) {
-          console.error("예약 번호가 없습니다.");
-          toast.error("예약 번호를 받지 못했습니다.");
-          return;
-        }
-
-        console.log("네비게이션 시작:", reservationNumber);
-        // XXX: navigate 사용하실 거면 CustomerPage, CustomerAddPage 컴포넌트 참고해 수정해 주세요.
-        navigate(
-          `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
         );
-        console.log("네비게이션 완료");
-      } else {
-        console.error("예약 실패 (서버 응답):", res.data);
-        toast.error(res.data.msg || "예약 처리 실패");
+        return;
       }
+
+      const reservationNumber = res.data.data.reservationNumber;
+
+      if (!reservationNumber) {
+        toast.error("예약 번호를 받지 못했습니다.");
+        return;
+      }
+
+      navigate(
+        `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
+      );
     } catch (error) {
-      console.error("예약 처리 중 예외 발생:", error);
-      toast.error("예약 처리 중 오류가 발생했습니다.");
+      toast.error(error.message || "예약 처리 중 오류가 발생했습니다.");
     }
   };
 

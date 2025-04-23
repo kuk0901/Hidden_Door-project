@@ -154,11 +154,9 @@
         color: variables.$dark-text-color;
 
         .react-calendar__tile {
-          color: variables.$dark-text-color;
-
           &--active {
-            background: variables.$primary-color;
-            color: blue !important;
+            background: #007bff;
+            color: variables.$light-background-color !important;
           }
 
           &--now {
@@ -169,7 +167,8 @@
           }
 
           &--disabled {
-            color: rgba(variables.$dark-text-color, 0.4);
+            color: variables.$light-background-color;
+            background-color: gray;
           }
         }
       }
@@ -195,13 +194,6 @@
 
       &:hover {
         background-color: #e0e0e0;
-
-        @include dark-mode {
-          background-color: color.adjust(
-            variables.$dark-background-color,
-            $lightness: 5%
-          );
-        }
       }
 
       &.selected {
@@ -218,6 +210,14 @@
         &:hover {
           background-color: #ffcccb;
         }
+      }
+
+      @include mixins.dark-mode {
+        background: color.adjust(
+          variables.$dark-background-color,
+          $lightness: 10%
+        );
+        color: variables.$dark-text-color;
       }
     }
   }
@@ -367,6 +367,14 @@
           border-color: variables.$primary-color;
           box-shadow: inset 0 0 5px rgba(0, 123, 255, 0.5);
         }
+      }
+
+      div {
+        color: black;
+      }
+
+      p {
+        color: black;
       }
     }
 
