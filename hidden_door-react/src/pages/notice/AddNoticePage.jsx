@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Api from '@axios/api';
 
+//
 function AddNoticePage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
