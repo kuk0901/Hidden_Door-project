@@ -1,45 +1,28 @@
-import React from "react";
+import Select from "react-select";
 import * as FaIcons from "react-icons/fa";
+import FormatIconOptionLabel from "@components/common/form/select/formatIconOptionLabel";
 
-// 새로 추가된 IconSelector 컴포넌트
-const IconSelector = ({ selectedIcon, onIconChange }) => {
-  const iconList = Object.entries(FaIcons).map(([name]) => (
-    <option key={name} value={name}>
-      {name}
-    </option>
-  ));
+const iconOptions = Object.entries(FaIcons).map(([name]) => ({
+  value: name,
+  icon: FaIcons[name]
+}));
 
-  return (
-    <div className="icon-update">
-      <div className="select-container">
-        <label className="label" htmlFor="icon-select">
-          아이콘 선택:{" "}
-        </label>
-        <select
-          id="icon-select"
-          name="icon"
-          onChange={(e) => onIconChange(e.target.value)}
-          value={selectedIcon || ""}
-          className="select"
-        >
-          <option value="" className="option">
-            아이콘 선택
-          </option>
-          {iconList}
-        </select>
-
-        {selectedIcon && (
-          <div className="preview">
-            <span className="preview--label">미리보기: </span>
-            {React.createElement(FaIcons[selectedIcon], {
-              size: 30,
-              className: "preview--icon"
-            })}
-          </div>
-        )}
-      </div>
-    </div>
-  );
-};
+const IconSelector = ({ selectedIcon, onIconChange, labelText }) => (
+  <>
+    <label htmlFor="icon-select" className="bold icon-selector-label">
+      {labelText || "주의사항 아이콘"}
+    </label>
+    <Select
+      id="icon-select"
+      className="icon-select"
+      options={iconOptions}
+      value={iconOptions.find((opt) => opt.value === selectedIcon)}
+      onChange={(option) => onIconChange(option?.value || "")}
+      formatOptionLabel={FormatIconOptionLabel}
+      placeholder="아이콘 선택"
+      isClearable
+    />
+  </>
+);
 
 export default IconSelector;

@@ -54,16 +54,16 @@ public class ReservationService {
         List<Reservation> reservationList = reservationRepository.findAll();
 
         List<ReservationDto> reservationDtoList = reservationList.stream()
-                .map(reservation -> {
-                    ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
-                    reservationDto
-                            .setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
-                    reservationDto
-                            .setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
-                    reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
-                    return reservationDto;
-                })
-                .toList();
+            .map(reservation -> {
+                ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
+                reservationDto
+                        .setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
+                reservationDto
+                        .setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
+                reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
+                return reservationDto;
+            })
+            .toList();
 
         return new ResponseDto<>(reservationDtoList, "예약 데이터 반환");
     }
@@ -101,30 +101,23 @@ public class ReservationService {
     }
 
     public ResponseDto<Map<String, Object>> getAvailableTimeSlots(String date, String themeId) {
-        // XXX:
-        // timeSlotRepository.findByThemeIdAndDate(themeId,localDate).orElseThrow(null);
-        // 형태로 변경해 주세요.
-        // orElseThrow 메서드 안에는 CustomerException(ErrorCode.~~) 형태로 사용하시면 됩니다.
-        Optional<TimeSlot> timeSlotOptional = timeSlotRepository.findByThemeIdAndDate(themeId, date);
-        if (timeSlotOptional.isEmpty()) {
-            throw new CustomException(ErrorCode.TIME_SLOT_NOT_FOUND, "해당 테마와 날짜에 예약 가능한 시간이 없습니다.");
-        }
-
-        TimeSlot timeSlot = timeSlotOptional.get();
+        TimeSlot timeSlot = timeSlotRepository.findByThemeIdAndDate(themeId, date)
+            .orElseThrow(() -> new CustomException(ErrorCode.TIME_SLOT_NOT_FOUND));
+    
         List<Map<String, Object>> availableTimeSlots = timeSlot.getSlots().stream()
-                .map(slot -> {
-                    Map<String, Object> slotInfo = new HashMap<>();
-                    slotInfo.put("time", slot.getTime());
-                    slotInfo.put("isAvailable", !slot.isBooked());
-                    return slotInfo;
-                })
-                .toList();
-
+            .map(slot -> {
+                Map<String, Object> slotInfo = new HashMap<>();
+                slotInfo.put("time", slot.getTime());
+                slotInfo.put("isAvailable", !slot.isBooked());
+                return slotInfo;
+            })
+            .toList();
+    
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("timeSlots", availableTimeSlots);
         return new ResponseDto<>(responseData, "예약 가능 시간 조회 성공");
     }
-
+    
     @Transactional
     public ResponseDto<ReservationDto> createReservation(ReservationDto dto) {
         String themeId = dto.getThemeId();

@@ -15,7 +15,7 @@ const FaqUpdatePage = () => {
     title: "",
     category: "",
     question: "",
-    answer: "",
+    answer: ""
   });
 
   const getFaqDetail = async () => {
@@ -66,7 +66,7 @@ const FaqUpdatePage = () => {
         writer: admin.email,
         title: faqDetail.title || "",
         question: faqDetail.question || "",
-        answer: faqDetail.answer || "",
+        answer: faqDetail.answer || ""
       });
     }
   }, [faqDetail, admin.email]);
@@ -88,7 +88,7 @@ const FaqUpdatePage = () => {
   };
 
   return (
-    <div className="faq-detail-container">
+    <section className="faq-detail-container">
       <div className="faqadd-input-title">
         <input
           type="text"
@@ -129,7 +129,7 @@ const FaqUpdatePage = () => {
       <button className="btn" onClick={handleListFaq}>
         목록으로
       </button>
-    </div>
+    </section>
   );
 };
 

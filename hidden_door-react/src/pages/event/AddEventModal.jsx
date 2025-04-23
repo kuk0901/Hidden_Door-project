@@ -84,8 +84,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
     } catch (error) {
       console.error('Error adding event:', error);
       toast.error(
-        error.response?.data?.message ||
-          '네트워크 문제로 이벤트 추가에 실패했습니다.'
+        error.message || '네트워크 문제로 이벤트 추가에 실패했습니다.'
       );
     }
   };

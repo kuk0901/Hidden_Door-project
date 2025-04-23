@@ -59,8 +59,7 @@ const AccountItem = ({
 
       toast.success(res.data.msg);
     } catch (error) {
-      console.log("Error deleting admin:", error);
-      toast.error("계정 삭제에 실패했습니다.");
+      toast.error(error.message || "계정 삭제에 실패했습니다.");
     }
   };
 

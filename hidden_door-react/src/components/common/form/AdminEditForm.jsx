@@ -44,7 +44,7 @@ const AdminEditForm = ({ children, onSubmit, formId, ...props }) => {
       delete data.pwd;
       delete data.pwdCheck;
     }
-    onSubmit(data);
+    onSubmit(data, reset);
   };
 
   // FIXME: 컴포넌트 분리 고려

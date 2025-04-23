@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useRecoilState } from 'recoil';
-import { noticesState, pageState } from '@atoms/noticeAtom';
-import { useAdmin } from '@hooks/useAdmin';
-import Api from '@axios/api';
-import { toast } from 'react-toastify';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { formatKoreanDate } from '../../utils/format/date';
-import Pagination from '@components/common/navigation/pagination/Pagination';
+import { useState, useEffect } from "react";
+import { useRecoilState } from "recoil";
+import { noticesState, pageState } from "@atoms/noticeAtom";
+import { useAdmin } from "@hooks/useAdmin";
+import Api from "@axios/api";
+import { toast } from "react-toastify";
+import { useNavigate, useLocation } from "react-router-dom";
+import { formatKoreanDate } from "../../utils/format/date";
+import Pagination from "@components/common/navigation/pagination/Pagination";
 
 function NoticePage() {
   const location = useLocation();
@@ -39,22 +39,19 @@ function NoticePage() {
           ...pageInfo,
           page: currentPage,
           isFirst: currentPage === 1,
-          isLast: currentPage === pageInfo?.totalPages,
+          isLast: currentPage === pageInfo?.totalPages
         }));
 
         if (!content || content.length === 0) {
-          toast.info('등록된 공지사항이 없습니다.');
+          toast.info("등록된 공지사항이 없습니다.");
         }
       } else {
         toast.error(
-          response.data.message || '공지사항을 불러오는 데 실패했습니다.'
+          response.data.message || "공지사항을 불러오는 데 실패했습니다."
         );
       }
     } catch (error) {
-      console.error('Error fetching notices:', error);
-      toast.error(
-        error.response?.data?.message || '공지사항을 불러오는 데 실패했습니다.'
-      );
+      toast.error(error.message || "공지사항을 불러오는 데 실패했습니다.");
     } finally {
       setLoading(false);
     }
@@ -76,7 +73,7 @@ function NoticePage() {
         <h1 className="notice-page-title">공지사항</h1>
         {admin && (
           <button
-            onClick={() => navigate('/hidden_door/notice/add')}
+            onClick={() => navigate("/hidden_door/notice/add")}
             className="add-notice-btn"
           >
             공지사항 추가
@@ -88,11 +85,11 @@ function NoticePage() {
   }
 
   return (
-    <div className="notice-page">
+    <section className="notice-page">
       <h1 className="notice-page-title">공지사항</h1>
       {admin && (
         <button
-          onClick={() => navigate('/hidden_door/notice/add')}
+          onClick={() => navigate("/hidden_door/notice/add")}
           className="add-notice-btn"
         >
           공지사항 추가
@@ -115,7 +112,7 @@ function NoticePage() {
         </ul>
       </div>
       <Pagination page={page} onPageChange={handlePageChange} />
-    </div>
+    </section>
   );
 }
 

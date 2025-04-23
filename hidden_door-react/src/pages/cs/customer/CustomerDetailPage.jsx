@@ -59,7 +59,7 @@ const CustomerDetailPage = () => {
       const res = await Api.post(`/customers/customer/update/${customerId}`, {
         customerAnswer: customerAnswer,
         adminName: admin.email,
-        customerCheck: "O",
+        customerCheck: "O"
       });
 
       if (res.status !== 200) {
@@ -86,7 +86,7 @@ const CustomerDetailPage = () => {
   }, []);
 
   return (
-    <div className="customer-detail-container">
+    <section className="customer-detail-container">
       <CustomerDetail customerDetail={customerDetail} />
 
       <div className="faq-btn-container">
@@ -102,20 +102,6 @@ const CustomerDetailPage = () => {
             >
               답변하기
             </button>
-
-            {/* 답변 입력 상태가 true일 때 인풋 칸과 제출 버튼을 보여줌 */}
-            {isAnswering && (
-              <div className="answer-section">
-                <textarea
-                  value={customerAnswer}
-                  onChange={handleAnswerChange}
-                  placeholder="답변을 작성하세요."
-                />
-                <button className="btn" onClick={handleSubmitAnswer}>
-                  답변 제출
-                </button>
-              </div>
-            )}
           </>
         )}
 
@@ -123,7 +109,23 @@ const CustomerDetailPage = () => {
           목록으로
         </button>
       </div>
-    </div>
+
+      <div>
+        {/* 답변 입력 상태가 true일 때 인풋 칸과 제출 버튼을 보여줌 */}
+        {isAnswering && (
+          <div className="answer-section">
+            <textarea
+              value={customerAnswer}
+              onChange={handleAnswerChange}
+              placeholder="답변을 작성하세요."
+            />
+            <button className="btn" onClick={handleSubmitAnswer}>
+              답변 제출
+            </button>
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 

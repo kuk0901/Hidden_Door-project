@@ -21,7 +21,7 @@ const ReservationConfirmPage = () => {
     themeId: selectedTheme,
     reservationDate: selectedDate.toISOString(),
     reservationTime: selectedTime,
-    paymentAmount: 0,
+    paymentAmount: 0
   });
 
   console.log("reservation: ", reservation);
@@ -35,7 +35,7 @@ const ReservationConfirmPage = () => {
       setReservation((prev) => ({
         ...prev,
         partySize: theme.minParticipants,
-        paymentAmount: theme.price * theme.minParticipants,
+        paymentAmount: theme.price * theme.minParticipants
       }));
     }
   }, [selectedTheme, themes]);
@@ -44,7 +44,7 @@ const ReservationConfirmPage = () => {
     if (selectedThemeDetails) {
       setReservation((prev) => ({
         ...prev,
-        paymentAmount: selectedThemeDetails.price * prev.partySize,
+        paymentAmount: selectedThemeDetails.price * prev.partySize
       }));
     }
   }, [reservation.partySize, selectedThemeDetails]);
@@ -53,7 +53,7 @@ const ReservationConfirmPage = () => {
     const { name, value } = e.target;
     setReservation((prev) => ({
       ...prev,
-      [name]: name === "partySize" ? Number(value) : value,
+      [name]: name === "partySize" ? Number(value) : value
     }));
   };
 
@@ -76,43 +76,37 @@ const ReservationConfirmPage = () => {
         availability: reservation.availability,
         paymentState: reservation.paymentState,
         paymentMethod: reservation.paymentMethod,
-        refundState: reservation.refundState,
+        refundState: reservation.refundState
       };
 
       console.log("요청 데이터:", reservationDto);
 
       const res = await Api.post("/reservations/create", reservationDto);
 
-      // XXX: status 사용으로 에러 처리 변경해 주세요.
-      if (res.data?.msg.includes("성공")) {
-        toast.success(res.data.msg);
-        console.log("예약 성공. 응답 데이터:", res.data);
-
-        const reservationNumber = res.data.data.reservationNumber;
-        if (!reservationNumber) {
-          console.error("예약 번호가 없습니다.");
-          toast.error("예약 번호를 받지 못했습니다.");
-          return;
-        }
-
-        console.log("네비게이션 시작:", reservationNumber);
-        // XXX: navigate 사용하실 거면 CustomerPage, CustomerAddPage 컴포넌트 참고해 수정해 주세요.
-        navigate(
-          `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
         );
-        console.log("네비게이션 완료");
-      } else {
-        console.error("예약 실패 (서버 응답):", res.data);
-        toast.error(res.data.msg || "예약 처리 실패");
+        return;
       }
+
+      const reservationNumber = res.data.data.reservationNumber;
+
+      if (!reservationNumber) {
+        toast.error("예약 번호를 받지 못했습니다.");
+        return;
+      }
+
+      navigate(
+        `/hidden_door/reservation/summary/${res.data.data.reservationNumber}`
+      );
     } catch (error) {
-      console.error("예약 처리 중 예외 발생:", error);
-      toast.error("예약 처리 중 오류가 발생했습니다.");
+      toast.error(error.message || "예약 처리 중 오류가 발생했습니다.");
     }
   };
 
   return (
-    <div className="reservation-confirm-page">
+    <section className="reservation-confirm-page">
       <h1>예약 확인</h1>
 
       <form onSubmit={handleSubmit}>
@@ -187,7 +181,7 @@ const ReservationConfirmPage = () => {
                     length:
                       selectedThemeDetails.maxParticipants -
                       selectedThemeDetails.minParticipants +
-                      1,
+                      1
                   },
                   (_, i) => i + selectedThemeDetails.minParticipants
                 ).map((num) => (
@@ -208,7 +202,7 @@ const ReservationConfirmPage = () => {
           </button>
         </div>
       </form>
-    </div>
+    </section>
   );
 };
 

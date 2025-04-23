@@ -34,13 +34,11 @@ function AddNoticePage() {
     try {
       const response = await Api.post('/notices', newNotice);
 
-      // 성공 상태 코드 확인
       if (response.status === 200 || response.status === 201) {
         toast.success(
           response.data.message || '공지사항이 성공적으로 등록되었습니다.'
         );
 
-        // 제목과 내용 초기화
         setTitle('');
         setContent('');
 
@@ -48,7 +46,6 @@ function AddNoticePage() {
           state: { shouldRefresh: true },
         });
       } else {
-        // 성공 상태 코드가 아닌 경우 에러 처리
         toast.error(
           handleResponseError(response.status, response.data.message)
         );
@@ -56,14 +53,13 @@ function AddNoticePage() {
     } catch (error) {
       console.error('Error adding notice:', error);
       toast.error(
-        error.response?.data?.message ||
-          '네트워크 문제로 공지사항 추가 실패하였습니다.'
+        error.message || '네트워크 문제로 공지사항 추가 실패하였습니다.'
       );
     }
   };
 
   return (
-    <div className="add-notice-page">
+    <section className="add-notice-page">
       <h2 className="add-notice-title">새 공지사항 추가</h2>
       <form onSubmit={handleSubmit} className="add-notice-form">
         <div className="add-notice-form-group">
@@ -109,7 +105,7 @@ function AddNoticePage() {
           </button>
         </div>
       </form>
-    </div>
+    </section>
   );
 }
 

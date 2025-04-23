@@ -15,6 +15,7 @@ import DeleteThemeButton from "@components/theme/DeleteThemeButton";
 import useConfirm from "@hooks/useConfirm";
 import { useAdmin } from "@hooks/useAdmin";
 import CheckboxGroup from "@components/common/form/input/CheckboxGroup";
+import { themeIsUnchanged } from "@utils/comparison/objectComparator";
 
 const ThemeDetail = ({ theme, setTheme }) => {
   const [themeEditVisible, setThemeEditVisible] = useState(false);
@@ -157,14 +158,6 @@ const ThemeDetail = ({ theme, setTheme }) => {
       availableDays: selectedAvailableDayNames
     };
 
-    submitData.append(
-      "themeDto",
-      new Blob([JSON.stringify(themeDto)], { type: "application/json" })
-    );
-    if (formData.file) {
-      submitData.append("file", formData.file);
-    }
-
     const isConfirmed = await confirm(
       `"${theme.themeName}" 테마 정보를 정말로 수정하시겠습니까?`
     );
@@ -172,6 +165,22 @@ const ThemeDetail = ({ theme, setTheme }) => {
     if (!isConfirmed) {
       setThemeEditVisible(false);
       return;
+    }
+
+    if (themeIsUnchanged(theme, themeDto)) {
+      toast.warn("변경된 내용이 없습니다.");
+      return;
+    }
+
+    console.log("theme: ", theme);
+    console.log("themeDto: ", themeDto);
+
+    submitData.append(
+      "themeDto",
+      new Blob([JSON.stringify(themeDto)], { type: "application/json" })
+    );
+    if (formData.file) {
+      submitData.append("file", formData.file);
     }
 
     try {

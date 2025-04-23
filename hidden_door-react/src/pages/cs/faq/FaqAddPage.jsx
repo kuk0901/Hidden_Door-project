@@ -13,7 +13,7 @@ const FaqAddPage = () => {
     title: "",
     category: "",
     question: "",
-    answer: "",
+    answer: ""
   });
 
   const handleCategoryChange = (e) => {
@@ -55,7 +55,7 @@ const FaqAddPage = () => {
     <>
       {/* c:if */}
       {admin && <button>asd</button>}
-      <div>
+      <section>
         <div className="faqadd-input-box">
           <form onSubmit={handleSubmit}>
             <div className="faqadd-input-category">
@@ -105,7 +105,7 @@ const FaqAddPage = () => {
             </button>
           </form>
         </div>
-      </div>
+      </section>
     </>
   );
 };

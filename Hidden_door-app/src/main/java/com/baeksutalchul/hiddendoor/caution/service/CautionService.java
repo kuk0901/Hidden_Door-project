@@ -46,13 +46,29 @@ public class CautionService {
     Caution caution = cautionRepository.findById(cautionId)
         .orElseThrow(() -> new CustomException(ErrorCode.CAUTION_NOT_FOUND));
 
-    Caution updateCaution = modelMapper.map(cautionDto, Caution.class);
-
-    if (caution.equals(updateCaution)) {
-      throw new CustomException(ErrorCode.NO_CHANGES_DETECTED);
+    if (caution.getTitle().equals(cautionDto.getTitle()) &&
+        caution.getContent().equals(cautionDto.getContent()) &&
+        caution.getIcon().equals(cautionDto.getIcon())) {
+      throw new CustomException(ErrorCode.NO_CHANGES_DETECTED, "변경된 사항이 없습니다.");
     }
 
-    cautionRepository.save(updateCaution);
+    Criteria criteria = new Criteria().andOperator(
+        Criteria.where("title").is(cautionDto.getTitle()),
+        Criteria.where("content").is(cautionDto.getContent()),
+        Criteria.where("icon").is(cautionDto.getIcon()),
+        Criteria.where("_id").ne(cautionId) // 본인 제외
+    );
+    Query query = new Query(criteria);
+
+    Caution existingCaution = mongoTemplate.findOne(query, Caution.class);
+    if (existingCaution != null) {
+      throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 주의사항이 이미 존재합니다.");
+    }
+
+    caution.setTitle(cautionDto.getTitle());
+    caution.setContent(cautionDto.getContent());
+    caution.setIcon(cautionDto.getIcon());
+    cautionRepository.save(caution);
 
     ResponseDto<List<CautionDto>> responseDto = getCautionList();
     responseDto.setMsg("주의사항이 수정되었습니다.");
@@ -82,18 +98,16 @@ public class CautionService {
   public ResponseDto<List<CautionDto>> addCautionOne(CautionDto cautionDto) {
 
     // 중복 검사
-    Criteria criteria = new Criteria().orOperator(
-        Criteria.where("originalFileName").is(cautionDto.getTitle()),
-        Criteria.where("description").is(cautionDto.getContent()));
+    Criteria criteria = new Criteria().andOperator(
+        Criteria.where("title").is(cautionDto.getTitle()),
+        Criteria.where("content").is(cautionDto.getContent()),
+        Criteria.where("icon").is(cautionDto.getIcon()));
     Query query = new Query(criteria);
 
     Caution existingCaution = mongoTemplate.findOne(query, Caution.class);
+
     if (existingCaution != null) {
-      if (existingCaution.getTitle().equals(cautionDto.getTitle())) {
-        throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 주의사항 제목이 이미 존재합니다.");
-      } else if (existingCaution.getContent().equals(cautionDto.getContent())) {
-        throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 주의사항 설명이 이미 존재합니다.");
-      }
+      throw new CustomException(ErrorCode.DUPLICATE_ENTITY, "동일한 주의사항이 이미 존재합니다.");
     }
 
     Caution newCaution = modelMapper.map(cautionDto, Caution.class);

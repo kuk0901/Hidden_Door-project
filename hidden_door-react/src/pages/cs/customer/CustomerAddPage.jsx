@@ -10,7 +10,7 @@ const CustomerAddPage = () => {
     customerCheck: "X",
     customerTitle: "",
     customerPwd: "",
-    customerContent: "",
+    customerContent: ""
   });
 
   const handleInputChange = (e) => {
@@ -48,7 +48,7 @@ const CustomerAddPage = () => {
   };
 
   return (
-    <div>
+    <section>
       <div className="customeradd-input-box">
         <form onSubmit={handleSubmit}>
           <div className="customeradd-input-title">
@@ -86,7 +86,7 @@ const CustomerAddPage = () => {
           </button>
         </form>
       </div>
-    </div>
+    </section>
   );
 };
 
