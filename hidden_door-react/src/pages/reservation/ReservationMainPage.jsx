@@ -15,7 +15,7 @@ const ReservationMainPage = () => {
   const navigate = useNavigate();
   const [pageData, setPageData] = useState({
     availableDates: [],
-    themes: []
+    themes: [],
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -37,7 +37,7 @@ const ReservationMainPage = () => {
       const formattedDate = formatReservationSelectedDate(selectedDate);
 
       const res = await Api.get("/reservations/timeslots", {
-        params: { date: formattedDate, themeId: selectedTheme }
+        params: { date: formattedDate, themeId: selectedTheme },
       });
 
       if (!res.data?.data?.timeSlots) {
@@ -48,7 +48,7 @@ const ReservationMainPage = () => {
       console.error("API Error:", {
         url: error.config?.url,
         status: error.response?.status,
-        data: error.response?.data
+        data: error.response?.data,
       });
       toast.error(error.response?.data?.message || "시간대 조회 실패");
     }
@@ -68,7 +68,7 @@ const ReservationMainPage = () => {
 
       setPageData({
         availableDates: res.data.data.availableDates,
-        themes: res.data.data.themes
+        themes: res.data.data.themes,
       });
     } catch (error) {
       toast.error(error.message || "예약 페이지를 불러오는데 실패했습니다.");
@@ -82,10 +82,9 @@ const ReservationMainPage = () => {
       const response = await Api.get("/reservations/check", {
         params: {
           reservationNumber: checkReservationNumber,
-          name: checkName
-        }
+          name: checkName,
+        },
       });
-
       // XXX: status 비교로 변경해 주세요.
 
       if (response.data) {
@@ -139,8 +138,8 @@ const ReservationMainPage = () => {
                 selectedDate,
                 selectedTime,
                 selectedTheme,
-                themes: pageData.themes
-              }
+                themes: pageData.themes,
+              },
             })
           }
         >
