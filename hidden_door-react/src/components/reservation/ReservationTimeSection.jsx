@@ -1,14 +1,14 @@
 const ReservationTimeSection = ({
   selectedTime,
   setSelectedTime,
-  timeSlots,
+  timeSlots
 }) => {
   return (
     <div className="time-section">
       <h2 className="section-title">시간 선택</h2>
-      <div className="time-slots">
-        {timeSlots && timeSlots.length > 0 ? (
-          timeSlots.map((slot) => (
+      {timeSlots && timeSlots.length > 0 ? (
+        <div className="time-slots">
+          {timeSlots.map((slot) => (
             <button
               key={slot.time}
               type="button" // type="button" 추가하여 폼 제출 방지
@@ -20,11 +20,11 @@ const ReservationTimeSection = ({
             >
               {slot.time}
             </button>
-          ))
-        ) : (
-          <p>날짜와 테마를 선택해 주세요.</p>
-        )}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <p className="time-guide">&quot;날짜와 테마&quot;를 선택해 주세요.</p>
+      )}
     </div>
   );
 };

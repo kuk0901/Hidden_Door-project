@@ -59,7 +59,7 @@ function AddNoticePage() {
   };
 
   return (
-    <div className="add-notice-page">
+    <section className="add-notice-page">
       <h2 className="add-notice-title">새 공지사항 추가</h2>
       <form onSubmit={handleSubmit} className="add-notice-form">
         <div className="add-notice-form-group">
@@ -105,7 +105,7 @@ function AddNoticePage() {
           </button>
         </div>
       </form>
-    </div>
+    </section>
   );
 }
 

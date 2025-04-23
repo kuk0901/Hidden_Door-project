@@ -1,5 +1,5 @@
-@use '../abstracts/variables';
-@use 'sass:color';
+@use "../abstracts/variables";
+@use "sass:color";
 
 // 다크 모드 mixin
 @mixin dark-mode {
@@ -46,7 +46,7 @@
     .notice-item {
       display: flex;
       justify-content: space-between;
-      padding: 15px 0;
+      padding: 15px 7px;
       border-bottom: 1px solid #eee;
       text-decoration: none;
       color: variables.$light-text-color;

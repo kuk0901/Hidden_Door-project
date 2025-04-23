@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Api from "@axios/api";
 import ReservationDateSection from "@components/reservation/ReservationDateSection";
 import ReservationTimeSection from "@components/reservation/ReservationTimeSection";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Modal from "react-modal";
 import { toast } from "react-toastify";
 import { formatReservationSelectedDate } from "@utils/format/date";
+import ReservationCheckModal from "@components/reservation/ReservationCheckModal";
 
 Modal.setAppElement("#root");
 
@@ -14,7 +15,7 @@ const ReservationMainPage = () => {
   const navigate = useNavigate();
   const [pageData, setPageData] = useState({
     availableDates: [],
-    themes: [],
+    themes: []
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -36,7 +37,7 @@ const ReservationMainPage = () => {
       const formattedDate = formatReservationSelectedDate(selectedDate);
 
       const res = await Api.get("/reservations/timeslots", {
-        params: { date: formattedDate, themeId: selectedTheme },
+        params: { date: formattedDate, themeId: selectedTheme }
       });
 
       if (!res.data?.data?.timeSlots) {
@@ -47,7 +48,7 @@ const ReservationMainPage = () => {
       console.error("API Error:", {
         url: error.config?.url,
         status: error.response?.status,
-        data: error.response?.data,
+        data: error.response?.data
       });
       toast.error(error.response?.data?.message || "시간대 조회 실패");
     }
@@ -67,7 +68,7 @@ const ReservationMainPage = () => {
 
       setPageData({
         availableDates: res.data.data.availableDates,
-        themes: res.data.data.themes,
+        themes: res.data.data.themes
       });
     } catch (error) {
       toast.error(error.message || "예약 페이지를 불러오는데 실패했습니다.");
@@ -81,8 +82,8 @@ const ReservationMainPage = () => {
       const response = await Api.get("/reservations/check", {
         params: {
           reservationNumber: checkReservationNumber,
-          name: checkName,
-        },
+          name: checkName
+        }
       });
 
       // XXX: status 비교로 변경해 주세요.
@@ -101,10 +102,12 @@ const ReservationMainPage = () => {
     fetchPageData();
   }, []);
 
+  const handleCloseModal = useCallback(() => setIsModalOpen(false), []);
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
-    <div className="reservation-page">
+    <section className="reservation-page">
       <h1 className="reservation-title">예약하기</h1>
       <form className="reservation-form" onSubmit={(e) => e.preventDefault()}>
         <div className="form-section">
@@ -136,8 +139,8 @@ const ReservationMainPage = () => {
                 selectedDate,
                 selectedTime,
                 selectedTheme,
-                themes: pageData.themes,
-              },
+                themes: pageData.themes
+              }
             })
           }
         >
@@ -151,54 +154,18 @@ const ReservationMainPage = () => {
         >
           예약 확인
         </button>
-
-        <Modal
-          isOpen={isModalOpen}
-          onRequestClose={() => setIsModalOpen(false)}
-          contentLabel="예약 확인"
-          className="reservation-check-modal"
-          overlayClassName="reservation-check-overlay"
-        >
-          <h2>예약 확인</h2>
-          <form onSubmit={(e) => e.preventDefault()}>
-            <div className="input-group">
-              <label htmlFor="reservationNumber">예약 번호</label>
-              <input
-                id="reservationNumber"
-                type="text"
-                placeholder="예약 번호"
-                value={checkReservationNumber}
-                onChange={(e) => setCheckReservationNumber(e.target.value)}
-                required
-              />
-            </div>
-            <div className="input-group">
-              <label htmlFor="name">이름</label>
-              <input
-                id="name"
-                type="text"
-                placeholder="이름"
-                value={checkName}
-                onChange={(e) => setCheckName(e.target.value)}
-                required
-              />
-            </div>
-            <div className="button-group">
-              <button
-                type="button"
-                onClick={handleCheckReservation}
-                disabled={!checkReservationNumber || !checkName}
-              >
-                확인
-              </button>
-              <button type="button" onClick={() => setIsModalOpen(false)}>
-                닫기
-              </button>
-            </div>
-          </form>
-        </Modal>
       </form>
-    </div>
+
+      <ReservationCheckModal
+        isOpen={isModalOpen}
+        handleCloseModal={handleCloseModal}
+        checkReservationNumber={checkReservationNumber}
+        setCheckReservationNumber={setCheckReservationNumber}
+        checkName={checkName}
+        setCheckName={setCheckName}
+        onCheck={handleCheckReservation}
+      />
+    </section>
   );
 };
 

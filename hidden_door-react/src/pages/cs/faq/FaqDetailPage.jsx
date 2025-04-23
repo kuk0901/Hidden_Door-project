@@ -48,7 +48,7 @@ const FaqDetailPage = () => {
   }, []);
 
   return (
-    <div className="faq-detail-container">
+    <section className="faq-detail-container">
       <FaqDetail faqDetail={faqDetail} />
 
       <div className="faq-btn-container">
@@ -62,7 +62,7 @@ const FaqDetailPage = () => {
           목록으로
         </button>
       </div>
-    </div>
+    </section>
   );
 };
 

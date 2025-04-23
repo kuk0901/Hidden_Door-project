@@ -59,7 +59,7 @@ const CustomerDetailPage = () => {
       const res = await Api.post(`/customers/customer/update/${customerId}`, {
         customerAnswer: customerAnswer,
         adminName: admin.email,
-        customerCheck: "O",
+        customerCheck: "O"
       });
 
       if (res.status !== 200) {
@@ -86,7 +86,7 @@ const CustomerDetailPage = () => {
   }, []);
 
   return (
-    <div className="customer-detail-container">
+    <section className="customer-detail-container">
       <CustomerDetail customerDetail={customerDetail} />
 
       <div className="faq-btn-container">
@@ -125,7 +125,7 @@ const CustomerDetailPage = () => {
           </div>
         )}
       </div>
-    </div>
+    </section>
   );
 };
 

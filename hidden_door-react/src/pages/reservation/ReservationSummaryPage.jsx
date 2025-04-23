@@ -45,7 +45,7 @@ const ReservationSummaryPage = () => {
   }
 
   return (
-    <div className="reservation-summary-container">
+    <section className="reservation-summary-container">
       <div className="reservation-summary">
         <h1>예약 상세 정보</h1>
         <p>예약 번호: {reservation.reservationNumber}</p>
@@ -59,7 +59,7 @@ const ReservationSummaryPage = () => {
         <p>예약 생성일: {reservation.kstResCreDate}</p>
         <p>결제 방법: {reservation.paymentMethod}</p>
       </div>
-    </div>
+    </section>
   );
 };
 
