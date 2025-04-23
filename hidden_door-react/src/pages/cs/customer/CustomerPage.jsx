@@ -61,8 +61,7 @@ const CustomerPage = () => {
         searchTerm: res.data.searchTerm,
       });
     } catch (error) {
-      // XXX: 더 명확한 메시지로 수정해 주세요.
-      toast.error(error.message || "오류입니다");
+      toast.error(error.message || "질문을 불러오는데 실패했습니다.");
     }
   };
 
