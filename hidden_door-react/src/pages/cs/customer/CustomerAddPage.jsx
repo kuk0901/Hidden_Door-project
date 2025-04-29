@@ -10,8 +10,10 @@ const CustomerAddPage = () => {
     customerCheck: "X",
     customerTitle: "",
     customerPwd: "",
-    customerContent: ""
+    customerContent: "",
   });
+
+  const [isActive, setIsActive] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -24,6 +26,7 @@ const CustomerAddPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsActive(true);
     try {
       if (
         !newCustomer.customerTitle ||
@@ -78,7 +81,11 @@ const CustomerAddPage = () => {
               rows="4"
             />
           </div>
-          <button className="customeradd-input-button" type="submit">
+          <button
+            className="customeradd-input-button"
+            type="submit"
+            disabled={isActive}
+          >
             추가
           </button>
           <button className="btn" onClick={handleListCustomer}>

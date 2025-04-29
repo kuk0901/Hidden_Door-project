@@ -6,13 +6,13 @@ import { useAdmin } from "@hooks/useAdmin";
 import SearchForm from "@components/common/form/SearchForm";
 import Pagination from "@components/common/navigation/pagination/Pagination";
 import FaqList from "../../../components/cs/faq/FaqList";
+import { useFaqList } from "../../../hooks/useFaqList";
 
-// XXX: 데이터 업데이트 가능성이 낮은 Faq는 recoil 사용 형태로 변경 부탁드립니다.
 const FaqPage = () => {
+  const { faqList, setFaqList } = useFaqList();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const { isSuperAdmin } = useAdmin();
-  const [faqList, setFaqList] = useState([]);
   const navigate = useNavigate();
   const [page, setPage] = useState(
     location.state?.page || {
@@ -78,7 +78,9 @@ const FaqPage = () => {
 
     setSearchParams({});
 
-    getAllFaq();
+    if (faqList.length == 0) {
+      getAllFaq();
+    }
   }, []);
 
   const handleReset = () => {

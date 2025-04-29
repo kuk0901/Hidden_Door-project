@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.faq.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +57,7 @@ public class FaqController {
   }
 
   @PostMapping("/faq/add")
-  public ResponseEntity<ResponseDto<String>> addFaq(@RequestBody FaqDto faqDto) {
+  public ResponseEntity<ResponseDto<Map<String, Object>>> addFaq(@RequestBody FaqDto faqDto) {
     return ResponseEntity.ok().body(faqService.addFaq(faqDto));
   }
   @PostMapping("/faq/update/{id}")
