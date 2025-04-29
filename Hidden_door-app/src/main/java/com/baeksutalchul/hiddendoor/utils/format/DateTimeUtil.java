@@ -17,6 +17,7 @@ public class DateTimeUtil {
   private static final DateTimeFormatter KOREAN_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일");
   private static final DateTimeFormatter KOREAN_DATETIME_FORMATTER = DateTimeFormatter
       .ofPattern("yyyy년 MM월 dd일 HH시간 mm분 ss초");
+  private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
 
   private DateTimeUtil() {
   }
@@ -79,5 +80,16 @@ public class DateTimeUtil {
 
     ZonedDateTime kstZdt = ZonedDateTime.ofInstant(instant, KST_ZONE);
     return kstZdt.format(KOREAN_DATETIME_FORMATTER);
+  }
+
+  public static String formatTimeSlot(Instant instant) {
+    ZonedDateTime kst = instant.atZone(ZoneId.of("Asia/Seoul"));
+    return kst.format(DateTimeFormatter.ofPattern("HH:mm"));
+  }
+
+  public static String convertToKoreanTime(Instant instant) {
+    if (instant.equals(DEFAULT_INSTANT)) return "";
+    return ZonedDateTime.ofInstant(instant, KST_ZONE)
+                       .format(TIME_FORMATTER);
   }
 }

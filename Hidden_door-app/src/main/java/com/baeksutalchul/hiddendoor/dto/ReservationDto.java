@@ -36,4 +36,5 @@ public class ReservationDto {
   private int partySize;
   private String reservationTime;
   private String reservationNumber;
+  private String kstResTime;
 }
