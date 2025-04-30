@@ -1,7 +1,6 @@
 package com.baeksutalchul.hiddendoor.faq.controller;
 
 import java.util.List;
-import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,8 +33,8 @@ public class FaqController {
   public ResponseEntity<ResponseDto<List<FaqDto>>> getFaqAll(
       @RequestParam(name= "page", required = false, defaultValue = "1") int page,
       @RequestParam(name= "size", required = false, defaultValue = "10") int size,
-      @RequestParam(name= "sortField", required = false, defaultValue = "id") String sortField,
-      @RequestParam(name= "sortDirection", required = false, defaultValue = "ASC") String sortDirection,
+      @RequestParam(name= "sortField", required = false, defaultValue = "creDate") String sortField,
+      @RequestParam(name= "sortDirection", required = false, defaultValue = "DESC") String sortDirection,
       @RequestParam(name= "searchField", required = false) String searchField,
       @RequestParam(name= "searchTerm", required = false) String searchTerm
   ) {
@@ -57,7 +56,7 @@ public class FaqController {
   }
 
   @PostMapping("/faq/add")
-  public ResponseEntity<ResponseDto<Map<String, Object>>> addFaq(@RequestBody FaqDto faqDto) {
+  public ResponseEntity<ResponseDto<String>> addFaq(@RequestBody FaqDto faqDto) {
     return ResponseEntity.ok().body(faqService.addFaq(faqDto));
   }
   @PostMapping("/faq/update/{id}")

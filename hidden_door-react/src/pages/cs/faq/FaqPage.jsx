@@ -6,13 +6,12 @@ import { useAdmin } from "@hooks/useAdmin";
 import SearchForm from "@components/common/form/SearchForm";
 import Pagination from "@components/common/navigation/pagination/Pagination";
 import FaqList from "../../../components/cs/faq/FaqList";
-import { useFaqList } from "../../../hooks/useFaqList";
 
 const FaqPage = () => {
-  const { faqList, setFaqList } = useFaqList();
   const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const { isSuperAdmin } = useAdmin();
+  const [faqList, setFaqList] = useState([]);
   const navigate = useNavigate();
   const [page, setPage] = useState(
     location.state?.page || {
@@ -22,7 +21,7 @@ const FaqPage = () => {
       totalPages: 0,
       isFirst: true,
       isLast: true,
-      sortField: "id",
+      sortField: "creDate",
       sortDirection: "ASC",
     }
   );
@@ -48,6 +47,7 @@ const FaqPage = () => {
         },
       });
 
+      console.log(page);
       if (res.status !== 200) {
         toast.error("FAQ불러오기에 실패했습니다.");
       }
@@ -78,9 +78,7 @@ const FaqPage = () => {
 
     setSearchParams({});
 
-    if (faqList.length == 0) {
-      getAllFaq();
-    }
+    getAllFaq();
   }, []);
 
   const handleReset = () => {

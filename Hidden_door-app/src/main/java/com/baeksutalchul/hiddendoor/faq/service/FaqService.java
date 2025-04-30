@@ -38,21 +38,21 @@ public class FaqService {
     Pageable pageable = PageableUtil.createPageRequest(
         Math.max(0, pageDto.getPage() - 1),
         pageDto.getSize(),
-        pageDto.getSortField(),
-        pageDto.getSortDirection());
+        "creDate",
+        "ASC");
 
     Page<Faq> faqList;
-
+    logger.info("pageDto{}", pageDto);
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
       switch (searchField) {
         case "title":
-          faqList = faqRepository.findByTitleContaining(searchTerm, pageable);
+          faqList = faqRepository.findByTitleContainingOrderByCreDateAsc(searchTerm, pageable);
           break;
         case "question":
-          faqList = faqRepository.findByQuestionContaining(searchTerm, pageable);
+          faqList = faqRepository.findByQuestionContainingOrderByCreDateAsc(searchTerm, pageable);
           break;
         default:
-          faqList = faqRepository.findByTitleContainingOrQuestionContaining(searchTerm, searchTerm, pageable);
+          faqList = faqRepository.findByTitleContainingOrQuestionContainingOrderByCreDateAsc(searchTerm, searchTerm, pageable);
       }
     } else {
       faqList = faqRepository.findAll(pageable);
@@ -90,7 +90,7 @@ public class FaqService {
   
 
   @Transactional
-  public ResponseDto<Map<String, Object>> addFaq(FaqDto faqDto) {
+  public ResponseDto<String> addFaq(FaqDto faqDto) {
 
     Faq faq = new Faq();
     faq.setWriter(faqDto.getWriter());
@@ -103,24 +103,7 @@ public class FaqService {
 
     Faq saveFaq = faqRepository.save(faq);
 
-    List<Faq> faqList = faqRepository.findAll();
-
-    List<FaqDto> faqDtoList = faqList.stream()
-    .map(f -> {
-      FaqDto fDto = modelMapper.map(f, FaqDto.class);
-
-      fDto.setKstCreDate(DateTimeUtil.convertToKoreanDate(f.getCreDate()));
-      fDto.setKstModDate(DateTimeUtil.convertToKoreanDate(f.getModDate()));
-
-      return fDto;
-    })
-    .toList();
-
-    Map<String, Object> map = new HashMap<>();
-    map.put("faqId", saveFaq.getFaqId());
-    map.put("faqList", faqDtoList);
-
-    return new ResponseDto<>(map, "succes");
+    return new ResponseDto<>(saveFaq.getFaqId(), "succes");
   }
 
   public ResponseDto<String> updateFaqOne(String id, FaqDto faqDto) {

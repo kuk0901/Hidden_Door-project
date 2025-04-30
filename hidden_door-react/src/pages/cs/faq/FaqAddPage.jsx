@@ -3,12 +3,11 @@ import { useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
-import { useFaqList } from "../../../hooks/useFaqList";
 
 const FaqAddPage = () => {
   const { admin } = useAdmin();
   const navigate = useNavigate();
-  const { setFaqList } = useFaqList();
+
   const [newFaq, setNewFaq] = useState({
     writer: admin.email,
     title: "",
@@ -44,8 +43,8 @@ const FaqAddPage = () => {
       if (res.status !== 200) {
         toast.error("FAQ추가에 실패했습니다.");
       }
-      setFaqList(res.data.data.faqList);
-      navigate(`/hidden_door/cs/faq/${res.data.data.faqId}?register=true`);
+
+      navigate(`/hidden_door/cs/faq/${res.data.data}?register=true`);
     } catch (error) {
       console.log(error);
       toast.error("FAQ추가에 실패했습니다.");
@@ -101,7 +100,7 @@ const FaqAddPage = () => {
             <button className="btn" type="submit">
               추가
             </button>
-            <button className="btn" onClick={handleListFaq}>
+            <button className="btn" onClick={handleListFaq} type="button">
               목록으로
             </button>
           </form>
