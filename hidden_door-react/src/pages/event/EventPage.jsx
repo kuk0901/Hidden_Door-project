@@ -123,7 +123,7 @@ function EventPage() {
   if (loading) return <div>로딩 중...</div>;
 
   return (
-    <div className="event-page">
+    <section className="event-page">
       <h1>이벤트 페이지</h1>
       {admin && (
         <button onClick={openAddModal} className="add-event-btn">
@@ -208,7 +208,7 @@ function EventPage() {
         onEventEdited={handleEventEdited}
         event={editingEvent}
       />
-    </div>
+    </section>
   );
 }
 
