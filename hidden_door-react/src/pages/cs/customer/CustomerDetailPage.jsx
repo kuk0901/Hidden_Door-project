@@ -4,6 +4,7 @@ import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
 import CustomerDetail from "../../../components/cs/customer/CustomerDetail.jsx";
+import useConfirm from "@hooks/useConfirm";
 
 const CustomerDetailPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,6 +14,7 @@ const CustomerDetailPage = () => {
   const [customerAnswer, setCustomerAnswer] = useState("");
   const [isAnswering, setIsAnswering] = useState(false);
   const navigate = useNavigate();
+  const confirm = useConfirm();
 
   const getCustomerDetail = async () => {
     try {
@@ -28,8 +30,7 @@ const CustomerDetailPage = () => {
   };
 
   const deleteCustomer = async () => {
-    // XXX: useConfirm 사용 형태로 수정해주세요.
-    const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
+    const confirmDelete = await confirm("정말 삭제하시겠습니까?");
     if (!confirmDelete) return;
 
     try {
@@ -39,7 +40,7 @@ const CustomerDetailPage = () => {
         toast.error("질문 삭제에 실패했습니다.");
       }
 
-      toast.success(res.data.msg);
+      navigate("/hidden_door/cs/customer?delete=true");
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
     }
@@ -59,7 +60,7 @@ const CustomerDetailPage = () => {
       const res = await Api.post(`/customers/customer/update/${customerId}`, {
         customerAnswer: customerAnswer,
         adminName: admin.email,
-        customerCheck: "O"
+        customerCheck: "O",
       });
 
       if (res.status !== 200) {

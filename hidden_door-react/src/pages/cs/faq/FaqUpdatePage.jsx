@@ -3,19 +3,21 @@ import { useParams, useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
+import useConfirm from "@hooks/useConfirm";
 
 const FaqUpdatePage = () => {
   const { admin } = useAdmin();
   const { faqId } = useParams();
   const [faqDetail, setFaqDetail] = useState(null);
   const navigate = useNavigate();
+  const confirm = useConfirm();
 
   const [newFaq, setNewFaq] = useState({
     writer: admin.email,
     title: "",
     category: "",
     question: "",
-    answer: ""
+    answer: "",
   });
 
   const getFaqDetail = async () => {
@@ -38,16 +40,17 @@ const FaqUpdatePage = () => {
   };
 
   const deleteFaq = async () => {
-    // XXX: useConfirm 사용 형태로 수정해주세요.
-    const confirmDelete = window.confirm("정말 삭제하시겠습니까?");
-    if (!confirmDelete) return;
+    const confirmed = await confirm("정말 삭제하시겠습니까?");
+    if (!confirmed) return;
 
     try {
       const response = await Api.delete(`/faqs/faq/delete/${faqId}`);
 
       if (response.status !== 200) {
         toast.error("삭제에 실패했습니다.");
+        return;
       }
+
       navigate("/hidden_door/cs/faq?delete=true");
     } catch (error) {
       toast.error(error.message || "삭제에 실패했습니다.");
@@ -66,7 +69,7 @@ const FaqUpdatePage = () => {
         writer: admin.email,
         title: faqDetail.title || "",
         question: faqDetail.question || "",
-        answer: faqDetail.answer || ""
+        answer: faqDetail.answer || "",
       });
     }
   }, [faqDetail, admin.email]);

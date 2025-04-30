@@ -102,8 +102,6 @@ public class CustomerService {
   @Transactional
   public ResponseDto<String> addCustomer(CustomerDto customerDto) {
 
-    // XXX: 버튼 클릭으로 동일 문의 요청이 반복될 경우를 고려한 중복 문의에 대학 확인 코드를 추가해 주세요.
-
     Customer customer = new Customer();
     customer.setCustomerName(customerDto.getCustomerName());
     customer.setCustomerEmail(customerDto.getCustomerEmail());
