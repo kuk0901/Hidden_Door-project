@@ -20,6 +20,8 @@ const ReservationSummaryPage = () => {
       try {
         const res = await Api.get(`/reservations/summary/${reservationNumber}`);
 
+        console.log("데이터: {}", res.data);
+
         if (res.status !== 200) {
           toast.error(
             "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
@@ -52,8 +54,8 @@ const ReservationSummaryPage = () => {
         <p>이름: {reservation.name}</p>
         <p>이메일: {reservation.email}</p>
         <p>전화번호: {reservation.phone}</p>
-        <p>예약 날짜: {reservation.kstResDate}</p>
-        <p>예약 시간: {reservation.reservationDate || "정보 없음"}</p>
+        <p>예약 날짜: {reservation.kstResCreDate}</p>
+        <p>예약 시간: {reservation.kstResTime}</p>
         <p>인원 수: {reservation.partySize}명</p>
         <p>총 결제 금액: {reservation.paymentAmount}원</p>
         <p>예약 생성일: {reservation.kstResCreDate}</p>
