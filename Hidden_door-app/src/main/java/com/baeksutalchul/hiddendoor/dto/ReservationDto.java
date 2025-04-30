@@ -19,7 +19,7 @@ public class ReservationDto {
   private String name;
   private String phone;
   private String email;
-  private String reservationDate;
+  private Instant reservationDate;
   private Instant reservationCreDate;
   private String availability;
   private int paymentAmount;
@@ -37,4 +37,5 @@ public class ReservationDto {
   private String reservationTime;
   private String reservationNumber;
   private String kstResTime;
+  private String reservationDateStr;
 }

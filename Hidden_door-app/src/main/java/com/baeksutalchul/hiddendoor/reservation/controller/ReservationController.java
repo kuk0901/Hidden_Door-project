@@ -81,7 +81,7 @@ public class ReservationController {
         감사합니다.""",
         reservationDto.getName(),
         res.getData().getReservationNumber(),
-        DateTimeUtil.convertToKoreanDate(Instant.parse(reservationDto.getReservationDate())),
+        DateTimeUtil.convertToKoreanDate(Instant.parse(reservationDto.getReservationDateStr())),
         reservationDto.getReservationTime()
       );
        

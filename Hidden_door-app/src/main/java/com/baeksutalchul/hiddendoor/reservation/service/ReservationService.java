@@ -121,7 +121,7 @@ public class ReservationService {
     @Transactional
     public ResponseDto<ReservationDto> createReservation(ReservationDto dto) {
         String themeId = dto.getThemeId();
-        String reservationDate = dto.getReservationDate().substring(0, 10);
+        String reservationDate = dto.getReservationDateStr().substring(0, 10);
 
         try {
             LocalDate.parse(reservationDate);
@@ -150,7 +150,7 @@ public class ReservationService {
         reservation.setName(dto.getName());
         reservation.setPhone(dto.getPhone());
         reservation.setEmail(dto.getEmail());
-        reservation.setReservationDate(combineDateTime(dto.getReservationDate(), dto.getReservationTime()));
+        reservation.setReservationDate(combineDateTime(dto.getReservationDateStr(), dto.getReservationTime()));
         reservation.setPartySize(dto.getPartySize());
         reservation.setPaymentAmount(dto.getPaymentAmount());
         reservation.setAvailability(dto.getAvailability());
