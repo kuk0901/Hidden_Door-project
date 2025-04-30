@@ -180,14 +180,15 @@ public class ReservationService {
     public ResponseDto<ReservationDto> getReservationSummary(String reservationNumber) {
         Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber)
                 .orElseThrow(() -> new CustomException(ErrorCode.RESERVATION_NOT_FOUND, "예약을 찾을 수 없습니다."));
-
-        ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
-        reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
-        reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
-        if (reservation.getPaymentDate() != null) {
-            reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDateTime(reservation.getPaymentDate()));
-        }
-        return new ResponseDto<>(reservationDto, "예약 요약 정보 조회 성공");
+    
+        ReservationDto dto = modelMapper.map(reservation, ReservationDto.class);
+        dto.setKstResTime(DateTimeUtil.convertToKoreanTime(reservation.getReservationDate())); // 명시적 추가
+        
+        // 날짜/시간 변환 강화
+        dto.setKstResDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationDate()));
+        dto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
+        
+        return new ResponseDto<>(dto, "예약 요약 정보 조회 성공");
     }
 
     public boolean checkReservation(String reservationNumber, String name) {

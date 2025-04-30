@@ -107,7 +107,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
   if (!isOpen) return null;
 
   return (
-    <div className="em-event-modal-overlay">
+    <section className="em-event-modal-overlay">
       <div className="em-event-modal">
         <h2 className="em-modal-title">이벤트 수정</h2>
         <form onSubmit={handleSubmit} className="em-modal-form">
@@ -225,7 +225,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
           </div>
         </form>
       </div>
-    </div>
+    </section>
   );
 }
 

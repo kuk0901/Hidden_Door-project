@@ -15,7 +15,7 @@ const ReservationMainPage = () => {
   const navigate = useNavigate();
   const [pageData, setPageData] = useState({
     availableDates: [],
-    themes: []
+    themes: [],
   });
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState("");
@@ -37,7 +37,7 @@ const ReservationMainPage = () => {
       const formattedDate = formatReservationSelectedDate(selectedDate);
 
       const res = await Api.get("/reservations/timeslots", {
-        params: { date: formattedDate, themeId: selectedTheme }
+        params: { date: formattedDate, themeId: selectedTheme },
       });
 
       if (!res.data?.data?.timeSlots) {
@@ -48,7 +48,7 @@ const ReservationMainPage = () => {
       console.error("API Error:", {
         url: error.config?.url,
         status: error.response?.status,
-        data: error.response?.data
+        data: error.response?.data,
       });
       toast.error(error.response?.data?.message || "시간대 조회 실패");
     }
@@ -68,7 +68,7 @@ const ReservationMainPage = () => {
 
       setPageData({
         availableDates: res.data.data.availableDates,
-        themes: res.data.data.themes
+        themes: res.data.data.themes,
       });
     } catch (error) {
       toast.error(error.message || "예약 페이지를 불러오는데 실패했습니다.");
@@ -79,22 +79,35 @@ const ReservationMainPage = () => {
 
   const handleCheckReservation = async () => {
     try {
-      const response = await Api.get("/reservations/check", {
+      const res = await Api.get("/reservations/check", {
         params: {
-          reservationNumber: checkReservationNumber,
-          name: checkName
-        }
+          reservationNumber: checkReservationNumber.trim(),
+          name: checkName.trim(),
+        },
       });
 
-      // XXX: status 비교로 변경해 주세요.
+      console.log("서버 응답:", res.data);
 
-      if (response.data) {
+      if (res.status !== 200) {
+        toast.error(
+          "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
+        );
+        return;
+      }
+
+      if (res.data?.data === true) {
+        navigate(`/hidden_door/reservation/summary/${checkReservationNumber}`);
+      } else if (res.data?.data?.exists) {
         navigate(`/hidden_door/reservation/summary/${checkReservationNumber}`);
       } else {
         toast.error("예약을 찾을 수 없습니다.");
       }
     } catch (error) {
-      toast.error("예약 확인 중 오류가 발생했습니다.", error);
+      if (error.response?.status === 404) {
+        toast.error("예약을 찾을 수 없습니다.");
+      } else {
+        toast.error("예약 확인 중 오류가 발생했습니다.");
+      }
     }
   };
 
@@ -139,8 +152,8 @@ const ReservationMainPage = () => {
                 selectedDate,
                 selectedTime,
                 selectedTheme,
-                themes: pageData.themes
-              }
+                themes: pageData.themes,
+              },
             })
           }
         >

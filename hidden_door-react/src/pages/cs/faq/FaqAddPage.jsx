@@ -13,7 +13,7 @@ const FaqAddPage = () => {
     title: "",
     category: "",
     question: "",
-    answer: ""
+    answer: "",
   });
 
   const handleCategoryChange = (e) => {
@@ -100,7 +100,7 @@ const FaqAddPage = () => {
             <button className="btn" type="submit">
               추가
             </button>
-            <button className="btn" onClick={handleListFaq}>
+            <button className="btn" onClick={handleListFaq} type="button">
               목록으로
             </button>
           </form>

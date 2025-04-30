@@ -21,9 +21,9 @@ public interface FaqRepository extends MongoRepository<Faq, String> {
 
   void deleteById(String id); 
 
-  Page<Faq> findByTitleContaining(String title, Pageable pageable);
+  Page<Faq> findByTitleContainingOrderByCreDateAsc(String title, Pageable pageable);
 
-  Page<Faq> findByQuestionContaining(String question, Pageable pageable);
+  Page<Faq> findByQuestionContainingOrderByCreDateAsc(String question, Pageable pageable);
 
-  Page<Faq> findByTitleContainingOrQuestionContaining(String title, String question, Pageable pageable);
+  Page<Faq> findByTitleContainingOrQuestionContainingOrderByCreDateAsc(String title, String question, Pageable pageable);
 }
