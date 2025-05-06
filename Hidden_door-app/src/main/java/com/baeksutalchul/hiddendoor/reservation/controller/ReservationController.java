@@ -1,6 +1,8 @@
 package com.baeksutalchul.hiddendoor.reservation.controller;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 
@@ -69,32 +71,42 @@ public class ReservationController {
     ResponseDto<ReservationDto> res = reservationService.createReservation(reservationDto);
 
     try {
-      String message = String.format("""
-        안녕하세요, %s님!
-        
-        예약이 성공적으로 완료되었습니다.
-        
-        예약 번호: %s
-        예약 날짜: %s
-        예약 시간: %s
-        
-        감사합니다.""",
-        reservationDto.getName(),
-        res.getData().getReservationNumber(),
-        DateTimeUtil.convertToKoreanDate(Instant.parse(reservationDto.getReservationDateStr())),
-        reservationDto.getReservationTime()
-      );
-       
-      MailDto mailDto = new MailDto(reservationDto.getEmail(), message);
+        LocalDate date = LocalDate.parse(reservationDto.getReservationDateStr());
+        String formattedDate = date.format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
 
-      mailService.sendMail(mailDto);
-      
-      } catch (Exception e) {
+        String message = String.format("""
+            안녕하세요, %s님!
+
+            예약이 성공적으로 완료되었습니다.
+
+            예약 번호: %s
+            예약 날짜: %s
+            예약 시간: %s
+
+            감사합니다.""",
+            reservationDto.getName(),
+            res.getData().getReservationNumber(),
+            formattedDate,
+            reservationDto.getReservationTime()
+        );
+
+        // 3파라미터 생성자 사용!
+        MailDto mailDto = new MailDto(
+            reservationDto.getEmail(),
+            "Hidden_door 방탈출 카페 예약 완료 안내",
+            message
+        );
+
+        mailService.sendMail(mailDto);
+
+    } catch (Exception e) {
+        e.printStackTrace(); // 실제 에러 원인을 콘솔에 출력
         throw new CustomException(ErrorCode.MAIL_SEND_FAILED);
-      }
+    }
 
     return ResponseEntity.ok(res);
   }
+
 
   @GetMapping("/summary/{reservationNumber}")
   public ResponseDto<ReservationDto> getReservationSummary(

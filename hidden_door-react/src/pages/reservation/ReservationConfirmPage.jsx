@@ -7,6 +7,12 @@ import { formatKoreanDate } from "@utils/format/date";
 const ReservationConfirmPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const formatLocalDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
   const { selectedDate, selectedTime, selectedTheme, themes } = location.state;
 
   const [reservation, setReservation] = useState({
@@ -19,7 +25,7 @@ const ReservationConfirmPage = () => {
     paymentMethod: "현장",
     refundState: "N",
     themeId: selectedTheme,
-    reservationDate: selectedDate.toISOString(),
+    reservationDate: formatLocalDate(selectedDate),
     reservationTime: selectedTime,
     paymentAmount: 0,
   });

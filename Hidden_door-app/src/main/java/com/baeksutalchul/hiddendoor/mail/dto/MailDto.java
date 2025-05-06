@@ -14,6 +14,7 @@ public class MailDto {
 
   public MailDto(String address, String message) {
     this.address = address;
+    this.title = "Hidden_door 방탈출 카페 예약 완료 안내";
     this.message = message;
   }
 }
