@@ -17,6 +17,7 @@ const AdminReservationDetailPage = () => {
     }
   };
 
+  // FIXME : 예약 완료 후 나오는 summary 페이지 가져와서 날짜 및 예약 관련 3가지 추가하기
   useEffect(() => {
     getReservationDetail();
   }, [reservationId]);
