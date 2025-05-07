@@ -15,39 +15,29 @@ function EventPage() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingEvent, setEditingEvent] = useState(null);
 
-  const handleResponseError = (status, message) => {
-    const errorMessages = {
-      400: message || '잘못된 요청입니다.',
-      401: message || '유효하지 않은 인증정보입니다. 다시 로그인해주세요.',
-      403: message || '접근 권한이 없습니다. 관리자에게 문의하세요.',
-      404: message || '요청하신 리소스를 찾을 수 없습니다.',
-      default:
-        message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
-    };
-
-    return errorMessages[status] || errorMessages.default;
-  };
-
   const fetchEvents = async () => {
     setLoading(true);
     try {
       const response = await Api.get('/events');
 
-      if (response.status === 200) {
-        const eventsData = response.data?.data;
-        if (eventsData && eventsData.length > 0) {
-          setEvents(eventsData);
-        } else {
-          setEvents([]);
-          toast.info('등록된 이벤트가 없습니다.');
-        }
+      if (response.status !== 200) {
+        toast.error('이벤트 정보를 불러오는데 실패했습니다.');
+        setEvents([]);
+        return;
+      }
+
+      const eventsData = response.data?.data;
+      if (eventsData && eventsData.length > 0) {
+        setEvents(eventsData);
       } else {
-        toast.error(
-          handleResponseError(response.status, response.data.message)
-        );
+        setEvents([]);
+        toast.info('등록된 이벤트가 없습니다.');
       }
     } catch (error) {
-      toast.error(error.message || '이벤트를 불러오는 데 실패했습니다.');
+      toast.error(
+        error.message ||
+          '이벤트를 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.'
+      );
     } finally {
       setLoading(false);
     }
