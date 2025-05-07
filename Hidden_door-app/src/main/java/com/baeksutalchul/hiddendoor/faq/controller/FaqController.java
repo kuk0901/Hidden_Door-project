@@ -20,7 +20,7 @@ import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 
 @RestController
-@RequestMapping("/api/v1/faqs") // * -> 여기만 복수형태로 작성함
+@RequestMapping("/api/v1/faqs") 
 public class FaqController {
   private final FaqService faqService;
   private static final Logger logger = LoggerFactory.getLogger(FaqController.class);
