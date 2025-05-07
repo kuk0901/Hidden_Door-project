@@ -20,7 +20,7 @@ const CustomerPage = () => {
       totalPages: 0,
       isFirst: true,
       isLast: true,
-      sortField: "id",
+      sortField: "queCreDate",
       sortDirection: "ASC",
     }
   );

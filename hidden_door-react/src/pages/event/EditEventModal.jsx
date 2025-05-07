@@ -12,19 +12,6 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
   const [isOngoing, setIsOngoing] = useState('false');
   const [noEndDate, setNoEndDate] = useState('false');
 
-  const handleResponseError = (status, message) => {
-    const errorMessages = {
-      400: message || '잘못된 요청입니다.',
-      401: message || '유효하지 않은 인증정보입니다. 다시 로그인해주세요.',
-      403: message || '접근 권한이 없습니다. 관리자에게 문의하세요.',
-      404: message || '요청하신 리소스를 찾을 수 없습니다.',
-      default:
-        message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
-    };
-
-    return errorMessages[status] || errorMessages.default;
-  };
-
   useEffect(() => {
     if (event) {
       setTitle(event.title || '');
@@ -83,29 +70,32 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
       noEndDate,
     };
 
-    console.log('Updated Event:', updatedEvent);
-
     try {
       const response = await Api.put(`/events/${event.eventId}`, updatedEvent);
 
-      if (response.status === 200) {
-        toast.success(
-          response.data.message || '이벤트가 성공적으로 수정되었습니다.'
-        );
-        onEventEdited(response.data.data);
-        onClose();
-      } else {
+      if (response.status !== 200) {
         toast.error(
-          handleResponseError(response.status, response.data.message)
+          response.data?.message ||
+            '이벤트 수정에 실패했습니다. 잠시 후 다시 시도해 주세요.'
         );
+        return;
       }
+
+      toast.success(
+        response.data.message || '이벤트가 성공적으로 수정되었습니다.'
+      );
+      onEventEdited(response.data.data);
+      onClose();
     } catch (error) {
-      toast.error(handleResponseError(error.response?.status, error.message));
+      toast.error(
+        error.message || '네트워크 문제로 이벤트 수정에 실패했습니다.'
+      );
     }
   };
 
   if (!isOpen) return null;
 
+  // XXX: input 태그와 label 태그는 id로 연결해주세요!
   return (
     <section className="em-event-modal-overlay">
       <div className="em-event-modal">

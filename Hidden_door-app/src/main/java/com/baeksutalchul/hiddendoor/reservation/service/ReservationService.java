@@ -15,6 +15,7 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -121,7 +122,7 @@ public class ReservationService {
     @Transactional
     public ResponseDto<ReservationDto> createReservation(ReservationDto dto) {
         String themeId = dto.getThemeId();
-        String reservationDate = dto.getReservationDate().substring(0, 10);
+        String reservationDate = dto.getReservationDateStr().substring(0, 10);
 
         try {
             LocalDate.parse(reservationDate);
@@ -150,7 +151,7 @@ public class ReservationService {
         reservation.setName(dto.getName());
         reservation.setPhone(dto.getPhone());
         reservation.setEmail(dto.getEmail());
-        reservation.setReservationDate(combineDateTime(dto.getReservationDate(), dto.getReservationTime()));
+        reservation.setReservationDate(combineDateTime(dto.getReservationDateStr(), dto.getReservationTime()));
         reservation.setPartySize(dto.getPartySize());
         reservation.setPaymentAmount(dto.getPaymentAmount());
         reservation.setAvailability(dto.getAvailability());
@@ -168,14 +169,18 @@ public class ReservationService {
 
     private Instant combineDateTime(String dateStr, String timeStr) {
         try {
-            LocalDate date = LocalDate.parse(dateStr.split("T")[0]);
+            String onlyDate = dateStr.contains("T") ? dateStr.split("T")[0] : dateStr;
+            LocalDate date = LocalDate.parse(onlyDate); // "2025-05-09"
             LocalTime time = LocalTime.parse(timeStr, DateTimeFormatter.ofPattern("HH:mm"));
             LocalDateTime dateTime = LocalDateTime.of(date, time);
-            return dateTime.toInstant(ZoneOffset.UTC);
+            ZoneId zoneId = ZoneId.of("Asia/Seoul");
+            return dateTime.atZone(zoneId).toInstant();
         } catch (DateTimeParseException e) {
+            System.err.println("combineDateTime error: dateStr=" + dateStr + ", timeStr=" + timeStr);
             throw new CustomException(ErrorCode.INVALID_DATE_FORMAT, "잘못된 날짜 또는 시간 형식입니다.");
         }
     }
+    
 
     public ResponseDto<ReservationDto> getReservationSummary(String reservationNumber) {
         Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber)

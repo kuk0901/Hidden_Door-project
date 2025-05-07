@@ -33,7 +33,7 @@ public class CustomerController {
   public ResponseEntity<ResponseDto<List<CustomerDto>>> getCustomerAll(
       @RequestParam(name= "page", required = false, defaultValue = "1") int page,
       @RequestParam(name= "size", required = false, defaultValue = "10") int size,
-      @RequestParam(name= "sortField", required = false, defaultValue = "id") String sortField,
+      @RequestParam(name= "sortField", required = false, defaultValue = "queCreDate") String sortField,
       @RequestParam(name= "sortDirection", required = false, defaultValue = "ASC") String sortDirection,
       @RequestParam(name= "searchField", required = false) String searchField,
       @RequestParam(name= "searchTerm", required = false) String searchTerm

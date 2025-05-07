@@ -7,6 +7,12 @@ import { formatKoreanDate } from "@utils/format/date";
 const ReservationConfirmPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const formatLocalDate = (date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
   const { selectedDate, selectedTime, selectedTheme, themes } = location.state;
 
   const [reservation, setReservation] = useState({
@@ -19,9 +25,9 @@ const ReservationConfirmPage = () => {
     paymentMethod: "현장",
     refundState: "N",
     themeId: selectedTheme,
-    reservationDate: selectedDate.toISOString(),
+    reservationDate: formatLocalDate(selectedDate),
     reservationTime: selectedTime,
-    paymentAmount: 0
+    paymentAmount: 0,
   });
 
   console.log("reservation: ", reservation);
@@ -35,7 +41,7 @@ const ReservationConfirmPage = () => {
       setReservation((prev) => ({
         ...prev,
         partySize: theme.minParticipants,
-        paymentAmount: theme.price * theme.minParticipants
+        paymentAmount: theme.price * theme.minParticipants,
       }));
     }
   }, [selectedTheme, themes]);
@@ -44,7 +50,7 @@ const ReservationConfirmPage = () => {
     if (selectedThemeDetails) {
       setReservation((prev) => ({
         ...prev,
-        paymentAmount: selectedThemeDetails.price * prev.partySize
+        paymentAmount: selectedThemeDetails.price * prev.partySize,
       }));
     }
   }, [reservation.partySize, selectedThemeDetails]);
@@ -53,7 +59,7 @@ const ReservationConfirmPage = () => {
     const { name, value } = e.target;
     setReservation((prev) => ({
       ...prev,
-      [name]: name === "partySize" ? Number(value) : value
+      [name]: name === "partySize" ? Number(value) : value,
     }));
   };
 
@@ -69,14 +75,14 @@ const ReservationConfirmPage = () => {
         name: reservation.name,
         phone: reservation.phone,
         email: reservation.email,
-        reservationDate: reservation.reservationDate,
+        reservationDateStr: reservation.reservationDate,
         reservationTime: reservation.reservationTime,
         partySize: reservation.partySize,
         paymentAmount: reservation.paymentAmount,
         availability: reservation.availability,
         paymentState: reservation.paymentState,
         paymentMethod: reservation.paymentMethod,
-        refundState: reservation.refundState
+        refundState: reservation.refundState,
       };
 
       console.log("요청 데이터:", reservationDto);
@@ -181,7 +187,7 @@ const ReservationConfirmPage = () => {
                     length:
                       selectedThemeDetails.maxParticipants -
                       selectedThemeDetails.minParticipants +
-                      1
+                      1,
                   },
                   (_, i) => i + selectedThemeDetails.minParticipants
                 ).map((num) => (

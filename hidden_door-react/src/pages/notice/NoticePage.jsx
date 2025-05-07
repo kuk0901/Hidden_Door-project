@@ -8,6 +8,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { formatKoreanDate } from '../../utils/format/date';
 import Pagination from '@components/common/navigation/pagination/Pagination';
 
+// XXX: 처음 공지사항 페이지 접속 후 다른 페이지에 이동했다가 공지사항 페이지로 다시 넘어오는 경우 로딩 화면만 나오고 있습니다.
 function NoticePage() {
   const location = useLocation();
   const { admin } = useAdmin();
@@ -30,28 +31,32 @@ function NoticePage() {
         `/notices?page=${currentPage - 1}&size=${page.size}`
       );
 
-      if (response.status === 200) {
-        const { content, page: pageInfo } = response.data?.data || {};
-
-        setNotices(content || []);
-        setPage((prev) => ({
-          ...prev,
-          ...pageInfo,
-          page: currentPage,
-          isFirst: currentPage === 1,
-          isLast: currentPage === pageInfo?.totalPages,
-        }));
-
-        if (!content || content.length === 0) {
-          toast.info('등록된 공지사항이 없습니다.');
-        }
-      } else {
+      if (response.status !== 200) {
         toast.error(
-          response.data.message || '공지사항을 불러오는 데 실패했습니다.'
+          response.data?.message ||
+            '공지사항을 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.'
         );
+        setNotices([]);
+        return;
+      }
+
+      const { content, page: pageInfo } = response.data?.data || {};
+
+      setNotices(content || []);
+      setPage((prev) => ({
+        ...prev,
+        ...pageInfo,
+        page: currentPage,
+        isFirst: currentPage === 1,
+        isLast: currentPage === pageInfo?.totalPages,
+      }));
+
+      if (!content || content.length === 0) {
+        toast.info('등록된 공지사항이 없습니다.');
       }
     } catch (error) {
       toast.error(error.message || '공지사항을 불러오는 데 실패했습니다.');
+      setNotices([]);
     } finally {
       setLoading(false);
     }
