@@ -161,7 +161,8 @@
       .em-form-group {
         display: flex;
         flex-direction: column;
-
+        // XXX: input과 label은 간격을 조금 띄워주세요!
+        
         & > div {
           // 이벤트 유형 (체크박스)
           display: flex;

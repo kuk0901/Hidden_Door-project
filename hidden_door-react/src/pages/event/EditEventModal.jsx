@@ -95,6 +95,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
 
   if (!isOpen) return null;
 
+  // XXX: input 태그와 label 태그는 id로 연결해주세요!
   return (
     <section className="em-event-modal-overlay">
       <div className="em-event-modal">

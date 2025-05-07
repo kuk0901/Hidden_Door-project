@@ -24,6 +24,7 @@
         variables.$dark-link-color,
         variables.$light-link-color
       );
+      cursor: pointer;
 
       &.btn--no {
         border: none;
@@ -64,6 +65,7 @@
             border: none;
             @include mixins.font-size(16px);
             min-width: auto;
+            cursor: pointer;
 
             &:hover {
               @include mixins.text-color(variables.$dark-link-color);
@@ -124,6 +126,7 @@
     .admin--info--container {
       background-color: transparent;
       border: none;
+      cursor: pointer;
 
       .admin--info__icon {
         color: variables.$page-bg-color;

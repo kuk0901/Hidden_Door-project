@@ -47,7 +47,6 @@ const AdminEditForm = ({ children, onSubmit, formId, ...props }) => {
     onSubmit(data, reset);
   };
 
-  // FIXME: 컴포넌트 분리 고려
   return (
     <form
       id={formId}
@@ -79,7 +78,7 @@ const AdminEditForm = ({ children, onSubmit, formId, ...props }) => {
             />
           </div>
 
-          {errors.userName && errors.userName && (
+          {errors.userName && errors?.userName && (
             <InputError error={errors.userName.message} />
           )}
         </div>
