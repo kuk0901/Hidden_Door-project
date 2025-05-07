@@ -15,36 +15,25 @@ function NoticeDetailPage() {
   const [editTitle, setEditTitle] = useState('');
   const [editContent, setEditContent] = useState('');
 
-  const handleResponseError = (status, message) => {
-    const errorMessages = {
-      400: message || '잘못된 요청입니다.',
-      401: message || '유효하지 않은 인증정보입니다. 다시 로그인해주세요.',
-      403: message || '접근 권한이 없습니다. 관리자에게 문의하세요.',
-      404: message || '요청하신 리소스를 찾을 수 없습니다.',
-      default:
-        message || '서버 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.',
-    };
-
-    return errorMessages[status] || errorMessages.default;
-  };
-
   const fetchNotice = async () => {
     setLoading(true);
 
     try {
       const response = await Api.get(`/notices/${noticeId}`);
 
-      if (response.status === 200) {
-        if (response.data?.data) {
-          setNotice(response.data.data);
-        } else {
-          toast.info('해당 공지사항을 찾을 수 없습니다.');
-          navigate('/hidden_door/notice');
-        }
-      } else {
+      if (response.status !== 200) {
         toast.error(
-          handleResponseError(response.status, response.data.message)
+          response.data?.message ||
+            '공지사항 조회에 실패했습니다. 잠시 후 다시 시도해 주세요.'
         );
+        navigate('/hidden_door/notice');
+        return;
+      }
+
+      if (response.data?.data) {
+        setNotice(response.data.data);
+      } else {
+        toast.info('해당 공지사항을 찾을 수 없습니다.');
         navigate('/hidden_door/notice');
       }
     } catch (error) {
