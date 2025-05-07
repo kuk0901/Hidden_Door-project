@@ -7,7 +7,7 @@ import { useParams } from "react-router-dom";
 const ReservationSummaryPage = () => {
   const { reservationNumber } = useParams();
   const location = useLocation();
-  const [reservation, setReservation] = useState(null);
+  const [reservationDto, setReservationDto] = useState(null);
 
   useEffect(() => {
     if (!reservationNumber) {
@@ -29,7 +29,7 @@ const ReservationSummaryPage = () => {
           return;
         }
 
-        setReservation(res.data.data);
+        setReservationDto(res.data.data);
       } catch (error) {
         toast.error(
           "예약 조회 실패: " + (error.response?.data?.message || error.message)
@@ -42,7 +42,7 @@ const ReservationSummaryPage = () => {
     }
   }, [reservationNumber]);
 
-  if (!reservation) {
+  if (!reservationDto) {
     return <p>예약 정보를 불러오는 중...</p>;
   }
 
@@ -50,16 +50,15 @@ const ReservationSummaryPage = () => {
     <section className="reservation-summary-container">
       <div className="reservation-summary">
         <h1>예약 상세 정보</h1>
-        <p>예약 번호: {reservation.reservationNumber}</p>
-        <p>이름: {reservation.name}</p>
-        <p>이메일: {reservation.email}</p>
-        <p>전화번호: {reservation.phone}</p>
-        <p>예약 날짜: {reservation.kstResCreDate}</p>
-        <p>예약 시간: {reservation.kstResTime}</p>
-        <p>인원 수: {reservation.partySize}명</p>
-        <p>총 결제 금액: {reservation.paymentAmount}원</p>
-        <p>예약 생성일: {reservation.kstResCreDate}</p>
-        <p>결제 방법: {reservation.paymentMethod}</p>
+        <p>예약 번호: {reservationDto.reservationNumber}</p>
+        <p>이름: {reservationDto.name}</p>
+        <p>이메일: {reservationDto.email}</p>
+        <p>전화번호: {reservationDto.phone}</p>
+        <p>예약 날짜: {reservationDto.kstResDate}</p>
+        <p>예약 시간: {reservationDto.kstResTime}</p>
+        <p>인원 수: {reservationDto.partySize}명</p>
+        <p>총 결제 금액: {reservationDto.paymentAmount}원</p>
+        <p>결제 방법: {reservationDto.paymentMethod}</p>
       </div>
     </section>
   );

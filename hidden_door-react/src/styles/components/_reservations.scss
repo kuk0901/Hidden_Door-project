@@ -456,6 +456,11 @@
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); // 선택적: 박스 그림자 추가
     border-radius: 8px;
 
+    @include mixins.dark-mode {
+      background-color: variables.$light-background-color;
+      color: black;
+    }
+
     h1 {
       font-size: 28px;
       margin-bottom: 20px;
