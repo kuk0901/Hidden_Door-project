@@ -21,9 +21,9 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 
   void deleteById(String id); 
 
-  Page<Customer> findByCustomerTitleContaining(String customerTitle, Pageable pageable);
+  Page<Customer> findByCustomerTitleContainingOrderByQueCreDateAsc(String customerTitle, Pageable pageable);
 
-  Page<Customer> findByCustomerContentContaining(String customerContent, Pageable pageable);
+  Page<Customer> findByCustomerContentContainingOrderByQueCreDateAsc(String customerContent, Pageable pageable);
 
-  Page<Customer> findByCustomerTitleContainingOrCustomerContentContaining(String customerTitle, String customerContent, Pageable pageable);
+  Page<Customer> findByCustomerTitleContainingOrCustomerContentContainingOrderByQueCreDateAsc(String customerTitle, String customerContent, Pageable pageable);
 }

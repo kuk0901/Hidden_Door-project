@@ -41,21 +41,21 @@ public class CustomerService {
     Pageable pageable = PageableUtil.createPageRequest(
         Math.max(0, pageDto.getPage() - 1),
         pageDto.getSize(),
-        pageDto.getSortField(),
-        pageDto.getSortDirection());
+        "queCreDate",
+        "ASC");
 
     Page<Customer> customerList;
 
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
       switch (searchField) {
         case "customerTitle":
-          customerList = customerRepository.findByCustomerTitleContaining(searchTerm, pageable);
+          customerList = customerRepository.findByCustomerTitleContainingOrderByQueCreDateAsc(searchTerm, pageable);
           break;
         case "customerContent":
-          customerList = customerRepository.findByCustomerContentContaining(searchTerm, pageable);
+          customerList = customerRepository.findByCustomerContentContainingOrderByQueCreDateAsc(searchTerm, pageable);
           break;
         default:
-          customerList = customerRepository.findByCustomerTitleContainingOrCustomerContentContaining(searchTerm,
+          customerList = customerRepository.findByCustomerTitleContainingOrCustomerContentContainingOrderByQueCreDateAsc(searchTerm,
               searchTerm, pageable);
       }
     } else {
