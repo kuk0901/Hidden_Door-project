@@ -93,6 +93,7 @@ const FaqUpdatePage = () => {
   return (
     <section className="faq-detail-container">
       <div className="faqadd-input-title">
+        <label>제목</label>
         <input
           type="text"
           name="title"
@@ -101,6 +102,7 @@ const FaqUpdatePage = () => {
         />
       </div>
       <div className="faqadd-input-content">
+        <label>질문</label>
         <textarea
           name="question"
           onChange={handleInputChange}
@@ -109,6 +111,7 @@ const FaqUpdatePage = () => {
         />
       </div>
       <div className="faqadd-input-content">
+        <label>답변</label>
         <textarea
           name="answer"
           onChange={handleInputChange}
@@ -117,21 +120,23 @@ const FaqUpdatePage = () => {
         />
       </div>
 
-      {admin && (
-        <button className="btn" onClick={deleteFaq}>
-          삭제
-        </button>
-      )}
+      <div className="faqUpdate-btn-container">
+        {admin && (
+          <button className="btn" onClick={deleteFaq}>
+            삭제
+          </button>
+        )}
 
-      {admin && (
-        <button className="btn" onClick={updateFaq}>
-          수정하기
-        </button>
-      )}
+        {admin && (
+          <button className="btn" onClick={updateFaq}>
+            수정하기
+          </button>
+        )}
 
-      <button className="btn" onClick={handleListFaq}>
-        목록으로
-      </button>
+        <button className="btn" onClick={handleListFaq}>
+          목록으로
+        </button>
+      </div>
     </section>
   );
 };

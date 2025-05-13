@@ -54,7 +54,6 @@ const FaqAddPage = () => {
   return (
     <>
       {/* c:if */}
-      {admin && <button>asd</button>}
       <section>
         <div className="faqadd-input-box">
           <form onSubmit={handleSubmit}>
@@ -97,12 +96,15 @@ const FaqAddPage = () => {
                 rows="6"
               />
             </div>
-            <button className="btn" type="submit">
-              추가
-            </button>
-            <button className="btn" onClick={handleListFaq} type="button">
-              목록으로
-            </button>
+
+            <div className="faqUpdate-btn-container">
+              <button className="btn" type="submit">
+                추가
+              </button>
+              <button className="btn" onClick={handleListFaq} type="button">
+                목록으로
+              </button>
+            </div>
           </form>
         </div>
       </section>
