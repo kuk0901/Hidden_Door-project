@@ -20,6 +20,7 @@ import com.baeksutalchul.hiddendoor.mail.service.MailService;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.reservation.service.ReservationService;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
+import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -40,9 +41,24 @@ public class ReservationController {
   }
 
   @GetMapping("/list")
-  public ResponseEntity<ResponseDto<List<ReservationDto>>> getReservationAll() {
-    return ResponseEntity.ok().body(reservationService.getReservationAll());
+  public ResponseEntity<ResponseDto<List<ReservationDto>>> getReservationAll(
+    @RequestParam(name= "page", required = false, defaultValue = "1") int page,
+    @RequestParam(name= "size", required = false, defaultValue = "10") int size,
+    @RequestParam(name= "sortField", required = false, defaultValue = "reservationCreDate") String sortField,
+    @RequestParam(name= "sortDirection", required = false, defaultValue = "ASC") String sortDirection
+  ) {
+    PageDto pageDto = new PageDto(
+      page, 
+      size, 
+      0L, 
+      0, 
+      page == 1, 
+      false, 
+      sortField, 
+      sortDirection);
+    return ResponseEntity.ok().body(reservationService.getReservationAll(pageDto));
   }
+
 
   @GetMapping("/{id}")
   public ResponseEntity<ResponseDto<ReservationDto>> getReservationById(

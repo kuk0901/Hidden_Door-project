@@ -28,6 +28,12 @@ public class ResponseDto<T> {
     this.pageDto = new PageDto();
   }
 
+  public ResponseDto(T data, String msg, PageDto pageDto) {
+    this.data = data;
+    this.msg = msg;
+    this.pageDto = pageDto;
+  }
+
   public ResponseDto(String token, T data, String msg) {
     this.token = token;
     this.data = data;
