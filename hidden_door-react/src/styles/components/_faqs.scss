@@ -2,7 +2,6 @@
   margin: auto;
   width: 1000px;
   height: 1000px;
-  border: 1px solid black;
 
   .cs-body {
     .cs-header {
@@ -85,11 +84,15 @@
 }
 
 .faqadd-input-box {
-  width: 1000px;
-  height: 800px;
-  border: 1px solid black;
-  position: relative;
-  padding: 50px;
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 
   div {
     margin-top: 20px;
@@ -207,4 +210,99 @@
 
 .answer-section .btn:hover {
   background-color: #0056b3;
+}
+
+.faq-detail-container {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.faqadd-input-title input,
+.faqadd-input-content textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.faqadd-input-title input:focus,
+.faqadd-input-content textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #ffffff;
+}
+
+.faqUpdate-btn-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 12px;
+  justify-content: flex-end;
+}
+
+.customeradd-input-box {
+  max-width: 720px;
+  margin: 40px auto;
+  padding: 24px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 입력창 (제목, 비밀번호) */
+.customeradd-input-title input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  transition: border-color 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.customeradd-input-title input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #ffffff;
+}
+
+/* 질문 textarea */
+.customeradd-input-content textarea {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 16px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background-color: #f9fafb;
+  resize: vertical;
+  transition: border-color 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.customeradd-input-content textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background-color: #ffffff;
+}
+
+/* 버튼 컨테이너 */
+.customerAdd-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
 }

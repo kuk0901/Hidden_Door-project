@@ -81,16 +81,15 @@ const CustomerAddPage = () => {
               rows="4"
             />
           </div>
-          <button
-            className="customeradd-input-button"
-            type="submit"
-            disabled={isActive}
-          >
-            추가
-          </button>
-          <button className="btn" onClick={handleListCustomer}>
-            목록으로
-          </button>
+
+          <div className="customerAdd-btn-container">
+            <button className="btn" type="submit" disabled={isActive}>
+              추가
+            </button>
+            <button className="btn" onClick={handleListCustomer} type="button">
+              목록으로
+            </button>
+          </div>
         </form>
       </div>
     </section>
