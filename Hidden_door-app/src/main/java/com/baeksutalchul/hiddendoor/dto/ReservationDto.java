@@ -38,4 +38,5 @@ public class ReservationDto {
   private String reservationNumber;
   private String kstResTime;
   private String reservationDateStr;
+  private String themeName;
 }
