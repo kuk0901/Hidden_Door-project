@@ -21,14 +21,14 @@ const CustomerPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "queCreDate",
-      sortDirection: "ASC",
+      sortDirection: "ASC"
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: "",
+      searchTerm: ""
     }
   );
 
@@ -46,8 +46,8 @@ const CustomerPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm,
-        },
+          searchTerm
+        }
       });
 
       if (res.status !== 200) {
@@ -58,7 +58,7 @@ const CustomerPage = () => {
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm,
+        searchTerm: res.data.searchTerm
       });
     } catch (error) {
       toast.error(error.message || "질문을 불러오는데 실패했습니다.");
@@ -85,7 +85,7 @@ const CustomerPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "customerTitle", label: "제목" },
-    { value: "customerContent", label: "질문내용" },
+    { value: "customerContent", label: "질문내용" }
   ];
 
   const handleAddCustomer = () => {
@@ -96,15 +96,29 @@ const CustomerPage = () => {
     <>
       <section className="section section-cs">
         <div className="cs-body">
-          <div className="cs-header">고객센터</div>
+          <div className="cs-header">히든도어 고객센터</div>
 
           <div className="cs-move">
-            <div>
-              <a href={`/hidden_door/cs/faq`}>FAQ</a>
-            </div>
-            <div>
-              <a href={`/hidden_door/cs/customer`}>1:1 문의</a>
-            </div>
+            <a
+              href={`/hidden_door/cs/faq`}
+              className={
+                location.pathname === "/hidden_door/cs/faq"
+                  ? "link_active"
+                  : "link"
+              }
+            >
+              FAQ
+            </a>
+            <a
+              href={`/hidden_door/cs/customer`}
+              className={
+                location.pathname === "/hidden_door/cs/customer"
+                  ? "link_active"
+                  : "link"
+              }
+            >
+              1:1 문의
+            </a>
           </div>
 
           <div className="cs-search-section">

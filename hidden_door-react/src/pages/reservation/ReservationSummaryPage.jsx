@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
+import { formatPhoneNumber, formatNumberToPrice } from "@utils/format/number";
 
 const ReservationSummaryPage = () => {
   const { reservationNumber } = useParams();
@@ -53,11 +54,13 @@ const ReservationSummaryPage = () => {
         <p>예약 번호: {reservationDto.reservationNumber}</p>
         <p>이름: {reservationDto.name}</p>
         <p>이메일: {reservationDto.email}</p>
-        <p>전화번호: {reservationDto.phone}</p>
+        <p>전화번호: {formatPhoneNumber(reservationDto.phone)}</p>
         <p>예약 날짜: {reservationDto.kstResDate}</p>
         <p>예약 시간: {reservationDto.kstResTime}</p>
         <p>인원 수: {reservationDto.partySize}명</p>
-        <p>총 결제 금액: {reservationDto.paymentAmount}원</p>
+        <p>
+          총 결제 금액: {formatNumberToPrice(reservationDto.paymentAmount)}원
+        </p>
         <p>결제 방법: {reservationDto.paymentMethod}</p>
       </div>
     </section>

@@ -10,6 +10,8 @@ import com.baeksutalchul.hiddendoor.theme.repository.ThemeRepository;
 import com.baeksutalchul.hiddendoor.timeSlot.domain.TimeSlot;
 import com.baeksutalchul.hiddendoor.timeSlot.repository.TimeSlotRepository;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
+import com.baeksutalchul.hiddendoor.utils.page.PageDto;
+import com.baeksutalchul.hiddendoor.utils.page.PageableUtil;
 import com.baeksutalchul.hiddendoor.utils.random.RandomString;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -27,6 +29,8 @@ import java.util.stream.IntStream;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,36 +55,61 @@ public class ReservationService {
         this.timeSlotRepository = timeSlotRepository;
     }
 
-    public ResponseDto<List<ReservationDto>> getReservationAll() {
-        List<Reservation> reservationList = reservationRepository.findAll();
-
-        List<ReservationDto> reservationDtoList = reservationList.stream()
+    public ResponseDto<List<ReservationDto>> getReservationAll(PageDto pageDto) {
+        Pageable pageable = PageableUtil.createPageRequest(
+            Math.max(0, pageDto.getPage() - 1),
+            pageDto.getSize(),
+            pageDto.getSortField(),
+            pageDto.getSortDirection()
+        );
+    
+        Page<Reservation> reservationPage = reservationRepository.findAll(pageable);
+    
+        List<ReservationDto> reservationDtoList = reservationPage.getContent().stream()
             .map(reservation -> {
                 ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
-                reservationDto
-                        .setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
-                reservationDto
-                        .setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
+                reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
+                reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
                 reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
                 return reservationDto;
             })
             .toList();
-
-        return new ResponseDto<>(reservationDtoList, "예약 데이터 반환");
+    
+        // PageDto 생성
+        PageDto resultPageDto = PageableUtil.createPageDto(reservationPage);
+    
+        // ResponseDto에 리스트와 페이지 정보 모두 담아서 반환
+        return new ResponseDto<>(reservationDtoList, "예약 데이터 반환", resultPageDto);
     }
+    
 
     public ResponseDto<ReservationDto> getReservationById(String reservationId) {
         Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
-
+    
         if (reservationOptional.isEmpty()) {
             return new ResponseDto<>(null, "예약 정보를 찾을 수 없습니다.");
         }
-
+    
         Reservation reservation = reservationOptional.get();
         ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
-        reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDateTime(reservation.getReservationDate()));
+    
+        reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationDate())); // "2025년 04월 10일"
+        reservationDto.setKstResTime(DateTimeUtil.convertToKoreanTime(reservation.getReservationDate())); // "23:00"
         reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
         reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
+        reservationDto.setPaymentMethod(reservation.getPaymentMethod());
+        reservationDto.setPaymentState(reservation.getPaymentState());
+    
+        // themeId로 themeName 조회해서 세팅
+        System.out.println("themeId: " + reservation.getThemeId());
+        themeRepository.findById(reservation.getThemeId())
+            .ifPresentOrElse(
+                theme -> {
+                    System.out.println("themeName: " + theme.getThemeName());
+                    reservationDto.setThemeName(theme.getThemeName()); // ★ 이 줄 추가!
+                },
+                () -> System.out.println("Theme not found!")
+            );
 
         return new ResponseDto<>(reservationDto, "예약 상세 정보 반환");
     }
