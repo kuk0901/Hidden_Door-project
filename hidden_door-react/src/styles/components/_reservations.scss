@@ -126,6 +126,7 @@
     flex-direction: row;
     gap: 20px;
     align-items: stretch;
+    flex-wrap: wrap;
   }
 
   .section-title {
@@ -536,4 +537,8 @@
       }
     }
   }
+}
+
+.admin-reservation-page {
+  min-height: 600px;
 }

@@ -15,7 +15,7 @@ const AdminReservationPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "reservationCreDate",
-      sortDirection: "ASC",
+      sortDirection: "ASC"
     }
   );
 
@@ -27,8 +27,8 @@ const AdminReservationPage = () => {
           page: newPage,
           size,
           sortField,
-          sortDirection,
-        },
+          sortDirection
+        }
       });
 
       if (res.status !== 200) {
@@ -55,7 +55,8 @@ const AdminReservationPage = () => {
 
   return (
     <>
-      <section>
+      <section className="admin-reservation-page">
+        {/* XXX: 페이지 알려주는 div 태그 대신 검색 기능 추가해주세요~ */}
         <div>예약 확인 페이지</div>
 
         <div className="reservation-list-container">
