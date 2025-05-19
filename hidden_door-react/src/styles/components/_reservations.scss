@@ -72,9 +72,25 @@
 
 .reservation-detail-container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 70vh;
+
+  .return-admin-reservation-list {
+    margin-top: 32px; // 버튼과 상세 내용 사이 여백
+    padding: 12px 32px;
+    font-size: 18px;
+    border-radius: 6px;
+    background: #222;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s;
+    &:hover {
+      background: #444;
+    }
+  }
 
   .reservation-detail {
     text-align: center;

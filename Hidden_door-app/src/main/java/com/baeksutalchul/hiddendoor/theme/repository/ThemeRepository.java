@@ -28,4 +28,6 @@ public interface ThemeRepository extends MongoRepository<Theme, String> {
 
   @Query(value = "{}", fields = "{ 'themeId': 1, 'themeName': 1, 'minParticipants': 1, 'maxParticipants': 1, 'price': 1 }")
   List<Theme> findAllThemesWithPriceInfo();
+
+  List<Theme> findByThemeNameContaining(String themeName);
 }
