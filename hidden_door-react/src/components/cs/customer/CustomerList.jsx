@@ -1,6 +1,6 @@
 import CustomerItem from "./CustomerItem";
 
-const CustomerList = ({ customerList }) => {
+const CustomerList = ({ customerList, page, search }) => {
   return (
     <ul className="faq-container">
       <li className="faq-li-header">
@@ -9,7 +9,12 @@ const CustomerList = ({ customerList }) => {
         <div>날짜</div>
       </li>
       {customerList.map((customer) => (
-        <CustomerItem key={customer.customerId} customer={customer} />
+        <CustomerItem
+          key={customer.customerId}
+          page={{ ...page }}
+          search={{ ...search }}
+          customer={customer}
+        />
       ))}
     </ul>
   );

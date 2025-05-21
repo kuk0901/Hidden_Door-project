@@ -22,14 +22,14 @@ const FaqPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "creDate",
-      sortDirection: "ASC"
+      sortDirection: "ASC",
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: ""
+      searchTerm: "",
     }
   );
 
@@ -43,11 +43,10 @@ const FaqPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm
-        }
+          searchTerm,
+        },
       });
 
-      console.log(page);
       if (res.status !== 200) {
         toast.error("FAQ불러오기에 실패했습니다.");
       }
@@ -56,7 +55,7 @@ const FaqPage = () => {
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm
+        searchTerm: res.data.searchTerm,
       });
     } catch (error) {
       toast.error(error.message || "오류입니다");
@@ -77,9 +76,21 @@ const FaqPage = () => {
     }
 
     setSearchParams({});
-
-    getAllFaq();
   }, []);
+
+  useEffect(() => {
+    if (location.state?.page || location.state?.search) {
+      setPage(location.state.page);
+      setSearch(location.state.search);
+      getAllFaq(
+        location.state.page.page,
+        location.state.search.searchField,
+        location.state.search.searchTerm
+      );
+    } else {
+      getAllFaq();
+    }
+  }, [location.state]);
 
   const handleReset = () => {
     setSearch({ searchField: "", searchTerm: "" });
@@ -89,7 +100,7 @@ const FaqPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "title", label: "제목" },
-    { value: "question", label: "질문내용" }
+    { value: "question", label: "질문내용" },
   ];
 
   const handleAddFaq = () => {
@@ -142,7 +153,11 @@ const FaqPage = () => {
           </div>
 
           <div className="cs-main-container">
-            <FaqList faqList={faqList} />
+            <FaqList
+              faqList={faqList}
+              page={{ ...page }}
+              search={{ ...search }}
+            />
           </div>
 
           <Pagination page={page} onPageChange={handlePageChange} />

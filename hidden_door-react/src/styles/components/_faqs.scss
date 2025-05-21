@@ -122,7 +122,8 @@
       .faq-li-header div {
         display: table-cell; /* 각 항목을 테이블 셀로 설정 */
         padding: 8px; /* 각 셀에 여백 추가 */
-        border: 1px solid; /* 셀에 테두리 추가 */
+        margin-top: 5px;
+        margin-bottom: 5px;
       }
 
       .faq-li-header .faq-title {
@@ -138,10 +139,15 @@
         display: table-row; /* 각 FAQ 항목을 테이블 행으로 설정 */
       }
 
+      .title-div {
+        font-weight: bold;
+      }
+
       .faq-tr-content div {
         display: table-cell; /* 항목들을 셀로 설정 */
         padding: 8px;
-        border: 1px solid; /* 셀에 테두리 추가 */
+        margin-top: 5px;
+        margin-bottom: 5px;
 
         a {
           color: variables.$light-text-color;
