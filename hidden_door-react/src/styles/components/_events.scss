@@ -2,6 +2,8 @@
 @use 'sass:color';
 @use '../abstracts/mixins';
 
+// 반응형 코드 22일 이후로 만들기
+
 .event-page {
   display: flex;
   flex-direction: column;
@@ -162,7 +164,7 @@
         display: flex;
         flex-direction: column;
         // XXX: input과 label은 간격을 조금 띄워주세요!
-        
+
         & > div {
           // 이벤트 유형 (체크박스)
           display: flex;

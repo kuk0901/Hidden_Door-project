@@ -1,5 +1,7 @@
-@use "../abstracts/variables";
-@use "sass:color";
+@use '../abstracts/variables';
+@use 'sass:color';
+
+// 반응형 코드 22일 이후로 만들기
 
 // 다크 모드 mixin
 @mixin dark-mode {
