@@ -1,6 +1,6 @@
 import FaqItem from "./FaqItem";
 
-const FaqList = ({ faqList }) => {
+const FaqList = ({ faqList, page, search }) => {
   return (
     <ul className="faq-container">
       <li className="faq-li-header">
@@ -8,7 +8,12 @@ const FaqList = ({ faqList }) => {
         <div>날짜</div>
       </li>
       {faqList.map((faq) => (
-        <FaqItem key={faq.faqId} faq={faq} />
+        <FaqItem
+          key={faq.faqId}
+          faq={faq}
+          page={{ ...page }}
+          search={{ ...search }}
+        />
       ))}
     </ul>
   );
