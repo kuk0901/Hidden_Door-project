@@ -1,6 +1,5 @@
 package com.baeksutalchul.hiddendoor.reservation.service;
 
-import com.baeksutalchul.hiddendoor.customer.domain.Customer;
 import com.baeksutalchul.hiddendoor.dto.ReservationDto;
 import com.baeksutalchul.hiddendoor.error.enums.ErrorCode;
 import com.baeksutalchul.hiddendoor.error.exception.CustomException;
@@ -9,7 +8,6 @@ import com.baeksutalchul.hiddendoor.reservation.domain.Reservation;
 import com.baeksutalchul.hiddendoor.reservation.repository.ReservationRepository;
 import com.baeksutalchul.hiddendoor.theme.domain.Theme;
 import com.baeksutalchul.hiddendoor.theme.repository.ThemeRepository;
-import com.baeksutalchul.hiddendoor.theme.service.ThemeService;
 import com.baeksutalchul.hiddendoor.timeSlot.domain.TimeSlot;
 import com.baeksutalchul.hiddendoor.timeSlot.repository.TimeSlotRepository;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
@@ -46,7 +44,6 @@ public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final ModelMapper modelMapper;
     private final ThemeRepository themeRepository;
-    private final ThemeService themeService;
     private final TimeSlotRepository timeSlotRepository;
     private final Logger logger = LoggerFactory.getLogger(ReservationService.class);
     private final Instant defaultInstant = Instant.parse("1970-01-01T00:00:00Z");
@@ -55,88 +52,75 @@ public class ReservationService {
             ReservationRepository reservationRepository,
             ModelMapper modelMapper,
             ThemeRepository themeRepository,
-            ThemeService themeService,
             TimeSlotRepository timeSlotRepository) {
         this.reservationRepository = reservationRepository;
         this.modelMapper = modelMapper;
         this.themeRepository = themeRepository;
-        this.themeService = themeService;
         this.timeSlotRepository = timeSlotRepository;
     }
 
     public ResponseDto<List<ReservationDto>> getReservationAll(PageDto pageDto, String searchField, String searchTerm) {
         Pageable pageable = PageableUtil.createPageRequest(
-            Math.max(0, pageDto.getPage() - 1),
-            pageDto.getSize(),
-            pageDto.getSortField(),
-            pageDto.getSortDirection()
-        );
-    
+                Math.max(0, pageDto.getPage() - 1),
+                pageDto.getSize(),
+                pageDto.getSortField(),
+                pageDto.getSortDirection());
+
+        List<Theme> allThemes = themeRepository.findAll();
+        Map<String, String> themeIdNameMap = allThemes.stream()
+                .collect(Collectors.toMap(Theme::getThemeId, Theme::getThemeName));
+
         Page<Reservation> reservationList;
-    
+
         if (searchTerm != null && !searchTerm.trim().isEmpty()) {
             switch (searchField) {
                 case "name":
-                    reservationList = reservationRepository.findByNameContainingOrderByReservationCreDateAsc(searchTerm, pageable);
+                    reservationList = reservationRepository.findByNameContainingOrderByReservationCreDateAsc(searchTerm,
+                            pageable);
                     break;
                 case "themeName":
-                List<Theme> themes = themeRepository.findByThemeNameContaining(searchTerm);
-                    themes.forEach(theme -> logger.info(theme.getThemeName()));
-                    
-                    List<String> themeIds = themes.stream()
-                        .map(Theme::getThemeId)
-                        .collect(Collectors.toList());
+                    List<String> themeIds = allThemes.stream()
+                            .filter(theme -> theme.getThemeName().contains(searchTerm))
+                            .map(Theme::getThemeId)
+                            .toList();
+
                     if (themeIds.isEmpty()) {
                         Page<Reservation> emptyPage = new PageImpl<>(Collections.emptyList(), pageable, 0);
                         return new ResponseDto<>(
-                            Collections.emptyList(),
-                            "예약 데이터 없음",
-                            PageableUtil.createPageDto(emptyPage),
-                            searchField,
-                            searchTerm
-                        );
+                                Collections.emptyList(),
+                                "예약 데이터 없음",
+                                PageableUtil.createPageDto(emptyPage),
+                                searchField,
+                                searchTerm);
                     }
-                    reservationList = reservationRepository.findByThemeIdInOrderByReservationCreDateAsc(themeIds, pageable);
+
+                    reservationList = reservationRepository.findByThemeIdInOrderByReservationCreDateAsc(themeIds,
+                            pageable);
                     break;
                 default:
-                    List<Theme> themesDefault = themeRepository.findByThemeNameContaining(searchTerm);
-                    List<String> themeIdsDefault = themesDefault.stream()
-                        .map(Theme::getThemeId)
-                        .collect(Collectors.toList());
-                    if (themeIdsDefault.isEmpty()) {
-                        reservationList = reservationRepository.findByNameContainingOrderByReservationCreDateAsc(searchTerm, pageable);
-                    } else {
-                        reservationList = reservationRepository.findByNameContainingOrThemeIdInOrderByReservationCreDateAsc(
-                            searchTerm, themeIdsDefault, pageable
-                        );
-                    }
+                    reservationList = reservationRepository.findAllByOrderByReservationCreDateAsc(pageable);
             }
         } else {
-            reservationList = reservationRepository.findAll(pageable);
+            reservationList = reservationRepository.findAllByOrderByReservationCreDateAsc(pageable);
         }
-    
+
+        // XXX: reservationList.getContent()가 비어있을 때 예외 처리가 아닌 비어있는 데이터 반환
+        // 화면에서 비어있는 데이터 처리로 이어져야 함
         if (reservationList.isEmpty()) {
             throw new CustomException(ErrorCode.RESERVATION_NOT_FOUND);
         }
-    
-        Set<String> themeIdsForMap = reservationList.getContent().stream()
-            .map(Reservation::getThemeId)
-            .collect(Collectors.toSet());
-        List<Theme> themesForMap = themeRepository.findAllById(themeIdsForMap);
-        Map<String, String> themeIdNameMap = themesForMap.stream()
-            .collect(Collectors.toMap(Theme::getThemeId, Theme::getThemeName));
-    
+
         List<ReservationDto> reservationDtoList = reservationList.getContent().stream()
-            .map(reservation -> {
-                ReservationDto dto = modelMapper.map(reservation, ReservationDto.class);
-                dto.setThemeName(themeIdNameMap.getOrDefault(reservation.getThemeId(), ""));
-                dto.setKstResDate(DateTimeUtil.convertToKoreanDateTimeNoSeconds(reservation.getReservationDate()));
-                dto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
-                dto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
-                return dto;
-            })
-            .toList();
-    
+                .map(reservation -> {
+                    ReservationDto dto = modelMapper.map(reservation, ReservationDto.class);
+                    dto.setThemeName(themeIdNameMap.getOrDefault(reservation.getThemeId(), ""));
+                    dto.setKstResDate(DateTimeUtil.convertToKoreanDateTimeNoSeconds(reservation.getReservationDate()));
+                    dto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
+                    dto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
+                    return dto;
+                })
+                .toList();
+
         PageDto resultPageDto = PageableUtil.createPageDto(reservationList);
         return new ResponseDto<>(reservationDtoList, "예약 데이터 반환", resultPageDto, searchField, searchTerm);
     }
@@ -159,7 +143,7 @@ public class ReservationService {
         reservationDto.setPaymentState(reservation.getPaymentState());
 
         themeRepository.findById(reservation.getThemeId())
-            .ifPresent(theme -> reservationDto.setThemeName(theme.getThemeName()));
+                .ifPresent(theme -> reservationDto.setThemeName(theme.getThemeName()));
 
         return new ResponseDto<>(reservationDto, "예약 상세 정보 반환");
     }
@@ -182,22 +166,22 @@ public class ReservationService {
 
     public ResponseDto<Map<String, Object>> getAvailableTimeSlots(String date, String themeId) {
         TimeSlot timeSlot = timeSlotRepository.findByThemeIdAndDate(themeId, date)
-            .orElseThrow(() -> new CustomException(ErrorCode.TIME_SLOT_NOT_FOUND));
-    
+                .orElseThrow(() -> new CustomException(ErrorCode.TIME_SLOT_NOT_FOUND));
+
         List<Map<String, Object>> availableTimeSlots = timeSlot.getSlots().stream()
-            .map(slot -> {
-                Map<String, Object> slotInfo = new HashMap<>();
-                slotInfo.put("time", slot.getTime());
-                slotInfo.put("isAvailable", !slot.isBooked());
-                return slotInfo;
-            })
-            .toList();
-    
+                .map(slot -> {
+                    Map<String, Object> slotInfo = new HashMap<>();
+                    slotInfo.put("time", slot.getTime());
+                    slotInfo.put("isAvailable", !slot.isBooked());
+                    return slotInfo;
+                })
+                .toList();
+
         Map<String, Object> responseData = new HashMap<>();
         responseData.put("timeSlots", availableTimeSlots);
         return new ResponseDto<>(responseData, "예약 가능 시간 조회 성공");
     }
-    
+
     @Transactional
     public ResponseDto<ReservationDto> createReservation(ReservationDto dto) {
         String themeId = dto.getThemeId();
@@ -255,23 +239,22 @@ public class ReservationService {
             ZoneId zoneId = ZoneId.of("Asia/Seoul");
             return dateTime.atZone(zoneId).toInstant();
         } catch (DateTimeParseException e) {
-            System.err.println("combineDateTime error: dateStr=" + dateStr + ", timeStr=" + timeStr);
+            logger.error(e.getMessage());
             throw new CustomException(ErrorCode.INVALID_DATE_FORMAT, "잘못된 날짜 또는 시간 형식입니다.");
         }
     }
-    
 
     public ResponseDto<ReservationDto> getReservationSummary(String reservationNumber) {
         Reservation reservation = reservationRepository.findByReservationNumber(reservationNumber)
                 .orElseThrow(() -> new CustomException(ErrorCode.RESERVATION_NOT_FOUND, "예약을 찾을 수 없습니다."));
-    
+
         ReservationDto dto = modelMapper.map(reservation, ReservationDto.class);
         dto.setKstResTime(DateTimeUtil.convertToKoreanTime(reservation.getReservationDate())); // 명시적 추가
-        
+
         // 날짜/시간 변환 강화
         dto.setKstResDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationDate()));
         dto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
-        
+
         return new ResponseDto<>(dto, "예약 요약 정보 조회 성공");
     }
 

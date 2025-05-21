@@ -211,17 +211,15 @@ public class AdminService {
       adminPage = adminRepository.findAllByOrderByRolesCountDesc(pageable);
     }
 
-    if (adminPage.isEmpty()) {
-      throw new CustomException(ErrorCode.ADMIN_NOT_FOUND);
-    }
-
     List<AdminDto> adminDtoList = adminPage.getContent().stream()
         .map(admin -> modelMapper.map(admin, AdminDto.class))
         .toList();
 
     PageDto resultPageDto = PageableUtil.createPageDto(adminPage);
 
-    return new ResponseDto<>(adminDtoList, "success", resultPageDto, searchField, searchTerm);
+    String message = adminDtoList.isEmpty() ? "관리자 정보가 없습니다." : "success";
+
+    return new ResponseDto<>(adminDtoList, message, resultPageDto, searchField, searchTerm);
   }
 
   public ResponseDto<AdminDto> getAdminInfo(String adminId) {

@@ -557,4 +557,32 @@
 
 .admin-reservation-page {
   min-height: 600px;
+
+  .search-form {
+    @include mixins.flex-layout-row-with-gap($align: center, $gap: 10px);
+
+    .search-select {
+      font-size: 16px;
+      padding: 3px;
+    }
+
+    .search-input {
+      display: inline-block;
+      width: 250px;
+      margin: 0;
+      font-size: 16px;
+      border: 1px solid #000;
+      background-color: #fff;
+      padding: 3px;
+      color: #000;
+
+      @include mixins.dark-mode {
+        border-color: #fff;
+      }
+    }
+
+    .btn-container {
+      gap: 10px;
+    }
+  }
 }
