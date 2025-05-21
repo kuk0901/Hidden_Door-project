@@ -147,7 +147,7 @@ const FaqPage = () => {
           <div className="btn-container">
             {isSuperAdmin && (
               <button className="btn" onClick={handleAddFaq}>
-                FAQ추가
+                FAQ 추가
               </button>
             )}
           </div>
