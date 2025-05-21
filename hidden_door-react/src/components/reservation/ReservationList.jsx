@@ -1,6 +1,6 @@
 import ReservationItem from "./ReservationItem";
 
-const ReservationList = ({ reservationList }) => {
+const ReservationList = ({ reservationList, page, search }) => {
   return (
     <ul className="reservation--list">
       <li className="reservation--item">
@@ -13,6 +13,8 @@ const ReservationList = ({ reservationList }) => {
         <ReservationItem
           key={reservation.reservationId}
           reservation={reservation}
+          page={page}
+          search={search}
         />
       ))}
     </ul>

@@ -92,4 +92,13 @@ public class DateTimeUtil {
     return ZonedDateTime.ofInstant(instant, KST_ZONE)
                        .format(TIME_FORMATTER);
   }
+
+  public static String convertToKoreanDateTimeNoSeconds(Instant instant) {
+    if (instant.equals(DEFAULT_INSTANT)) {
+        return "";
+    }
+    ZonedDateTime kstZdt = ZonedDateTime.ofInstant(instant, KST_ZONE);
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy년 MM월 dd일 HH시 mm분");
+    return kstZdt.format(formatter);
+  }
 }
