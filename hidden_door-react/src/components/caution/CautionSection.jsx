@@ -20,7 +20,7 @@ const CautionSection = () => {
         return;
       }
 
-      setCautionList(res.data.data);
+      setCautionList(res.data?.data);
       setLoading(false);
     } catch (error) {
       toast.error(

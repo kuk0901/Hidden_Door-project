@@ -140,8 +140,12 @@ const ThemePage = () => {
   return (
     <>
       <Header
-        title={escapeRoom.themeHeaderTitle}
-        subtitle={escapeRoom.themeHeaderSubtitle}
+        title={
+          escapeRoom.themeHeaderTitle || "방탈출 카페 정보를 추가해주세요."
+        }
+        subtitle={
+          escapeRoom.themeHeaderSubtitle || "방탈출 카페 정보를 추가해주세요."
+        }
         text="제목 수정"
         reservation={true}
         handleUpdate={() => setTitleVisible(!titleVisible)}
@@ -151,7 +155,9 @@ const ThemePage = () => {
         <>
           <InfoEditForm
             labelVal="제목"
-            currentTitle={escapeRoom.themeHeaderTitle}
+            currentTitle={
+              escapeRoom.themeHeaderTitle || "방탈출 카페 정보를 추가해주세요."
+            }
             onRef={titleRef}
             autoFocus={true}
             id="themeHeaderTitle"
@@ -160,7 +166,10 @@ const ThemePage = () => {
 
           <InfoEditForm
             labelVal="부제목"
-            currentTitle={escapeRoom.themeHeaderSubtitle}
+            currentTitle={
+              escapeRoom.themeHeaderSubtitle ||
+              "방탈출 카페 정보를 추가해주세요."
+            }
             onRef={subtitleRef}
             viewButton={true}
             onUpdate={handleThemeTitleLineUpdate}
@@ -172,10 +181,13 @@ const ThemePage = () => {
       )}
 
       <section className="theme-page--info">
-        <p className="theme--title text-center">{escapeRoom.themeTitle}</p>
-        <p className="theme--explanation text-center">
-          {escapeRoom.themeExplanation}
+        <p className="theme--title text-center">
+          {escapeRoom.themeTitle || "방탈출 카페 정보를 추가해주세요."}
         </p>
+        <p className="theme--explanation text-center">
+          {escapeRoom.themeExplanation || "방탈출 카페 정보를 추가해주세요."}
+        </p>
+
         {isAdmin && (
           <div className="btn-container">
             <button
@@ -192,7 +204,9 @@ const ThemePage = () => {
         <>
           <InfoEditForm
             labelVal="테마 제목"
-            currentTitle={escapeRoom.themeTitle}
+            currentTitle={
+              escapeRoom.themeTitle || "방탈출 카페 정보를 추가해주세요."
+            }
             onRef={titleDetailRef}
             autoFocus={true}
             id="themeTitle"
@@ -201,7 +215,9 @@ const ThemePage = () => {
 
           <InfoEditForm
             labelVal="테마 설명"
-            currentTitle={escapeRoom.themeExplanation}
+            currentTitle={
+              escapeRoom.themeExplanation || "방탈출 카페 정보를 추가해주세요."
+            }
             onRef={explanationRef}
             viewButton={true}
             area={true}
