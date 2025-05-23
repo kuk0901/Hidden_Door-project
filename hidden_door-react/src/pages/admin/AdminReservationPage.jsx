@@ -3,8 +3,11 @@ import Api from "@axios/api";
 import { toast } from "react-toastify";
 import Pagination from "@components/common/navigation/pagination/Pagination";
 import ReservationList from "../../components/reservation/ReservationList";
+import SearchForm from "@components/common/form/SearchForm";
+import { useLocation } from "react-router-dom";
 
 const AdminReservationPage = () => {
+  const location = useLocation();
   const [reservationList, setReservationList] = useState([]);
   const [page, setPage] = useState(
     location.state?.page || {
@@ -15,11 +18,27 @@ const AdminReservationPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "reservationCreDate",
-      sortDirection: "ASC"
+      sortDirection: "ASC",
     }
   );
 
-  const getAllReservation = async (newPage = 1) => {
+  const [search, setSearch] = useState(
+    location.state?.search || {
+      searchField: "",
+      searchTerm: "",
+    }
+  );
+
+  useEffect(() => {
+    if (location.state?.page) setPage(location.state.page);
+    if (location.state?.search) setSearch(location.state.search);
+  }, [location.state]);
+
+  const getAllReservation = async (
+    newPage = 1,
+    searchField = "",
+    searchTerm = ""
+  ) => {
     try {
       const { size, sortField, sortDirection } = page;
       const res = await Api.get("/reservations/list", {
@@ -27,8 +46,10 @@ const AdminReservationPage = () => {
           page: newPage,
           size,
           sortField,
-          sortDirection
-        }
+          sortDirection,
+          searchField,
+          searchTerm,
+        },
       });
 
       if (res.status !== 200) {
@@ -39,28 +60,81 @@ const AdminReservationPage = () => {
       }
 
       setReservationList(res.data.data);
-      setPage(res.data.pageDto);
+
+      setPage({
+        ...res.data.pageDto,
+        sortField,
+        sortDirection,
+      });
+
+      setSearch({
+        searchField: res.data.searchField,
+        searchTerm: res.data.searchTerm,
+      });
     } catch (error) {
       toast.error(error.message || "오류입니다.");
     }
   };
 
+  const handleSearch = (searchField, searchTerm) => {
+    getAllReservation(
+      1,
+      searchField,
+      searchTerm,
+      page.sortField,
+      page.sortDirection
+    );
+  };
+
   const handlePageChange = (newPage) => {
-    getAllReservation(newPage);
+    getAllReservation(
+      newPage,
+      search.searchField,
+      search.searchTerm,
+      page.sortField,
+      page.sortDirection
+    );
   };
 
   useEffect(() => {
-    getAllReservation();
+    getAllReservation(
+      1,
+      search.searchField,
+      search.searchTerm,
+      page.sortField,
+      page.sortDirection
+    );
   }, []);
+
+  const handleReset = () => {
+    setSearch({ searchField: "", searchTerm: "" });
+    getAllReservation(1, "", "", page.sortField, page.sortDirection);
+  };
+
+  const searchFields = [
+    { value: "", label: "검색 필드 선택" },
+    { value: "name", label: "성함" },
+    { value: "themeName", label: "테마명" },
+  ];
 
   return (
     <>
       <section className="admin-reservation-page">
-        {/* XXX: 페이지 알려주는 div 태그 대신 검색 기능 추가해주세요~ */}
-        <div>예약 확인 페이지</div>
+        <div>
+          <SearchForm
+            onSearch={handleSearch}
+            fields={searchFields}
+            initialValues={search}
+            onReset={handleReset}
+          />
+        </div>
 
         <div className="reservation-list-container">
-          <ReservationList reservationList={reservationList} />
+          <ReservationList
+            reservationList={reservationList}
+            page={page}
+            search={search}
+          />
         </div>
         <Pagination page={page} onPageChange={handlePageChange} />
       </section>

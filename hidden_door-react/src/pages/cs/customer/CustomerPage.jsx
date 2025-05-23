@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
@@ -8,6 +8,7 @@ import Pagination from "@components/common/navigation/pagination/Pagination";
 import CustomerList from "../../../components/cs/customer/CustomerList";
 
 const CustomerPage = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const location = useLocation();
   const { admin } = useAdmin();
   const [customerList, setCustomerList] = useState([]);
@@ -21,14 +22,14 @@ const CustomerPage = () => {
       isFirst: true,
       isLast: true,
       sortField: "queCreDate",
-      sortDirection: "ASC"
+      sortDirection: "ASC",
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
       searchField: "",
-      searchTerm: ""
+      searchTerm: "",
     }
   );
 
@@ -46,8 +47,8 @@ const CustomerPage = () => {
           sortField,
           sortDirection,
           searchField,
-          searchTerm
-        }
+          searchTerm,
+        },
       });
 
       if (res.status !== 200) {
@@ -58,7 +59,7 @@ const CustomerPage = () => {
       setPage(res.data.pageDto);
       setSearch({
         searchField: res.data.searchField,
-        searchTerm: res.data.searchTerm
+        searchTerm: res.data.searchTerm,
       });
     } catch (error) {
       toast.error(error.message || "질문을 불러오는데 실패했습니다.");
@@ -74,8 +75,26 @@ const CustomerPage = () => {
   };
 
   useEffect(() => {
-    getAllCustomer();
+    if (searchParams.get("delete") === "true") {
+      toast.success("FAQ가 삭제되었습니다.");
+    }
+
+    setSearchParams({});
   }, []);
+
+  useEffect(() => {
+    if (location.state?.page || location.state?.search) {
+      setPage(location.state.page);
+      setSearch(location.state.search);
+      getAllCustomer(
+        location.state.page.page,
+        location.state.search.searchField,
+        location.state.search.searchTerm
+      );
+    } else {
+      getAllCustomer();
+    }
+  }, [location.state]);
 
   const handleReset = () => {
     setSearch({ searchField: "", searchTerm: "" });
@@ -85,7 +104,7 @@ const CustomerPage = () => {
   const searchFields = [
     { value: "", label: "검색 필드 선택" },
     { value: "customerTitle", label: "제목" },
-    { value: "customerContent", label: "질문내용" }
+    { value: "customerContent", label: "질문내용" },
   ];
 
   const handleAddCustomer = () => {
@@ -139,7 +158,11 @@ const CustomerPage = () => {
           </div>
 
           <div className="cs-main-container">
-            <CustomerList customerList={customerList} />
+            <CustomerList
+              customerList={customerList}
+              page={{ ...page }}
+              search={{ ...search }}
+            />
           </div>
 
           <Pagination page={page} onPageChange={handlePageChange} />

@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
@@ -15,6 +20,9 @@ const CustomerDetailPage = () => {
   const [isAnswering, setIsAnswering] = useState(false);
   const navigate = useNavigate();
   const confirm = useConfirm();
+  const location = useLocation();
+  const [page, setPage] = useState(location.state?.page || {});
+  const [search, setSearch] = useState(location.state?.search || {});
 
   const getCustomerDetail = async () => {
     try {
@@ -26,7 +34,7 @@ const CustomerDetailPage = () => {
   };
 
   const handleListCustomer = () => {
-    navigate("/hidden_door/cs/customer");
+    navigate("/hidden_door/cs/customer", { state: { page, search } });
   };
 
   const deleteCustomer = async () => {
@@ -85,6 +93,13 @@ const CustomerDetailPage = () => {
     setSearchParams({});
     getCustomerDetail();
   }, []);
+
+  useEffect(() => {
+    if (location.state) {
+      setPage(location.state.page);
+      setSearch(location.state.search);
+    }
+  }, [location.state]);
 
   return (
     <section className="customer-detail-container">

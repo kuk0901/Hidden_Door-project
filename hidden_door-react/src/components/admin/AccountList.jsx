@@ -19,18 +19,24 @@ const AccountList = ({
         {role && <div className="content content--xs">계정 삭제</div>}
       </li>
 
-      {adminList.map((adminData) => (
-        <AccountItem
-          page={page}
-          search={search}
-          key={adminData.adminId}
-          adminData={adminData}
-          setAdminList={setAdminList}
-          setPage={setPage}
-          setSearch={setSearch}
-          role={role}
-        />
-      ))}
+      {adminList.length > 0 ? (
+        adminList.map((adminData) => (
+          <AccountItem
+            page={page}
+            search={search}
+            key={adminData.adminId}
+            adminData={adminData}
+            setAdminList={setAdminList}
+            setPage={setPage}
+            setSearch={setSearch}
+            role={role}
+          />
+        ))
+      ) : (
+        <div className="account--empty">
+          <p>등록된 관리자가 없습니다.</p>
+        </div>
+      )}
     </ul>
   );
 };

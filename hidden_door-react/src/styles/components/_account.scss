@@ -3,6 +3,12 @@
 @use "../abstracts/variables";
 
 .account--section {
+  .no-data {
+    p {
+      font-weight: 700;
+    }
+  }
+
   .account--list {
     border: 1px solid;
     padding: 10px 10px 0;

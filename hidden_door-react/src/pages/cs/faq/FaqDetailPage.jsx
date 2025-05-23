@@ -1,5 +1,10 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate, useSearchParams } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useAdmin } from "@hooks/useAdmin";
@@ -11,6 +16,9 @@ const FaqDetailPage = () => {
   const { faqId } = useParams();
   const [faqDetail, setFaqDetail] = useState(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const [page, setPage] = useState(location.state?.page || {});
+  const [search, setSearch] = useState(location.state?.search || {});
 
   const getFaqDetail = async () => {
     try {
@@ -27,7 +35,7 @@ const FaqDetailPage = () => {
   };
 
   const handleListFaq = () => {
-    navigate("/hidden_door/cs/faq");
+    navigate("/hidden_door/cs/faq", { state: { page, search } });
   };
 
   const handleUpdateFaq = () => {
@@ -46,6 +54,13 @@ const FaqDetailPage = () => {
     setSearchParams({});
     getFaqDetail();
   }, []);
+
+  useEffect(() => {
+    if (location.state) {
+      setPage(location.state.page);
+      setSearch(location.state.search);
+    }
+  }, [location.state]);
 
   return (
     <section className="faq-detail-container">
