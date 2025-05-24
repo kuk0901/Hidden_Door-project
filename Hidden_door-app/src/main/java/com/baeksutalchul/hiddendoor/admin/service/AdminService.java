@@ -217,7 +217,6 @@ public class AdminService {
 
     PageDto resultPageDto = PageableUtil.createPageDto(adminPage);
 
-    // TODO: 데이터가 없을 경우 처리 필요
     String message = adminDtoList.isEmpty() ? "관리자 정보가 없습니다." : "success";
 
     return new ResponseDto<>(adminDtoList, message, resultPageDto, searchField, searchTerm);
