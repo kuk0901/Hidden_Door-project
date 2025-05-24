@@ -32,7 +32,7 @@ const EventList = ({ data }) => {
   return (
     <div className="event--list">
       <Slider {...settings}>
-        {data.map((event) => (
+        {data?.map((event) => (
           <EventItem key={event.eventId} event={event} />
         ))}
       </Slider>

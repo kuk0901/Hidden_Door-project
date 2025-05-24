@@ -38,7 +38,9 @@ public class CautionService {
         .map(caution -> modelMapper.map(caution, CautionDto.class))
         .toList();
 
-    return new ResponseDto<>(cautionDtoList, "success");
+    String msg = cautionDtoList.isEmpty() ? "주의사항이 없습니다." : "success";
+
+    return new ResponseDto<>(cautionDtoList, msg);
   }
 
   @Transactional

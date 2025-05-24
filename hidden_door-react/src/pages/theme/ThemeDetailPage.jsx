@@ -98,8 +98,14 @@ const ThemeDetailPage = () => {
   return (
     <>
       <Header
-        title={escapeRoom.themeDetailHeaderTitle}
-        subtitle={escapeRoom.themeDetailHeaderSubtitle}
+        title={
+          escapeRoom.themeDetailHeaderTitle ||
+          "방탈출 카페 정보를 추가해주세요."
+        }
+        subtitle={
+          escapeRoom.themeDetailHeaderSubtitle ||
+          "방탈출 카페 정보를 추가해주세요."
+        }
         text="제목 수정"
         reservation={true}
         handleUpdate={() =>
@@ -111,14 +117,20 @@ const ThemeDetailPage = () => {
         <>
           <InfoEditForm
             labelVal="제목"
-            currentTitle={escapeRoom.themeDetailHeaderTitle}
+            currentTitle={
+              escapeRoom.themeDetailHeaderTitle ||
+              "방탈출 카페 정보를 추가해주세요."
+            }
             onRef={titleRef}
             autoFocus={true}
           />
 
           <InfoEditForm
             labelVal="부제목"
-            currentTitle={escapeRoom.themeDetailHeaderSubtitle}
+            currentTitle={
+              escapeRoom.themeDetailHeaderSubtitle ||
+              "방탈출 카페 정보를 추가해주세요."
+            }
             onRef={subtitleRef}
             viewButton={true}
             onUpdate={handleThemeDetailTitleLineUpdate}
