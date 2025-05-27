@@ -141,6 +141,16 @@
 
       .title-div {
         font-weight: bold;
+        cursor: pointer;
+        color: variables.$light-text-color;
+        @include mixins.dark-mode {
+          color: variables.$dark-text-color;
+        }
+
+        &:hover {
+          transform: none;
+          color: variables.$light-link-color;
+        }
       }
 
       .faq-tr-content div {
