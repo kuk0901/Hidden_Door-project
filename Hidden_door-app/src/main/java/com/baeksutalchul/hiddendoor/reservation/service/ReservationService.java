@@ -93,7 +93,6 @@ public class ReservationService {
                                 searchField,
                                 searchTerm);
                     }
-
                     reservationList = reservationRepository.findByThemeIdInOrderByReservationCreDateAsc(themeIds,
                             pageable);
                     break;
