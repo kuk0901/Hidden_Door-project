@@ -2,6 +2,8 @@
 @use "../abstracts/variables" as variables;
 @use "sass:color";
 
+// FIXME: 시스템모드 + 반응형 코드 추가해주세요.
+
 // 다크 모드 mixin
 @mixin dark-mode {
   @media (prefers-color-scheme: dark) {
@@ -78,7 +80,7 @@
   min-height: 70vh;
 
   .return-admin-reservation-list {
-    margin-top: 32px; // 버튼과 상세 내용 사이 여백
+    margin: 10px;
     padding: 12px 32px;
     font-size: 18px;
     border-radius: 6px;
@@ -99,6 +101,7 @@
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    margin: 10px;
 
     @include mixins.dark-mode {
       background-color: variables.$light-background-color;
@@ -215,7 +218,6 @@
       transition: background-color 0.3s, color 0.3s;
       border-radius: 5px;
 
-      // XXX: dark-mode에서 배경색이랑 글자 색이 비슷합니다. 이 부분 참고해서 수정 부탁드립니다.
       &:hover {
         background-color: #e0e0e0;
       }
@@ -242,6 +244,13 @@
           $lightness: 10%
         );
         color: variables.$dark-text-color;
+
+        &:hover {
+          background-color: color.scale(
+            variables.$dark-background-color,
+            $lightness: 10%
+          );
+        }
       }
     }
 
@@ -343,10 +352,9 @@
   }
 }
 
-// XXX: 위아래 margin 값이 필요합니다! 현재는 너무 붙어있어서 답답한 느낌을 조성할 수 있을 듯 합니다.
 .reservation-confirm-page {
   max-width: 800px;
-  margin: 0 auto;
+  margin: 10px auto 50px auto;
   padding: 20px;
   background-color: variables.$light-background-color;
   border-radius: 8px;
@@ -409,7 +417,6 @@
       max-width: 600px;
       margin-bottom: 20px;
 
-      // XXX: 각 label에 width 속성을 줘서 일정한 느낌을 주는 게 더 좋을 것 같아요.
       label {
         flex-basis: 30%;
         font-size: 18px;
@@ -420,6 +427,7 @@
         padding: 10px;
         border-radius: 4px;
         margin-right: 15px;
+        width: 150px;
       }
 
       input,
@@ -441,7 +449,6 @@
         color: black;
       }
 
-      // XXX: 다른 UI와 비슷하게 css 추가해주세요!
       p {
         color: black;
       }
@@ -461,9 +468,9 @@
 
       &:hover {
         background-color: rgb(
-          160,
-          131,
-          211
+          149,
+          103,
+          228
         ); // 버튼 호버 시 색상 변경 (직접 지정)
       }
     }
@@ -564,13 +571,15 @@
     .search-select {
       font-size: 16px;
       padding: 3px;
+      height: 39px;
     }
 
     .search-input {
       display: inline-block;
       width: 250px;
+      height: 39px;
       margin: 0;
-      font-size: 16px;
+      font-size: 20px;
       border: 1px solid #000;
       background-color: #fff;
       padding: 3px;

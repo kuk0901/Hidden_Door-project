@@ -1,16 +1,14 @@
-@use '../abstracts/variables';
-@use 'sass:color';
+@use "../abstracts/variables";
+@use "../abstracts/mixins";
+@use "sass:color";
 
-// 반응형 코드 22일 이후로 만들기
-
-// 다크 모드 mixin
 @mixin dark-mode {
   @media (prefers-color-scheme: dark) {
     @content;
   }
 }
 
-// notice 메인
+// XXX: detail에서 반응형 수정 필요합니다. (버튼 부분)
 .notice-page {
   max-width: 800px;
   margin: 0 auto;
@@ -23,10 +21,26 @@
     background-color: variables.$dark-background-color;
   }
 
+  @include mixins.md-mode {
+    max-width: 100%;
+    padding: 12px;
+  }
+
+  @include mixins.sm-mode {
+    padding: 8px;
+  }
+
   .notice-page-title {
     font-size: 40px;
     margin-bottom: 20px;
     text-align: center;
+
+    @include mixins.md-mode {
+      font-size: 28px;
+    }
+    @include mixins.sm-mode {
+      font-size: 22px;
+    }
   }
 
   .add-notice-btn {
@@ -41,6 +55,13 @@
     @include dark-mode {
       background-color: variables.$dark-blue-color;
       color: variables.$dark-text-color;
+    }
+
+    @include mixins.md-mode {
+      width: 100%;
+      font-size: 1rem;
+      padding: 10px 0;
+      text-align: center;
     }
   }
 
@@ -74,6 +95,9 @@
 
       .notice-title {
         font-weight: bold;
+        @include mixins.sm-mode {
+          font-size: 1rem;
+        }
       }
 
       .notice-date {
@@ -82,12 +106,21 @@
         @include dark-mode {
           color: color.adjust(variables.$dark-text-color, $alpha: -0.3);
         }
+        @include mixins.sm-mode {
+          font-size: 0.9rem;
+        }
+      }
+
+      @include mixins.sm-mode {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 10px 2px;
       }
     }
   }
 }
 
-// notice detail
 .notice-detail-page {
   max-width: 800px;
   margin: 0 auto;
@@ -99,9 +132,21 @@
     background-color: variables.$dark-background-color;
   }
 
+  @include mixins.md-mode {
+    max-width: 100%;
+    padding: 12px;
+  }
+  @include mixins.sm-mode {
+    padding: 8px;
+  }
+
   .notice-title {
     font-size: 24px;
     margin-bottom: 10px;
+
+    @include mixins.sm-mode {
+      font-size: 18px;
+    }
   }
 
   .notice-info {
@@ -113,16 +158,36 @@
     @include dark-mode {
       color: color.adjust(variables.$dark-text-color, $alpha: -0.3);
     }
+
+    @include mixins.sm-mode {
+      flex-direction: column;
+      gap: 4px;
+      font-size: 0.95rem;
+    }
   }
 
   .notice-content {
     line-height: 1.6;
     margin-bottom: 30px;
+
+    @include mixins.sm-mode {
+      font-size: 0.98rem;
+    }
   }
 
   .notice-actions {
     display: flex;
     gap: 10px;
+
+    @include mixins.sm-mode {
+      flex-direction: column;
+      gap: 6px;
+      width: 100%;
+      .notice-btn {
+        width: 100%;
+        text-align: center;
+      }
+    }
 
     .notice-btn {
       padding: 10px 20px;
@@ -149,7 +214,6 @@
   }
 }
 
-// notice add and edit
 .add-notice-page,
 .edit-notice-page {
   max-width: 800px;
@@ -161,12 +225,24 @@
     color: variables.$dark-text-color;
     background-color: variables.$dark-background-color;
   }
+
+  @include mixins.md-mode {
+    max-width: 100%;
+    padding: 12px;
+  }
+  @include mixins.sm-mode {
+    padding: 8px;
+  }
 }
 
 .add-notice-title,
 .edit-notice-title {
   font-size: 24px;
   margin-bottom: 20px;
+
+  @include mixins.sm-mode {
+    font-size: 18px;
+  }
 }
 
 .add-notice-form,
@@ -174,6 +250,10 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+
+  @include mixins.sm-mode {
+    gap: 12px;
+  }
 }
 
 .add-notice-form-group,
@@ -186,6 +266,10 @@
 .edit-notice-form-label {
   margin-bottom: 5px;
   font-weight: bold;
+
+  @include mixins.sm-mode {
+    font-size: 0.95rem;
+  }
 }
 
 .add-notice-form-input,
@@ -212,18 +296,44 @@
       $lightness: 20%
     );
   }
+
+  @include mixins.md-mode {
+    width: 100%;
+    font-size: 0.98rem;
+    padding: 10px;
+  }
+  @include mixins.sm-mode {
+    font-size: 0.95rem;
+    padding: 8px;
+  }
 }
 
 .add-notice-form-textarea,
 .edit-notice-form-textarea {
   min-height: 150px;
   resize: vertical;
+
+  @include mixins.sm-mode {
+    min-height: 100px;
+  }
 }
 
 .add-notice-form-buttons,
 .edit-notice-form-buttons {
   display: flex;
   gap: 10px;
+
+  @include mixins.sm-mode {
+    flex-direction: column;
+    gap: 6px;
+    width: 100%;
+
+    .add-notice-btn,
+    .edit-notice-btn {
+      width: 100%;
+      text-align: center;
+    }
+  }
 }
 
 .add-notice-btn,
@@ -238,6 +348,11 @@
 
   @include dark-mode {
     color: variables.$dark-text-color;
+  }
+
+  @include mixins.sm-mode {
+    font-size: 0.95rem;
+    padding: 8px 0;
   }
 }
 
@@ -262,13 +377,17 @@
   }
 }
 
-// 페이지네이션 스타일
 .pagination {
   display: flex;
   justify-content: center;
   align-items: center;
   margin-top: 20px;
   gap: 10px;
+
+  @include mixins.sm-mode {
+    gap: 4px;
+    flex-wrap: wrap;
+  }
 
   button {
     padding: 8px 12px;
@@ -314,6 +433,11 @@
         color: variables.$dark-text-color;
         border-color: variables.$dark-blue-color;
       }
+    }
+
+    @include mixins.sm-mode {
+      padding: 6px 8px;
+      font-size: 12px;
     }
   }
 }

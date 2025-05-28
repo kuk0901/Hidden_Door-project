@@ -206,7 +206,7 @@ const CautionList = () => {
       )}
 
       <ul className="caution--list">
-        {cautionList.map((caution) => (
+        {cautionList?.map((caution) => (
           <CautionItem
             isAdmin={isAdmin}
             key={caution.cautionId}

@@ -30,8 +30,6 @@ const ReservationConfirmPage = () => {
     paymentAmount: 0,
   });
 
-  console.log("reservation: ", reservation);
-
   const [selectedThemeDetails, setSelectedThemeDetails] = useState(null);
 
   useEffect(() => {
@@ -84,8 +82,6 @@ const ReservationConfirmPage = () => {
         paymentMethod: reservation.paymentMethod,
         refundState: reservation.refundState,
       };
-
-      console.log("요청 데이터:", reservationDto);
 
       const res = await Api.post("/reservations/create", reservationDto);
 
@@ -200,7 +196,8 @@ const ReservationConfirmPage = () => {
           )}
 
           <div className="form-group">
-            <p>총 가격 : {reservation.paymentAmount.toLocaleString()}원</p>
+            <label>총 가격</label>
+            <div>{reservation.paymentAmount.toLocaleString()}원</div>
           </div>
 
           <button type="submit" className="submit-button">

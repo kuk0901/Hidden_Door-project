@@ -1,6 +1,8 @@
 @use "../abstracts/variables";
 @use "../abstracts/mixins";
 
+// XXX: 시스템모드 + 반응형 코드 추가해주세요.
+
 .section-cs {
   margin: 20px auto;
   width: 1000px;
@@ -141,6 +143,16 @@
 
       .title-div {
         font-weight: bold;
+        cursor: pointer;
+        color: variables.$light-text-color;
+        @include mixins.dark-mode {
+          color: variables.$dark-text-color;
+        }
+
+        &:hover {
+          transform: none;
+          color: variables.$light-link-color;
+        }
       }
 
       .faq-tr-content div {

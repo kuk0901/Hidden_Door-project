@@ -27,6 +27,8 @@ const HomePage = () => {
           "방탈출 카페 정보를 불러오지 못했습니다. 잠시 후 다시 시도해 주세요."
         );
         return;
+      } else if (res.data.data === null) {
+        return;
       }
 
       setEscapeRoom({ ...res.data.data });
@@ -51,7 +53,8 @@ const HomePage = () => {
       <section className="main-section__img">
         <div className="guide-container">
           <div className="guide--text">
-            {escapeRoom.themeDetailHeaderSubtitle}
+            {escapeRoom.themeDetailHeaderSubtitle ||
+              "방탈출 카페 정보를 추가해주세요."}
           </div>
 
           <div className="img-container">
@@ -81,7 +84,9 @@ const HomePage = () => {
             />
           </div>
 
-          <div className="guide--text">{escapeRoom.themeTitle}</div>
+          <div className="guide--text">
+            {escapeRoom.themeTitle || "방탈출 카페 정보를 추가해주세요."}
+          </div>
         </div>
 
         {admin && (

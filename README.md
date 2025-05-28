@@ -9,7 +9,7 @@ Hidden_Door는 단순하고 편리한 예약 및 관리 기능 구현과 더불�
 3. [기술 스택](#기술-스택)
 4. [팀 정보](#팀-정보)
 5. [프로젝트 목표](#프로젝트-목표)
-6. [Hosting Service](#Hosting-Service)
+6. [Hosting](#Hosting)
 
 ## 프로젝트 개요
 
@@ -45,22 +45,10 @@ Hidden_Door는 NoSQL, JWT, RESTful API, React 학습을 통한 실제 애플리�
 
 이 프로젝트를 통해 팀원들은 브랜치 전략, GitHub Pull Request 등을 활용한 실무 수준의 프로젝트 관리 능력을 강화하고, React, Recoil, MongoDB, Spring Boot 등 현대적인 웹 개발 기술에 대한 역량을 향상시켰습니다.
 
-## Hosting Service
+## Hosting
 
-- 클라이언트: Vercel
-
-- 서버: 로컬 호스팅
+- 프론트/백엔드: 로컬 호스팅
 
 - 데이터베이스: 로컬 MongoDB || docker(MongoDB)
-
-#### 구현 세부사항:
-
-```
-1. 백엔드는 로컬 환경에서 구동
-
-2. 프론트엔드는 Vercel을 통해 호스팅
-
-3. 이미지 파일은 로컬에 저장(필요시 Imgur 등의 외부 서비스 활용 고려)
-```
 
 #### 주의사항: 배포 후 호스팅 서비스 URL을 프로젝트 설정 파일에 반드시 추가해야 합니다.

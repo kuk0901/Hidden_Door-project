@@ -11,9 +11,18 @@ const CustomerItem = ({ customer, page, search }) => {
 
   return (
     <li className="faq-tr-content">
-      <button onClick={handleDetail} className="title-div">
+      <div
+        onClick={handleDetail}
+        className="title-div"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") handleDetail();
+        }}
+        style={{ cursor: "pointer" }}
+      >
         {customer.customerTitle}
-      </button>
+      </div>
       <div className="cs-check">{customer.customerCheck}</div>
       <div className="cs-date">{customer.kstQueCreDate}</div>
     </li>
