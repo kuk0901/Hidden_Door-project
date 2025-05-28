@@ -1,6 +1,6 @@
-@use '../abstracts/variables';
-@use '../abstracts/mixins';
-@use 'sass:color';
+@use "../abstracts/variables";
+@use "../abstracts/mixins";
+@use "sass:color";
 
 @mixin dark-mode {
   @media (prefers-color-scheme: dark) {
@@ -8,6 +8,7 @@
   }
 }
 
+// XXX: detail에서 반응형 수정 필요합니다. (버튼 부분)
 .notice-page {
   max-width: 800px;
   margin: 0 auto;

@@ -1,7 +1,9 @@
-@use '../abstracts/variables';
-@use 'sass:color';
-@use '../abstracts/mixins';
+@use "../abstracts/variables";
+@use "sass:color";
+@use "../abstracts/mixins";
 
+// XXX: modal에서 반응형 수정 필요합니다. (버튼 부분)
+// 또한 event 추가할 때 Y축 스크롤이 사라집니다. 각 화면 크기 잘 고려해서 수정해주세요.
 .event-page {
   display: flex;
   flex-direction: column;
