@@ -46,7 +46,9 @@ public class ThemeService {
         .map(theme -> modelMapper.map(theme, ThemeDto.class))
         .toList();
 
-    return new ResponseDto<>(themeDtoList, "success");
+    String message = themeDtoList.isEmpty() ? "테마 정보가 없습니다." : "success";
+
+    return new ResponseDto<>(themeDtoList, message);
   }
 
   public ResponseDto<ThemeDto> getThemeById(String id) {

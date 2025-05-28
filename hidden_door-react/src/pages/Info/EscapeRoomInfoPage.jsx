@@ -133,7 +133,7 @@ const EscapeRoomInfoPage = () => {
   return (
     <>
       <Header
-        title={escapeRoom.title}
+        title={escapeRoom.title || "방탈출 카페 정보를 추가해주세요."}
         text="제목 수정"
         reservation={true}
         handleUpdate={() => setTitleVisible(!titleVisible)}
@@ -142,7 +142,7 @@ const EscapeRoomInfoPage = () => {
       {titleVisible && (
         <InfoEditForm
           labelVal="제목"
-          currentTitle={escapeRoom.title}
+          currentTitle={escapeRoom.title || "방탈출 카페 정보를 추가해주세요."}
           onUpdate={handleTitleUpdate}
           onCancel={() => setTitleVisible(false)}
           onRef={titleRef}
@@ -159,7 +159,7 @@ const EscapeRoomInfoPage = () => {
 
         {/* explanation */}
         <div className="info-explanation text-center">
-          {escapeRoom.explanation}
+          {escapeRoom.explanation || "방탈출 카페 정보를 추가해주세요."}
         </div>
 
         {isAdmin && (
@@ -175,7 +175,9 @@ const EscapeRoomInfoPage = () => {
         {explanationVisible && (
           <InfoEditForm
             labelVal="상세 설명"
-            currentTitle={escapeRoom.explanation}
+            currentTitle={
+              escapeRoom.explanation || "방탈출 카페 정보를 추가해주세요."
+            }
             onUpdate={handleExplanationUpdate}
             onCancel={() => setExplanationVisible(false)}
             onRef={explanationRef}

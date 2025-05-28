@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.escapeRoom.service;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -37,13 +38,14 @@ public class EscapeRoomService {
 
   // common
   public ResponseDto<EscapeRoomDto> getEscapeRoomInfo() {
-    return escapeRoomRepository.findAll().stream()
-        .findFirst()
-        .map(escapeRoom -> {
-          EscapeRoomDto dto = modelMapper.map(escapeRoom, EscapeRoomDto.class);
-          return new ResponseDto<>(dto, "방탈출 정보입니다.");
-        })
-        .orElseThrow(() -> new CustomException(ErrorCode.ESCAPE_ROOM_NOT_FOUND));
+    Optional<EscapeRoom> optionalEscapeRoom = escapeRoomRepository.findAll().stream().findFirst();
+
+    if (optionalEscapeRoom.isPresent()) {
+      EscapeRoomDto dto = modelMapper.map(optionalEscapeRoom.get(), EscapeRoomDto.class);
+      return new ResponseDto<>(dto, "방탈출 정보입니다.");
+    }
+
+    return new ResponseDto<>(null, "방탈출 정보가 없습니다.");
   }
 
   // admin

@@ -20,7 +20,7 @@ const ThemeSection = () => {
         );
       }
 
-      setThemeList(res.data.data);
+      setThemeList(res.data?.data);
       setLoading(false);
     } catch (error) {
       toast.error(
@@ -49,7 +49,7 @@ const ThemeSection = () => {
 
       <div className="theme-page--theme-section">
         <ul className="theme--list">
-          {themeList.map((theme) => (
+          {themeList?.map((theme) => (
             <Theme key={theme.themeId} theme={theme} />
           ))}
         </ul>

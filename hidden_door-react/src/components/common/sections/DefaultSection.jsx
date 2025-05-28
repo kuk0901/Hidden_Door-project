@@ -14,7 +14,7 @@ const DefaultSection = ({ api, className, title, ChildComponent }) => {
         return;
       }
 
-      setSectionData(res.data.data);
+      setSectionData(res.data?.data);
     } catch (error) {
       toast.error(
         error.message ||
