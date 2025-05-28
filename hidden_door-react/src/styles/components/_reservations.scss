@@ -2,6 +2,8 @@
 @use "../abstracts/variables" as variables;
 @use "sass:color";
 
+// FIXME: 시스템모드 + 반응형 코드 추가해주세요.
+
 // 다크 모드 mixin
 @mixin dark-mode {
   @media (prefers-color-scheme: dark) {
@@ -78,7 +80,7 @@
   min-height: 70vh;
 
   .return-admin-reservation-list {
-    margin-top: 32px; // 버튼과 상세 내용 사이 여백
+    margin: 10px;
     padding: 12px 32px;
     font-size: 18px;
     border-radius: 6px;
@@ -99,6 +101,7 @@
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
+    margin: 10px;
 
     @include mixins.dark-mode {
       background-color: variables.$light-background-color;
