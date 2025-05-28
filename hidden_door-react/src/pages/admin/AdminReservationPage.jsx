@@ -8,6 +8,7 @@ import { useLocation } from "react-router-dom";
 
 const AdminReservationPage = () => {
   const location = useLocation();
+  console.log("location.state", location.state);
   const [reservationList, setReservationList] = useState([]);
   const [page, setPage] = useState(
     location.state?.page || {
@@ -30,8 +31,17 @@ const AdminReservationPage = () => {
   );
 
   useEffect(() => {
-    if (location.state?.page) setPage(location.state.page);
-    if (location.state?.search) setSearch(location.state.search);
+    if (location.state?.page || location.state?.search) {
+      setPage(location.state.page);
+      setSearch(location.state.search);
+      getAllReservation(
+        location.state.page.page,
+        location.state.search.searchField,
+        location.state.search.searchTerm
+      );
+    } else {
+      getAllReservation();
+    }
   }, [location.state]);
 
   const getAllReservation = async (
@@ -39,6 +49,7 @@ const AdminReservationPage = () => {
     searchField = "",
     searchTerm = ""
   ) => {
+    console.log("API 호출 page:", newPage);
     try {
       const { size, sortField, sortDirection } = page;
       const res = await Api.get("/reservations/list", {
@@ -95,16 +106,6 @@ const AdminReservationPage = () => {
       page.sortDirection
     );
   };
-
-  useEffect(() => {
-    getAllReservation(
-      1,
-      search.searchField,
-      search.searchTerm,
-      page.sortField,
-      page.sortDirection
-    );
-  }, []);
 
   const handleReset = () => {
     setSearch({ searchField: "", searchTerm: "" });

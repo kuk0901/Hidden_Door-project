@@ -21,8 +21,6 @@ const ReservationSummaryPage = () => {
       try {
         const res = await Api.get(`/reservations/summary/${reservationNumber}`);
 
-        console.log("데이터: {}", res.data);
-
         if (res.status !== 200) {
           toast.error(
             "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
