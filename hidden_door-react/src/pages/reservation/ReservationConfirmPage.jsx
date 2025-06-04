@@ -65,7 +65,7 @@ const ReservationConfirmPage = () => {
     e.preventDefault();
     try {
       if (!reservation.name || !reservation.email || !reservation.phone) {
-        toast.error("이름, 이메일, 전화번호는 필수 입력 항목입니다");
+        toast.error("이름, 이메일, 전화번호는 필수 입력 항목입니다.");
         return;
       }
       const reservationDto = {
