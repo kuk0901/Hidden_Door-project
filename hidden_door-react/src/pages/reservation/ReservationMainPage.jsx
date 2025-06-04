@@ -116,7 +116,7 @@ const ReservationMainPage = () => {
   const handleCloseModal = useCallback(() => setIsModalOpen(false), []);
 
   if (isLoading) return <div>Loading...</div>;
-
+  // FIXME: 예약하기 클릭 시 중복 방지를 위해 비활성화
   return (
     <section className="reservation-page">
       <h1 className="reservation-title">예약하기</h1>
