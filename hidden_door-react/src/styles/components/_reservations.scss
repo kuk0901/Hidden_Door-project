@@ -2,12 +2,6 @@
 @use "../abstracts/variables" as variables;
 @use "sass:color";
 
-@mixin dark-mode {
-  @media (prefers-color-scheme: dark) {
-    @content;
-  }
-}
-
 .reservation-list-container {
   display: flex;
   background: variables.$light-background-color;
