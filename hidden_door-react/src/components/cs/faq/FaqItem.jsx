@@ -11,17 +11,9 @@ const FaqItem = ({ faq, page, search }) => {
 
   return (
     <li className="faq-tr-content">
-      <div
-        onClick={handleDetail}
-        className="title-div"
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") handleDetail();
-        }}
-      >
+      <button onClick={handleDetail} className="title-div" type="button">
         {faq.title}
-      </div>
+      </button>
       <div className="cs-date">{faq.kstCreDate}</div>
     </li>
   );
