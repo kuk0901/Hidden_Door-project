@@ -2,7 +2,6 @@
 @use "../abstracts/variables" as variables;
 @use "sass:color";
 
-// 다크 모드 mixin (이미 mixins에 있다면 중복 정의 불필요)
 @mixin dark-mode {
   @media (prefers-color-scheme: dark) {
     @content;
@@ -657,7 +656,7 @@
     max-width: 600px;
     width: 100%;
     padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); // 선택적: 박스 그림자 추가
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 
     @include mixins.dark-mode {
