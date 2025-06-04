@@ -21,8 +21,6 @@ const AdminReservationDetailPage = () => {
         return;
       }
 
-      console.log("데이터 확인: {}", res.data);
-
       setReservationDetail(res.data.data);
     } catch (error) {
       toast.error(error.message || "오류입니다.");

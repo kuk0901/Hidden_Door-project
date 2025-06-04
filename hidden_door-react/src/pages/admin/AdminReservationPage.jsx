@@ -8,7 +8,7 @@ import { useLocation } from "react-router-dom";
 
 const AdminReservationPage = () => {
   const location = useLocation();
-  console.log("location.state", location.state);
+
   const [reservationList, setReservationList] = useState([]);
   const [page, setPage] = useState(
     location.state?.page || {
@@ -49,7 +49,6 @@ const AdminReservationPage = () => {
     searchField = "",
     searchTerm = ""
   ) => {
-    console.log("API 호출 page:", newPage);
     try {
       const { size, sortField, sortDirection } = page;
       const res = await Api.get("/reservations/list", {
