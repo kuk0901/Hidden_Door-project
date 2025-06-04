@@ -44,7 +44,7 @@ const ReservationSummaryPage = () => {
   if (!reservationDto) {
     return <p>예약 정보를 불러오는 중...</p>;
   }
-
+  // FIXME: 돌아가기 버튼 있어야 함
   return (
     <section className="reservation-summary-container">
       <div className="reservation-summary">

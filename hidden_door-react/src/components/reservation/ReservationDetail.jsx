@@ -4,7 +4,7 @@ const ReservationDetail = ({ reservationDetail }) => {
   if (!reservationDetail) {
     return <div>Loading...</div>;
   }
-
+  // FIXME: 결제 여부 필드 수정 가능하게 변경 radio 사용
   return (
     <div className="reservation-detail">
       <h1>예약 상세 정보</h1>
