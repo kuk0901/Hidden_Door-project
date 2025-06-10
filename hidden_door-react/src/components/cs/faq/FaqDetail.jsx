@@ -5,7 +5,7 @@ const FaqDetail = ({ faqDetail }) => {
 
   return (
     <div className="faq-detail">
-      <div>
+      <div className="faq-title-div">
         <p className="faq-title p">제목: {faqDetail.title}</p>
         <p className="faq-credate-p">작성날짜: {faqDetail.kstModDate}</p>
       </div>
