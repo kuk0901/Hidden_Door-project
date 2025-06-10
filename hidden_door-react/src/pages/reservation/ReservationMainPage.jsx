@@ -25,6 +25,7 @@ const ReservationMainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [checkReservationNumber, setCheckReservationNumber] = useState("");
   const [checkName, setCheckName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (selectedTheme && selectedDate) {
@@ -77,6 +78,23 @@ const ReservationMainPage = () => {
     }
   };
 
+  const handleReservation = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      navigate("/hidden_door/reservation/confirm", {
+        state: {
+          selectedDate,
+          selectedTime,
+          selectedTheme,
+          themes: pageData.themes,
+        },
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const handleCheckReservation = async () => {
     try {
       const res = await Api.get("/reservations/check", {
@@ -116,7 +134,7 @@ const ReservationMainPage = () => {
   const handleCloseModal = useCallback(() => setIsModalOpen(false), []);
 
   if (isLoading) return <div>Loading...</div>;
-  // FIXME: 예약하기 클릭 시 중복 방지를 위해 비활성화
+
   return (
     <section className="reservation-page">
       <h1 className="reservation-title">예약하기</h1>
@@ -143,19 +161,12 @@ const ReservationMainPage = () => {
         <button
           className="submit-button"
           type="button"
-          disabled={!selectedDate || !selectedTime || !selectedTheme}
-          onClick={() =>
-            navigate("/hidden_door/reservation/confirm", {
-              state: {
-                selectedDate,
-                selectedTime,
-                selectedTheme,
-                themes: pageData.themes,
-              },
-            })
+          disabled={
+            !selectedDate || !selectedTime || !selectedTheme || isSubmitting
           }
+          onClick={handleReservation}
         >
-          예약하기
+          {isSubmitting ? "예약 진행 중..." : "예약하기"}
         </button>
 
         <button

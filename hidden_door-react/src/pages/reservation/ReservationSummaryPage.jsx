@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ const ReservationSummaryPage = () => {
   const { reservationNumber } = useParams();
   const location = useLocation();
   const [reservationDto, setReservationDto] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!reservationNumber) {
@@ -44,22 +45,33 @@ const ReservationSummaryPage = () => {
   if (!reservationDto) {
     return <p>예약 정보를 불러오는 중...</p>;
   }
-  // FIXME: 돌아가기 버튼 있어야 함
+
   return (
     <section className="reservation-summary-container">
-      <div className="reservation-summary">
-        <h1>예약 상세 정보</h1>
-        <p>예약 번호: {reservationDto.reservationNumber}</p>
-        <p>이름: {reservationDto.name}</p>
-        <p>이메일: {reservationDto.email}</p>
-        <p>전화번호: {formatPhoneNumber(reservationDto.phone)}</p>
-        <p>예약 날짜: {reservationDto.kstResDate}</p>
-        <p>예약 시간: {reservationDto.kstResTime}</p>
-        <p>인원 수: {reservationDto.partySize}명</p>
-        <p>
-          총 결제 금액: {formatNumberToPrice(reservationDto.paymentAmount)}원
-        </p>
-        <p>결제 방법: {reservationDto.paymentMethod}</p>
+      <div>
+        <div className="reservation-summary">
+          <h1>예약 상세 정보</h1>
+          <p>예약 번호: {reservationDto.reservationNumber}</p>
+          <p>이름: {reservationDto.name}</p>
+          <p>이메일: {reservationDto.email}</p>
+          <p>전화번호: {formatPhoneNumber(reservationDto.phone)}</p>
+          <p>예약 날짜: {reservationDto.kstResDate}</p>
+          <p>예약 시간: {reservationDto.kstResTime}</p>
+          <p>인원 수: {reservationDto.partySize}명</p>
+          <p>
+            총 결제 금액: {formatNumberToPrice(reservationDto.paymentAmount)}원
+          </p>
+          <p>결제 방법: {reservationDto.paymentMethod}</p>
+        </div>
+
+        <div className="button-container">
+          <button
+            className="back-button"
+            onClick={() => navigate("/hidden_door/main")}
+          >
+            돌아가기
+          </button>
+        </div>
       </div>
     </section>
   );

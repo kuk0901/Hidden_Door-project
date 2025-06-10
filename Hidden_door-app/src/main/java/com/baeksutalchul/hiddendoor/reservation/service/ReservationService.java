@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import org.modelmapper.ModelMapper;
@@ -106,9 +105,15 @@ public class ReservationService {
         // XXX: reservationList.getContent()가 비어있을 때 예외 처리가 아닌 비어있는 데이터 반환
         // 화면에서 비어있는 데이터 처리로 이어져야 함
         if (reservationList.isEmpty()) {
-            throw new CustomException(ErrorCode.RESERVATION_NOT_FOUND);
+            PageDto resultPageDto = PageableUtil.createPageDto(reservationList);
+            return new ResponseDto<>(
+                Collections.emptyList(),
+                "예약 데이터 없음",
+                resultPageDto,
+                searchField,
+                searchTerm
+            );
         }
-
         List<ReservationDto> reservationDtoList = reservationList.getContent().stream()
                 .map(reservation -> {
                     ReservationDto dto = modelMapper.map(reservation, ReservationDto.class);
@@ -146,6 +151,38 @@ public class ReservationService {
 
         return new ResponseDto<>(reservationDto, "예약 상세 정보 반환");
     }
+
+    public ResponseDto<ReservationDto> updatePaymentState(String reservationId, String paymentState) {
+        Optional<Reservation> reservationOptional = reservationRepository.findById(reservationId);
+        if (reservationOptional.isEmpty()) {
+            return new ResponseDto<>(null, "예약 정보를 찾을 수 없습니다.");
+        }
+
+        Reservation reservation = reservationOptional.get();
+
+        reservation.setPaymentState(paymentState);
+        if ("Y".equals(paymentState)) {
+            reservation.setPaymentDate(Instant.now());
+        } else {
+            reservation.setPaymentDate(Instant.ofEpochMilli(0));
+        }
+        
+        reservationRepository.save(reservation);
+    
+        ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
+        reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
+
+        reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationDate()));
+        reservationDto.setKstResTime(DateTimeUtil.convertToKoreanTime(reservation.getReservationDate()));
+        reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
+        reservationDto.setPaymentMethod(reservation.getPaymentMethod());
+        reservationDto.setPaymentState(reservation.getPaymentState());
+        themeRepository.findById(reservation.getThemeId())
+            .ifPresent(theme -> reservationDto.setThemeName(theme.getThemeName()));
+
+        return new ResponseDto<>(reservationDto, "결제 상태 갱신");
+    }
+    
 
     public ResponseDto<Map<String, Object>> getReservationMainPage() {
         Map<String, Object> pageData = new HashMap<>();
@@ -201,13 +238,11 @@ public class ReservationService {
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_RESERVED));
 
-        // 예약 처리
         selectedSlot.setBooked(true);
         String reservationNumber = RandomString.getRandomShortString();
         selectedSlot.setReservationNumber(reservationNumber);
         timeSlotRepository.save(timeSlot);
 
-        // 예약 정보 저장
         Reservation reservation = new Reservation();
         reservation.setThemeId(dto.getThemeId());
         reservation.setName(dto.getName());
@@ -232,7 +267,7 @@ public class ReservationService {
     private Instant combineDateTime(String dateStr, String timeStr) {
         try {
             String onlyDate = dateStr.contains("T") ? dateStr.split("T")[0] : dateStr;
-            LocalDate date = LocalDate.parse(onlyDate); // "2025-05-09"
+            LocalDate date = LocalDate.parse(onlyDate);
             LocalTime time = LocalTime.parse(timeStr, DateTimeFormatter.ofPattern("HH:mm"));
             LocalDateTime dateTime = LocalDateTime.of(date, time);
             ZoneId zoneId = ZoneId.of("Asia/Seoul");
@@ -248,9 +283,8 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomException(ErrorCode.RESERVATION_NOT_FOUND, "예약을 찾을 수 없습니다."));
 
         ReservationDto dto = modelMapper.map(reservation, ReservationDto.class);
-        dto.setKstResTime(DateTimeUtil.convertToKoreanTime(reservation.getReservationDate())); // 명시적 추가
+        dto.setKstResTime(DateTimeUtil.convertToKoreanTime(reservation.getReservationDate()));
 
-        // 날짜/시간 변환 강화
         dto.setKstResDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationDate()));
         dto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
 

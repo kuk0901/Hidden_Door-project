@@ -2,8 +2,6 @@
 @use "../abstracts/variables" as variables;
 @use "sass:color";
 
-// FIXME: 반응형 수정, 관리자 예약확인 페이지 hover 효과 추가
-
 .reservation-list-container {
   display: flex;
   background: variables.$light-background-color;
@@ -29,8 +27,14 @@
     background: inherit;
     color: inherit;
 
+    @include mixins.md-mode {
+      font-size: 20px;
+    }
     @include mixins.sm-mode {
-      font-size: 18px;
+      font-size: 15px;
+    }
+    @include mixins.xs-mode {
+      font-size: 13px;
     }
 
     .reservation--item {
@@ -38,9 +42,35 @@
       border-bottom: 1px solid variables.$confirm-border-color;
       background: inherit;
       color: inherit;
+      font-size: 22px;
+      height: 64px;
 
+      @include mixins.md-mode {
+        font-size: 17px;
+        height: 48px;
+      }
       @include mixins.sm-mode {
-        font-size: 0.95rem;
+        font-size: 13px;
+        align-items: flex-start;
+        height: auto;
+        min-height: 36px;
+      }
+      @include mixins.xs-mode {
+        font-size: 12px;
+        min-height: 28px;
+      }
+
+      .detail--link:hover {
+        background-color: #b86a1e;
+        color: white;
+        transition: background-color 0.2s;
+      }
+
+      @include mixins.dark-mode {
+        .detail--link:hover {
+          background-color: #f0b36a;
+          color: white;
+        }
       }
 
       .title {
@@ -49,12 +79,39 @@
 
         &.title__sm {
           width: 100px;
+          @include mixins.md-mode {
+            width: 80px;
+          }
+          @include mixins.sm-mode {
+            width: 60px;
+          }
+          @include mixins.xs-mode {
+            width: 40px;
+          }
         }
         &.title__md {
           width: 200px;
+          @include mixins.md-mode {
+            width: 140px;
+          }
+          @include mixins.sm-mode {
+            width: 90px;
+          }
+          @include mixins.xs-mode {
+            width: 70px;
+          }
         }
         &.title__lg {
           width: 300px;
+          @include mixins.md-mode {
+            width: 180px;
+          }
+          @include mixins.sm-mode {
+            width: 110px;
+          }
+          @include mixins.xs-mode {
+            width: 80px;
+          }
         }
       }
 
@@ -70,12 +127,39 @@
 
           &.content__sm {
             width: 100px;
+            @include mixins.md-mode {
+              width: 80px;
+            }
+            @include mixins.sm-mode {
+              width: 60px;
+            }
+            @include mixins.xs-mode {
+              width: 40px;
+            }
           }
           &.content__md {
             width: 200px;
+            @include mixins.md-mode {
+              width: 140px;
+            }
+            @include mixins.sm-mode {
+              width: 90px;
+            }
+            @include mixins.xs-mode {
+              width: 70px;
+            }
           }
           &.content__lg {
             width: 300px;
+            @include mixins.md-mode {
+              width: 180px;
+            }
+            @include mixins.sm-mode {
+              width: 110px;
+            }
+            @include mixins.xs-mode {
+              width: 80px;
+            }
           }
         }
       }
@@ -102,8 +186,8 @@
   }
 
   @include mixins.sm-mode {
-    padding: 10px;
-    font-size: 0.97rem;
+    padding: 5px;
+    font-size: 0.9rem;
   }
 
   .return-admin-reservation-list {
@@ -116,18 +200,30 @@
     border: none;
     cursor: pointer;
     transition: background 0.2s;
+    min-width: 160px;
+    height: 48px;
 
     @include mixins.dark-mode {
-      background: #fff;
-      color: #222;
+      background-color: variables.$dark-blue-color;
+      color: variables.$dark-text-color;
+    }
+
+    @include mixins.md-mode {
+      font-size: 1rem;
+      padding: 8px 20px;
+      min-width: 120px;
+      height: 38px;
+    }
+    @include mixins.sm-mode {
+      font-size: 0.95rem;
+      padding: 6px 10px;
+      min-width: 80px;
+      height: 30px;
     }
 
     &:hover {
-      background: #444;
-
-      @include mixins.dark-mode {
-        background: #ccc;
-      }
+      font-weight: 600;
+      background-color: color.scale(#28a745, $lightness: 10%);
     }
   }
 
@@ -142,14 +238,31 @@
     background: inherit;
     color: inherit;
 
+    @include mixins.dark-mode {
+      background-color: variables.$light-background-color;
+      color: black;
+    }
+
+    @include mixins.md-mode {
+      padding: 12px;
+      font-size: 0.95rem;
+      max-width: 95vw;
+    }
     @include mixins.sm-mode {
-      padding: 10px;
-      font-size: 0.97rem;
+      padding: 8px;
+      font-size: 0.9rem;
+      max-width: 99vw;
     }
 
     h1 {
       font-size: 28px;
       margin-bottom: 20px;
+      @include mixins.md-mode {
+        font-size: 20px;
+      }
+      @include mixins.sm-mode {
+        font-size: 16px;
+      }
     }
 
     p {
@@ -157,6 +270,14 @@
       margin: 10px 0;
       line-height: 1.5;
       padding: 10px;
+      @include mixins.md-mode {
+        font-size: 18px;
+        padding: 7px;
+      }
+      @include mixins.sm-mode {
+        font-size: 13px;
+        padding: 5px;
+      }
     }
   }
 }
@@ -187,8 +308,11 @@
     margin-bottom: 30px;
     font-size: 28px;
 
+    @include mixins.md-mode {
+      font-size: 22px;
+    }
     @include mixins.sm-mode {
-      font-size: 20px;
+      font-size: 16px;
     }
   }
 
@@ -197,8 +321,11 @@
     flex-direction: column;
     gap: 30px;
 
+    @include mixins.md-mode {
+      gap: 18px;
+    }
     @include mixins.sm-mode {
-      gap: 15px;
+      gap: 10px;
     }
   }
 
@@ -209,9 +336,12 @@
     align-items: stretch;
     flex-wrap: wrap;
 
+    @include mixins.md-mode {
+      gap: 14px;
+    }
     @include mixins.sm-mode {
       flex-direction: column;
-      gap: 10px;
+      gap: 7px;
     }
   }
 
@@ -220,8 +350,11 @@
     text-align: center;
     font-size: 22px;
 
-    @include mixins.sm-mode {
+    @include mixins.md-mode {
       font-size: 18px;
+    }
+    @include mixins.sm-mode {
+      font-size: 14px;
     }
   }
 
@@ -269,8 +402,11 @@
           }
         }
       }
+      @include mixins.md-mode {
+        padding: 7px;
+      }
       @include mixins.sm-mode {
-        padding: 5px;
+        padding: 4px;
       }
     }
   }
@@ -283,8 +419,12 @@
       gap: 10px;
       align-content: start;
 
+      @include mixins.md-mode {
+        gap: 7px;
+      }
       @include mixins.sm-mode {
         grid-template-columns: 1fr;
+        gap: 4px;
       }
     }
 
@@ -295,6 +435,8 @@
       cursor: pointer;
       transition: background-color 0.3s, color 0.3s;
       border-radius: 5px;
+      font-size: 17px;
+      height: 44px;
 
       &:hover {
         background-color: #e0e0e0;
@@ -330,9 +472,15 @@
           );
         }
       }
-      @include mixins.sm-mode {
-        font-size: 0.97rem;
+      @include mixins.md-mode {
+        font-size: 15px;
         padding: 8px 10px;
+        height: 36px;
+      }
+      @include mixins.sm-mode {
+        font-size: 12px;
+        padding: 6px 7px;
+        height: 28px;
       }
     }
 
@@ -340,8 +488,11 @@
       text-align: center;
       font-size: 17px;
 
+      @include mixins.md-mode {
+        font-size: 14px;
+      }
       @include mixins.sm-mode {
-        font-size: 15px;
+        font-size: 12px;
       }
     }
   }
@@ -355,8 +506,11 @@
       flex-direction: column;
       gap: 10px;
 
-      @include mixins.sm-mode {
+      @include mixins.md-mode {
         gap: 7px;
+      }
+      @include mixins.sm-mode {
+        gap: 4px;
       }
     }
 
@@ -369,6 +523,8 @@
       border-radius: 5px;
       text-align: left;
       transition: background-color 0.3s, color 0.3s, font-weight 0.1s;
+      font-size: 17px;
+      height: 44px;
 
       &:hover {
         background-color: #e0e0e0;
@@ -394,9 +550,15 @@
           );
         }
       }
-      @include mixins.sm-mode {
-        font-size: 0.97rem;
+      @include mixins.md-mode {
+        font-size: 14px;
         padding: 8px 10px;
+        height: 36px;
+      }
+      @include mixins.sm-mode {
+        font-size: 12px;
+        padding: 6px 7px;
+        height: 28px;
       }
     }
   }
@@ -409,15 +571,25 @@
     font-size: 18px;
     cursor: pointer;
     border-radius: 5px;
+    min-width: 180px;
+    height: 48px;
 
     @include mixins.dark-mode {
       background-color: variables.$dark-blue-color;
       color: variables.$dark-text-color;
     }
 
-    @include mixins.sm-mode {
+    @include mixins.md-mode {
       font-size: 1rem;
       padding: 10px;
+      min-width: 120px;
+      height: 36px;
+    }
+    @include mixins.sm-mode {
+      font-size: 0.95rem;
+      padding: 7px;
+      min-width: 80px;
+      height: 28px;
     }
 
     &:hover {
@@ -434,6 +606,8 @@
     border-radius: 5px;
     color: variables.$dark-text-color;
     background-color: variables.$light-text-color;
+    min-width: 180px;
+    height: 48px;
 
     &:hover {
       font-weight: 600;
@@ -453,9 +627,17 @@
         );
       }
     }
-    @include mixins.sm-mode {
+    @include mixins.md-mode {
       font-size: 1rem;
       padding: 10px;
+      min-width: 120px;
+      height: 36px;
+    }
+    @include mixins.sm-mode {
+      font-size: 0.95rem;
+      padding: 7px;
+      min-width: 80px;
+      height: 28px;
     }
   }
 }
@@ -487,8 +669,11 @@
     margin-bottom: 30px;
     color: variables.$primary-color;
 
-    @include mixins.sm-mode {
+    @include mixins.md-mode {
       font-size: 22px;
+    }
+    @include mixins.sm-mode {
+      font-size: 16px;
     }
   }
 
@@ -523,10 +708,15 @@
         border-radius: 4px;
         margin-right: 15px;
 
+        @include mixins.md-mode {
+          font-size: 16px;
+          padding: 8px;
+        }
         @include mixins.sm-mode {
           width: 100%;
-          font-size: 16px;
+          font-size: 14px;
           margin-right: 0;
+          padding: 6px;
         }
       }
 
@@ -538,9 +728,14 @@
         background-color: variables.$light-background-color;
         text-align: left;
 
+        @include mixins.md-mode {
+          font-size: 14px;
+          padding: 7px;
+        }
         @include mixins.sm-mode {
           width: 100%;
-          font-size: 15px;
+          font-size: 12px;
+          padding: 5px;
         }
       }
     }
@@ -577,10 +772,16 @@
         margin-right: 15px;
         width: 150px;
 
+        @include mixins.md-mode {
+          font-size: 16px;
+          padding: 8px;
+          width: 120px;
+        }
         @include mixins.sm-mode {
           width: 100%;
-          font-size: 16px;
+          font-size: 14px;
           margin-right: 0;
+          padding: 6px;
         }
       }
 
@@ -598,9 +799,14 @@
           box-shadow: inset 0 0 5px rgba(0, 123, 255, 0.5);
         }
 
+        @include mixins.md-mode {
+          font-size: 14px;
+          padding: 7px;
+        }
         @include mixins.sm-mode {
           width: 100%;
-          font-size: 15px;
+          font-size: 12px;
+          padding: 5px;
         }
       }
 
@@ -624,15 +830,25 @@
       cursor: pointer;
       font-weight: 600;
       font-size: 16px;
+      min-width: 160px;
+      height: 48px;
 
       &:hover {
         background-color: rgb(149, 103, 228);
       }
 
+      @include mixins.md-mode {
+        font-size: 14px;
+        padding: 8px 16px;
+        min-width: 120px;
+        height: 36px;
+      }
       @include mixins.sm-mode {
         width: 100%;
-        font-size: 1rem;
-        padding: 10px;
+        font-size: 12px;
+        padding: 7px;
+        min-width: 80px;
+        height: 28px;
       }
     }
   }
@@ -657,14 +873,24 @@
       color: black;
     }
 
+    @include mixins.md-mode {
+      padding: 12px;
+      font-size: 0.95rem;
+    }
     @include mixins.sm-mode {
-      padding: 10px;
-      font-size: 0.97rem;
+      padding: 8px;
+      font-size: 0.9rem;
     }
 
     h1 {
       font-size: 28px;
       margin-bottom: 20px;
+      @include mixins.md-mode {
+        font-size: 20px;
+      }
+      @include mixins.sm-mode {
+        font-size: 16px;
+      }
     }
 
     p {
@@ -672,6 +898,56 @@
       margin: 10px 0;
       line-height: 1.5;
       padding: 10px;
+      @include mixins.md-mode {
+        font-size: 18px;
+        padding: 7px;
+      }
+      @include mixins.sm-mode {
+        font-size: 13px;
+        padding: 5px;
+      }
+    }
+  }
+
+  .button-container {
+    margin-top: 32px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .back-button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    cursor: pointer;
+    border-radius: 5px;
+    min-width: 180px;
+    height: 48px;
+
+    @include mixins.dark-mode {
+      background-color: variables.$dark-blue-color;
+      color: variables.$dark-text-color;
+    }
+
+    @include mixins.md-mode {
+      font-size: 1rem;
+      padding: 10px;
+      min-width: 120px;
+      height: 36px;
+    }
+    @include mixins.sm-mode {
+      font-size: 0.95rem;
+      padding: 7px;
+      min-width: 80px;
+      height: 28px;
+    }
+
+    &:hover {
+      font-weight: 600;
+      background-color: color.scale(#28a745, $lightness: 10%);
     }
   }
 }
@@ -692,10 +968,15 @@
     color: variables.$dark-text-color;
   }
 
+  @include mixins.md-mode {
+    min-width: 350px;
+    padding: 12px;
+    font-size: 0.95rem;
+  }
   @include mixins.sm-mode {
     min-width: 100%;
-    padding: 10px;
-    font-size: 0.97rem;
+    padding: 8px;
+    font-size: 0.9rem;
   }
 
   &::backdrop {
@@ -725,11 +1006,19 @@
         label {
           width: 70px;
           text-align: center;
+          @include mixins.md-mode {
+            width: 50px;
+          }
+          @include mixins.sm-mode {
+            width: 40px;
+          }
         }
 
         input {
           width: 300px;
-
+          @include mixins.md-mode {
+            width: 180px;
+          }
           @include mixins.sm-mode {
             width: 100%;
           }
@@ -754,9 +1043,13 @@
       padding: 3px;
       height: 39px;
 
-      @include mixins.sm-mode {
+      @include mixins.md-mode {
         font-size: 14px;
         height: 32px;
+      }
+      @include mixins.sm-mode {
+        font-size: 12px;
+        height: 28px;
       }
     }
 
@@ -775,10 +1068,15 @@
         border-color: #fff;
       }
 
-      @include mixins.sm-mode {
-        width: 100%;
+      @include mixins.md-mode {
+        width: 180px;
         font-size: 16px;
         height: 32px;
+      }
+      @include mixins.sm-mode {
+        width: 100%;
+        font-size: 12px;
+        height: 28px;
       }
     }
 
