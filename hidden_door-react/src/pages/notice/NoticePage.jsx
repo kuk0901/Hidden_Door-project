@@ -8,7 +8,6 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { formatKoreanDate } from '../../utils/format/date';
 import Pagination from '@components/common/navigation/pagination/Pagination';
 
-// XXX: 처음 공지사항 페이지 접속 후 다른 페이지에 이동했다가 공지사항 페이지로 다시 넘어오는 경우 로딩 화면만 나오고 있습니다.
 function NoticePage() {
   const location = useLocation();
   const { admin } = useAdmin();
@@ -18,10 +17,8 @@ function NoticePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (notices.length === 0 || location.state?.shouldRefresh) {
-      fetchNotices(page.page);
-    }
-  }, [page.page, location.state]);
+    fetchNotices(page.page);
+  }, [page.page, location.key]);
 
   const fetchNotices = async (currentPage) => {
     setLoading(true);

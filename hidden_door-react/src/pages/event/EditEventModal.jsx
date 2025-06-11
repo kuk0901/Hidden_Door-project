@@ -95,7 +95,6 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
 
   if (!isOpen) return null;
 
-  // XXX: input 태그와 label 태그는 id로 연결해주세요!
   return (
     <section className="em-event-modal-overlay">
       <div className="em-event-modal">
@@ -107,31 +106,29 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
             </label>
             <input
               type="text"
-              id="title"
+              id="em-form-input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="em-form-input"
               placeholder="제목을 입력해주세요"
             />
           </div>
 
           <div className="em-form-group">
-            <label htmlFor="description" className="em-form-label">
+            <label htmlFor="description" id="em-form-label">
               설명
             </label>
             <textarea
-              id="description"
+              id="em-form-textarea"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="em-form-textarea"
               placeholder="설명을 입력해주세요"
             />
           </div>
 
           <div className="em-form-group">
-            <label className="em-form-label">이벤트 기간</label>
+            <label id="em-form-label">이벤트 기간</label>
             <div className="date-picker-container">
               <div className="event-calendar-wrapper">
                 <p className="event-calendar-label">시작일</p>
@@ -170,11 +167,12 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
           </div>
 
           <div className="em-form-group">
-            <label className="em-form-label">이벤트 유형</label>
+            <label id="em-form-label">이벤트 유형</label>
             <div>
               <label>
                 <input
                   type="checkbox"
+                  id="eventDate_checkbox_input"
                   checked={isOngoing === 'true'}
                   onChange={(e) => {
                     setIsOngoing(e.target.checked ? 'true' : 'false');
@@ -188,6 +186,7 @@ function EditEventModal({ isOpen, onClose, onEventEdited, event }) {
               <label>
                 <input
                   type="checkbox"
+                  id="eventDate_checkbox_input"
                   checked={noEndDate === 'true'}
                   onChange={(e) => {
                     setNoEndDate(e.target.checked ? 'true' : 'false');

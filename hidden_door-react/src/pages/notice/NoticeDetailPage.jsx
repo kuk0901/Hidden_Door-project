@@ -150,14 +150,25 @@ function NoticeDetailPage() {
             value={editTitle}
             onChange={(e) => setEditTitle(e.target.value)}
             placeholder="제목"
+            className="edit-notice-form-input"
           />
           <textarea
             value={editContent}
             onChange={(e) => setEditContent(e.target.value)}
             placeholder="내용"
+            className="edit-notice-form-textarea"
           />
-          <button type="submit">저장</button>
-          <button type="button" onClick={() => setIsEditing(false)}>
+          <button
+            type="submit"
+            className="edit-notice-btn edit-notice-btn-submit"
+          >
+            저장
+          </button>
+          <button
+            type="button"
+            onClick={() => setIsEditing(false)}
+            className="edit-notice-btn edit-notice-btn-cancel"
+          >
             취소
           </button>
         </form>
