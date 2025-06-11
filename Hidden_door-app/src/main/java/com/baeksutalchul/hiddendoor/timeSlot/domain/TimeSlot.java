@@ -18,18 +18,18 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class TimeSlot {
     @Id
-    private String id; // "theme1_20240408"
+    private String id;
     private String themeId;
     private String date;
-    private List<TimeSlotDetail> slots; // 변경점: 객체 리스트로 관리
+    private List<TimeSlotDetail> slots;
 
-    // 내부 클래스로 시간대 상세 정보 관리
+
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
     public static class TimeSlotDetail {
-        private String time; // "HH:mm" 형식
+        private String time;
         private boolean isBooked;
-        private String reservationNumber; // null 가능
+        private String reservationNumber;
     }
 }

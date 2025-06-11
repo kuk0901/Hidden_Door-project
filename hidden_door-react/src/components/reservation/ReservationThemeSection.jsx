@@ -10,7 +10,7 @@ const ReservationThemeSection = ({
         {themes.map((theme) => (
           <button
             key={theme.themeId}
-            type="button" // type="button" 추가하여 폼 제출 방지
+            type="button"
             onClick={() => setSelectedTheme(theme.themeId)}
             className={`theme-slot ${
               selectedTheme === theme.themeId ? "selected" : ""

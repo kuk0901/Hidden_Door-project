@@ -118,7 +118,6 @@ public class ReservationController {
             reservationDto.getReservationTime()
         );
 
-        // 3파라미터 생성자 사용!
         MailDto mailDto = new MailDto(
             reservationDto.getEmail(),
             "Hidden_door 방탈출 카페 예약 완료 안내",
@@ -128,7 +127,7 @@ public class ReservationController {
         mailService.sendMail(mailDto);
 
     } catch (Exception e) {
-        e.printStackTrace(); // 실제 에러 원인을 콘솔에 출력
+        e.printStackTrace();
         throw new CustomException(ErrorCode.MAIL_SEND_FAILED);
     }
 
@@ -144,7 +143,7 @@ public class ReservationController {
 
   @GetMapping("/check")
   public ResponseDto<Boolean> checkReservation(
-      @RequestParam("reservationNumber") String reservationNumber, // 개별 파라미터로 분리
+      @RequestParam("reservationNumber") String reservationNumber,
       @RequestParam("name") String name) {
     boolean exists = reservationService.checkReservation(reservationNumber, name);
     return new ResponseDto<>(exists, exists ? "예약 확인 성공" : "예약 없음");

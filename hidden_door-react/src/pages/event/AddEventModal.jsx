@@ -84,7 +84,7 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
         <h2 className="em-modal-title">새 이벤트 추가</h2>
         <form onSubmit={handleSubmit} className="em-modal-form">
           <div className="em-form-group">
-            <label htmlFor="title" className="em-form-label">
+            <label htmlFor="title" id="em-form-label">
               제목
             </label>
             <input
@@ -98,15 +98,14 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
           </div>
 
           <div className="em-form-group">
-            <label htmlFor="description" className="em-form-label">
+            <label htmlFor="description" id="em-form-label">
               설명
             </label>
             <textarea
-              id="description"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="em-form-textarea"
+              id="em-form-textarea"
               placeholder="설명을 입력해주세요"
             />
           </div>

@@ -11,7 +11,6 @@ const ThemeTotalReservationChart = ({ data }) => {
     0
   );
 
-  // 임시 UI
   return (
     <div className={styles.container}>
       {/* 1. 컴팩트 요약판 (카드형) */}
