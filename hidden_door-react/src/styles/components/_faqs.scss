@@ -39,7 +39,6 @@
     .cs-body {
       .cs-header {
         background-color: variables.$dark-background-color;
-        color: variables.$light-text-color;
       }
 
       .title-div,
@@ -271,13 +270,14 @@
 
       .faq-tr-content {
         display: table-row;
+        border-bottom: 1px solid #a9a9a9;
       }
 
       .title-div {
         font-weight: bold;
         background: none;
         border: none;
-        padding: 0;
+        padding: 10px;
         font: inherit;
         color: variables.$light-text-color;
         text-align: left;
@@ -365,6 +365,13 @@
   margin-bottom: 10px;
 }
 
+@media (prefers-color-scheme: dark) {
+  .faq-title-div {
+    color: #000 !important; /* 완전 검정 */
+    /* 또는 원하는 색상 코드로 변경 */
+  }
+}
+
 .faq-credate-p {
   font-size: 14px;
 
@@ -427,6 +434,7 @@
   font-size: 14px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  color: #000;
   box-sizing: border-box;
   margin-bottom: 12px;
   font-family: inherit;

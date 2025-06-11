@@ -5,7 +5,7 @@ const CustoemrDetail = ({ customerDetail }) => {
 
   return (
     <div className="faq-detail">
-      <div>
+      <div className="faq-title-div">
         <p className="faq-title p">제목: {customerDetail.customerTitle}</p>
         <p className="faq-credate-p">
           질문날짜: {customerDetail.kstQueCreDate}
