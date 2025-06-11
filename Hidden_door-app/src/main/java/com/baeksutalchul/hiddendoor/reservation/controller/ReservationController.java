@@ -24,6 +24,7 @@ import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -67,6 +68,15 @@ public class ReservationController {
       @PathVariable("id") String reservationId) {
     return ResponseEntity.ok().body(reservationService.getReservationById(reservationId));
   }
+  
+  @PatchMapping("/{id}/payment")
+  public ResponseEntity<ResponseDto<ReservationDto>> updatePaymentState(
+      @PathVariable("id") String reservationId,
+      @RequestBody Map<String, String> request) {
+    String paymentState = request.get("paymentState");
+    return ResponseEntity.ok().body(reservationService.updatePaymentState(reservationId, paymentState));
+  }
+
 
   @GetMapping("/main")
   public ResponseEntity<ResponseDto<Map<String, Object>>> getReservationMainPage() {
