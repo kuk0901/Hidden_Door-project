@@ -8,6 +8,7 @@ const dummy = [
   { themeName: "theme4", reservations: 8, total: 8 }
 ];
 
+// TODO: 반응형 css 부분 수정해야 함.
 const ThemeDayReservationChart = ({ data = dummy }) => {
   const sortedData = [...data].sort((a, b) => b.reservations - a.reservations);
 

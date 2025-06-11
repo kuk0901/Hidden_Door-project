@@ -16,6 +16,10 @@
   min-width: 250px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 
+  @include mixins.sm-mode {
+    width: 100%;
+  }
+
   .card_header {
     @include mixins.flex-layout-row(space-between, center);
     margin-bottom: 12px;
@@ -75,6 +79,10 @@
   min-width: 300px;
   min-height: 250px;
   position: relative;
+
+  @include mixins.sm-mode {
+    display: none;
+  }
 }
 
 .tooltip {
