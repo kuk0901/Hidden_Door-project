@@ -25,6 +25,7 @@ const ReservationMainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [checkReservationNumber, setCheckReservationNumber] = useState("");
   const [checkName, setCheckName] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (selectedTheme && selectedDate) {
@@ -74,6 +75,23 @@ const ReservationMainPage = () => {
       toast.error(error.message || "예약 페이지를 불러오는데 실패했습니다.");
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleReservation = async () => {
+    if (isSubmitting) return;
+    setIsSubmitting(true);
+    try {
+      navigate("/hidden_door/reservation/confirm", {
+        state: {
+          selectedDate,
+          selectedTime,
+          selectedTheme,
+          themes: pageData.themes,
+        },
+      });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -143,19 +161,12 @@ const ReservationMainPage = () => {
         <button
           className="submit-button"
           type="button"
-          disabled={!selectedDate || !selectedTime || !selectedTheme}
-          onClick={() =>
-            navigate("/hidden_door/reservation/confirm", {
-              state: {
-                selectedDate,
-                selectedTime,
-                selectedTheme,
-                themes: pageData.themes,
-              },
-            })
+          disabled={
+            !selectedDate || !selectedTime || !selectedTheme || isSubmitting
           }
+          onClick={handleReservation}
         >
-          예약하기
+          {isSubmitting ? "예약 진행 중..." : "예약하기"}
         </button>
 
         <button

@@ -14,6 +14,7 @@ const ReservationConfirmPage = () => {
     return `${year}-${month}-${day}`;
   };
   const { selectedDate, selectedTime, selectedTheme, themes } = location.state;
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [reservation, setReservation] = useState({
     name: "",
@@ -63,6 +64,8 @@ const ReservationConfirmPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
+    setIsSubmitting(true);
     try {
       if (!reservation.name || !reservation.email || !reservation.phone) {
         toast.error("이름, 이메일, 전화번호는 필수 입력 항목입니다");
@@ -200,8 +203,12 @@ const ReservationConfirmPage = () => {
             <div>{reservation.paymentAmount.toLocaleString()}원</div>
           </div>
 
-          <button type="submit" className="submit-button">
-            예약 완료
+          <button
+            type="submit"
+            className="submit-button"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? "예약 처리 중..." : "예약 완료"}
           </button>
         </div>
       </form>

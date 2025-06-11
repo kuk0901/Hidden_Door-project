@@ -30,9 +30,23 @@ const AdminReservationDetailPage = () => {
   useEffect(() => {
     getReservationDetail();
   }, [reservationId]);
+  const handlePaymentStateChange = async (newState) => {
+    try {
+      const res = await Api.patch(`/reservations/${reservationId}/payment`, {
+        paymentState: newState,
+      });
+      if (res.status !== 200) {
+        toast.error("결제 상태 변경 실패");
+        return;
+      }
+      setReservationDetail(res.data.data);
+      toast.success("결제 상태가 변경되었습니다.");
+    } catch (error) {
+      toast.error(error.message || "결제 상태 변경 중 오류가 발생했습니다.");
+    }
+  };
 
   const handleBack = () => {
-    // state에 page, search 정보가 있으면 목록으로 넘겨준다
     if (location.state && location.state.page && location.state.search) {
       navigate("/hidden_door/admin/reservation", {
         state: {
@@ -48,7 +62,10 @@ const AdminReservationDetailPage = () => {
   return (
     <div className="reservation-detail-container">
       <div>
-        <ReservationDetail reservationDetail={reservationDetail} />
+        <ReservationDetail
+          reservationDetail={reservationDetail}
+          onPaymentStateChange={handlePaymentStateChange}
+        />
       </div>
 
       <button onClick={handleBack} className="return-admin-reservation-list">
