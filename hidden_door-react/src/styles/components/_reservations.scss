@@ -1,6 +1,7 @@
 @use "../abstracts/mixins";
 @use "../abstracts/variables" as variables;
 @use "sass:color";
+
 // FIXME: mainPage의 캘린더 css 수정해야함
 .reservation-list-container {
   display: flex;
