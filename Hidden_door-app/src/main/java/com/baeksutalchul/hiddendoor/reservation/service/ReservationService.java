@@ -167,17 +167,17 @@ public class ReservationService {
             reservation.setPaymentDate(Instant.ofEpochMilli(0));
         }
         
-        reservationRepository.save(reservation);
+        Reservation savedReservation = reservationRepository.save(reservation);
     
-        ReservationDto reservationDto = modelMapper.map(reservation, ReservationDto.class);
-        reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(reservation.getPaymentDate()));
+        ReservationDto reservationDto = modelMapper.map(savedReservation, ReservationDto.class);
+        reservationDto.setKstPayDate(DateTimeUtil.convertToKoreanDate(savedReservation.getPaymentDate()));
 
-        reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationDate()));
-        reservationDto.setKstResTime(DateTimeUtil.convertToKoreanTime(reservation.getReservationDate()));
-        reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(reservation.getReservationCreDate()));
-        reservationDto.setPaymentMethod(reservation.getPaymentMethod());
-        reservationDto.setPaymentState(reservation.getPaymentState());
-        themeRepository.findById(reservation.getThemeId())
+        reservationDto.setKstResDate(DateTimeUtil.convertToKoreanDate(savedReservation.getReservationDate()));
+        reservationDto.setKstResTime(DateTimeUtil.convertToKoreanTime(savedReservation.getReservationDate()));
+        reservationDto.setKstResCreDate(DateTimeUtil.convertToKoreanDate(savedReservation.getReservationCreDate()));
+        reservationDto.setPaymentMethod(savedReservation.getPaymentMethod());
+        reservationDto.setPaymentState(savedReservation.getPaymentState());
+        themeRepository.findById(savedReservation.getThemeId())
             .ifPresent(theme -> reservationDto.setThemeName(theme.getThemeName()));
 
         return new ResponseDto<>(reservationDto, "결제 상태 갱신");
