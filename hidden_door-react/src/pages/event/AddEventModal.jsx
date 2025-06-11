@@ -78,7 +78,6 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
 
   if (!isOpen) return null;
 
-  // XXX: input 태그와 label 태그는 id로 연결해주세요!
   return (
     <section className="em-event-modal-overlay">
       <div className="em-event-modal">
@@ -90,11 +89,10 @@ function AddEventModal({ isOpen, onClose, onEventAdded }) {
             </label>
             <input
               type="text"
-              id="title"
+              id="em-form-input"
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
-              className="em-form-input"
               placeholder="제목을 입력해주세요"
             />
           </div>
