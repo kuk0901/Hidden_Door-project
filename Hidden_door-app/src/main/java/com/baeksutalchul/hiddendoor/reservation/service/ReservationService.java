@@ -102,8 +102,6 @@ public class ReservationService {
             reservationList = reservationRepository.findAllByOrderByReservationCreDateAsc(pageable);
         }
 
-        // XXX: reservationList.getContent()가 비어있을 때 예외 처리가 아닌 비어있는 데이터 반환
-        // 화면에서 비어있는 데이터 처리로 이어져야 함
         if (reservationList.isEmpty()) {
             PageDto resultPageDto = PageableUtil.createPageDto(reservationList);
             return new ResponseDto<>(

@@ -19,7 +19,7 @@ const ReservationDetail = ({ reservationDetail, onPaymentStateChange }) => {
   if (!reservationDetail) {
     return <div>Loading...</div>;
   }
-  //FIXME : 확인해야함
+
   return (
     <div className="reservation-detail">
       <h1>예약 상세 정보</h1>
