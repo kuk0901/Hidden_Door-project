@@ -1,7 +1,7 @@
 const ReservationTimeSection = ({
   selectedTime,
   setSelectedTime,
-  timeSlots
+  timeSlots,
 }) => {
   return (
     <div className="time-section">
@@ -11,7 +11,7 @@ const ReservationTimeSection = ({
           {timeSlots.map((slot) => (
             <button
               key={slot.time}
-              type="button" // type="button" 추가하여 폼 제출 방지
+              type="button"
               onClick={() => setSelectedTime(slot.time)}
               className={`time-slot ${
                 selectedTime === slot.time ? "selected" : ""
