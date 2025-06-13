@@ -11,7 +11,8 @@ Hidden_Door는 단순하고 편리한 예약 및 관리 기능 구현과 더불�
 5. [수행 기간 및 절차](#수행-기간-및-절차)
 6. [프로젝트 목표](#프로젝트-목표)
 7. [Hosting](#Hosting)
-8. [상세 문서](#상세-문서)
+8. [설치 및 실행 방법](#설치-및-실행-방법)
+9. [상세 문서](#상세-문서)
 
 ## 프로젝트 개요
 
@@ -27,6 +28,7 @@ Hidden_Door는 NoSQL, JWT, RESTful API, React 학습을 통한 실제 애플리�
 
 - UI 디자인: Google Slides
 - FrontEnd: Vite, React, Recoil, SCSS
+- API: Kakao Map
 - BackEnd: Java, SpringBoot, Gradle
 - Database: MongoDB
 - 개발 도구: Visual Studio Code, MongoDB-Compass
@@ -87,6 +89,159 @@ Hidden_Door는 NoSQL, JWT, RESTful API, React 학습을 통한 실제 애플리�
 - 프론트/백엔드: 로컬 호스팅
 
 - 데이터베이스: 로컬 MongoDB || docker(MongoDB)
+
+## 설치 및 실행 방법
+
+> 본 프로젝트는 VSCode 환경에서 개발되었습니다.
+
+**실행 순서:**
+
+1. 저장소 클론 또는 ZIP 파일 다운로드
+2. 데이터베이스(MongoDB) 실행
+3. 서버(Spring Boot) 실행
+4. 클라이언트(vite-react) 실행
+
+### 1. 저장소 클론
+
+```shell
+git clone https://github.com/kuk0901/Hidden_Door-project.git
+```
+
+### 2. ZIP 파일 다운로드
+
+- [히든도어 깃허브](https://github.com/kuk0901/Hidden_Door-project.git)에서 "<> Code" 버튼을 클릭 후 "Download ZIP"을 선택해주세요.
+
+### 환경변수 설정
+
+> 아래 환경변수 내용을 확인 후 참고해 설정해주세요.
+
+- 전체:
+
+  ```
+  # database & docker
+  MONGODB_URI
+  MONGO_DB_NAME
+  MONGO_INITDB_ROOT_USERNAME
+  MONGO_INITDB_ROOT_PASSWORD
+  ADMIN_EMAIL
+  ADMIN_PASSWORD
+  GMAIL_USERNAME
+  GMAIL_PASSWORD
+
+  # jwt
+  JWT_SECRET_KEY
+
+  # ADMIN_LOGIN_PATH는 일정 주기로 변경 주의
+  VITE_APP_ADMIN_LOGIN_PATH
+  VITE_APP_API_URL
+  ```
+
+- client(hidden_door-react)
+
+  ```
+  # ADMIN_LOGIN_PATH는 일정 주기로 변경 주의
+  VITE_APP_ADMIN_LOGIN_PATH
+  VITE_APP_API_URL
+  VITE_APP_IMG_URL
+  VITE_APP_UNCACHED_URLS
+
+  # kakao map api
+  VITE_APP_KAKAO_API
+  VITE_APP_KAKAO_JS_KEY
+  ```
+
+### Database
+
+- **로컬:** MongoDB 설치 필요
+
+- **Docker:**
+
+  > docker-compose.yml 파일 사용시 환경변수 설정에 주의해주세요.
+
+  - 백그라운드 모드 실행
+
+    ```shell
+    docker compose up -d mongodb
+    ```
+
+  - 포그라운드 모드 실행
+
+    ```shell
+    docker compose up mongodb
+    ```
+
+  - **데이터베이스 공통:**
+
+  - [documents 브랜치](https://github.com/kuk0901/Hidden_Door-project/tree/documents)의 `database` 폴더 안에 있는 json 파일들을 MongoDB에 import 해주세요.
+  - GUI로 데이터를 관리하고 싶다면 [MongoDB Compass](https://www.mongodb.com/try/download/compass)를 설치해 사용하실 수 있습니다.
+
+    - Compass 설치 및 사용법:
+      1. Compass를 다운로드 및 설치합니다.
+      2. 실행 후, `localhost:27019`(도커 사용 시) 또는 `localhost:27017`(로컬 설치 시)로 접속합니다.
+      3. "Add Data" → "Import File" 기능을 이용해 json 파일을 데이터베이스에 추가할 수 있습니다.
+
+### Server(Hidden_door-app)
+
+1. 환경변수 파일 준비(.env)
+
+   - 설정 파일에 필요한 값을 입력하세요.
+
+2. 의존성 설치 및 빌드
+
+   - macOS/Linux:
+
+   ```shell
+   ./gradlew build
+   ```
+
+   - Windows:
+
+   ```shell
+   gradlew.bat build
+   ```
+
+3. 실행 파일(jar)로 서버 실행
+
+   - 빌드가 완료되면 build/libs/(Gradle) 또는 target/(Maven) 폴더에 jar 파일이 생성됩니다.
+
+   - 아래 명령어로 실행:
+
+   ```shell
+   java -jar build/libs/프로젝트명-버전.jar
+
+   # 예시
+   java -jar build/libs/hidden-door-app-0.0.1-SNAPSHOT.jar
+   ```
+
+4. 서버 실행 후 접속
+
+   > application.yml 파일의 port는 8888로 작성되어 있습니다.
+
+   - 접속 URL: http://localhost:8888
+
+### Client(hidden_door-react)
+
+1. 환경변수(.env) 파일 준비
+
+2. 의존성 설치
+
+   ```shell
+   npm install
+   # 또는
+   yarn install
+   ```
+
+3. 클라이언트 실행
+
+   ```shell
+   npm run start
+   # 또는
+   yarn start
+   ```
+
+4. 접속 URL
+
+   - http://localhost:5173
 
 ## 상세 문서
 
