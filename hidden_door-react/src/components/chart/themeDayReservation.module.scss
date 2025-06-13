@@ -9,6 +9,10 @@ $color-progress: #66bb6a; // 진행률 바
   @include mixins.flex-layout-column-with-gap(space-around, center, 20px);
   color: #000;
   width: 100%;
+
+  @include mixins.sm-mode {
+    gap: 5px;
+  }
 }
 
 .header {
@@ -47,14 +51,30 @@ $color-progress: #66bb6a; // 진행률 바
       padding: 0 8px;
       text-align: center;
     }
+
+    @include mixins.sm-mode {
+      display: none;
+    }
   }
 
   .listContent {
     background-color: #fff;
+    @include mixins.sm-mode {
+      @include mixins.flex-layout-column-with-gap(space-between, center, 10px);
+      background-color: transparent;
+    }
 
     .listItem {
       display: contents;
       text-align: center;
+
+      .div_flex {
+        @include mixins.flex-layout-row(center, center);
+
+        .listItem_title {
+          display: none;
+        }
+      }
 
       .themeColor {
         display: inline-block;
@@ -116,6 +136,22 @@ $color-progress: #66bb6a; // 진행률 바
 
         .progressText {
           font-size: 0.8em;
+        }
+      }
+
+      @include mixins.sm-mode {
+        display: block;
+        width: 100%;
+        background-color: #fff;
+        border-radius: 8px;
+
+        .div_flex {
+          justify-content: space-between;
+
+          .listItem_title {
+            display: block;
+            font-weight: 600;
+          }
         }
       }
     }

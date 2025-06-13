@@ -65,6 +65,15 @@ const ThemeTotalReservationChart = ({ data }) => {
             borderWidth={1}
             borderColor={{ from: "color", modifiers: [["darker", 0.3]] }}
             enableArcLinkLabels={false}
+            theme={{
+              labels: {
+                text: {
+                  fontSize: 18,
+                  fill: "#fff",
+                  fontWeight: 700
+                }
+              }
+            }}
             tooltip={({ datum }) => {
               const original = datum.data.originalData;
               return (
