@@ -8,7 +8,6 @@ const dummy = [
   { themeName: "theme4", reservations: 8, total: 8 }
 ];
 
-// TODO: 반응형 css 부분 수정해야 함.
 const ThemeDayReservationChart = ({ data = dummy }) => {
   const sortedData = [...data].sort((a, b) => b.reservations - a.reservations);
 
@@ -44,33 +43,45 @@ const ThemeDayReservationChart = ({ data = dummy }) => {
                   isSoldOut ? styles.soldOut : ""
                 }`}
               >
-                <div className={styles.themeName}>
-                  <span
-                    className={styles.themeColor}
-                    style={{
-                      backgroundColor: `${stringToColor(item.themeName)}`
-                    }}
-                  ></span>{" "}
-                  {item.themeName}
-                </div>
-
-                <div className={styles.reservationCount}>
-                  <b>{item.reservations}</b>/{item.total}
+                <div className={`${styles.div_flex} ${styles.themeName}`}>
+                  <div className={styles.listItem_title}>테마명:</div>
+                  <div>
+                    <div
+                      className={styles.themeColor}
+                      style={{
+                        backgroundColor: `${stringToColor(item.themeName)}`
+                      }}
+                    ></div>{" "}
+                    {item.themeName}
+                  </div>
                 </div>
 
                 <div
-                  className={`${styles.remaining} ${
+                  className={`${styles.div_flex} ${styles.reservationCount}`}
+                >
+                  <div className={styles.listItem_title}>예약/총량:</div>
+                  <div>
+                    <b>{item.reservations}</b>/{item.total}
+                  </div>
+                </div>
+
+                <div
+                  className={`${styles.div_flex}  ${styles.remaining} ${
                     isSoldOut ? styles.soldOutText : ""
                   }`}
                 >
+                  <div className={styles.listItem_title}>잔여:</div>
                   {isSoldOut ? (
-                    <span style={{ fontWeight: "bold" }}>매진</span>
+                    <div style={{ fontWeight: "bold" }}>매진</div>
                   ) : (
-                    `${item.total - item.reservations}개`
+                    <div className={styles.count}>
+                      {item.total - item.reservations}개
+                    </div>
                   )}
                 </div>
 
-                <div className={styles.progressWrapper}>
+                <div className={`${styles.div_flex} ${styles.progressWrapper}`}>
+                  <div className={styles.listItem_title}>진행률:</div>
                   <div className={styles.progressBar}>
                     <div
                       className={`${styles.progressFill} ${
