@@ -53,7 +53,7 @@ public class SecurityConfig {
             .requestMatchers("/images/**", "/api/v1/auth/authenticate", "/api/v1/auth/renew", "/api/v1/auth/verify",
                 "/api/v1/auth/terminate",
                 "/api/v1/customers/customer/add",
-                "/api/v1/customers/customer/delete/*", "/api/v1/reservations/create")
+                "/api/v1/customers/customer/delete/*", "/api/v1/reservations/create","/api/v1/customers/customer/verify-password")
             .permitAll()
             .requestMatchers("/api/v1/admins/**", "/api/v1/monitoring/**")
             .hasAnyAuthority("ROLE_ADMIN", "ROLE_SUPER_ADMIN")

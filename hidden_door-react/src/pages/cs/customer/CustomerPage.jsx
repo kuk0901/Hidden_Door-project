@@ -150,11 +150,9 @@ const CustomerPage = () => {
           </div>
 
           <div className="btn-container">
-            {admin && (
-              <button className="btn" onClick={handleAddCustomer}>
-                질문하기
-              </button>
-            )}
+            <button className="btn" onClick={handleAddCustomer}>
+              질문하기
+            </button>
           </div>
 
           <div className="cs-main-container">
