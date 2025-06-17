@@ -4,21 +4,25 @@ import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import { formatPhoneNumber, formatNumberToPrice } from "@utils/format/number";
+import ReservationSummaryPageSkeleton from "@components/common/loading/skeletonUI/ReservationSummaryPageSkeleton";
 
 const ReservationSummaryPage = () => {
   const { reservationNumber } = useParams();
   const location = useLocation();
   const [reservationDto, setReservationDto] = useState(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!reservationNumber) {
       toast.error("예약 번호가 없습니다.");
+      setLoading(false);
     }
   }, [location.state, reservationNumber]);
 
   useEffect(() => {
     const fetchReservationSummary = async () => {
+      setLoading(true);
       try {
         const res = await Api.get(`/reservations/summary/${reservationNumber}`);
 
@@ -26,6 +30,7 @@ const ReservationSummaryPage = () => {
           toast.error(
             "알 수 없는 오류가 발생했습니다. 잠시 후 다시 시도해 주세요."
           );
+          setLoading(false);
           return;
         }
 
@@ -34,6 +39,8 @@ const ReservationSummaryPage = () => {
         toast.error(
           "예약 조회 실패: " + (error.response?.data?.message || error.message)
         );
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -41,6 +48,10 @@ const ReservationSummaryPage = () => {
       fetchReservationSummary();
     }
   }, [reservationNumber]);
+
+  if (loading) {
+    return <ReservationSummaryPageSkeleton />;
+  }
 
   if (!reservationDto) {
     return <p>예약 정보를 불러오는 중...</p>;

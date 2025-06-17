@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatPhoneNumber, formatNumberToPrice } from "@utils/format/number";
+import ReservationDetailSkeleton from "@components/common/loading/skeletonUI/ReservationDetailSkeleton";
 
 const ReservationDetail = ({ reservationDetail, onPaymentStateChange }) => {
   const [paymentState, setPaymentState] = useState(
@@ -17,7 +18,7 @@ const ReservationDetail = ({ reservationDetail, onPaymentStateChange }) => {
   };
 
   if (!reservationDetail) {
-    return <div>Loading...</div>;
+    return <ReservationDetailSkeleton />;
   }
 
   return (

@@ -5,9 +5,11 @@ import Pagination from "@components/common/navigation/pagination/Pagination";
 import ReservationList from "../../components/reservation/ReservationList";
 import SearchForm from "@components/common/form/SearchForm";
 import { useLocation } from "react-router-dom";
+import ReservationMainPageSkeleton from "@components/common/loading/skeletonUI/ReservationMainPageSkeleton";
 
 const AdminReservationPage = () => {
   const location = useLocation();
+  const [loading, setLoading] = useState(true);
 
   const [reservationList, setReservationList] = useState([]);
   const [page, setPage] = useState(
@@ -81,6 +83,7 @@ const AdminReservationPage = () => {
         searchField: res.data.searchField,
         searchTerm: res.data.searchTerm,
       });
+      setLoading(false);
     } catch (error) {
       toast.error(error.message || "오류입니다.");
     }
@@ -117,7 +120,9 @@ const AdminReservationPage = () => {
     { value: "themeName", label: "테마명" },
   ];
 
-  return (
+  return loading ? (
+    <ReservationMainPageSkeleton />
+  ) : (
     <>
       <section className="admin-reservation-page">
         <div>

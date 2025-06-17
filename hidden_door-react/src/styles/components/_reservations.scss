@@ -376,6 +376,10 @@
       border-radius: 8px;
       padding: 10px;
 
+      .react-calendar__navigation button {
+        background: none !important;
+      }
+
       @include mixins.dark-mode {
         background: color.adjust(
           variables.$dark-background-color,
