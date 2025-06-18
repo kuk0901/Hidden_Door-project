@@ -62,7 +62,7 @@ const ReservationDetail = ({ reservationDetail, onPaymentStateChange }) => {
         {reservationDetail.paymentMethod}
       </p>
       <fieldset className="paymentState">
-        <legend className="semibold">결제 여부:</legend>
+        <span className="semibold">결제 여부:</span>
         <label style={{ marginRight: "20px" }}>
           <input
             type="radio"

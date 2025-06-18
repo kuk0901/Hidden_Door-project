@@ -284,14 +284,39 @@
     }
 
     .paymentState {
-      @include mixins.flex-layout-row(space-around, center);
+      @include mixins.flex-layout-row(flex-start, center);
       border: none;
       margin: 0;
       padding: 0;
+      border-bottom: 1px solid black;
+
+      span {
+        font-size: 22px;
+        margin-right: 5px;
+
+        @include mixins.md-mode {
+          font-size: 18px;
+        }
+        @include mixins.sm-mode {
+          font-size: 13px;
+        }
+      }
 
       label {
         margin: 0;
-        padding: 0;
+        cursor: pointer;
+
+        input {
+          cursor: pointer;
+        }
+      }
+
+      @include mixins.md-mode {
+        padding: 7px;
+      }
+
+      @include mixins.sm-mode {
+        padding: 5px;
       }
     }
   }
