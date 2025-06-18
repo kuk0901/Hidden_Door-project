@@ -6,6 +6,7 @@ import Loading from "@components/common/loading/Loading";
 import { AppRoutes } from "@routes/AppRoutes";
 import { useAuth } from "@hooks/useAuth";
 import { useScrollRestoration } from "@hooks/useScrollRestoration";
+import InputConfirm from "./components/common/dialogs/inputConfirm";
 
 function App() {
   const { loading } = useAuth();
@@ -27,6 +28,7 @@ function App() {
         theme="light"
       />
       <Confirm />
+      <InputConfirm />
       <Suspense fallback={<Loading />}>
         <AppRoutes />
       </Suspense>

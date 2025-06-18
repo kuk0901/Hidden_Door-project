@@ -27,6 +27,23 @@
       min-height: 55px;
       margin-bottom: 20px;
       font-weight: 700;
+
+      &.confirm-modal__input-msg {
+        font-size: 18px;
+        min-height: 30px;
+        margin-bottom: 10px;
+      }
+    }
+
+    .confirm-modal__input {
+      display: inline-block;
+      width: 100%;
+      padding: 5px;
+      border: 1px solid #000;
+      border-radius: 4px;
+      background-color: #fff;
+      color: #000;
+      margin-bottom: 10px;
     }
 
     .confirm-modal__btn-container {
