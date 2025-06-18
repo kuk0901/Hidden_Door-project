@@ -102,9 +102,7 @@ public class CustomerService {
   @Transactional
   public ResponseDto<String> addCustomer(CustomerDto customerDto) {
 
-    Customer customer = new Customer();
-    customer.setCustomerName(customerDto.getCustomerName());
-    customer.setCustomerEmail(customerDto.getCustomerEmail());
+    Customer customer = new Customer();    
     customer.setCustomerTitle(customerDto.getCustomerTitle());
     customer.setCustomerContent(customerDto.getCustomerContent());
     customer.setCustomerCheck(customerDto.getCustomerCheck());
