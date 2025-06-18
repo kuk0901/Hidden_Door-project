@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.baeksutalchul.hiddendoor.customer.service.CustomerService;
 import com.baeksutalchul.hiddendoor.dto.CustomerDto;
+import com.baeksutalchul.hiddendoor.dto.PasswordCheckDto;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 
@@ -70,4 +71,12 @@ public class CustomerController {
   public ResponseEntity<ResponseDto<String>> deleteCustomerOne(@PathVariable("id") String customerId) {
     return ResponseEntity.ok().body(customerService.deleteCustomerOne(customerId));
   }
+
+  @PostMapping("/customer/verify-password")
+  public ResponseEntity<ResponseDto<Boolean>> verifyCustomerPassword(@RequestBody PasswordCheckDto dto) {
+    boolean success = customerService.verifyCustomerPassword(dto.getCustomerId(), dto.getPassword());
+    return ResponseEntity.ok(new ResponseDto<>(success, success ? "비밀번호가 일치합니다." : "비밀번호가 틀렸습니다."));
+  }
+
+  
 }

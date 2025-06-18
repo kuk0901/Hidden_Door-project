@@ -139,6 +139,7 @@ const ReservationConfirmPage = () => {
               type="text"
               id="name"
               name="name"
+              className="form-input"
               value={reservation.name}
               onChange={handleInputChange}
               placeholder="성함을 입력해주세요"
@@ -152,6 +153,7 @@ const ReservationConfirmPage = () => {
               type="email"
               id="email"
               name="email"
+              className="form-input"
               value={reservation.email}
               onChange={handleInputChange}
               placeholder="이메일을 입력해주세요"
@@ -165,6 +167,7 @@ const ReservationConfirmPage = () => {
               type="tel"
               id="phone"
               name="phone"
+              className="form-input"
               value={reservation.phone}
               onChange={handleInputChange}
               placeholder="휴대폰 번호를 입력해주세요"

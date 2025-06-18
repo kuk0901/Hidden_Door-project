@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { formatPhoneNumber, formatNumberToPrice } from "@utils/format/number";
+import ReservationDetailSkeleton from "@components/common/loading/skeletonUI/ReservationDetailSkeleton";
 
 const ReservationDetail = ({ reservationDetail, onPaymentStateChange }) => {
   const [paymentState, setPaymentState] = useState(
@@ -17,27 +18,52 @@ const ReservationDetail = ({ reservationDetail, onPaymentStateChange }) => {
   };
 
   if (!reservationDetail) {
-    return <div>Loading...</div>;
+    return <ReservationDetailSkeleton />;
   }
 
   return (
     <div className="reservation-detail">
       <h1>예약 상세 정보</h1>
-      <p>테마명: {reservationDetail.themeName}</p>
-      <p>성함: {reservationDetail.name}</p>
-      <p>연락처: {formatPhoneNumber(reservationDetail.phone)}</p>
-      <p>이메일: {reservationDetail.email}</p>
-      <p>예약 날짜: {reservationDetail.kstResDate}</p>
-      <p>예약 시간: {reservationDetail.kstResTime}</p>
-      <p>예약 번호: {reservationDetail.reservationNumber}</p>
-      <p>인원 수: {reservationDetail.partySize}명</p>
       <p>
-        총 결제 금액: {formatNumberToPrice(reservationDetail.paymentAmount)}원
+        <span className="semibold">테마명:</span> {reservationDetail.themeName}
       </p>
-      <p>결제 방법: {reservationDetail.paymentMethod}</p>
       <p>
-        결제 여부:{" "}
-        <label>
+        <span className="semibold">성함:</span> {reservationDetail.name}
+      </p>
+      <p>
+        <span className="semibold">연락처:</span>{" "}
+        {formatPhoneNumber(reservationDetail.phone)}
+      </p>
+      <p>
+        <span className="semibold">이메일: </span> {reservationDetail.email}
+      </p>
+      <p>
+        <span className="semibold">예약 날짜: </span>{" "}
+        {reservationDetail.kstResDate}
+      </p>
+      <p>
+        <span className="semibold">예약 시간: </span>{" "}
+        {reservationDetail.kstResTime}
+      </p>
+      <p>
+        <span className="semibold">예약 번호: </span>{" "}
+        {reservationDetail.reservationNumber}
+      </p>
+      <p>
+        <span className="semibold">인원 수:</span> {reservationDetail.partySize}
+        명
+      </p>
+      <p>
+        <span className="semibold">총 결제 금액: </span>
+        {formatNumberToPrice(reservationDetail.paymentAmount)}원
+      </p>
+      <p>
+        <span className="semibold">결제 방법:</span>{" "}
+        {reservationDetail.paymentMethod}
+      </p>
+      <fieldset className="paymentState">
+        <span className="semibold">결제 여부:</span>
+        <label style={{ marginRight: "20px" }}>
           <input
             type="radio"
             name="paymentState"
@@ -47,7 +73,7 @@ const ReservationDetail = ({ reservationDetail, onPaymentStateChange }) => {
           />
           미결제
         </label>
-        <label style={{ marginLeft: "20px" }}>
+        <label>
           <input
             type="radio"
             name="paymentState"
@@ -57,9 +83,9 @@ const ReservationDetail = ({ reservationDetail, onPaymentStateChange }) => {
           />
           결제 완료
         </label>
-      </p>
+      </fieldset>
       <p>
-        결제 날짜:{" "}
+        <span className="semibold">결제 날짜: </span>
         {reservationDetail.kstPayDate === "" ||
         reservationDetail.kstPayDate === "1970-01-01"
           ? "아직 결제가 되지 않았습니다"

@@ -2,6 +2,7 @@
 @use "../abstracts/variables" as variables;
 @use "sass:color";
 
+// FIXME: mainPage의 캘린더 css 수정해야함
 .reservation-list-container {
   display: flex;
   background: variables.$light-background-color;
@@ -43,7 +44,7 @@
       background: inherit;
       color: inherit;
       font-size: 22px;
-      height: 64px;
+      height: 50px;
 
       @include mixins.md-mode {
         font-size: 17px;
@@ -229,8 +230,7 @@
 
   .reservation-detail {
     text-align: center;
-    max-width: 600px;
-    width: 100%;
+    width: 420px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -257,6 +257,7 @@
     h1 {
       font-size: 28px;
       margin-bottom: 20px;
+      text-align: center;
       @include mixins.md-mode {
         font-size: 20px;
       }
@@ -266,16 +267,55 @@
     }
 
     p {
+      text-align: left;
       font-size: 22px;
-      margin: 10px 0;
+      margin: 5px 0;
       line-height: 1.5;
       padding: 10px;
+      border-bottom: 1px solid black;
       @include mixins.md-mode {
         font-size: 18px;
         padding: 7px;
       }
       @include mixins.sm-mode {
         font-size: 13px;
+        padding: 5px;
+      }
+    }
+
+    .paymentState {
+      @include mixins.flex-layout-row(flex-start, center);
+      border: none;
+      margin: 0;
+      padding: 10px;
+      border-bottom: 1px solid black;
+
+      span {
+        font-size: 22px;
+        margin-right: 5px;
+
+        @include mixins.md-mode {
+          font-size: 18px;
+        }
+        @include mixins.sm-mode {
+          font-size: 13px;
+        }
+      }
+
+      label {
+        margin: 0;
+        cursor: pointer;
+
+        input {
+          cursor: pointer;
+        }
+      }
+
+      @include mixins.md-mode {
+        padding: 7px;
+      }
+
+      @include mixins.sm-mode {
         padding: 5px;
       }
     }
@@ -374,6 +414,10 @@
       border: 1px solid #ddd;
       border-radius: 8px;
       padding: 10px;
+
+      .react-calendar__navigation button {
+        background: none !important;
+      }
 
       @include mixins.dark-mode {
         background: color.adjust(
@@ -574,11 +618,6 @@
     min-width: 180px;
     height: 48px;
 
-    @include mixins.dark-mode {
-      background-color: variables.$dark-blue-color;
-      color: variables.$dark-text-color;
-    }
-
     @include mixins.md-mode {
       font-size: 1rem;
       padding: 10px;
@@ -667,7 +706,11 @@
   h1 {
     font-size: 32px;
     margin-bottom: 30px;
-    color: variables.$primary-color;
+    color: black;
+
+    @include mixins.dark-mode {
+      color: white;
+    }
 
     @include mixins.md-mode {
       font-size: 22px;
@@ -708,6 +751,11 @@
         border-radius: 4px;
         margin-right: 15px;
 
+        @include mixins.dark-mode {
+          background-color: #ffebcd;
+          color: black;
+        }
+
         @include mixins.md-mode {
           font-size: 16px;
           padding: 8px;
@@ -717,6 +765,13 @@
           font-size: 14px;
           margin-right: 0;
           padding: 6px;
+        }
+      }
+
+      .form-input {
+        @include mixins.dark-mode {
+          background-color: #ffebcd;
+          color: black;
         }
       }
 
@@ -824,7 +879,7 @@
       margin-top: 20px;
       padding: 10px 20px;
       background-color: variables.$confirm-button-color;
-      color: variables.$confirm-text-color;
+      color: white;
       border-radius: 4px;
       border: none;
       cursor: pointer;
@@ -1058,7 +1113,7 @@
       width: 250px;
       height: 39px;
       margin: 0;
-      font-size: 20px;
+      font-size: 15px;
       border: 1px solid #000;
       background-color: #fff;
       padding: 3px;
