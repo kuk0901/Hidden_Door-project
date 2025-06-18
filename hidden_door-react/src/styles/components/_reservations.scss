@@ -44,7 +44,7 @@
       background: inherit;
       color: inherit;
       font-size: 22px;
-      height: 64px;
+      height: 50px;
 
       @include mixins.md-mode {
         font-size: 17px;
@@ -287,7 +287,7 @@
       @include mixins.flex-layout-row(flex-start, center);
       border: none;
       margin: 0;
-      padding: 0;
+      padding: 10px;
       border-bottom: 1px solid black;
 
       span {
@@ -618,11 +618,6 @@
     min-width: 180px;
     height: 48px;
 
-    @include mixins.dark-mode {
-      background-color: variables.$dark-blue-color;
-      color: variables.$dark-text-color;
-    }
-
     @include mixins.md-mode {
       font-size: 1rem;
       padding: 10px;
@@ -711,7 +706,11 @@
   h1 {
     font-size: 32px;
     margin-bottom: 30px;
-    color: variables.$primary-color;
+    color: black;
+
+    @include mixins.dark-mode {
+      color: white;
+    }
 
     @include mixins.md-mode {
       font-size: 22px;
@@ -752,6 +751,11 @@
         border-radius: 4px;
         margin-right: 15px;
 
+        @include mixins.dark-mode {
+          background-color: #ffebcd;
+          color: black;
+        }
+
         @include mixins.md-mode {
           font-size: 16px;
           padding: 8px;
@@ -761,6 +765,13 @@
           font-size: 14px;
           margin-right: 0;
           padding: 6px;
+        }
+      }
+
+      .form-input {
+        @include mixins.dark-mode {
+          background-color: #ffebcd;
+          color: black;
         }
       }
 
@@ -868,7 +879,7 @@
       margin-top: 20px;
       padding: 10px 20px;
       background-color: variables.$confirm-button-color;
-      color: variables.$confirm-text-color;
+      color: white;
       border-radius: 4px;
       border: none;
       cursor: pointer;
