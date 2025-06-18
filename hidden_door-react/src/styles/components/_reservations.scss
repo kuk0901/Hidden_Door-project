@@ -230,8 +230,7 @@
 
   .reservation-detail {
     text-align: center;
-    max-width: 600px;
-    width: 100%;
+    width: 420px;
     padding: 20px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
@@ -258,6 +257,7 @@
     h1 {
       font-size: 28px;
       margin-bottom: 20px;
+      text-align: center;
       @include mixins.md-mode {
         font-size: 20px;
       }
@@ -267,10 +267,12 @@
     }
 
     p {
+      text-align: left;
       font-size: 22px;
-      margin: 10px 0;
+      margin: 5px 0;
       line-height: 1.5;
       padding: 10px;
+      border-bottom: 1px solid black;
       @include mixins.md-mode {
         font-size: 18px;
         padding: 7px;
@@ -278,6 +280,18 @@
       @include mixins.sm-mode {
         font-size: 13px;
         padding: 5px;
+      }
+    }
+
+    .paymentState {
+      @include mixins.flex-layout-row(space-around, center);
+      border: none;
+      margin: 0;
+      padding: 0;
+
+      label {
+        margin: 0;
+        padding: 0;
       }
     }
   }
@@ -1063,7 +1077,7 @@
       width: 250px;
       height: 39px;
       margin: 0;
-      font-size: 20px;
+      font-size: 15px;
       border: 1px solid #000;
       background-color: #fff;
       padding: 3px;
