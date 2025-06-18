@@ -142,4 +142,16 @@ public class CustomerService {
     customerRepository.deleteById(id);
     return new ResponseDto<>("", "질문 " + customerToDelete.getCustomerTitle() + "이(가) 삭제되었습니다.");
   }
+
+public boolean verifyCustomerPassword(String customerId, int password) {
+    Optional<Customer> customerOptional = customerRepository.findById(customerId);
+
+    if (customerOptional.isEmpty()) {
+        return false;
+    }
+
+    Customer customer = customerOptional.get();
+    return customer.getCustomerPwd() == password;
+  }
+
 }
