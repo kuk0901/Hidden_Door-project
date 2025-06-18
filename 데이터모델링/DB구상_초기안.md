@@ -1,6 +1,6 @@
 ## Database 구상 초기안
 
-- `예약(Reservation)`
+#### `예약(Reservation)`
 
 | ko-field                            | en-field             |
 | ----------------------------------- | -------------------- |
@@ -18,7 +18,9 @@
 | 결제 방법                           | PAYMENT_METHOD       |
 | 환불 여부                           | REFUND_STATE         |
 
-- `방탈출 카페 정보(EscapeRoom)`
+<br />
+
+#### `방탈출 카페 정보(EscapeRoom)`
 
 | ko-field         | en-field           |
 | ---------------- | ------------------ |
@@ -31,7 +33,9 @@
 | 이미지 실제 경로 | STORED_FILE_NAME   |
 | 이미지 이름      | ORIGINAL_FILE_NAME |
 
-- `테마 정보(Theme)`
+<br />
+
+#### `테마 정보(Theme)`
 
 | ko-field    | en-field          |
 | ----------- | ----------------- |
@@ -43,7 +47,9 @@
 | 가격        | PRICE             |
 | 누적 이용금 | TOTLE_AMOUNT_USED |
 
-- `공지사항(Notice)`
+<br />
+
+#### `공지사항(Notice)`
 
 | ko-field    | en-field  |
 | ----------- | --------- |
@@ -53,7 +59,9 @@
 | 작성자 정보 | ADMIN_ID  |
 | 작성 날짜   | CRE_DATE  |
 
-- `이벤트(Event)`
+<br />
+
+#### `이벤트(Event)`
 
 | ko-field           | en-field     |
 | ------------------ | ------------ |
@@ -66,7 +74,9 @@
 | 당첨자 휴대폰 번호 | WINNER_PHONE |
 | 당첨자 이메일      | WINNER_EMAIL |
 
-- `고객센터(CustomerService)`
+<br />
+
+#### `고객센터(CustomerService)`
 
 | ko-field       | en-field         |
 | -------------- | ---------------- |
@@ -80,7 +90,9 @@
 | 문의 작성일    | QUE_CRE_DATE     |
 | 답변 작성일    | ANS_CRE_DATE     |
 
-- `자주 찾는 질문(FAQ)`
+<br />
+
+#### `자주 찾는 질문(FAQ)`
 
 | ko-field  | en-field |
 | --------- | -------- |
@@ -92,7 +104,9 @@
 | 수정일    | MOD_DATE |
 | 작성자    | WRITER   |
 
-- `관리자(Admin)`
+<br />
+
+#### `관리자(Admin)`
 
 | ko-field      | en-field  |
 | ------------- | --------- |
@@ -103,7 +117,9 @@
 | 비밀번호      | PWD       |
 | 권한          | AUTHORITY |
 
-- `주의사항(caution)`
+<br />
+
+#### `주의사항(caution)`
 
 | ko-field    | en-field   |
 | ----------- | ---------- |
