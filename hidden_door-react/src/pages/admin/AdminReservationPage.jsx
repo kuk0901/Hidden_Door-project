@@ -7,6 +7,7 @@ import SearchForm from "@components/common/form/SearchForm";
 import { useLocation } from "react-router-dom";
 import ReservationMainPageSkeleton from "@components/common/loading/skeletonUI/ReservationMainPageSkeleton";
 
+// skeletonUI 변경하기
 const AdminReservationPage = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
