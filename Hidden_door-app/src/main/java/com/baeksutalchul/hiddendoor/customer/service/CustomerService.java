@@ -62,7 +62,7 @@ public class CustomerService {
       customerList = customerRepository.findAll(pageable);
     }
     if (customerList.isEmpty()) {
-      throw new CustomException(ErrorCode.FAQ_NOT_FOUND);
+      throw new CustomException(ErrorCode.CS_NOT_FOUND);
     }
 
     List<CustomerDto> customerDtoList = customerList.getContent().stream()
@@ -106,7 +106,7 @@ public class CustomerService {
     customer.setCustomerTitle(customerDto.getCustomerTitle());
     customer.setCustomerContent(customerDto.getCustomerContent());
     customer.setCustomerCheck(customerDto.getCustomerCheck());
-    customer.setCustomerPwd(customerDto.getCustomerPwd());
+    customer.setCustomerPwd(Integer.parseInt(customerDto.getCustomerPwd()));
     customer.setQueCreDate(Instant.now());
     customer.setAnsCreDate(defaulInstant);
 
