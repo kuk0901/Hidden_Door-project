@@ -8,132 +8,144 @@
   }
 }
 
+%box-styling {
+  background-color: transparent;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  padding: 32px;
+  margin: 40px auto;
+  @include dark-mode {
+    background-color: transparent;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+  @include mixins.md-mode {
+    max-width: 100%;
+    padding: 24px;
+  }
+  @include mixins.sm-mode {
+    padding: 16px;
+  }
+}
+
+// 공통 버튼 스타일
+%btn-styling {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 500;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  @include mixins.md-mode {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px 0;
+    text-align: center;
+  }
+}
+
 .notice-page {
+  @extend %box-styling;
   max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
   color: variables.$light-text-color;
   min-height: calc(100vh - 136px - 70px);
 
   @include dark-mode {
     color: variables.$dark-text-color;
-    background-color: variables.$dark-background-color;
   }
+}
 
+.notice-page-title {
+  font-size: 40px;
+  margin-bottom: 20px;
+  text-align: center;
   @include mixins.md-mode {
-    max-width: 100%;
-    padding: 12px;
+    font-size: 28px;
   }
   @include mixins.sm-mode {
-    padding: 8px;
+    font-size: 22px;
   }
+}
 
-  .notice-page-title {
-    font-size: 40px;
-    margin-bottom: 20px;
-    text-align: center;
+.add-notice-btn {
+  @extend %btn-styling;
+  background-color: variables.$light-blue-color;
+  color: white;
+  text-decoration: none;
+  margin-bottom: 20px;
+  border: none;
+  cursor: pointer;
 
-    @include mixins.md-mode {
-      font-size: 28px;
-    }
-    @include mixins.sm-mode {
-      font-size: 22px;
-    }
+  @include dark-mode {
+    background-color: variables.$dark-blue-color;
+    color: variables.$dark-text-color;
   }
+}
 
-  .add-notice-btn {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: variables.$light-blue-color;
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    margin-bottom: 20px;
+.notice-list {
+  .notice-item {
+    padding: 18px 16px;
+    margin-bottom: 12px;
+    background-color: transparent;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border: none;
+    display: flex;
+    justify-content: space-between;
+    text-decoration: none;
+    color: variables.$light-text-color;
     cursor: pointer;
 
     @include dark-mode {
-      background-color: variables.$dark-blue-color;
+      background-color: transparent;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
       color: variables.$dark-text-color;
     }
-    @include mixins.md-mode {
-      width: 100%;
-      font-size: 1rem;
-      padding: 10px 0;
-      text-align: center;
-    }
-  }
-
-  .notice-list {
-    .notice-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 15px 7px;
-      border-bottom: 1px solid #eee;
-      text-decoration: none;
-      color: variables.$light-text-color;
-      cursor: pointer;
-
+    &:hover {
+      background-color: #f8f9fa;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
       @include dark-mode {
-        border-bottom-color: color.adjust(
+        background-color: color.adjust(
           variables.$dark-background-color,
-          $lightness: 10%
+          $lightness: 5%
         );
-        color: variables.$dark-text-color;
       }
-      &:hover {
-        background-color: #f8f9fa;
-        @include dark-mode {
-          background-color: color.adjust(
-            variables.$dark-background-color,
-            $lightness: 5%
-          );
-        }
+    }
+    .notice-title {
+      font-weight: bold;
+      @include mixins.sm-mode {
+        font-size: 1rem;
       }
-      .notice-title {
-        font-weight: bold;
-        @include mixins.sm-mode {
-          font-size: 1rem;
-        }
-      }
-      .notice-date {
-        color: #6c757d;
-        @include dark-mode {
-          color: color.adjust(variables.$dark-text-color, $alpha: -0.3);
-        }
-        @include mixins.sm-mode {
-          font-size: 0.9rem;
-        }
+    }
+    .notice-date {
+      color: #6c757d;
+      @include dark-mode {
+        color: color.adjust(variables.$dark-text-color, $alpha: -0.3);
       }
       @include mixins.sm-mode {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 5px;
-        padding: 10px 2px;
+        font-size: 0.9rem;
       }
+    }
+    @include mixins.sm-mode {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 5px;
+      padding: 10px 2px;
     }
   }
 }
 
-.notice-detail-page {
+.notice-detail-page,
+.add-notice-page,
+.edit-notice-page {
+  @extend %box-styling;
   max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
   color: variables.$light-text-color;
 
-  @include dark-mode {
-    color: variables.$dark-text-color;
-    background-color: variables.$dark-background-color;
-  }
-  @include mixins.md-mode {
-    max-width: 100%;
-    padding: 12px;
-  }
-  @include mixins.sm-mode {
-    padding: 8px;
-  }
-
-  .notice-title {
+  .notice-title,
+  .add-notice-title,
+  .edit-notice-title {
     font-size: 24px;
     margin-bottom: 10px;
     @include mixins.sm-mode {
@@ -174,8 +186,7 @@
       }
     }
     .notice-btn {
-      padding: 10px 20px;
-      border-radius: 5px;
+      @extend %btn-styling;
       text-decoration: none;
       color: white;
       border: none;
@@ -196,41 +207,11 @@
   }
 }
 
-.add-notice-page,
-.edit-notice-page {
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  color: variables.$light-text-color;
-
-  @include dark-mode {
-    color: variables.$dark-text-color;
-    background-color: variables.$dark-background-color;
-  }
-  @include mixins.md-mode {
-    max-width: 100%;
-    padding: 12px;
-  }
-  @include mixins.sm-mode {
-    padding: 8px;
-  }
-}
-
-.add-notice-title,
-.edit-notice-title {
-  font-size: 24px;
-  margin-bottom: 20px;
-  @include mixins.sm-mode {
-    font-size: 18px;
-  }
-}
-
 .edit-notice-form,
 .add-notice-form {
   display: flex;
   flex-direction: column;
   gap: 20px;
-
   @include mixins.sm-mode {
     gap: 12px;
   }
@@ -247,7 +228,6 @@
 .add-notice-form-label {
   font-weight: 600;
   color: variables.$light-text-color;
-
   @include dark-mode {
     color: variables.$dark-text-color;
   }
@@ -268,7 +248,6 @@
   font-size: 1rem;
   background-color: #fff;
   color: #495057;
-
   @include dark-mode {
     background-color: white;
     color: black;
@@ -287,7 +266,6 @@
 .add-notice-form-textarea {
   min-height: 150px;
   resize: vertical;
-
   @include mixins.sm-mode {
     min-height: 100px;
   }
@@ -297,7 +275,6 @@
 .add-notice-form-buttons {
   display: flex;
   gap: 10px;
-
   @include mixins.sm-mode {
     flex-direction: column;
     gap: 6px;
@@ -311,13 +288,11 @@
 
 .edit-notice-btn,
 .add-notice-btn {
-  padding: 10px 20px;
+  @extend %btn-styling;
   border: none;
-  border-radius: 0.25rem;
   color: white;
   cursor: pointer;
   font-size: 1rem;
-
   @include dark-mode {
     color: variables.$dark-text-color;
   }
@@ -330,7 +305,6 @@
 .edit-notice-btn-submit,
 .add-notice-btn-submit {
   background-color: variables.$light-blue-color;
-
   &:hover {
     background-color: color.adjust(
       variables.$light-blue-color,
@@ -345,7 +319,6 @@
 .edit-notice-btn-cancel,
 .add-notice-btn-cancel {
   background-color: #6c757d;
-
   &:hover {
     background-color: color.adjust(#6c757d, $lightness: 10%);
   }
@@ -357,12 +330,10 @@
   align-items: center;
   margin-top: 20px;
   gap: 10px;
-
   @include mixins.sm-mode {
     gap: 4px;
     flex-wrap: wrap;
   }
-
   button {
     padding: 8px 12px;
     border: 1px solid #ced4da;
@@ -371,22 +342,22 @@
     font-size: 14px;
     cursor: pointer;
     transition: all 0.3s ease;
-
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     &:hover {
       background-color: #e9ecef;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
     }
-
     &:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
-
     &.active {
       background-color: variables.$light-blue-color;
       color: #fff;
       border-color: variables.$light-blue-color;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
-
     @include dark-mode {
       background-color: variables.$dark-background-color;
       color: variables.$dark-text-color;
@@ -394,21 +365,18 @@
         variables.$dark-background-color,
         $lightness: 20%
       );
-
       &:hover {
         background-color: color.adjust(
           variables.$dark-background-color,
           $lightness: 10%
         );
       }
-
       &.active {
         background-color: variables.$dark-blue-color;
         color: variables.$dark-text-color;
         border-color: variables.$dark-blue-color;
       }
     }
-
     @include mixins.sm-mode {
       padding: 6px 8px;
       font-size: 12px;

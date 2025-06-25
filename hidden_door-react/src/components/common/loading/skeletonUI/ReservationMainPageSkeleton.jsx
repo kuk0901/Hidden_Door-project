@@ -13,7 +13,7 @@ const ReservationMainSkeleton = () => (
           <h2 className="section-title">
             <Skeleton width={80} />
           </h2>
-          <Skeleton height={240} width="100%" style={{ borderRadius: 8 }} />
+          <Skeleton height={300} width="100%" style={{ borderRadius: 8 }} />
         </div>
         {/* 테마 선택 */}
         <div className="theme-section">
@@ -21,7 +21,7 @@ const ReservationMainSkeleton = () => (
             <Skeleton width={80} />
           </h2>
           <div className="theme-slots">
-            {Array.from({ length: 3 }).map((_, i) => (
+            {Array.from({ length: 4 }).map((_, i) => (
               <Skeleton
                 key={i}
                 height={44}
@@ -48,8 +48,8 @@ const ReservationMainSkeleton = () => (
           </div>
         </div>
       </div>
-      <Skeleton height={48} width={180} style={{ marginTop: 16 }} />
-      <Skeleton height={48} width={180} style={{ marginTop: 8 }} />
+      <Skeleton height={48} width={1090} style={{ marginTop: 16 }} />
+      <Skeleton height={48} width={1090} style={{ marginTop: 8 }} />
     </form>
   </section>
 );

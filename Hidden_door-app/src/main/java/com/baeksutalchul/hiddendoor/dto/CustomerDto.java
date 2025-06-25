@@ -16,7 +16,7 @@ public class CustomerDto {
   private String customerCheck;
   private String customerAnswer;
   private String adminName;
-  private int customerPwd;
+  private String customerPwd;
   private Instant queCreDate;
   private Instant ansCreDate;
   private String kstQueCreDate;

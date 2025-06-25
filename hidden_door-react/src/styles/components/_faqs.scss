@@ -1,5 +1,5 @@
-@use "../abstracts/variables";
-@use "../abstracts/mixins";
+@use '../abstracts/variables';
+@use '../abstracts/mixins';
 
 @include mixins.light-mode {
   .section-cs {
@@ -75,6 +75,12 @@
       .cs-header,
       .cs-main-container {
         width: 960px;
+        .empty-message {
+          text-align: center;
+          padding: 40px 0;
+          color: #888;
+          font-size: 20px;
+        }
       }
     }
   }
@@ -90,6 +96,12 @@
       .cs-main-container {
         width: 100%;
         font-size: 22px;
+        .empty-message {
+          text-align: center;
+          padding: 40px 0;
+          color: #888;
+          font-size: 20px;
+        }
       }
 
       .cs-move a {
@@ -111,6 +123,12 @@
         height: auto;
         font-size: 18px;
         line-height: 1.5;
+        .empty-message {
+          text-align: center;
+          padding: 40px 0;
+          color: #888;
+          font-size: 20px;
+        }
       }
 
       .cs-move {
@@ -230,6 +248,12 @@
       margin-top: 30px;
       width: 1000px;
       height: 500px;
+      .empty-message {
+        text-align: center;
+        padding: 40px 0;
+        color: #888;
+        font-size: 20px;
+      }
 
       .faq-container {
         list-style-type: none;

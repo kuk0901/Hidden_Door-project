@@ -59,7 +59,7 @@ const ReservationSummaryPage = () => {
 
   return (
     <section className="reservation-summary-container">
-      <div>
+      <div className="reservation-summary-div">
         <div className="reservation-summary">
           <h1>예약 상세 정보</h1>
           <p>예약 번호: {reservationDto.reservationNumber}</p>
