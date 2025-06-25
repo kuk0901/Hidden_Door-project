@@ -47,40 +47,35 @@ public class CustomerService {
     Page<Customer> customerList;
 
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-      switch (searchField) {
-        case "customerTitle":
-          customerList = customerRepository.findByCustomerTitleContainingOrderByQueCreDateAsc(searchTerm, pageable);
-          break;
-        case "customerContent":
-          customerList = customerRepository.findByCustomerContentContainingOrderByQueCreDateAsc(searchTerm, pageable);
-          break;
-        default:
-          customerList = customerRepository.findByCustomerTitleContainingOrCustomerContentContainingOrderByQueCreDateAsc(searchTerm,
-              searchTerm, pageable);
-      }
+        switch (searchField) {
+            case "customerTitle":
+                customerList = customerRepository.findByCustomerTitleContainingOrderByQueCreDateAsc(searchTerm, pageable);
+                break;
+            case "customerContent":
+                customerList = customerRepository.findByCustomerContentContainingOrderByQueCreDateAsc(searchTerm, pageable);
+                break;
+            default:
+                customerList = customerRepository.findByCustomerTitleContainingOrCustomerContentContainingOrderByQueCreDateAsc(searchTerm,
+                    searchTerm, pageable);
+        }
     } else {
-      customerList = customerRepository.findAll(pageable);
-    }
-    if (customerList.isEmpty()) {
-      throw new CustomException(ErrorCode.CS_NOT_FOUND);
+        customerList = customerRepository.findAll(pageable);
     }
 
     List<CustomerDto> customerDtoList = customerList.getContent().stream()
         .map(customer -> {
-          CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
-
-          customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
-          customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
-
-          return customerDto;
+            CustomerDto customerDto = modelMapper.map(customer, CustomerDto.class);
+            customerDto.setKstQueCreDate(DateTimeUtil.convertToKoreanDate(customer.getQueCreDate()));
+            customerDto.setKstAnsCreDate(DateTimeUtil.convertToKoreanDate(customer.getAnsCreDate()));
+            return customerDto;
         })
         .toList();
 
     PageDto resultPageDto = PageableUtil.createPageDto(customerList);
     logger.info("resultPageDto: {}", resultPageDto);
 
-    return new ResponseDto<>(customerDtoList, "success", resultPageDto, searchField, searchTerm);
-  }
+    return new ResponseDto<>(customerDtoList, "success", resultPageDto, searchField, searchTerm);    
+}
 
   public ResponseDto<CustomerDto> getCustomerById(String customerId) {
     Optional<Customer> customerOptional = customerRepository.findById(customerId);
