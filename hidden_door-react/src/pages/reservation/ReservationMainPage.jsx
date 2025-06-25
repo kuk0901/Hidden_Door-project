@@ -8,6 +8,7 @@ import Modal from "react-modal";
 import { toast } from "react-toastify";
 import { formatReservationSelectedDate } from "@utils/format/date";
 import ReservationCheckModal from "@components/reservation/ReservationCheckModal";
+import ReservationMainPageSkeleton from "@components/common/loading/skeletonUI/ReservationMainPageSkeleton";
 
 Modal.setAppElement("#root");
 
@@ -133,7 +134,7 @@ const ReservationMainPage = () => {
 
   const handleCloseModal = useCallback(() => setIsModalOpen(false), []);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ReservationMainPageSkeleton />;
 
   return (
     <section className="reservation-page">

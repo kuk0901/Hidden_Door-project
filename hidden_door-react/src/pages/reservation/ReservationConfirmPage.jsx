@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import Api from "@axios/api";
 import { toast } from "react-toastify";
 import { formatKoreanDate } from "@utils/format/date";
+import ReservationConfirmPageSkeleton from "@components/common/loading/skeletonUI/ReservationConfirmPageSkeleton";
 
 const ReservationConfirmPage = () => {
   const location = useLocation();
@@ -109,6 +110,10 @@ const ReservationConfirmPage = () => {
       toast.error(error.message || "예약 처리 중 오류가 발생했습니다.");
     }
   };
+
+  if (!selectedThemeDetails) {
+    return <ReservationConfirmPageSkeleton />;
+  }
 
   return (
     <section className="reservation-confirm-page">

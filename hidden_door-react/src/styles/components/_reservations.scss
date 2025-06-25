@@ -2,7 +2,6 @@
 @use "../abstracts/variables" as variables;
 @use "sass:color";
 
-// FIXME: mainPage의 캘린더 css 수정해야함
 .reservation-list-container {
   display: flex;
   background: variables.$light-background-color;
@@ -17,7 +16,7 @@
     font-size: 18px;
   }
   @include mixins.sm-mode {
-    font-size: 0.97rem;
+    font-size: 15px;
   }
 
   .reservation--list {
@@ -188,7 +187,7 @@
 
   @include mixins.sm-mode {
     padding: 5px;
-    font-size: 0.9rem;
+    font-size: 14px;
   }
 
   .return-admin-reservation-list {
@@ -245,12 +244,12 @@
 
     @include mixins.md-mode {
       padding: 12px;
-      font-size: 0.95rem;
+      font-size: 15px;
       max-width: 95vw;
     }
     @include mixins.sm-mode {
       padding: 8px;
-      font-size: 0.9rem;
+      font-size: 13px;
       max-width: 99vw;
     }
 
@@ -619,13 +618,13 @@
     height: 48px;
 
     @include mixins.md-mode {
-      font-size: 1rem;
+      font-size: 16px;
       padding: 10px;
       min-width: 120px;
       height: 36px;
     }
     @include mixins.sm-mode {
-      font-size: 0.95rem;
+      font-size: 13px;
       padding: 7px;
       min-width: 80px;
       height: 28px;
@@ -667,13 +666,13 @@
       }
     }
     @include mixins.md-mode {
-      font-size: 1rem;
+      font-size: 16px;
       padding: 10px;
       min-width: 120px;
       height: 36px;
     }
     @include mixins.sm-mode {
-      font-size: 0.95rem;
+      font-size: 13px;
       padding: 7px;
       min-width: 80px;
       height: 28px;
