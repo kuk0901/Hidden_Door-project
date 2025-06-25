@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import Api from "@axios/api";
-import { toast } from "react-toastify";
-import { useAdmin } from "@hooks/useAdmin";
-import SearchForm from "@components/common/form/SearchForm";
-import Pagination from "@components/common/navigation/pagination/Pagination";
-import CustomerList from "../../../components/cs/customer/CustomerList";
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import Api from '@axios/api';
+import { toast } from 'react-toastify';
+import { useAdmin } from '@hooks/useAdmin';
+import SearchForm from '@components/common/form/SearchForm';
+import Pagination from '@components/common/navigation/pagination/Pagination';
+import CustomerList from '../../../components/cs/customer/CustomerList';
 
 const CustomerPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,26 +21,26 @@ const CustomerPage = () => {
       totalPages: 0,
       isFirst: true,
       isLast: true,
-      sortField: "queCreDate",
-      sortDirection: "ASC",
+      sortField: 'queCreDate',
+      sortDirection: 'ASC',
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
-      searchField: "",
-      searchTerm: "",
+      searchField: '',
+      searchTerm: '',
     }
   );
 
   const getAllCustomer = async (
     newPage = 1,
-    searchField = "",
-    searchTerm = ""
+    searchField = '',
+    searchTerm = ''
   ) => {
     try {
       const { size, sortField, sortDirection } = page;
-      const res = await Api.get("/customers/list", {
+      const res = await Api.get('/customers/list', {
         params: {
           page: newPage,
           size,
@@ -52,7 +52,7 @@ const CustomerPage = () => {
       });
 
       if (res.status !== 200) {
-        toast.error("질문을 불러오는데 실패했습니다.");
+        toast.error('질문을 불러오는데 실패했습니다.');
       }
 
       setCustomerList(res.data.data);
@@ -62,7 +62,7 @@ const CustomerPage = () => {
         searchTerm: res.data.searchTerm,
       });
     } catch (error) {
-      toast.error(error.message || "질문을 불러오는데 실패했습니다.");
+      toast.error(error.message || '질문을 불러오는데 실패했습니다.');
     }
   };
 
@@ -75,8 +75,8 @@ const CustomerPage = () => {
   };
 
   useEffect(() => {
-    if (searchParams.get("delete") === "true") {
-      toast.success("FAQ가 삭제되었습니다.");
+    if (searchParams.get('delete') === 'true') {
+      toast.success('질문이 삭제되었습니다.');
     }
 
     setSearchParams({});
@@ -97,18 +97,18 @@ const CustomerPage = () => {
   }, [location.state]);
 
   const handleReset = () => {
-    setSearch({ searchField: "", searchTerm: "" });
+    setSearch({ searchField: '', searchTerm: '' });
     getAllCustomer();
   };
 
   const searchFields = [
-    { value: "", label: "검색 필드 선택" },
-    { value: "customerTitle", label: "제목" },
-    { value: "customerContent", label: "질문내용" },
+    { value: '', label: '검색 필드 선택' },
+    { value: 'customerTitle', label: '제목' },
+    { value: 'customerContent', label: '질문내용' },
   ];
 
   const handleAddCustomer = () => {
-    navigate("/hidden_door/cs/customer/add");
+    navigate('/hidden_door/cs/customer/add');
   };
 
   return (
@@ -121,9 +121,9 @@ const CustomerPage = () => {
             <a
               href={`/hidden_door/cs/faq`}
               className={
-                location.pathname === "/hidden_door/cs/faq"
-                  ? "link_active"
-                  : "link"
+                location.pathname === '/hidden_door/cs/faq'
+                  ? 'link_active'
+                  : 'link'
               }
             >
               FAQ
@@ -131,9 +131,9 @@ const CustomerPage = () => {
             <a
               href={`/hidden_door/cs/customer`}
               className={
-                location.pathname === "/hidden_door/cs/customer"
-                  ? "link_active"
-                  : "link"
+                location.pathname === '/hidden_door/cs/customer'
+                  ? 'link_active'
+                  : 'link'
               }
             >
               1:1 문의
@@ -156,11 +156,15 @@ const CustomerPage = () => {
           </div>
 
           <div className="cs-main-container">
-            <CustomerList
-              customerList={customerList}
-              page={{ ...page }}
-              search={{ ...search }}
-            />
+            {customerList && customerList.length > 0 ? (
+              <CustomerList
+                customerList={customerList}
+                page={{ ...page }}
+                search={{ ...search }}
+              />
+            ) : (
+              <div className="empty-message">등록된 질문이 없습니다.</div>
+            )}
           </div>
 
           <Pagination page={page} onPageChange={handlePageChange} />
