@@ -221,6 +221,12 @@
       min-width: 80px;
       height: 30px;
     }
+    @include xs-mode {
+      font-size: 0.8rem;
+      padding: 4px 7px;
+      min-width: 60px;
+      height: 22px;
+    }
 
     &:hover {
       font-weight: 600;
@@ -618,12 +624,20 @@
     min-width: 180px;
     height: 48px;
 
+    @include xs-mode {
+      font-size: 0.8rem;
+      padding: 4px;
+      min-width: 60px;
+      height: 22px;
+    }
+
     @include mixins.md-mode {
       font-size: 1rem;
       padding: 10px;
       min-width: 120px;
       height: 36px;
     }
+
     @include mixins.sm-mode {
       font-size: 0.95rem;
       padding: 7px;
@@ -677,6 +691,12 @@
       padding: 7px;
       min-width: 80px;
       height: 28px;
+    }
+    @include xs-mode {
+      font-size: 0.8rem;
+      padding: 4px;
+      min-width: 60px;
+      height: 22px;
     }
   }
 }
@@ -995,11 +1015,19 @@
         min-width: 120px;
         height: 36px;
       }
+
       @include mixins.sm-mode {
         font-size: 0.95rem;
         padding: 7px;
         min-width: 80px;
         height: 28px;
+      }
+
+      @include xs-mode {
+        font-size: 0.8rem;
+        padding: 4px;
+        min-width: 60px;
+        height: 22px;
       }
 
       &:hover {

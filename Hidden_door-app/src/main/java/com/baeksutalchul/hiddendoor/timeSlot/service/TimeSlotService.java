@@ -5,8 +5,10 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,5 +99,23 @@ public class TimeSlotService {
         }
       }
     });
+  }
+
+  //FIXME: 예약 시간대 삭제 코드 reservation 보다 먼저 작성하기
+  public List<String> removeTimeSlots(List<String> dateList) {
+    List<TimeSlot> slotsToDelete = timeSlotRepository.findByDateIn(dateList);
+
+    Set<String> reservationNumbers = new HashSet<>();
+    for (TimeSlot timeSlot : slotsToDelete) {
+        for (TimeSlot.TimeSlotDetail detail : timeSlot.getSlots()) {
+            if (detail.getReservationNumber() != null && !detail.getReservationNumber().isEmpty()) {
+                reservationNumbers.add(detail.getReservationNumber());
+            }
+        }
+    }
+
+    timeSlotRepository.deleteByDateIn(dateList);
+
+    return new ArrayList<>(reservationNumbers);
   }
 }

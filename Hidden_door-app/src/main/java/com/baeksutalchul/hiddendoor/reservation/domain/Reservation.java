@@ -3,6 +3,7 @@ package com.baeksutalchul.hiddendoor.reservation.domain;
 import java.time.Instant;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -29,5 +30,6 @@ public class Reservation {
   private Instant paymentDate;
   private String refundState;
   private int partySize;
+  @Indexed(unique = true)
   private String reservationNumber;
 }
