@@ -2,7 +2,6 @@
 @use "../abstracts/variables" as variables;
 @use "sass:color";
 
-// FIXME: 반응형 버튼 크기 조정해야함
 .reservation-list-container {
   display: flex;
   background: variables.$light-background-color;
@@ -221,7 +220,7 @@
       min-width: 80px;
       height: 30px;
     }
-    @include xs-mode {
+    @include mixins.xs-mode {
       font-size: 0.8rem;
       padding: 4px 7px;
       min-width: 60px;
@@ -624,7 +623,7 @@
     min-width: 180px;
     height: 48px;
 
-    @include xs-mode {
+    @include mixins.xs-mode {
       font-size: 0.8rem;
       padding: 4px;
       min-width: 60px;
@@ -692,7 +691,7 @@
       min-width: 80px;
       height: 28px;
     }
-    @include xs-mode {
+    @include mixins.xs-mode {
       font-size: 0.8rem;
       padding: 4px;
       min-width: 60px;
@@ -1023,7 +1022,7 @@
         height: 28px;
       }
 
-      @include xs-mode {
+      @include mixins.xs-mode {
         font-size: 0.8rem;
         padding: 4px;
         min-width: 60px;

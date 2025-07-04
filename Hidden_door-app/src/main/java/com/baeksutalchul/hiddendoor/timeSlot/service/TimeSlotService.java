@@ -101,7 +101,6 @@ public class TimeSlotService {
     });
   }
 
-  //FIXME: 예약 시간대 삭제 코드 reservation 보다 먼저 작성하기
   public List<String> removeTimeSlots(List<String> dateList) {
     List<TimeSlot> slotsToDelete = timeSlotRepository.findByDateIn(dateList);
 

@@ -236,9 +236,14 @@ public class ReservationService {
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_RESERVED));
 
-        selectedSlot.setBooked(true);
-        //FIXME: reservationNumber 중복검사 코드 추가하기
         String reservationNumber = RandomString.getRandomShortString();
+        while (reservationRepository.existsByReservationNumber(reservationNumber)) {
+            reservationNumber = RandomString.getRandomShortString();
+        }
+
+
+        selectedSlot.setBooked(true);
+        
         selectedSlot.setReservationNumber(reservationNumber);
         timeSlotRepository.save(timeSlot);
 
