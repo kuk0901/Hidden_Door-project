@@ -236,8 +236,14 @@ public class ReservationService {
                 .findFirst()
                 .orElseThrow(() -> new CustomException(ErrorCode.ALREADY_RESERVED));
 
-        selectedSlot.setBooked(true);
         String reservationNumber = RandomString.getRandomShortString();
+        while (reservationRepository.existsByReservationNumber(reservationNumber)) {
+            reservationNumber = RandomString.getRandomShortString();
+        }
+
+
+        selectedSlot.setBooked(true);
+        
         selectedSlot.setReservationNumber(reservationNumber);
         timeSlotRepository.save(timeSlot);
 
@@ -291,5 +297,10 @@ public class ReservationService {
 
     public boolean checkReservation(String reservationNumber, String name) {
         return reservationRepository.existsByReservationNumberAndName(reservationNumber, name);
+    }
+
+    public void removeReservation(List<String> reservationNumbers) {
+        if (reservationNumbers == null || reservationNumbers.isEmpty()) return;
+        reservationRepository.deleteByReservationNumberIn(reservationNumbers);
     }
 }

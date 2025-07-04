@@ -21,6 +21,7 @@ import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.reservation.service.ReservationService;
 import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
+import com.baeksutalchul.hiddendoor.utils.scheduling.DataCleanUpScheduler;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +36,12 @@ public class ReservationController {
   private final ReservationService reservationService;
   private final MailService mailService;
   private static final Logger logger = LoggerFactory.getLogger(ReservationController.class);
+  private final DataCleanUpScheduler dataCleanUpScheduler;
 
-  public ReservationController(ReservationService reservationService, MailService mailService) {
+  public ReservationController(ReservationService reservationService, MailService mailService, DataCleanUpScheduler dataCleanUpScheduler) {
     this.reservationService = reservationService;
     this.mailService = mailService;
+    this.dataCleanUpScheduler = dataCleanUpScheduler;
   }
 
   @GetMapping("/list")
@@ -59,6 +62,9 @@ public class ReservationController {
       false, 
       sortField, 
       sortDirection);
+
+    dataCleanUpScheduler.removeOldData();
+    
     return ResponseEntity.ok().body(reservationService.getReservationAll(pageDto, searchField, searchTerm));
   }
 
@@ -80,6 +86,7 @@ public class ReservationController {
 
   @GetMapping("/main")
   public ResponseEntity<ResponseDto<Map<String, Object>>> getReservationMainPage() {
+    dataCleanUpScheduler.removeOldData();
     return ResponseEntity.ok(reservationService.getReservationMainPage());
   }
 

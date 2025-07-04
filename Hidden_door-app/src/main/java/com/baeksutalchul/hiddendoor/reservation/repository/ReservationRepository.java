@@ -29,4 +29,8 @@ public interface ReservationRepository extends MongoRepository<Reservation, Stri
       Pageable pageable);
 
   Page<Reservation> findAllByOrderByReservationCreDateAsc(Pageable pageable);
+
+  void deleteByReservationNumberIn(List<String> reservationNumbers);
+
+  boolean existsByReservationNumber(String reservationNumber);
 }
