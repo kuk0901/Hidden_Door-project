@@ -27,7 +27,7 @@ public class DataCleanUpScheduler {
   }
 
   @Transactional
-  @Scheduled(cron = "0 0 0 * * ?") // 매일 0시에 실행 => 나중에 주석 풀기
+  @Scheduled(cron = "0 0 0 * * ?") // 매일 0시에 실행
   public void removeOldData() {
     try {
       // 서비스 시작일(예시) ~ 3년 + 1일 전까지 모두 삭제
