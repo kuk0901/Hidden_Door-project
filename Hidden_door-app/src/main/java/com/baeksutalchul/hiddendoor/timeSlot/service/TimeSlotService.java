@@ -101,8 +101,9 @@ public class TimeSlotService {
     });
   }
 
-  public List<String> removeTimeSlots(List<String> dateList) {
-    List<TimeSlot> slotsToDelete = timeSlotRepository.findByDateIn(dateList);
+  public List<String> removeTimeSlotsBeforeOrEqual(LocalDate targetDate) {
+    String targetDateStr = targetDate.toString();
+    List<TimeSlot> slotsToDelete = timeSlotRepository.findByDateLessThanEqual(targetDateStr);
 
     Set<String> reservationNumbers = new HashSet<>();
     for (TimeSlot timeSlot : slotsToDelete) {
@@ -113,8 +114,9 @@ public class TimeSlotService {
         }
     }
 
-    timeSlotRepository.deleteByDateIn(dateList);
+    timeSlotRepository.deleteByDateLessThanEqual(targetDateStr);
 
     return new ArrayList<>(reservationNumbers);
   }
+
 }
