@@ -27,7 +27,7 @@ public class DataCleanUpScheduler {
   }
 
   @Transactional
-  @Scheduled(cron = "0 0 0 * * ?") // 매일 0시에 실행
+  @Scheduled(cron = "0 0 0 1 * ?") // 매일 0시에 실행
   public void removeOldData() {
     try {
       LocalDate targetDate = LocalDate.now().minusYears(3).minusDays(1); // 오늘로부터 3년+1일 전
