@@ -27,35 +27,21 @@ public class DataCleanUpScheduler {
   }
 
   @Transactional
-  @Scheduled(cron = "0 0 0 * * ?") // 매일 0시에 실행 => 나중에 주석 풀기
+  @Scheduled(cron = "0 0 0 1 * ?")
   public void removeOldData() {
     try {
-      // 서비스 시작일(예시) ~ 3년 + 1일 전까지 모두 삭제
-      LocalDate startDate = LocalDate.parse("2022-06-28"); // 서비스 시작일 등 기준
       LocalDate targetDate = LocalDate.now().minusYears(3).minusDays(1); // 오늘로부터 3년+1일 전
 
-      if (targetDate.isBefore(startDate)) {
-          logger.info("삭제할 데이터가 없습니다. (targetDate < startDate)");
-          return;
-      }
+      List<String> reservationNumbers = timeSlotService.removeTimeSlotsBeforeOrEqual(targetDate);
 
-      List<String> dateList = new ArrayList<>();
-      LocalDate temp = startDate;
-      while (!temp.isAfter(targetDate)) {
-          dateList.add(temp.toString());
-          temp = temp.plusDays(1);
-      }
-
-      List<String> reservationNumbers = timeSlotService.removeTimeSlots(dateList);
-
-      if (!reservationNumbers.isEmpty()) {
+      if (reservationNumbers != null && !reservationNumbers.isEmpty()) {
           reservationService.removeReservation(reservationNumbers);
       }
 
-      logger.info("데이터 정리 완료: {} ~ {}까지 삭제", startDate, targetDate);
+      logger.info("데이터 정리 완료: {}까지 삭제", targetDate);
 
     } catch (Exception e) {
-      logger.info("error: {}", e);
+        logger.info("error: {}", e.getMessage(), e);
     }
   }
   

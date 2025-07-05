@@ -1,6 +1,7 @@
 package com.baeksutalchul.hiddendoor.timeSlot.repository;
 
 import java.util.Optional;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
@@ -19,6 +20,7 @@ public interface TimeSlotRepository extends MongoRepository<TimeSlot, String> {
 
   List<TimeSlot> findByDateIn(List<String> dates);
   
-  void deleteByDateIn(List<String> dates);
+  List<TimeSlot> findByDateLessThanEqual(String targetDate);
 
+  void deleteByDateLessThanEqual(String targetDate);
 }

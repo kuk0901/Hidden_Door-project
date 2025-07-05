@@ -62,8 +62,6 @@ public class ReservationController {
       false, 
       sortField, 
       sortDirection);
-
-    dataCleanUpScheduler.removeOldData();
     
     return ResponseEntity.ok().body(reservationService.getReservationAll(pageDto, searchField, searchTerm));
   }
@@ -86,7 +84,6 @@ public class ReservationController {
 
   @GetMapping("/main")
   public ResponseEntity<ResponseDto<Map<String, Object>>> getReservationMainPage() {
-    dataCleanUpScheduler.removeOldData();
     return ResponseEntity.ok(reservationService.getReservationMainPage());
   }
 
