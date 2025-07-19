@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
-import Api from "@axios/api";
-import { toast } from "react-toastify";
-import { useAdmin } from "@hooks/useAdmin";
-import SearchForm from "@components/common/form/SearchForm";
-import Pagination from "@components/common/navigation/pagination/Pagination";
-import FaqList from "../../../components/cs/faq/FaqList";
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import Api from '@axios/api';
+import { toast } from 'react-toastify';
+import { useAdmin } from '@hooks/useAdmin';
+import SearchForm from '@components/common/form/SearchForm';
+import Pagination from '@components/common/navigation/pagination/Pagination';
+import FaqList from '../../../components/cs/faq/FaqList';
 
 const FaqPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -21,22 +21,22 @@ const FaqPage = () => {
       totalPages: 0,
       isFirst: true,
       isLast: true,
-      sortField: "creDate",
-      sortDirection: "ASC",
+      sortField: 'creDate',
+      sortDirection: 'ASC',
     }
   );
 
   const [search, setSearch] = useState(
     location.state?.search || {
-      searchField: "",
-      searchTerm: "",
+      searchField: '',
+      searchTerm: '',
     }
   );
 
-  const getAllFaq = async (newPage = 1, searchField = "", searchTerm = "") => {
+  const getAllFaq = async (newPage = 1, searchField = '', searchTerm = '') => {
     try {
       const { size, sortField, sortDirection } = page;
-      const res = await Api.get("/faqs/list", {
+      const res = await Api.get('/faqs/list', {
         params: {
           page: newPage,
           size,
@@ -48,7 +48,7 @@ const FaqPage = () => {
       });
 
       if (res.status !== 200) {
-        toast.error("FAQ불러오기에 실패했습니다.");
+        toast.error('FAQ불러오기에 실패했습니다.');
       }
 
       setFaqList(res.data.data);
@@ -58,7 +58,7 @@ const FaqPage = () => {
         searchTerm: res.data.searchTerm,
       });
     } catch (error) {
-      toast.error(error.message || "오류입니다");
+      toast.error(error.message || '오류입니다');
     }
   };
 
@@ -71,8 +71,8 @@ const FaqPage = () => {
   };
 
   useEffect(() => {
-    if (searchParams.get("delete") === "true") {
-      toast.success("FAQ가 삭제되었습니다.");
+    if (searchParams.get('delete') === 'true') {
+      toast.success('FAQ가 삭제되었습니다.');
     }
 
     setSearchParams({});
@@ -93,18 +93,18 @@ const FaqPage = () => {
   }, [location.state]);
 
   const handleReset = () => {
-    setSearch({ searchField: "", searchTerm: "" });
+    setSearch({ searchField: '', searchTerm: '' });
     getAllFaq();
   };
 
   const searchFields = [
-    { value: "", label: "검색 필드 선택" },
-    { value: "title", label: "제목" },
-    { value: "question", label: "질문내용" },
+    { value: '', label: '검색 필드 선택' },
+    { value: 'title', label: '제목' },
+    { value: 'question', label: '질문내용' },
   ];
 
   const handleAddFaq = () => {
-    navigate("/hidden_door/cs/faq/add");
+    navigate('/hidden_door/cs/faq/add');
   };
 
   return (
@@ -117,9 +117,9 @@ const FaqPage = () => {
             <a
               href={`/hidden_door/cs/faq`}
               className={
-                location.pathname === "/hidden_door/cs/faq"
-                  ? "link_active"
-                  : "link"
+                location.pathname === '/hidden_door/cs/faq'
+                  ? 'link_active'
+                  : 'link'
               }
             >
               FAQ
@@ -127,9 +127,9 @@ const FaqPage = () => {
             <a
               href={`/hidden_door/cs/customer`}
               className={
-                location.pathname === "/hidden_door/cs/customer"
-                  ? "link_active"
-                  : "link"
+                location.pathname === '/hidden_door/cs/customer'
+                  ? 'link_active'
+                  : 'link'
               }
             >
               1:1 문의
@@ -153,11 +153,15 @@ const FaqPage = () => {
           </div>
 
           <div className="cs-main-container">
-            <FaqList
-              faqList={faqList}
-              page={{ ...page }}
-              search={{ ...search }}
-            />
+            {faqList && faqList.length > 0 ? (
+              <FaqList
+                faqList={faqList}
+                page={{ ...page }}
+                search={{ ...search }}
+              />
+            ) : (
+              <div className="empty-message">등록된 FAQ가 없습니다.</div>
+            )}
           </div>
 
           <Pagination page={page} onPageChange={handlePageChange} />
