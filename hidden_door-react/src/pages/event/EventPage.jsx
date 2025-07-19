@@ -31,7 +31,6 @@ function EventPage() {
         setEvents(eventsData);
       } else {
         setEvents([]);
-        toast.info('등록된 이벤트가 없습니다.');
       }
     } catch (error) {
       toast.error(
@@ -133,7 +132,9 @@ function EventPage() {
             </div>
           ))
         ) : (
-          <div className="no-events-message">진행중인 이벤트가 없습니다.</div>
+          <div className="no-events-wrapper">
+            <div className="no-events-message">진행중인 이벤트가 없습니다.</div>
+          </div>
         )}
       </div>
 

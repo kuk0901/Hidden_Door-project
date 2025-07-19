@@ -39,41 +39,36 @@ public class FaqService {
         Math.max(0, pageDto.getPage() - 1),
         pageDto.getSize(),
         "creDate",
-        "ASC");
+        "ASC"
+    );
 
     Page<Faq> faqList;
-    logger.info("pageDto{}", pageDto);
+
     if (searchTerm != null && !searchTerm.trim().isEmpty()) {
-      switch (searchField) {
-        case "title":
-          faqList = faqRepository.findByTitleContainingOrderByCreDateAsc(searchTerm, pageable);
-          break;
-        case "question":
-          faqList = faqRepository.findByQuestionContainingOrderByCreDateAsc(searchTerm, pageable);
-          break;
-        default:
-          faqList = faqRepository.findByTitleContainingOrQuestionContainingOrderByCreDateAsc(searchTerm, searchTerm, pageable);
-      }
+        switch (searchField) {
+            case "title":
+                faqList = faqRepository.findByTitleContainingOrderByCreDateAsc(searchTerm, pageable);
+                break;
+            case "question":
+                faqList = faqRepository.findByQuestionContainingOrderByCreDateAsc(searchTerm, pageable);
+                break;
+            default:
+                faqList = faqRepository.findByTitleContainingOrQuestionContainingOrderByCreDateAsc(searchTerm, searchTerm, pageable);
+        }
     } else {
-      faqList = faqRepository.findAll(pageable);
-    }
-    if (faqList.isEmpty()) {
-      throw new CustomException(ErrorCode.FAQ_NOT_FOUND);
+        faqList = faqRepository.findAll(pageable);
     }
 
     List<FaqDto> faqDtoList = faqList.getContent().stream()
         .map(faq -> {
-          FaqDto faqDto = modelMapper.map(faq, FaqDto.class);
-
-          faqDto.setKstCreDate(DateTimeUtil.convertToKoreanDate(faq.getCreDate()));
-          faqDto.setKstModDate(DateTimeUtil.convertToKoreanDate(faq.getModDate()));
-
-          return faqDto;
+            FaqDto faqDto = modelMapper.map(faq, FaqDto.class);
+            faqDto.setKstCreDate(DateTimeUtil.convertToKoreanDate(faq.getCreDate()));
+            faqDto.setKstModDate(DateTimeUtil.convertToKoreanDate(faq.getModDate()));
+            return faqDto;
         })
         .toList();
 
     PageDto resultPageDto = PageableUtil.createPageDto(faqList);
-    logger.info("resultPageDto: {}", resultPageDto);
 
     return new ResponseDto<>(faqDtoList, "success", resultPageDto, searchField, searchTerm);
   }
