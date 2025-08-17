@@ -49,7 +49,6 @@ function NoticePage() {
       }));
 
       if (!content || content.length === 0) {
-        toast.info('등록된 공지사항이 없습니다.');
       }
     } catch (error) {
       toast.error(error.message || '공지사항을 불러오는 데 실패했습니다.');
@@ -81,7 +80,9 @@ function NoticePage() {
             공지사항 추가
           </button>
         )}
-        <div className="no-notice-message">등록된 공지사항이 없습니다.</div>
+        <div className="no-notice-wrapper">
+          <div className="no-notice-message">등록된 공지사항이 없습니다.</div>
+        </div>
       </div>
     );
   }
