@@ -54,6 +54,21 @@
   @include dark-mode {
     color: variables.$dark-text-color;
   }
+
+  .no-notice-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 200px;
+  }
+
+  .no-notice-message {
+    text-align: center;
+    color: #888;
+    font-size: 18px;
+  }
 }
 
 .notice-page-title {

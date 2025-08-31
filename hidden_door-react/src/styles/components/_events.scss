@@ -79,6 +79,20 @@
       gap: 10px;
     }
 
+    .no-events-wrapper {
+      grid-column: 1 / -1; // 전체 가로 span
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 200px;
+    }
+
+    .no-events-message {
+      text-align: center;
+      color: #888;
+      font-size: 20px;
+    }
+
     .event-item {
       display: flex;
       justify-content: center;

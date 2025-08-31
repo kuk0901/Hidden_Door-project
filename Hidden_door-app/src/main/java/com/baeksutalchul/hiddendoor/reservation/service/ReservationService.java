@@ -277,7 +277,6 @@ public class ReservationService {
             ZoneId zoneId = ZoneId.of("Asia/Seoul");
             return dateTime.atZone(zoneId).toInstant();
         } catch (DateTimeParseException e) {
-            logger.error(e.getMessage());
             throw new CustomException(ErrorCode.INVALID_DATE_FORMAT, "잘못된 날짜 또는 시간 형식입니다.");
         }
     }

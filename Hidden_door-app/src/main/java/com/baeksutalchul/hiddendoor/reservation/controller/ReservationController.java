@@ -1,6 +1,5 @@
 package com.baeksutalchul.hiddendoor.reservation.controller;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -19,7 +18,6 @@ import com.baeksutalchul.hiddendoor.mail.dto.MailDto;
 import com.baeksutalchul.hiddendoor.mail.service.MailService;
 import com.baeksutalchul.hiddendoor.res.ResponseDto;
 import com.baeksutalchul.hiddendoor.reservation.service.ReservationService;
-import com.baeksutalchul.hiddendoor.utils.format.DateTimeUtil;
 import com.baeksutalchul.hiddendoor.utils.page.PageDto;
 import com.baeksutalchul.hiddendoor.utils.scheduling.DataCleanUpScheduler;
 
@@ -92,8 +90,6 @@ public class ReservationController {
     @RequestParam("date") String date,
     @RequestParam("themeId") String themeId
   ) {
-    logger.info("조회 요청 - themeId: {}, date: {}", themeId, date);
-
     return reservationService.getAvailableTimeSlots(date, themeId);
   }
 
